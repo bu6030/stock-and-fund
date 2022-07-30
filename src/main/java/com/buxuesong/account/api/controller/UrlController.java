@@ -39,7 +39,7 @@ public class UrlController {
      *
      * @return
      */
-    @GetMapping(value = "/main")
+    @GetMapping(value = { "/main", "/" })
     public ModelAndView stockAndFundInit(HttpServletRequest request, HttpServletResponse response) {
         ModelAndView m = new ModelAndView();
         m.setViewName("stockAndFund");
