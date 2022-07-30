@@ -31,4 +31,4 @@ target*
 APP_HOME_LOG*/*
 docker/*
 
-.iead/*
+.idea/*
