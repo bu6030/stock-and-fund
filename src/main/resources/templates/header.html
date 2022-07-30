@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<header class="am-topbar admin-header">
+    <div class="am-topbar-brand"><img th:src="@{/i/logo.png}"></div>
+    <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+        <ul class="am-nav am-nav-pills am-topbar-nav admin-header-list">
+            <li class="kuanjie">
+                <a th:href="@{/main}">股票基金汇总</a>
+                <a th:href="@{/fundInit}">基金</a>
+                <a th:href="@{/stockInit}">股票</a>
+            </li>
+        </ul>
+    </div>
+</header>
+</html>
