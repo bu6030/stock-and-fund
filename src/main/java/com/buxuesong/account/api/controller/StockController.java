@@ -32,9 +32,11 @@ public class StockController {
      *
      * @return
      */
-    @GetMapping(value = "/stock/table")
-    public Response getRedisStock(HttpServletRequest request) throws Exception {
-        return Response.builder().code("00000000").value(stockService.getStock()).build();
+    @PostMapping(value = "/saveStock")
+    public Response saveStock(@RequestBody SaveStockRequest saveStockRequest) throws Exception {
+        log.info("Save stock request: {}", saveStockRequest);
+        stockService.saveStock(saveStockRequest);
+        return Response.builder().value(true).code("00000000").build();
     }
 
     /**
@@ -42,10 +44,10 @@ public class StockController {
      *
      * @return
      */
-    @PostMapping(value = "/stock")
-    public Response saveStock(HttpServletRequest request, @RequestBody SaveStockRequest saveStockRequest) throws Exception {
-        log.info("Save stock request: {}", request);
-        stockService.saveStock(saveStockRequest.getStock());
+    @PostMapping(value = "/deleteStock")
+    public Response deleteStock(@RequestBody SaveStockRequest saveStockRequest) throws Exception {
+        log.info("Delete stock request: {}", saveStockRequest);
+        stockService.deleteStock(saveStockRequest);
         return Response.builder().value(true).code("00000000").build();
     }
 }

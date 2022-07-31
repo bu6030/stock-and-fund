@@ -1,7 +1,7 @@
 package com.buxuesong.account.service;
 
-import com.buxuesong.account.persist.dao.StockAndFundMapper;
-import com.buxuesong.account.persist.entity.StockAndFund;
+import com.buxuesong.account.model.SaveFundRequest;
+import com.buxuesong.account.persist.dao.FundMapper;
 import org.apache.commons.lang3.StringUtils;
 import com.buxuesong.account.model.FundBean;
 import com.buxuesong.account.util.HttpClientPoolUtil;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +21,7 @@ import java.util.Map;
 @Service
 public class FundServiceImpl implements FundService {
     @Autowired
-    private StockAndFundMapper stockAndFundMapper;
+    private FundMapper fundMapper;
 
     private static final Logger logger = LoggerFactory.getLogger(FundServiceImpl.class);
 
@@ -89,27 +88,33 @@ public class FundServiceImpl implements FundService {
     }
 
     @Override
-    public void saveFund(String fund) {
-        stockAndFundMapper.update(StockAndFund.builder().stockAndFundInfo(fund).type(2).build());
+    public void saveFund(SaveFundRequest saveFundRequest) {
+        SaveFundRequest saveFundRequestFromTable = fundMapper.findFundByCode(saveFundRequest.getCode());
+        if(saveFundRequestFromTable!=null){
+            fundMapper.updateFund(saveFundRequest);
+        }else {
+            fundMapper.save(saveFundRequest);
+        }
+    }
+
+    @Override
+    public void deleteFund(SaveFundRequest saveFundRequest) {
+        fundMapper.deleteFund(saveFundRequest);
     }
 
     @Override
     public List<String> getFundList() {
-        String fund = stockAndFundMapper.findByType(2).getStockAndFundInfo();
-        logger.info("表中基金为：{}", fund);
-        if (StringUtils.isEmpty(fund)) {
+        List<SaveFundRequest> fund = fundMapper.findAllFund();
+        logger.info("缓存的基金为：{}", fund);
+        if (fund == null || fund.isEmpty()) {
             return new ArrayList<>();
         }
-        String[] fundArr = fund.split(";");
         List<String> list = new ArrayList<>();
-        for (int i = 0; i < fundArr.length; i++) {
-            list.add(fundArr[i]);
+        for (SaveFundRequest fundRequest: fund) {
+            String fundArr = fundRequest.getCode() + "," + fundRequest.getCostPrise() +"," + fundRequest.getBonds() +"," + fundRequest.getApp();
+            list.add(fundArr);
         }
         return list;
     }
 
-    @Override
-    public String getFund() {
-        return (String) stockAndFundMapper.findByType(2).getStockAndFundInfo();
-    }
 }

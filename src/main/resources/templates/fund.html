@@ -35,6 +35,9 @@
                 <dl class="am-icon-home" style="float: right;">
                     当前位置： 首页 > <a href="#">基金明细</a>
                 </dl>
+                <dl>
+                    <button type="button" onclick="showDialog('fund')" class="am-btn am-btn-danger am-round am-btn-xs am-icon-plus" > 添加基金</button>
+                </dl>
             </div>
             <div class="am-btn-toolbars am-btn-toolbar am-kg am-cf"></div>
             <form class="am-form am-g">
@@ -60,6 +63,7 @@
                         <th class="table-author am-hide-sm-only">收益率</th>
                         <th class="table-author am-hide-sm-only">市值/金额</th>
                         <th width="130px">收益</th>
+                        <th class="table-author am-hide-sm-only">操作</th>
                     </tr>
                     </thead>
                     <tbody id="nr">

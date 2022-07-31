@@ -28,12 +28,11 @@
             <div class="listbiaoti am-cf">
                 <ul class="am-icon-users"> 股票明细
                 </ul>
-                <dl style="float: left;">
-                    <input type="text" style="width: 1000px" class="demo-input" id="stock">
-                    <button type="button" onclick="saveStock()" class="am-btn am-btn-danger am-round am-btn-xs am-icon-plus" > 存储股票列表</button>
-                </dl>
                 <dl class="am-icon-home" style="float: right;">
                     当前位置： 首页 > <a href="#">股票明细</a>
+                </dl>
+                <dl>
+                    <button type="button" onclick="showDialog('stock')" class="am-btn am-btn-danger am-round am-btn-xs am-icon-plus" > 添加股票</button>
                 </dl>
             </div>
             <div class="am-btn-toolbars am-btn-toolbar am-kg am-cf"></div>
@@ -62,6 +61,7 @@
                         <th class="table-author am-hide-sm-only">收益率</th>
                         <th class="table-author am-hide-sm-only">市值/金额</th>
                         <th class="table-author am-hide-sm-only">收益</th>
+                        <th class="table-author am-hide-sm-only">操作</th>
                     </tr>
                     </thead>
                     <tbody id="nr">

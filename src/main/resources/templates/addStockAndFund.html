@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>添加股票/基金</title>
+    <link rel="stylesheet" th:href="@{/css/main.admin.css}" type="text/css" media="all"/>
+    <link rel="stylesheet" th:href="@{/css/main.amazeui.min.css}" type="text/css" media="all"/>
+    <script th:src="@{/js/addStockAndFund.js}"></script>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <!-- 日历控件 -->
+    <script th:src="@{/js/laydate.js}"></script>
+</head>
+<body onload="getData()">
+
+<div width="80%" height="80%">
+    <div class="listbiaoti am-cf">
+        <ul class="am-icon-flag on"> 添加股票/基金</ul>
+        <!--<dl class="am-icon-home" style="float: right;"> 当前位置： 首页 > <a href="#">商品列表</a></dl>-->
+    </div>
+
+    <div class="fbneirong">
+        <form class="am-form" id="saveOutComeForm">
+            <input type="hidden" id="type" th:value="${type}"/>
+            <div class="am-form-group am-cf">
+                <div class="zuo">股票/基金：</div>
+                <div class="you">
+                    <select data-am-selected="{btnSize: 'sm'}">
+                        <option th:value="1" th:selected="${type =='stock'}">股票</option>
+                        <option th:value="2" th:selected="${type =='fund'}">基金</option>
+                    </select>
+                </div>
+            </div>
+            <div class="am-form-group am-cf">
+                <div class="zuo">股票/基金编码：</div>
+                <div class="you">
+                    <input type="text" class="am-input-sm" id="code" placeholder="请输入编码">
+                </div>
+            </div>
+            <div class="am-form-group am-cf">
+                <div class="zuo">持仓成本：</div>
+                <div class="you">
+                    <input type="number" class="am-input-sm" id="costPrise" placeholder="请输入持仓成本">
+                </div>
+            </div>
+            <div class="am-form-group am-cf">
+                <div class="zuo">持有份额：</div>
+                <div class="you">
+                    <input type="number" class="am-input-sm" id="bonds" placeholder="请输入持有份额">
+                </div>
+            </div>
+            <div class="am-form-group am-cf">
+                <div class="zuo">APP：</div>
+                <div class="you">
+                    <select data-am-selected="{btnSize: 'sm'}" id="app">
+                        <option th:value="ZFB">支付宝</option>
+                        <option th:value="DFCF">东方财富</option>
+                        <option th:value="DFZQ">东方证券</option>
+                        <option th:value="ZGYH">中国银行</option>
+                    </select>
+                </div>
+            </div>
+            <div class="am-form-group am-cf">
+                <div class="you" style="margin-left: 11%;">
+                    <button type="button" onclick="submitStockAndFund()" class="am-btn am-btn-success am-radius">添加</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -74,7 +74,9 @@ function getTableHtml(result){
             + "</td><td>" + result[k].incomePercent + "%"
             + "</td><td>" + marketValue
             + "</td><td>" + result[k].income
-            +"</td></tr>";
+            + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"删除\" onclick=\"deleteFund('" + result[k].fundCode + "')\">"
+            + "<span class=\"am-icon-remove\"></span></button>"
+            +"</td><td></td></tr>";
 
     }
     str += "<tr><td>合计</td><td colspan='3'></td><td>" + totalDayIncome + "</td><td colspan='5'></td><td>" + totalmarketValue + "</td><td>" + totalIncome
@@ -123,4 +125,43 @@ function getAppName(app){
 function filterApp(app) {
     filteredApp = app;
     getData();
+}
+
+function showDialog(type){
+    var iHeight = 600;
+    var iWidth = 800;
+    //获得窗口的垂直位置
+    var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+    //获得窗口的水平位置
+    var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+    var url = '/addStockAndFundInit?type='+type;
+
+    window.open (url, 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
+}
+
+function deleteFund(code){
+    if(!confirm("确定要删除吗？")){
+        return;
+    }
+    var url = "/deleteFund";
+    var req = {
+        "code" : code
+    }
+    $.ajax({
+        url: url,
+        type:"post",
+        data : JSON.stringify(req),
+        dataType:'json',
+        contentType: 'application/json',
+        success: function (data){
+            if(data.code=="00000000") {
+                getData();
+            }
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
 }

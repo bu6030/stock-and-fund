@@ -1,10 +1,9 @@
 package com.buxuesong.account.service;
 
+import com.buxuesong.account.model.SaveStockRequest;
 import com.buxuesong.account.model.StockBean;
-import com.buxuesong.account.persist.dao.StockAndFundMapper;
-import com.buxuesong.account.persist.entity.StockAndFund;
+import com.buxuesong.account.persist.dao.StockMapper;
 import com.buxuesong.account.util.HttpClientPoolUtil;
-import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,11 +21,8 @@ public class StockServiceImpl implements StockService {
 
     private static final Logger logger = LoggerFactory.getLogger(StockServiceImpl.class);
 
-    public final static DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-    private static Gson gson = new Gson();
-
     @Autowired
-    private StockAndFundMapper stockAndFundMapper;
+    private StockMapper stockMapper;
 
     @Override
     public List<StockBean> getStockDetails(List<String> codes) {
@@ -96,27 +91,32 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
-    public void saveStock(String stock) {
-        stockAndFundMapper.update(StockAndFund.builder().stockAndFundInfo(stock).type(1).build());
+    public void saveStock(SaveStockRequest saveStockRequest) {
+        SaveStockRequest saveStockRequestFromTable = stockMapper.findStockByCode(saveStockRequest.getCode());
+        if(saveStockRequestFromTable!=null){
+            stockMapper.updateStock(saveStockRequest);
+        }else {
+            stockMapper.save(saveStockRequest);
+        }
+    }
+
+    @Override
+    public void deleteStock(SaveStockRequest saveStockRequest) {
+        stockMapper.deleteStock(saveStockRequest);
     }
 
     @Override
     public List<String> getStockList() {
-        String stock = stockAndFundMapper.findByType(1).getStockAndFundInfo();
+        List<SaveStockRequest> stock = stockMapper.findAllStock();
         logger.info("缓存的股票为：{}", stock);
-        if (StringUtils.isEmpty(stock)) {
+        if (stock == null || stock.isEmpty()) {
             return new ArrayList<>();
         }
-        String[] stockArr = stock.split(";");
         List<String> list = new ArrayList<>();
-        for (int i = 0; i < stockArr.length; i++) {
-            list.add(stockArr[i]);
+        for (SaveStockRequest stockRequest: stock) {
+            String stockArr = stockRequest.getCode() + "," + stockRequest.getCostPrise() +"," + stockRequest.getBonds() +"," + stockRequest.getApp();
+            list.add(stockArr);
         }
         return list;
-    }
-
-    @Override
-    public String getStock() {
-        return (String) stockAndFundMapper.findByType(1).getStockAndFundInfo();
     }
 }

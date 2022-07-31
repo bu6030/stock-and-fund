@@ -1,6 +1,7 @@
 package com.buxuesong.account.api.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -46,4 +47,16 @@ public class UrlController {
         return m;
     }
 
+    /**
+     * PC网页端类别页初始化
+     *
+     * @return
+     */
+    @GetMapping(value = "/addStockAndFundInit")
+    public ModelAndView addStockAndFundInit(@RequestParam String type, HttpServletRequest request, HttpServletResponse response) {
+        ModelAndView m = new ModelAndView();
+        m.setViewName("addStockAndFund");
+        m.getModel().put("type", type);
+        return m;
+    }
 }

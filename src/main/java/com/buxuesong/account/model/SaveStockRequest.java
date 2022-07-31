@@ -1,20 +1,52 @@
 package com.buxuesong.account.model;
 
-public class SaveStockRequest {
-    private String stock;
+import java.math.BigDecimal;
 
-    public String getStock() {
-        return stock;
+public class SaveStockRequest {
+    private String code;
+    private BigDecimal costPrise;
+    private int bonds;
+    private String app;
+
+    public String getCode() {
+        return code;
     }
 
-    public void setStock(String stock) {
-        this.stock = stock;
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public BigDecimal getCostPrise() {
+        return costPrise;
+    }
+
+    public void setCostPrise(BigDecimal costPrise) {
+        this.costPrise = costPrise;
+    }
+
+    public int getBonds() {
+        return bonds;
+    }
+
+    public void setBonds(int bonds) {
+        this.bonds = bonds;
+    }
+
+    public String getApp() {
+        return app;
+    }
+
+    public void setApp(String app) {
+        this.app = app;
     }
 
     @Override
     public String toString() {
         return "SaveStockRequest{" +
-            "stock='" + stock + '\'' +
-            '}';
+                "code='" + code + '\'' +
+                ", costPrise='" + costPrise + '\'' +
+                ", bonds='" + bonds + '\'' +
+                ", app='" + app + '\'' +
+                '}';
     }
 }
