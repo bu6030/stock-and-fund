@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface StockService {
     List<StockBean> getStockDetails(List<String> codes);
-    void saveStock(SaveStockRequest stock);
+    boolean saveStock(SaveStockRequest stock);
     void deleteStock(SaveStockRequest saveStockRequest);
     List<String> getStockList();
 }

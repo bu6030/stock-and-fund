@@ -2,6 +2,7 @@ package com.buxuesong.account.service;
 
 import com.buxuesong.account.model.SaveFundRequest;
 import com.buxuesong.account.persist.dao.FundMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import com.buxuesong.account.model.FundBean;
 import com.buxuesong.account.util.HttpClientPoolUtil;
@@ -18,12 +19,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class FundServiceImpl implements FundService {
     @Autowired
     private FundMapper fundMapper;
-
-    private static final Logger logger = LoggerFactory.getLogger(FundServiceImpl.class);
 
     private static Gson gson = new Gson();
 
@@ -48,6 +48,7 @@ public class FundServiceImpl implements FundService {
                 String result = HttpClientPoolUtil.getHttpClient()
                     .get("http://fundgz.1234567.com.cn/js/" + code + ".js?rt=" + System.currentTimeMillis());
                 String json = result.substring(8, result.length() - 2);
+                log.info("基金结果： {}", json);
                 if (!json.isEmpty()) {
                     FundBean bean = gson.fromJson(json, FundBean.class);
                     FundBean.loadFund(bean, codeMap);
@@ -76,11 +77,12 @@ public class FundServiceImpl implements FundService {
                         }
                     }
                     funds.add(bean);
-                    logger.info("Fund编码:[" + code + "]信息：{}", bean);
+                    log.info("Fund编码:[" + code + "]信息：{}", bean);
                 } else {
-                    logger.info("Fund编码:[" + code + "]无法获取数据");
+                    log.info("Fund编码:[" + code + "]无法获取数据");
                 }
             } catch (Exception e) {
+                log.info("Fund编码:[" + code + "]异常");
                 e.printStackTrace();
             }
         }
@@ -88,13 +90,24 @@ public class FundServiceImpl implements FundService {
     }
 
     @Override
-    public void saveFund(SaveFundRequest saveFundRequest) {
+    public boolean saveFund(SaveFundRequest saveFundRequest) {
+        try{
+            String result = HttpClientPoolUtil.getHttpClient()
+                    .get("http://fundgz.1234567.com.cn/js/" + saveFundRequest.getCode() + ".js?rt=" + System.currentTimeMillis());
+            String json = result.substring(8, result.length() - 2);
+            log.info("基金结果： {}", json);
+            FundBean bean = gson.fromJson(json, FundBean.class);
+        }catch (Exception e){
+            log.info("获取基金信息异常 {}", e.getMessage());
+            return false;
+        }
         SaveFundRequest saveFundRequestFromTable = fundMapper.findFundByCode(saveFundRequest.getCode());
         if(saveFundRequestFromTable!=null){
             fundMapper.updateFund(saveFundRequest);
         }else {
             fundMapper.save(saveFundRequest);
         }
+        return true;
     }
 
     @Override
@@ -105,7 +118,7 @@ public class FundServiceImpl implements FundService {
     @Override
     public List<String> getFundList() {
         List<SaveFundRequest> fund = fundMapper.findAllFund();
-        logger.info("缓存的基金为：{}", fund);
+        log.info("缓存的基金为：{}", fund);
         if (fund == null || fund.isEmpty()) {
             return new ArrayList<>();
         }

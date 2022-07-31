@@ -4,6 +4,7 @@ import com.buxuesong.account.model.SaveStockRequest;
 import com.buxuesong.account.model.StockBean;
 import com.buxuesong.account.persist.dao.StockMapper;
 import com.buxuesong.account.util.HttpClientPoolUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,10 +17,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@Slf4j
 @Service
 public class StockServiceImpl implements StockService {
-
-    private static final Logger logger = LoggerFactory.getLogger(StockServiceImpl.class);
 
     @Autowired
     private StockMapper stockMapper;
@@ -45,6 +45,7 @@ public class StockServiceImpl implements StockService {
 
         try {
             String result = HttpClientPoolUtil.getHttpClient().get("http://qt.gtimg.cn/q=" + urlPara);
+            log.info("获取股票信息 {}", result);
             String[] lines = result.split("\n");
             for (String line : lines) {
                 String code = line.substring(line.indexOf("_") + 1, line.indexOf("="));
@@ -91,13 +92,24 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
-    public void saveStock(SaveStockRequest saveStockRequest) {
+    public boolean saveStock(SaveStockRequest saveStockRequest) {
+        try {
+            String result = HttpClientPoolUtil.getHttpClient().get("http://qt.gtimg.cn/q=" + saveStockRequest.getCode());
+            String code = result.substring(result.indexOf("_") + 1, result.indexOf("="));
+            String dataStr = result.substring(result.indexOf("=") + 2, result.length() - 2);
+            String[] values = dataStr.split("~");
+            log.info("添加股票名称 {}", values[1]);
+        }catch (Exception e) {
+            log.info("获取股票信息异常 {}", e.getMessage());
+            return false;
+        }
         SaveStockRequest saveStockRequestFromTable = stockMapper.findStockByCode(saveStockRequest.getCode());
         if(saveStockRequestFromTable!=null){
             stockMapper.updateStock(saveStockRequest);
         }else {
             stockMapper.save(saveStockRequest);
         }
+        return true;
     }
 
     @Override
@@ -108,7 +120,7 @@ public class StockServiceImpl implements StockService {
     @Override
     public List<String> getStockList() {
         List<SaveStockRequest> stock = stockMapper.findAllStock();
-        logger.info("缓存的股票为：{}", stock);
+        log.info("缓存的股票为：{}", stock);
         if (stock == null || stock.isEmpty()) {
             return new ArrayList<>();
         }

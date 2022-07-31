@@ -27,6 +27,9 @@ function submitStockAndFund(){
         dataType:'json',
         contentType: 'application/json',
         success: function (data){
+            if(data.code!="00000000"){
+                alert("添加失败！");
+            }
             window.close();
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {

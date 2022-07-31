@@ -35,8 +35,10 @@ public class StockController {
     @PostMapping(value = "/saveStock")
     public Response saveStock(@RequestBody SaveStockRequest saveStockRequest) throws Exception {
         log.info("Save stock request: {}", saveStockRequest);
-        stockService.saveStock(saveStockRequest);
-        return Response.builder().value(true).code("00000000").build();
+        if(stockService.saveStock(saveStockRequest)){
+            return Response.builder().value(true).code("00000000").build();
+        }
+        return Response.builder().value(true).code("00000001").build();
     }
 
     /**
