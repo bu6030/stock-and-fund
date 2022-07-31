@@ -5,7 +5,7 @@
     <title>添加股票/基金</title>
     <link rel="stylesheet" th:href="@{/css/main.admin.css}" type="text/css" media="all"/>
     <link rel="stylesheet" th:href="@{/css/main.amazeui.min.css}" type="text/css" media="all"/>
-    <script th:src="@{/js/addStockAndFund.js}"></script>
+    <script th:src="@{/js/updateStockAndFund.js}"></script>
     <script th:src="@{/js/jquery.min.js}"></script>
     <!-- 日历控件 -->
     <script th:src="@{/js/laydate.js}"></script>
@@ -14,7 +14,7 @@
 
 <div width="80%" height="80%">
     <div class="listbiaoti am-cf">
-        <ul class="am-icon-flag on"> 添加股票/基金</ul>
+        <ul class="am-icon-flag on"> 修改股票/基金</ul>
         <!--<dl class="am-icon-home" style="float: right;"> 当前位置： 首页 > <a href="#">商品列表</a></dl>-->
     </div>
 
@@ -33,29 +33,29 @@
             <div class="am-form-group am-cf">
                 <div class="zuo">股票/基金编码：</div>
                 <div class="you">
-                    <input type="text" class="am-input-sm" id="code" placeholder="请输入编码">
+                    <input type="text" class="am-input-sm" id="code" th:value="${code}" placeholder="请输入编码">
                 </div>
             </div>
             <div class="am-form-group am-cf">
                 <div class="zuo">持仓成本：</div>
                 <div class="you">
-                    <input type="number" class="am-input-sm" id="costPrise" placeholder="请输入持仓成本">
+                    <input type="number" class="am-input-sm" id="costPrise" th:value="${costPrise}" placeholder="请输入持仓成本">
                 </div>
             </div>
             <div class="am-form-group am-cf">
                 <div class="zuo">持有份额：</div>
                 <div class="you">
-                    <input type="number" class="am-input-sm" id="bonds" placeholder="请输入持有份额">
+                    <input type="number" class="am-input-sm" id="bonds" th:value="${bonds}" placeholder="请输入持有份额">
                 </div>
             </div>
             <div class="am-form-group am-cf">
                 <div class="zuo">APP：</div>
                 <div class="you">
                     <select data-am-selected="{btnSize: 'sm'}" id="app">
-                        <option th:value="ZFB">支付宝</option>
-                        <option th:value="DFCF">东方财富</option>
-                        <option th:value="DFZQ">东方证券</option>
-                        <option th:value="ZGYH">中国银行</option>
+                        <option th:value="ZFB" th:selected="${app =='ZFB'}">支付宝</option>
+                        <option th:value="DFCF" th:selected="${app =='DFCF'}">东方财富</option>
+                        <option th:value="DFZQ" th:selected="${app =='DFZQ'}">东方证券</option>
+                        <option th:value="ZGYH" th:selected="${app =='ZGYH'}">中国银行</option>
                     </select>
                 </div>
             </div>

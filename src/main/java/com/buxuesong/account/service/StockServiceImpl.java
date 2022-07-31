@@ -6,8 +6,6 @@ import com.buxuesong.account.persist.dao.StockMapper;
 import com.buxuesong.account.util.HttpClientPoolUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -130,5 +128,8 @@ public class StockServiceImpl implements StockService {
             list.add(stockArr);
         }
         return list;
+    }
+    public SaveStockRequest findStockByCode(String code){
+        return stockMapper.findStockByCode(code);
     }
 }

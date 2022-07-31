@@ -14,9 +14,9 @@ function getData() {
     initStock();
     lay('#version').html('-v'+ laydate.v);
     // 10s刷新
-    // setInterval(function () {
-    //     window.location.reload()
-    // }, 10000)
+    setInterval(function () {
+        window.location.reload()
+    }, 30000)
 }
 
 function initStock(){

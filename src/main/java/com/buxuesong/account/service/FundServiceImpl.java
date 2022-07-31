@@ -130,4 +130,8 @@ public class FundServiceImpl implements FundService {
         return list;
     }
 
+    @Override
+    public SaveFundRequest findFundByCode(String code) {
+        return fundMapper.findFundByCode(code);
+    }
 }

@@ -26,9 +26,9 @@ function getData() {
 
     lay('#version').html('-v'+ laydate.v);
     // 10s刷新
-    // setInterval(function () {
-    //     window.location.reload()
-    // }, 10000)
+    setInterval(function () {
+        window.location.reload()
+    }, 30000)
 }
 
 function getTableHtml(result){
@@ -59,7 +59,9 @@ function getTableHtml(result){
             + "</td><td>" + result[k].bonds + "</td><td>" + result[k].incomePercent +"%"
             + "</td><td>" + marketValue
             + "</td><td>" + result[k].income
-            + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"删除\" onclick=\"deleteStock('" + result[k].code + "')\">"
+            + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"修改\" onclick=\"updateStock('" + result[k].code + "')\">"
+            + "<span class=\"am-icon-pencil-square-o\"></span></button>"
+            + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"删除\" onclick=\"deleteStock('" + result[k].code + "')\">"
             + "<span class=\"am-icon-remove\"></span></button>"
             +"</td></tr>";
         totalIncome = totalIncome.add(new BigDecimal(result[k].income));
@@ -67,32 +69,6 @@ function getTableHtml(result){
     str += "<tr><td>合计</td><td colspan='4'></td><td>" + totalDayIncome + "</td><td colspan='6'></td><td>" + totalmarketValue + "</td><td>" + totalIncome
         +"</td><td></td></tr>";
     return str;
-}
-
-function saveStock(){
-    var userId = $("#userId").val();
-    var stock = $("#stock").val();
-    var req = {
-        "userId" : userId,
-        "stock":stock
-    }
-    $.ajax({
-        url:"/stock",
-        type:"post",
-        data : JSON.stringify(req),
-        dataType:'json',
-        contentType: 'application/json',
-        success: function (data){
-            if(data.code=="00000000"){
-                getData();
-            }
-        },
-        error: function(XMLHttpRequest, textStatus, errorThrown) {
-            console.log(XMLHttpRequest.status);
-            console.log(XMLHttpRequest.readyState);
-            console.log(textStatus);
-        }
-    });
 }
 
 function getAppName(app){
@@ -149,4 +125,14 @@ function deleteStock(code){
             console.log(textStatus);
         }
     });
+}
+
+function updateStock(code){
+    var iHeight = 600;
+    var iWidth = 800;
+    //获得窗口的垂直位置
+    var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+    //获得窗口的水平位置
+    var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+    window.open ('/updateStockAndFundInit?code='+code+'&type=stock', 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
 }

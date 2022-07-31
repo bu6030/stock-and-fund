@@ -24,25 +24,11 @@ function getData() {
         }
     });
 
-    $.ajax({
-        url:"/fund/table",
-        type:"get",
-        data :{
-        },
-        dataType:'json',
-        contentType: 'application/x-www-form-urlencoded',
-        success: function (data){
-            var result = data.value;
-            $("#fund").val(result);
-        },
-        error: function(XMLHttpRequest, textStatus, errorThrown) {
-            console.log(XMLHttpRequest.status);
-            console.log(XMLHttpRequest.readyState);
-            console.log(textStatus);
-        }
-    });
     lay('#version').html('-v'+ laydate.v);
-
+    // 10s刷新
+    setInterval(function () {
+        window.location.reload()
+    }, 30000)
 }
 
 function getTableHtml(result){
@@ -74,40 +60,16 @@ function getTableHtml(result){
             + "</td><td>" + result[k].incomePercent + "%"
             + "</td><td>" + marketValue
             + "</td><td>" + result[k].income
-            + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"删除\" onclick=\"deleteFund('" + result[k].fundCode + "')\">"
+            + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"修改\" onclick=\"updateFund('" + result[k].fundCode + "')\">"
+            + "<span class=\"am-icon-pencil-square-o\"></span></button>"
+            + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"删除\" onclick=\"deleteFund('" + result[k].fundCode + "')\">"
             + "<span class=\"am-icon-remove\"></span></button>"
-            +"</td><td></td></tr>";
+            +"</td></tr>";
 
     }
     str += "<tr><td>合计</td><td colspan='3'></td><td>" + totalDayIncome + "</td><td colspan='5'></td><td>" + totalmarketValue + "</td><td>" + totalIncome
-        +"</td></tr>";
+        +"</td><td></td></tr>";
     return str;
-}
-
-function saveFund(){
-    var userId = $("#userId").val();
-    var fund = $("#fund").val();
-    var req = {
-        "userId" : userId,
-        "fund": fund
-    }
-    $.ajax({
-        url:"/fund",
-        type:"post",
-        data : JSON.stringify(req),
-        dataType:'json',
-        contentType: 'application/json',
-        success: function (data){
-            if(data.code=="00000000"){
-                getData();
-            }
-        },
-        error: function(XMLHttpRequest, textStatus, errorThrown) {
-            console.log(XMLHttpRequest.status);
-            console.log(XMLHttpRequest.readyState);
-            console.log(textStatus);
-        }
-    });
 }
 
 function getAppName(app){
@@ -164,4 +126,14 @@ function deleteFund(code){
             console.log(textStatus);
         }
     });
+}
+
+function updateFund(code){
+    var iHeight = 600;
+    var iWidth = 800;
+    //获得窗口的垂直位置
+    var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+    //获得窗口的水平位置
+    var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+    window.open ('/updateStockAndFundInit?code='+code+'&type=fund', 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
 }

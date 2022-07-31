@@ -10,4 +10,5 @@ public interface FundService {
     boolean saveFund(SaveFundRequest saveFundRequest);
     List<String> getFundList();
     void deleteFund(SaveFundRequest saveFundRequest);
+    SaveFundRequest findFundByCode(String code);
 }
