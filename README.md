@@ -1,4 +1,4 @@
-# stockeAndFund
+# stocke-and-fund
 自己写着玩的一个股票基金SpringBoot小项目
 # 股票数据格式
 sh600048,15.692,100,DFCF;sz000002,18.994,200,DFCF;
@@ -26,3 +26,9 @@ DFCF/DFZQ/ZFB分别代码东方财富/东方证券/支付宝，目前我就写�
 <br>
 DFCF/DFZQ/ZFB分别代码东方财富/东方证券/支付宝，目前我就写了这三个格式，自己可以在fund.js/stockAndFund.js里修改可以展示的文字
 <br>
+
+# 本机Docker环境一键部署
+1. 本地package出jar包
+2. 执行项目根目录下localDeployment.sh
+./localDeployment.sh
+3. 本机访问http://localhost:8080/main
