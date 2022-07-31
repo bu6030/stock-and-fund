@@ -21,6 +21,7 @@ public class UrlController {
     private StockService stockService;
     @Autowired
     private FundService fundService;
+
     /**
      * PC网页端类别页初始化
      *
@@ -76,19 +77,20 @@ public class UrlController {
      * @return
      */
     @GetMapping(value = "/updateStockAndFundInit")
-    public ModelAndView updateStockAndFundInit(@RequestParam String type,@RequestParam String code, HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView updateStockAndFundInit(@RequestParam String type, @RequestParam String code, HttpServletRequest request,
+        HttpServletResponse response) {
         log.info("修改股票基金初始化 type : {}, code : {}", type, code);
         ModelAndView m = new ModelAndView();
         m.setViewName("updateStockAndFund");
         m.getModel().put("type", type);
-        if(type.equals("fund")){
+        if (type.equals("fund")) {
             SaveFundRequest saveFundRequest = fundService.findFundByCode(code);
             log.info("修改股票基金初始化 saveFundRequest : {}", saveFundRequest);
             m.getModel().put("code", saveFundRequest.getCode());
             m.getModel().put("costPrise", saveFundRequest.getCostPrise());
             m.getModel().put("bonds", saveFundRequest.getBonds());
             m.getModel().put("app", saveFundRequest.getApp());
-        }else{
+        } else {
             SaveStockRequest saveStockRequest = stockService.findStockByCode(code);
             log.info("修改股票基金初始化 saveStockRequest : {}", saveStockRequest);
             m.getModel().put("code", saveStockRequest.getCode());

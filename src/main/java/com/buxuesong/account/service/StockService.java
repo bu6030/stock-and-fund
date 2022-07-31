@@ -8,8 +8,12 @@ import java.util.List;
 
 public interface StockService {
     List<StockBean> getStockDetails(List<String> codes);
+
     boolean saveStock(SaveStockRequest stock);
+
     void deleteStock(SaveStockRequest saveStockRequest);
+
     List<String> getStockList();
+
     SaveStockRequest findStockByCode(String code);
 }

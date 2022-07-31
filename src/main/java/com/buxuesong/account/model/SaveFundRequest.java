@@ -43,10 +43,10 @@ public class SaveFundRequest {
     @Override
     public String toString() {
         return "SaveFundRequest{" +
-                "code='" + code + '\'' +
-                ", costPrise='" + costPrise + '\'' +
-                ", bonds='" + bonds + '\'' +
-                ", app='" + app + '\'' +
-                '}';
+            "code='" + code + '\'' +
+            ", costPrise='" + costPrise + '\'' +
+            ", bonds='" + bonds + '\'' +
+            ", app='" + app + '\'' +
+            '}';
     }
 }

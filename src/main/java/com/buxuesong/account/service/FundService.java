@@ -7,8 +7,12 @@ import java.util.List;
 
 public interface FundService {
     List<FundBean> getFundDetails(List<String> codes);
+
     boolean saveFund(SaveFundRequest saveFundRequest);
+
     List<String> getFundList();
+
     void deleteFund(SaveFundRequest saveFundRequest);
+
     SaveFundRequest findFundByCode(String code);
 }

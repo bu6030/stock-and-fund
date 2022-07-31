@@ -43,10 +43,10 @@ public class SaveStockRequest {
     @Override
     public String toString() {
         return "SaveStockRequest{" +
-                "code='" + code + '\'' +
-                ", costPrise='" + costPrise + '\'' +
-                ", bonds='" + bonds + '\'' +
-                ", app='" + app + '\'' +
-                '}';
+            "code='" + code + '\'' +
+            ", costPrise='" + costPrise + '\'' +
+            ", bonds='" + bonds + '\'' +
+            ", app='" + app + '\'' +
+            '}';
     }
 }

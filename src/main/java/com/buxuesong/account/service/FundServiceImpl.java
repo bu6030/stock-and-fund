@@ -91,20 +91,20 @@ public class FundServiceImpl implements FundService {
 
     @Override
     public boolean saveFund(SaveFundRequest saveFundRequest) {
-        try{
+        try {
             String result = HttpClientPoolUtil.getHttpClient()
-                    .get("http://fundgz.1234567.com.cn/js/" + saveFundRequest.getCode() + ".js?rt=" + System.currentTimeMillis());
+                .get("http://fundgz.1234567.com.cn/js/" + saveFundRequest.getCode() + ".js?rt=" + System.currentTimeMillis());
             String json = result.substring(8, result.length() - 2);
             log.info("基金结果： {}", json);
             FundBean bean = gson.fromJson(json, FundBean.class);
-        }catch (Exception e){
+        } catch (Exception e) {
             log.info("获取基金信息异常 {}", e.getMessage());
             return false;
         }
         SaveFundRequest saveFundRequestFromTable = fundMapper.findFundByCode(saveFundRequest.getCode());
-        if(saveFundRequestFromTable!=null){
+        if (saveFundRequestFromTable != null) {
             fundMapper.updateFund(saveFundRequest);
-        }else {
+        } else {
             fundMapper.save(saveFundRequest);
         }
         return true;
@@ -123,8 +123,9 @@ public class FundServiceImpl implements FundService {
             return new ArrayList<>();
         }
         List<String> list = new ArrayList<>();
-        for (SaveFundRequest fundRequest: fund) {
-            String fundArr = fundRequest.getCode() + "," + fundRequest.getCostPrise() +"," + fundRequest.getBonds() +"," + fundRequest.getApp();
+        for (SaveFundRequest fundRequest : fund) {
+            String fundArr = fundRequest.getCode() + "," + fundRequest.getCostPrise() + "," + fundRequest.getBonds() + ","
+                + fundRequest.getApp();
             list.add(fundArr);
         }
         return list;

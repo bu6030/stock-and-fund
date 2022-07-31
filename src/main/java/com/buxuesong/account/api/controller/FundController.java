@@ -36,7 +36,7 @@ public class FundController {
     @PostMapping(value = "/saveFund")
     public Response saveFund(@RequestBody SaveFundRequest saveFundRequest) throws Exception {
         log.info("Save fund request: {}", saveFundRequest);
-        if(fundService.saveFund(saveFundRequest)) {
+        if (fundService.saveFund(saveFundRequest)) {
             return Response.builder().value(true).code("00000000").build();
         }
         return Response.builder().value(true).code("00000001").build();

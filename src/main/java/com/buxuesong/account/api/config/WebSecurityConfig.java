@@ -17,24 +17,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
             .authorizeRequests()
             .antMatchers("/**")
             .permitAll()
-                .and()
-                .csrf()
-                .disable()
-                .sessionManagement()
-                .disable()
-                .cors()
-                .and()
-                .headers()
-                .defaultsDisabled()
-                .contentTypeOptions();
+            .and()
+            .csrf()
+            .disable()
+            .sessionManagement()
+            .disable()
+            .cors()
+            .and()
+            .headers()
+            .defaultsDisabled()
+            .contentTypeOptions();
     }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedHeaders("*")
-                .allowedMethods("*")
-                .maxAge(1800)
-                .allowedOrigins("*");
+            .allowedHeaders("*")
+            .allowedMethods("*")
+            .maxAge(1800)
+            .allowedOrigins("*");
     }
 }

@@ -97,14 +97,14 @@ public class StockServiceImpl implements StockService {
             String dataStr = result.substring(result.indexOf("=") + 2, result.length() - 2);
             String[] values = dataStr.split("~");
             log.info("添加股票名称 {}", values[1]);
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.info("获取股票信息异常 {}", e.getMessage());
             return false;
         }
         SaveStockRequest saveStockRequestFromTable = stockMapper.findStockByCode(saveStockRequest.getCode());
-        if(saveStockRequestFromTable!=null){
+        if (saveStockRequestFromTable != null) {
             stockMapper.updateStock(saveStockRequest);
-        }else {
+        } else {
             stockMapper.save(saveStockRequest);
         }
         return true;
@@ -123,13 +123,15 @@ public class StockServiceImpl implements StockService {
             return new ArrayList<>();
         }
         List<String> list = new ArrayList<>();
-        for (SaveStockRequest stockRequest: stock) {
-            String stockArr = stockRequest.getCode() + "," + stockRequest.getCostPrise() +"," + stockRequest.getBonds() +"," + stockRequest.getApp();
+        for (SaveStockRequest stockRequest : stock) {
+            String stockArr = stockRequest.getCode() + "," + stockRequest.getCostPrise() + "," + stockRequest.getBonds() + ","
+                + stockRequest.getApp();
             list.add(stockArr);
         }
         return list;
     }
-    public SaveStockRequest findStockByCode(String code){
+
+    public SaveStockRequest findStockByCode(String code) {
         return stockMapper.findStockByCode(code);
     }
 }
