@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class SaveFundRequest {
     private String code;
     private BigDecimal costPrise;
-    private int bonds;
+    private String bonds;
     private String app;
 
     public String getCode() {
@@ -24,11 +24,11 @@ public class SaveFundRequest {
         this.costPrise = costPrise;
     }
 
-    public int getBonds() {
+    public String getBonds() {
         return bonds;
     }
 
-    public void setBonds(int bonds) {
+    public void setBonds(String bonds) {
         this.bonds = bonds;
     }
 
