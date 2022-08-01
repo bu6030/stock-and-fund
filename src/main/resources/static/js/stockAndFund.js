@@ -13,9 +13,11 @@ function getData() {
     var accountId = $("#accountId").val();
     initStock();
     lay('#version').html('-v'+ laydate.v);
-    // 10s刷新
+    // 30s刷新
     setInterval(function () {
-        window.location.reload()
+        if ($("#enableAutoRefresh").is(":checked")) {
+            window.location.reload()
+        }
     }, 30000)
 }
 
@@ -84,7 +86,8 @@ function getStockTableHtml(result){
             + "</td><td>" + result[k].changePercent +"%"
             + "</td><td>" +result[k].max
             + "</td><td>" + result[k].min
-            + "</td><td>" + result[k].now + "</td><td>" + result[k].costPrise
+            + "</td><td>" + result[k].now
+            + "</td><td>" + result[k].costPrise
             + "</td><td>" + result[k].bonds
             + "</td><td>" + marketValue
             + "</td><td>" + result[k].incomePercent +"%"
@@ -120,11 +123,13 @@ function getFundTableHtml(result){
             + "</td><td>" + dayIncome
             + "</td><td>" +result[k].gszzl + "%"
             + "</td><td>"
-            + "</td><td>" + result[k].dwjz + "</td><td>" + result[k].gsz
+            + "</td><td>" + result[k].dwjz + "(" + result[k].jzrq + ")"
+            + "</td><td>" + result[k].gsz
             + "</td><td>" +result[k].costPrise
             + "</td><td>" + result[k].bonds
             + "</td><td>" + marketValue
-            + "</td><td>" + result[k].incomePercent + "%</td><td>" + result[k].income
+            + "</td><td>" + result[k].incomePercent + "%"
+            + "</td><td>" + result[k].income
             +"</td></tr>";
         fundTotalIncome = fundTotalIncome.add(new BigDecimal(result[k].income));
         fundDayIncome = fundDayIncome.add(dayIncome);

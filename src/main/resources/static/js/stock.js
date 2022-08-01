@@ -25,9 +25,11 @@ function getData() {
     });
 
     lay('#version').html('-v'+ laydate.v);
-    // 10s刷新
+    // 30s刷新
     setInterval(function () {
-        window.location.reload()
+        if ($("#enableAutoRefresh").is(":checked")) {
+            window.location.reload()
+        }
     }, 30000)
 }
 
