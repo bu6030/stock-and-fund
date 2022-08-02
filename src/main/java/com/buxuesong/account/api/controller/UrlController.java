@@ -23,7 +23,7 @@ public class UrlController {
     private FundService fundService;
 
     /**
-     * PC网页端类别页初始化
+     * 基金页面初始化
      *
      * @return
      */
@@ -35,7 +35,7 @@ public class UrlController {
     }
 
     /**
-     * PC网页端类别页初始化
+     * 股票页面初始化
      *
      * @return
      */
@@ -47,7 +47,7 @@ public class UrlController {
     }
 
     /**
-     * PC网页端类别页初始化
+     * 股票基金汇总页面初始化
      *
      * @return
      */
@@ -59,7 +59,7 @@ public class UrlController {
     }
 
     /**
-     * PC网页端类别页初始化
+     * 添加股票基金页面初始化
      *
      * @return
      */
@@ -72,7 +72,7 @@ public class UrlController {
     }
 
     /**
-     * PC网页端类别页初始化
+     * 修改股票基金页面初始化
      *
      * @return
      */

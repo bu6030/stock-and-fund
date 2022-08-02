@@ -17,7 +17,7 @@ public class StockController {
     private StockService stockService;
 
     /**
-     * 获取账本列表接口
+     * 获取股票信息列表接口
      *
      * @return
      */
@@ -28,7 +28,7 @@ public class StockController {
     }
 
     /**
-     * 获取账本列表接口
+     * 保存/修改股票接口
      *
      * @return
      */
@@ -42,7 +42,7 @@ public class StockController {
     }
 
     /**
-     * 获取账本列表接口
+     * 删除股票接口
      *
      * @return
      */

@@ -18,7 +18,7 @@ public class FundController {
     private FundService fundService;
 
     /**
-     * 获取账本列表接口
+     * 获取基金信息列表接口
      *
      * @return
      */
@@ -29,7 +29,7 @@ public class FundController {
     }
 
     /**
-     * 获取账本列表接口
+     * 保存/修改基金接口
      *
      * @return
      */
@@ -43,7 +43,7 @@ public class FundController {
     }
 
     /**
-     * 获取账本列表接口
+     * 删除基金接口
      *
      * @return
      */
