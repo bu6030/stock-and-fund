@@ -25,9 +25,11 @@ function getData() {
     });
 
     lay('#version').html('-v'+ laydate.v);
-    // 10s刷新
+    // 30s刷新
     setInterval(function () {
-        window.location.reload()
+        if ($("#enableAutoRefresh").is(":checked")) {
+            window.location.reload()
+        }
     }, 30000)
 }
 
@@ -53,7 +55,7 @@ function getTableHtml(result){
             + "</td><td>" +result[k].fundName
             + "</td><td>" +result[k].gszzl + "%"
             + "</td><td>" + dayIncome
-            + "</td><td>" + result[k].dwjz
+            + "</td><td>" + result[k].dwjz + "(" + result[k].jzrq + ")"
             + "</td><td>" + result[k].gsz
             + "</td><td>" +result[k].costPrise
             + "</td><td>" + result[k].bonds
