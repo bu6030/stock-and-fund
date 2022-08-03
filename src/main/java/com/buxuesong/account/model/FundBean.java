@@ -3,6 +3,7 @@ package com.buxuesong.account.model;
 import com.google.gson.annotations.SerializedName;
 import org.apache.commons.lang3.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Objects;
 
@@ -57,6 +58,25 @@ public class FundBean {
                 fund.setBonds(codeStr[2]);
             }
         }
+    }
+
+    public static FundBean loadFundFromSina(String code, String fundStr) {
+        fundStr = fundStr.replaceAll("var hq_str_sz" + code + "=", "")
+            .replaceAll("var hq_str_f_" + code + "=", "").replaceAll("\"", "");
+        String[] lines = fundStr.split("\n");
+        FundBean fundBean = new FundBean();
+        String[] fundInfoArr = lines[0].split(",");
+        String[] fundJingZhiArr = lines[1].split(",");
+        fundBean.setFundCode(code);
+        fundBean.setFundName(fundJingZhiArr[0]);
+        fundBean.setJzrq(fundJingZhiArr[4]);
+        fundBean.setDwjz(fundInfoArr[2]);
+        fundBean.setGsz(fundInfoArr[3]);
+        BigDecimal gsz = new BigDecimal(fundInfoArr[3]);
+        BigDecimal dwjz = new BigDecimal(fundInfoArr[2]);
+        BigDecimal gszzl = gsz.subtract(dwjz).divide(gsz, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).setScale(2);
+        fundBean.setGszzl(gszzl.toString());
+        return fundBean;
     }
 
     public String getFundCode() {

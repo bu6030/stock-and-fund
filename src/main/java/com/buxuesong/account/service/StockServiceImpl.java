@@ -146,8 +146,8 @@ public class StockServiceImpl implements StockService {
         ResponseEntity<String> response = null;
         try {
             response = restTemplate.exchange(
-                    GET_STOCK_INFO_URL, HttpMethod.GET, null, String.class, param);
-        }catch(Exception e){
+                GET_STOCK_INFO_URL, HttpMethod.GET, null, String.class, param);
+        } catch (Exception e) {
             log.info("获取腾讯股票接口异常: {]", e);
             return null;
         }
