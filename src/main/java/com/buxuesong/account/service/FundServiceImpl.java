@@ -5,12 +5,13 @@ import com.buxuesong.account.persist.dao.FundMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import com.buxuesong.account.model.FundBean;
-import com.buxuesong.account.util.HttpClientPoolUtil;
 import com.google.gson.Gson;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -24,8 +25,11 @@ import java.util.Map;
 public class FundServiceImpl implements FundService {
     @Autowired
     private FundMapper fundMapper;
+    @Autowired
+    private RestTemplate restTemplate;
 
     private static Gson gson = new Gson();
+    private static final String GET_FUND_INFO_URL = "http://fundgz.1234567.com.cn/js/{code}.js";
 
     @Override
     public List<FundBean> getFundDetails(List<String> codes) {
@@ -45,8 +49,7 @@ public class FundServiceImpl implements FundService {
 
         for (String code : codeList) {
             try {
-                String result = HttpClientPoolUtil.getHttpClient()
-                    .get("http://fundgz.1234567.com.cn/js/" + code + ".js?rt=" + System.currentTimeMillis());
+                String result = getFundInfoFromApi(code);
                 String json = result.substring(8, result.length() - 2);
                 log.info("基金结果： {}", json);
                 if (!json.isEmpty()) {
@@ -92,8 +95,7 @@ public class FundServiceImpl implements FundService {
     @Override
     public boolean saveFund(SaveFundRequest saveFundRequest) {
         try {
-            String result = HttpClientPoolUtil.getHttpClient()
-                .get("http://fundgz.1234567.com.cn/js/" + saveFundRequest.getCode() + ".js?rt=" + System.currentTimeMillis());
+            String result = getFundInfoFromApi(saveFundRequest.getCode());
             String json = result.substring(8, result.length() - 2);
             log.info("基金结果： {}", json);
             FundBean bean = gson.fromJson(json, FundBean.class);
@@ -118,7 +120,7 @@ public class FundServiceImpl implements FundService {
     @Override
     public List<String> getFundList() {
         List<SaveFundRequest> fund = fundMapper.findAllFund();
-        log.info("缓存的基金为：{}", fund);
+        log.info("数据库中的基金为：{}", fund);
         if (fund == null || fund.isEmpty()) {
             return new ArrayList<>();
         }
@@ -135,4 +137,21 @@ public class FundServiceImpl implements FundService {
     public SaveFundRequest findFundByCode(String code) {
         return fundMapper.findFundByCode(code);
     }
+
+    private String getFundInfoFromApi(String code) {
+        String url = UriComponentsBuilder.fromUriString(GET_FUND_INFO_URL)
+            .queryParam("rt", System.currentTimeMillis())
+            .build()
+            .toUriString();
+        ResponseEntity<String> response = null;
+        try {
+            response = restTemplate.exchange(
+                    url, HttpMethod.GET, null, String.class, code);
+        }catch(Exception e){
+            log.info("获取天天基金接口异常: {]", e);
+            return null;
+        }
+        return response.getBody();
+    }
+
 }
