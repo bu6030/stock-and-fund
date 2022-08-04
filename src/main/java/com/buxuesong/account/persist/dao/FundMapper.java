@@ -14,7 +14,7 @@ public interface FundMapper {
     @Update("INSERT INTO FUND (CODE, COST_PRICE, BONDS, APP) values (#{saveFundRequest.code},#{saveFundRequest.costPrise},#{saveFundRequest.bonds},#{saveFundRequest.app}) ")
     int save(@Param("saveFundRequest") SaveFundRequest saveFundRequest);
 
-    @Select("select CODE, COST_PRICE costPrise, BONDS, APP from FUND order by CODE ASC")
+    @Select("select CODE, COST_PRICE costPrise, BONDS, APP from FUND order by APP ASC, CODE ASC")
     List<SaveFundRequest> findAllFund();
 
     @Select("select CODE, COST_PRICE costPrise, BONDS, APP from FUND where code = #{code}")
