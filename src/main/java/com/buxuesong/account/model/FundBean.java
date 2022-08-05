@@ -67,14 +67,17 @@ public class FundBean {
         FundBean fundBean = new FundBean();
         String[] fundInfoArr = lines[0].split(",");
         String[] fundJingZhiArr = lines[1].split(",");
+        BigDecimal gsz = new BigDecimal(fundInfoArr[3]);
+        BigDecimal dwjz = new BigDecimal(fundInfoArr[2]);
+        if(gsz.compareTo(new BigDecimal("0"))==0){
+            gsz = dwjz;
+        }
+        BigDecimal gszzl = gsz.subtract(dwjz).divide(gsz, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).setScale(2);
         fundBean.setFundCode(code);
         fundBean.setFundName(fundJingZhiArr[0]);
         fundBean.setJzrq(fundJingZhiArr[4]);
-        fundBean.setDwjz(fundInfoArr[2]);
-        fundBean.setGsz(fundInfoArr[3]);
-        BigDecimal gsz = new BigDecimal(fundInfoArr[3]);
-        BigDecimal dwjz = new BigDecimal(fundInfoArr[2]);
-        BigDecimal gszzl = gsz.subtract(dwjz).divide(gsz, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).setScale(2);
+        fundBean.setDwjz(dwjz.toString());
+        fundBean.setGsz(gsz.toString());
         fundBean.setGszzl(gszzl.toString());
         return fundBean;
     }
