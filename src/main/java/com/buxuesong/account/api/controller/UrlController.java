@@ -100,4 +100,16 @@ public class UrlController {
         }
         return m;
     }
+
+    /**
+     * 新基金页面初始化，引入layui
+     *
+     * @return
+     */
+    @GetMapping(value = "/fundNewInit")
+    public ModelAndView exampleInit(HttpServletRequest request, HttpServletResponse response) {
+        ModelAndView m = new ModelAndView();
+        m.setViewName("fundNew");
+        return m;
+    }
 }
