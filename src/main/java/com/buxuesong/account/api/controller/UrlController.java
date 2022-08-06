@@ -107,9 +107,21 @@ public class UrlController {
      * @return
      */
     @GetMapping(value = "/fundNewInit")
-    public ModelAndView exampleInit(HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView fundNewInit(HttpServletRequest request, HttpServletResponse response) {
         ModelAndView m = new ModelAndView();
         m.setViewName("fundNew");
+        return m;
+    }
+
+    /**
+     * 新股票页面初始化，引入layui
+     *
+     * @return
+     */
+    @GetMapping(value = "/stockNewInit")
+    public ModelAndView stockNewInit(HttpServletRequest request, HttpServletResponse response) {
+        ModelAndView m = new ModelAndView();
+        m.setViewName("stockNew");
         return m;
     }
 }

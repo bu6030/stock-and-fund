@@ -22,7 +22,7 @@
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delete">删除</a>
-<!--    <a class="layui-btn layui-btn-xs" lay-event="more">更多 <i class="layui-icon layui-icon-down"></i></a>-->
+    <!--    <a class="layui-btn layui-btn-xs" lay-event="more">更多 <i class="layui-icon layui-icon-down"></i></a>-->
 </script>
 <script th:src="@{/js/BigDecimal.js}"></script>
 <script th:src="@{/js/jquery.min.js}"></script>
@@ -44,7 +44,7 @@
         table.render({
             elem: '#demo'
             // ,height: 600
-            ,url: '/fund' //数据接口（此处为静态数据，仅作演示）
+            ,url: '/stock' //数据接口（此处为静态数据，仅作演示）
             ,title: '用户表'
             // ,page: true //开启分页
             ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
@@ -61,13 +61,10 @@
                     } else if(item.app == 'ZGYH'){
                         item.appNew = '中国银行';
                     }
-                    item.dayIncome = new BigDecimal(parseFloat((new BigDecimal(item.gszzl))
-                        .multiply((new BigDecimal(item.dwjz))).multiply(new BigDecimal(item.bonds))
-                        .divide(new BigDecimal("100"))).toFixed(2)) +'';
-                    item.marketValue = new BigDecimal(parseFloat((new BigDecimal(item.gsz)).multiply(new BigDecimal(item.bonds))).toFixed(2)) +'';
-                    item.gszzlNew = item.gszzl +'%';
-                    item.dwjzNew = item.dwjz+ '(' + item.jzrq + ')';
-                    item.incomePercent = item.incomePercent + "%";
+                    item.dayIncome = (new BigDecimal(item.change)).multiply(new BigDecimal(item.bonds)) +'';
+                    item.marketValue = (new BigDecimal(item.now)).multiply(new BigDecimal(item.bonds)) +'';
+                    item.changePercentNew = item.changePercent +'%';
+                    item.incomePercentNew = item.incomePercent +'%';
                 }
                 return {
                     "code": res.code, //解析接口状态
@@ -78,17 +75,19 @@
             }
             ,cols: [ [ //表头
                 {type: 'checkbox', fixed: 'left'}
-                ,{field: 'appNew', title: 'APP', width: 120, sort: true, fixed: 'left',totalRow: '合计：', toolbar: '#filterApp'}
-                ,{field: 'fundCode', title: '基金编码', width:120, sort: true, fixed: 'left'}
-                ,{field: 'fundName', title: '基金名称', width:180}
-                ,{field: 'gszzlNew', title: '估算涨跌幅', width:150}
-                ,{field: 'dayIncome', title: '估算当日盈利', width:130, totalRow: true}
-                ,{field: 'dwjzNew', title: '当日净值', width: 180, sort: true}
-                ,{field: 'gsz', title: '估算净值', width:120, sort: true}
-                ,{field: 'costPrise', title: '持仓成本', width: 120}
-                ,{field: 'bonds', title: '持有份额', width:150, sort: true}
-                ,{field: 'incomePercent', title: '收益率', width: 120, sort: true}
-                ,{field: 'marketValue', title: '市值/金额', width: 100, sort: true, totalRow: true}
+                ,{field: 'appNew', title: 'APP', width: 120, sort: true, fixed: 'left',totalRow: '合计：'}
+                ,{field: 'code', title: '编码', width:120, sort: true, fixed: 'left'}
+                ,{field: 'name', title: '股票名称', width:120}
+                ,{field: 'change', title: '涨跌', width:80}
+                ,{field: 'changePercentNew', title: '涨跌幅', width:100, sort: true}
+                ,{field: 'dayIncome', title: '当日盈利', width: 120, sort: true, totalRow: true}
+                ,{field: 'max', title: '最高价', width:120}
+                ,{field: 'min', title: '最低价', width: 120}
+                ,{field: 'now', title: '当前价', width: 120}
+                ,{field: 'costPrise', title: '成本价', width: 100}
+                ,{field: 'bonds', title: '持仓', width: 135, sort: true}
+                ,{field: 'incomePercentNew', title: '收益率', width: 135, sort: true}
+                ,{field: 'marketValue', title: '市值/金额', width: 135, sort: true, totalRow: true}
                 ,{field: 'income', title: '收益', width: 135, sort: true, totalRow: true}
                 ,{fixed: 'right', title: '操作', width: 150, align:'center', toolbar: '#barDemo'}
             ] ]
@@ -101,7 +100,7 @@
             switch(obj.event){
                 case 'add':
                     layer.msg('添加');
-                    showDialog('fund');
+                    showDialog('stock');
                     break;
                 case 'update':
                     if(data.length === 0){
@@ -109,7 +108,7 @@
                     } else if(data.length > 1){
                         layer.msg('只能同时编辑一个');
                     } else {
-                        updateFund(checkStatus.data[0].fundCode);
+                        updateStock(checkStatus.data[0].code);
                     }
                     break;
                 case 'delete':
@@ -117,10 +116,10 @@
                         layer.msg('请选择一行');
                     } else {
                         layer.msg('删除');
-                        layer.confirm('真的删除'+ checkStatus.data[0].fundName +'么?', function(index){
+                        layer.confirm('真的删除'+ checkStatus.data[0].name +'么?', function(index){
                             layer.close(index);
                             //向服务端发送删除指令
-                            deleteFund(checkStatus.data[0].fundCode);
+                            deleteStock(checkStatus.data[0].code);
                             // obj.del(); //删除对应行（tr）的DOM结构
                             location.reload();
                         });
@@ -151,15 +150,15 @@
                 ,layEvent = obj.event; //获得 lay-event 对应的值
             if(layEvent === 'edit') {
                 layer.msg('编辑操作');
-                updateFund(data.fundCode);
+                updateStock(data.code);
             } else if (layEvent === 'delete') {
-                    layer.confirm('真的删除'+ data.fundName +'么?', function(index){
-                        layer.close(index);
-                        //向服务端发送删除指令
-                        deleteFund(data.fundCode);
-                        // obj.del(); //删除对应行（tr）的DOM结构
-                        location.reload();
-                    });
+                layer.confirm('真的删除'+ data.name +'么?', function(index){
+                    layer.close(index);
+                    //向服务端发送删除指令
+                    deleteStock(data.code);
+                    // obj.del(); //删除对应行（tr）的DOM结构
+                    location.reload();
+                });
             }
             // } else if(layEvent === 'more'){
             //     //下拉菜单
@@ -219,18 +218,18 @@
         window.open (url, 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
     }
 
-    function updateFund(code) {
+    function updateStock(code) {
         var iHeight = 600;
         var iWidth = 800;
         //获得窗口的垂直位置
         var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
         //获得窗口的水平位置
         var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
-        window.open ('/updateStockAndFundInit?code='+code+'&type=fund', 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
+        window.open ('/updateStockAndFundInit?code='+code+'&type=stock', 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
     }
 
-    function deleteFund(code) {
-        var url = "/deleteFund";
+    function deleteStock(code) {
+        var url = "/deleteStock";
         var req = {
             "code" : code
         }
