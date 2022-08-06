@@ -14,7 +14,7 @@
 </head>
 <body>
 <header class="menu">
-    <div th:replace="header.html"></div>
+    <div th:replace="headerNew.html"></div>
 </header>
 
 <table class="layui-hide" id="demo" lay-filter="test"></table>
@@ -78,7 +78,7 @@
             }
             ,cols: [ [ //表头
                 {type: 'checkbox', fixed: 'left'}
-                ,{field: 'appNew', title: 'APP', width: 120, sort: true, fixed: 'left',totalRow: '合计：', toolbar: '#filterApp'}
+                ,{field: 'appNew', title: 'APP', width: 120, sort: true, fixed: 'left',totalRow: '合计：'}
                 ,{field: 'fundCode', title: '基金编码', width:120, sort: true, fixed: 'left'}
                 ,{field: 'fundName', title: '基金名称', width:180}
                 ,{field: 'gszzlNew', title: '估算涨跌幅', width:150}
