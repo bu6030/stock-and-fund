@@ -30,7 +30,8 @@ function submitStockAndFund(){
             if(data.code!="00000000"){
                 alert("添加失败！");
             }else{
-                window.opener.getData();
+                // window.opener.getData();
+                window.opener.location.reload();
             }
             window.close();
         },
