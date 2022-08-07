@@ -39,7 +39,7 @@
         var dropdown = layui.dropdown; //下拉菜单
 
         // 向世界问个好
-        layer.msg('Hello World');
+        layer.msg('基金：您可在此页面查看基金当日情况，以及添加修改删除基金。');
 
         // 执行一个 table 实例
         table.render({
@@ -79,9 +79,9 @@
             }
             ,cols: [ [ //表头
                 {type: 'checkbox', fixed: 'left'}
-                ,{field: 'appNew', title: 'APP', width: 120, sort: true, fixed: 'left',totalRow: '合计：'}
-                ,{field: 'fundCode', title: '基金编码', width:120, sort: true, fixed: 'left'}
-                ,{field: 'fundName', title: '基金名称', width:180}
+                ,{field: 'appNew', title: 'APP', width: 120, sort: true,totalRow: '合计：'}
+                ,{field: 'fundCode', title: '基金编码', width:120, sort: true}
+                ,{field: 'fundName', title: '基金名称', width:215}
                 ,{field: 'gszzlNew', title: '估算涨跌幅', width:150}
                 ,{field: 'dayIncome', title: '估算当日盈利', width:130, totalRow: true}
                 ,{field: 'dwjzNew', title: '当日净值', width: 180, sort: true}

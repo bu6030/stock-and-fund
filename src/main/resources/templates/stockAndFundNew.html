@@ -22,11 +22,6 @@
 </div>
 <table class="layui-hide" id="demo" lay-filter="test"></table>
 
-<script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delete">删除</a>
-    <!--    <a class="layui-btn layui-btn-xs" lay-event="more">更多 <i class="layui-icon layui-icon-down"></i></a>-->
-</script>
 <script th:src="@{/js/BigDecimal.js}"></script>
 <script th:src="@{/js/jquery.min.js}"></script>
 <script src="https://cdn.staticfile.org/layui/2.7.6/layui.js"></script>
@@ -36,21 +31,17 @@
         // 得到需要的内置组件
         var layer = layui.layer; //弹层
         var table = layui.table; //表格
-        var dropdown = layui.dropdown; //下拉菜单
 
         // 向世界问个好
-        layer.msg('Hello World');
+        layer.msg('股票基金汇总：您可在此页面查看股票基金当日情况。');
 
         // 执行一个 table 实例
         table.render({
             elem: '#demo'
-            // ,height: 600
             ,url: '/stockAndFund' //数据接口（此处为静态数据，仅作演示）
             ,title: '用户表'
             ,even: true //开启隔行背景
             ,size: 'sm' //小尺寸的表格
-            // ,page: true //开启分页
-            ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
             ,totalRow: true //开启合计行
             ,parseData: function(res){ //res 即为原始返回的数据
                 for(var i=0;i<res.value.length;i++){
@@ -95,67 +86,23 @@
                 };
             }
             ,cols: [ [ //表头
-                {type: 'checkbox', fixed: 'left'}
-                ,{field: 'typeNew', title: '基金/股票', width: 90, sort: true, fixed: 'left',totalRow: '合计：'}
-                ,{field: 'appNew', title: 'APP', width: 90, sort: true, fixed: 'left'}
-                ,{field: 'code', title: '股票/基金编码', width:120, sort: true, fixed: 'left'}
-                ,{field: 'name', title: '股票/基金名称', width:160}
+               {field: 'typeNew', title: '基金/股票', width: 90, sort: true,totalRow: '合计：'}
+                ,{field: 'appNew', title: 'APP', width: 90, sort: true}
+                ,{field: 'code', title: '股票/基金编码', width:120, sort: true}
+                ,{field: 'name', title: '股票/基金名称', width:190}
                 ,{field: 'change', title: '涨跌', width:70}
                 ,{field: 'dayIncome', title: '当日盈利', width: 100, sort: true, totalRow: true}
                 ,{field: 'changePercentAndGszzl', title: '涨跌幅', width:100, sort: true}
                 ,{field: 'max', title: '最高价', width:90}
                 ,{field: 'min', title: '最低价', width: 90}
                 ,{field: 'nowAndGsz', title: '当前价/估算净值', width: 110}
-                ,{field: 'dwjzNew', title: '当日净值', width: 140, sort: true}
+                ,{field: 'dwjzNew', title: '当日净值', width: 180, sort: true}
                 ,{field: 'costPrise', title: '成本价', width: 80}
                 ,{field: 'bonds', title: '持仓', width: 110, sort: true}
-                ,{field: 'incomePercentNew', title: '收益率', width: 100, sort: true}
-                ,{field: 'marketValue', title: '市值/金额', width: 110, sort: true, totalRow: true}
-                ,{field: 'income', title: '收益', width: 130, sort: true, totalRow: true}
-                ,{fixed: 'right', title: '操作', width: 120, align:'center', toolbar: '#barDemo'}
+                ,{field: 'incomePercentNew', title: '收益率', width: 150, sort: true}
+                ,{field: 'marketValue', title: '市值/金额', width: 150, sort: true, totalRow: true}
+                ,{field: 'income', title: '收益', width: 150, sort: true, totalRow: true}
             ] ]
-        });
-
-        // 头工具栏事件
-        table.on('toolbar(test)', function(obj){
-            var checkStatus = table.checkStatus(obj.config.id)
-                ,data = checkStatus.data; //获取选中的数据
-            switch(obj.event){
-                case 'add':
-                    layer.msg('添加');
-                    showDialog('stock');
-                    break;
-                case 'update':
-                    if(data.length === 0){
-                        layer.msg('请选择一行');
-                    } else if(data.length > 1){
-                        layer.msg('只能同时编辑一个');
-                    } else {
-                        updateStock(checkStatus.data[0].code);
-                    }
-                    break;
-                case 'delete':
-                    if(data.length === 0 || data.length > 1){
-                        layer.msg('请选择一行');
-                    } else {
-                        layer.msg('删除');
-                        layer.confirm('真的删除'+ checkStatus.data[0].name +'么?', function(index){
-                            layer.close(index);
-                            //向服务端发送删除指令
-                            deleteStock(checkStatus.data[0].code);
-                            // obj.del(); //删除对应行（tr）的DOM结构
-                            location.reload();
-                        });
-
-                    }
-                    break;
-            };
-            // var time = setInterval(function() {
-            //     if (nowCount>0){
-            //         insTb.reload({page: {curr: nowCurr}});
-            //     }
-            // }, 120000);
-
         });
 
         //定时刷新
@@ -167,112 +114,7 @@
             }
         }, 30000);
 
-        // 单元格工具事件
-        table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
-            var data = obj.data //获得当前行数据
-                ,layEvent = obj.event; //获得 lay-event 对应的值
-            if(layEvent === 'edit') {
-                layer.msg('编辑操作');
-                updateStock(data.code);
-            } else if (layEvent === 'delete') {
-                layer.confirm('真的删除'+ data.name +'么?', function(index){
-                    layer.close(index);
-                    //向服务端发送删除指令
-                    deleteStock(data.code);
-                    // obj.del(); //删除对应行（tr）的DOM结构
-                    location.reload();
-                });
-            }
-            // } else if(layEvent === 'more'){
-            //     //下拉菜单
-            //     dropdown.render({
-            //         elem: this //触发事件的 DOM 对象
-            //         ,show: true //外部事件触发即显示
-            //         ,data: [{
-            //             title: '编辑'
-            //             ,id: 'edit'
-            //         },{
-            //             title: '删除'
-            //             ,id: 'del'
-            //         }]
-            //         ,click: function(menudata){
-            //             if(menudata.id === 'del'){
-            //                 layer.confirm('真的删除'+ data.fundName +'么?', function(index){
-            //                     layer.close(index);
-            //                     //向服务端发送删除指令
-            //                     deleteFund(data.fundCode, obj);
-            //                     // obj.del(); //删除对应行（tr）的DOM结构
-            //                     location.reload();
-            //                 });
-            //             } else if(menudata.id === 'edit'){
-            //                 layer.msg('编辑操作，当前行 CODE:'+ data.fundCode);
-            //                 updateFund(data.fundCode);
-            //             }
-            //         }
-            //         ,align: 'right' //右对齐弹出
-            //         ,style: 'box-shadow: 1px 1px 10px rgb(0 0 0 / 12%);' //设置额外样式
-            //     })
-            // }
-        });
-        // // 分页
-        // laypage.render({
-        //     elem: 'pageDemo' //分页容器的id
-        //     ,count: 1000 //数据总数
-        //     ,limit: 10 //每页显示的数据条数
-        //     ,skin: '#1E9FFF' //自定义选中色值
-        //     //,layout: ['prev', 'page', 'next', 'count', 'limit', 'refresh', 'skip'] //自定义排版
-        //     ,jump: function(obj, first){
-        //         if(!first){
-        //             layer.msg('第'+ obj.curr +'页', {offset: 'b'});
-        //         }
-        //     }
-        // });
     });
-
-    function showDialog(type) {
-        var iHeight = 600;
-        var iWidth = 800;
-        //获得窗口的垂直位置
-        var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
-        //获得窗口的水平位置
-        var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
-        var url = '/addStockAndFundInit?type='+type;
-
-        window.open (url, 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
-    }
-
-    function updateStock(code) {
-        var iHeight = 600;
-        var iWidth = 800;
-        //获得窗口的垂直位置
-        var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
-        //获得窗口的水平位置
-        var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
-        window.open ('/updateStockAndFundInit?code='+code+'&type=stock', 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
-    }
-
-    function deleteStock(code) {
-        var url = "/deleteStock";
-        var req = {
-            "code" : code
-        }
-        $.ajax({
-            url: url,
-            type:"post",
-            data : JSON.stringify(req),
-            dataType:'json',
-            contentType: 'application/json',
-            success: function (data){
-                if(data.code=="00000000") {
-                }
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
-                console.log(XMLHttpRequest.status);
-                console.log(XMLHttpRequest.readyState);
-                console.log(textStatus);
-            }
-        });
-    }
 </script>
 </body>
 </html>
