@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>股票</title>
+    <title>股票基金汇总</title>
     <link rel="stylesheet" th:href="@{/css/main.admin.css}" type="text/css" media="all"/>
     <link rel="stylesheet" th:href="@{/css/main.amazeui.min.css}" type="text/css" media="all"/>
     <link href="https://cdn.staticfile.org/layui/2.7.6/css/layui.css" rel="stylesheet">
@@ -47,6 +47,8 @@
             // ,height: 600
             ,url: '/stockAndFund' //数据接口（此处为静态数据，仅作演示）
             ,title: '用户表'
+            ,even: true //开启隔行背景
+            ,size: 'sm' //小尺寸的表格
             // ,page: true //开启分页
             ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
             ,totalRow: true //开启合计行
@@ -94,23 +96,23 @@
             }
             ,cols: [ [ //表头
                 {type: 'checkbox', fixed: 'left'}
-                ,{field: 'typeNew', title: '基金/股票', width: 100, sort: true, fixed: 'left',totalRow: '合计：'}
-                ,{field: 'appNew', title: 'APP', width: 100, sort: true, fixed: 'left'}
-                ,{field: 'code', title: '股票/基金编码', width:130, sort: true, fixed: 'left'}
+                ,{field: 'typeNew', title: '基金/股票', width: 90, sort: true, fixed: 'left',totalRow: '合计：'}
+                ,{field: 'appNew', title: 'APP', width: 90, sort: true, fixed: 'left'}
+                ,{field: 'code', title: '股票/基金编码', width:120, sort: true, fixed: 'left'}
                 ,{field: 'name', title: '股票/基金名称', width:160}
-                ,{field: 'change', title: '涨跌', width:80}
-                ,{field: 'dayIncome', title: '当日盈利', width: 120, sort: true, totalRow: true}
+                ,{field: 'change', title: '涨跌', width:70}
+                ,{field: 'dayIncome', title: '当日盈利', width: 100, sort: true, totalRow: true}
                 ,{field: 'changePercentAndGszzl', title: '涨跌幅', width:100, sort: true}
-                ,{field: 'max', title: '最高价', width:120}
-                ,{field: 'min', title: '最低价', width: 120}
-                ,{field: 'nowAndGsz', title: '当前价/估算净值', width: 130}
-                ,{field: 'dwjzNew', title: '当日净值', width: 180, sort: true}
-                ,{field: 'costPrise', title: '成本价', width: 100}
-                ,{field: 'bonds', title: '持仓', width: 135, sort: true}
-                ,{field: 'incomePercentNew', title: '收益率', width: 135, sort: true}
-                ,{field: 'marketValue', title: '市值/金额', width: 135, sort: true, totalRow: true}
-                ,{field: 'income', title: '收益', width: 135, sort: true, totalRow: true}
-                ,{fixed: 'right', title: '操作', width: 150, align:'center', toolbar: '#barDemo'}
+                ,{field: 'max', title: '最高价', width:90}
+                ,{field: 'min', title: '最低价', width: 90}
+                ,{field: 'nowAndGsz', title: '当前价/估算净值', width: 110}
+                ,{field: 'dwjzNew', title: '当日净值', width: 140, sort: true}
+                ,{field: 'costPrise', title: '成本价', width: 80}
+                ,{field: 'bonds', title: '持仓', width: 110, sort: true}
+                ,{field: 'incomePercentNew', title: '收益率', width: 100, sort: true}
+                ,{field: 'marketValue', title: '市值/金额', width: 110, sort: true, totalRow: true}
+                ,{field: 'income', title: '收益', width: 130, sort: true, totalRow: true}
+                ,{fixed: 'right', title: '操作', width: 120, align:'center', toolbar: '#barDemo'}
             ] ]
         });
 
