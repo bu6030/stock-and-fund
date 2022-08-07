@@ -124,4 +124,16 @@ public class UrlController {
         m.setViewName("stockNew");
         return m;
     }
+
+    /**
+     * 新股票基金汇总页面初始化，引入layui
+     *
+     * @return
+     */
+    @GetMapping(value = "/stockAndFundNewInit")
+    public ModelAndView stockAndFundNewInit(HttpServletRequest request, HttpServletResponse response) {
+        ModelAndView m = new ModelAndView();
+        m.setViewName("stockAndFundNew");
+        return m;
+    }
 }
