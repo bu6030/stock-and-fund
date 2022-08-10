@@ -84,6 +84,8 @@ function getAppName(app){
         return "东方证券";
     } else if(app == "ZGYH"){
         return "中国银行";
+    } else if(app == "PAYH"){
+        return "平安银行";
     }
 }
 
