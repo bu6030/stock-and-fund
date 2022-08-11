@@ -16,7 +16,9 @@ public class DepositServiceImpl implements DepositService {
 
     @Override
     public List<Deposit> getDepositList() {
-        return depositMapper.findAllDeposit();
+        List<Deposit> list = depositMapper.findAllDeposit();
+        log.info("Get deposit list : {}", list);
+        return list;
     }
 
 }
