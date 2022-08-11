@@ -27,7 +27,7 @@ public class UrlController {
      *
      * @return
      */
-    @GetMapping(value = "/fundInit")
+    @GetMapping(value = "/fund.html")
     public ModelAndView fundInit(HttpServletRequest request, HttpServletResponse response) {
         ModelAndView m = new ModelAndView();
         m.setViewName("fund");
@@ -39,7 +39,7 @@ public class UrlController {
      *
      * @return
      */
-    @GetMapping(value = "/stockInit")
+    @GetMapping(value = "/stock.html")
     public ModelAndView stockInit(HttpServletRequest request, HttpServletResponse response) {
         ModelAndView m = new ModelAndView();
         m.setViewName("stock");
@@ -51,7 +51,7 @@ public class UrlController {
      *
      * @return
      */
-    @GetMapping(value = { "/main", "/" })
+    @GetMapping(value = { "/main.html", "/" })
     public ModelAndView stockAndFundInit(HttpServletRequest request, HttpServletResponse response) {
         ModelAndView m = new ModelAndView();
         m.setViewName("stockAndFund");
@@ -63,7 +63,7 @@ public class UrlController {
      *
      * @return
      */
-    @GetMapping(value = "/addStockAndFundInit")
+    @GetMapping(value = "/addStockAndFund.html")
     public ModelAndView addStockAndFundInit(@RequestParam String type, HttpServletRequest request, HttpServletResponse response) {
         ModelAndView m = new ModelAndView();
         m.setViewName("addStockAndFund");
@@ -76,7 +76,7 @@ public class UrlController {
      *
      * @return
      */
-    @GetMapping(value = "/updateStockAndFundInit")
+    @GetMapping(value = "/updateStockAndFund.html")
     public ModelAndView updateStockAndFundInit(@RequestParam String type, @RequestParam String code, HttpServletRequest request,
         HttpServletResponse response) {
         log.info("修改股票基金初始化 type : {}, code : {}", type, code);
@@ -106,7 +106,7 @@ public class UrlController {
      *
      * @return
      */
-    @GetMapping(value = "/fundNewInit")
+    @GetMapping(value = "/fundNew.html")
     public ModelAndView fundNewInit(HttpServletRequest request, HttpServletResponse response) {
         ModelAndView m = new ModelAndView();
         m.setViewName("fundNew");
@@ -118,7 +118,7 @@ public class UrlController {
      *
      * @return
      */
-    @GetMapping(value = "/stockNewInit")
+    @GetMapping(value = "/stockNew.html")
     public ModelAndView stockNewInit(HttpServletRequest request, HttpServletResponse response) {
         ModelAndView m = new ModelAndView();
         m.setViewName("stockNew");
@@ -130,10 +130,22 @@ public class UrlController {
      *
      * @return
      */
-    @GetMapping(value = "/stockAndFundNewInit")
+    @GetMapping(value = "/stockAndFundNew.html")
     public ModelAndView stockAndFundNewInit(HttpServletRequest request, HttpServletResponse response) {
         ModelAndView m = new ModelAndView();
         m.setViewName("stockAndFundNew");
+        return m;
+    }
+
+    /**
+     * 新股票基金汇总页面初始化，引入layui
+     *
+     * @return
+     */
+    @GetMapping(value = "/deposit.html")
+    public ModelAndView depositInit(HttpServletRequest request, HttpServletResponse response) {
+        ModelAndView m = new ModelAndView();
+        m.setViewName("deposit");
         return m;
     }
 }

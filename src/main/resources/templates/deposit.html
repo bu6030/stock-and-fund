@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>收益汇总</title>
+    <link rel="stylesheet" th:href="@{/css/main.admin.css}" type="text/css" media="all"/>
+    <link rel="stylesheet" th:href="@{/css/main.amazeui.min.css}" type="text/css" media="all"/>
+    <script th:src="@{/js/deposit.js}"></script>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/sidebar.js}"></script>
+    <script th:src="@{/js/BigDecimal.js}"></script>
+    <!-- 日历控件 -->
+    <script th:src="@{/js/laydate.js}"></script>
+</head>
+<body onload="sidebar();getData()">
+
+<header class="menu">
+    <div th:replace="header.html"></div>
+</header>
+
+<div class="am-cf admin-main">
+
+    <div th:replace="sidebar.html"></div>
+
+    <div class=" admin-content">
+        <div class="daohang"></div>
+        <div class="admin-biaogelist">
+            <div class="listbiaoti am-cf">
+                <ul class="am-icon-users"> 收益汇总
+                </ul>
+                <dl class="am-icon-home" style="float: right;">
+                    当前位置： 首页 > <a href="#">收益汇总</a>
+                </dl>
+            </div>
+            <div class="am-btn-toolbars am-btn-toolbar am-kg am-cf"></div>
+            <form class="am-form am-g">
+                <input type="hidden" th:value="${userId}" id="userId"/>
+                <input type="hidden" th:value="${personName}" id="personName"/>
+                <input type="hidden" id="accountId"/>
+                <input type="hidden" id="typeId"/>
+                <table width="100%" class="am-table am-table-bordered am-table-radius am-table-striped">
+                    <thead>
+                    <tr class="am-success">
+                        <th class="table-author am-hide-sm-only">日期</th>
+                        <th class="table-title">基金收益</th>
+                        <th class="table-type">股票收益</th>
+                        <th class="table-author am-hide-sm-only">总收益</th>
+                    </tr>
+                    </thead>
+                    <tbody id="nr">
+                    </tbody>
+                </table>
+                <div id="page"></div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
