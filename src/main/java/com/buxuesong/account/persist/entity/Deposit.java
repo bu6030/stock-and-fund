@@ -50,10 +50,10 @@ public class Deposit {
     @Override
     public String toString() {
         return "Deposit{" +
-                "date='" + date + '\'' +
-                ", fundDayIncome=" + fundDayIncome +
-                ", stockDayIncome=" + stockDayIncome +
-                ", totalDayIncome=" + totalDayIncome +
-                '}';
+            "date='" + date + '\'' +
+            ", fundDayIncome=" + fundDayIncome +
+            ", stockDayIncome=" + stockDayIncome +
+            ", totalDayIncome=" + totalDayIncome +
+            '}';
     }
 }
