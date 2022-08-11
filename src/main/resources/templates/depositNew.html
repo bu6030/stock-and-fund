@@ -44,6 +44,9 @@
                 res.fundDayIncome = parseFloat(res.fundDayIncome).toFixed(2)+'';
                 res.stockDayIncome = parseFloat(res.stockDayIncome).toFixed(2)+'';
                 res.totalDayIncome = parseFloat(res.totalDayIncome).toFixed(2)+'';
+                res.fundMarketValue = parseFloat(res.fundMarketValue).toFixed(2)+'';
+                res.stockMarketValue = parseFloat(res.stockMarketValue).toFixed(2)+'';
+                res.totalMarketValue = parseFloat(res.totalMarketValue).toFixed(2)+'';
                 return {
                     "code": res.code, //解析接口状态
                     "msg": res.msg, //解析提示文本
@@ -56,7 +59,9 @@
                 ,{field: 'fundDayIncome', title: '基金收益', width:200, sort: true, totalRow: true}
                 ,{field: 'stockDayIncome', title: '股票收益', width:200, sort: true, totalRow: true}
                 ,{field: 'totalDayIncome', title: '总收益', width:200, sort: true, totalRow: true}
-
+                ,{field: 'fundMarketValue', title: '基金市值', width:200, sort: true, totalRow: true}
+                ,{field: 'stockMarketValue', title: '股票市值', width:200, sort: true, totalRow: true}
+                ,{field: 'totalMarketValue', title: '总市值', width:200, sort: true, totalRow: true}
             ] ]
         });
 

@@ -36,6 +36,9 @@ function getTableHtml(result){
             + "</td><td>" + parseFloat(result[k].fundDayIncome).toFixed(2)
             + "</td><td>" + parseFloat(result[k].stockDayIncome).toFixed(2)
             + "</td><td>" + parseFloat(result[k].totalDayIncome).toFixed(2)
+            + "</td><td>" + parseFloat(result[k].fundMarketValue).toFixed(2)
+            + "</td><td>" + parseFloat(result[k].stockMarketValue).toFixed(2)
+            + "</td><td>" + parseFloat(result[k].totalMarketValue).toFixed(2)
             +"</td></tr>";
 
     }

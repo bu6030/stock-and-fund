@@ -15,6 +15,10 @@ public class Deposit {
     private BigDecimal stockDayIncome;
     private BigDecimal totalDayIncome;
 
+    private BigDecimal fundMarketValue;
+    private BigDecimal stockMarketValue;
+    private BigDecimal totalMarketValue;
+
     public String getDate() {
         return date;
     }
@@ -47,6 +51,30 @@ public class Deposit {
         this.totalDayIncome = totalDayIncome;
     }
 
+    public BigDecimal getFundMarketValue() {
+        return fundMarketValue;
+    }
+
+    public void setFundMarketValue(BigDecimal fundMarketValue) {
+        this.fundMarketValue = fundMarketValue;
+    }
+
+    public BigDecimal getStockMarketValue() {
+        return stockMarketValue;
+    }
+
+    public void setStockMarketValue(BigDecimal stockMarketValue) {
+        this.stockMarketValue = stockMarketValue;
+    }
+
+    public BigDecimal getTotalMarketValue() {
+        return totalMarketValue;
+    }
+
+    public void setTotalMarketValue(BigDecimal totalMarketValue) {
+        this.totalMarketValue = totalMarketValue;
+    }
+
     @Override
     public String toString() {
         return "Deposit{" +
@@ -54,6 +82,9 @@ public class Deposit {
             ", fundDayIncome=" + fundDayIncome +
             ", stockDayIncome=" + stockDayIncome +
             ", totalDayIncome=" + totalDayIncome +
+            ", fundMarketValue=" + fundMarketValue +
+            ", stockMarketValue=" + stockMarketValue +
+            ", totalMarketValue=" + totalMarketValue +
             '}';
     }
 }
