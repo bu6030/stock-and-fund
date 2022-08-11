@@ -28,10 +28,19 @@ function getTableHtml(result){
     var totalTotalDayIncome = 0;
     var totalFundDayIncome = 0;
     var totalStockDayIncome = 0;
+
+    var totalFundMarketValue = 0;
+    var totalStockMarketValue = 0;
+    var totalTotalMarketValue = 0;
     for(var k in result) {
         totalFundDayIncome = totalFundDayIncome + parseFloat(result[k].fundDayIncome);
         totalStockDayIncome = totalStockDayIncome + parseFloat(result[k].stockDayIncome);
         totalTotalDayIncome = totalTotalDayIncome + parseFloat(result[k].totalDayIncome);
+
+        totalFundMarketValue = totalFundMarketValue + parseFloat(result[k].fundMarketValue);
+        totalStockMarketValue = totalStockMarketValue + parseFloat(result[k].stockMarketValue);
+        totalTotalMarketValue = totalTotalMarketValue + parseFloat(result[k].totalMarketValue);
+
         str += "<tr><td>" + result[k].date
             + "</td><td>" + parseFloat(result[k].fundDayIncome).toFixed(2)
             + "</td><td>" + parseFloat(result[k].stockDayIncome).toFixed(2)
@@ -42,7 +51,12 @@ function getTableHtml(result){
             +"</td></tr>";
 
     }
-    str += "<tr><td>合计</td><td>" + totalFundDayIncome.toFixed(2) + "</td><td>" + totalStockDayIncome.toFixed(2) + "</td><td>" + totalTotalDayIncome.toFixed(2)
+    str += "<tr><td>合计</td><td>" + totalFundDayIncome.toFixed(2)
+        + "</td><td>" + totalStockDayIncome.toFixed(2)
+        + "</td><td>" + totalTotalDayIncome.toFixed(2)
+        + "</td><td>" + totalFundMarketValue.toFixed(2)
+        + "</td><td>" + totalStockMarketValue.toFixed(2)
+        + "</td><td>" + totalTotalMarketValue.toFixed(2)
         +"</td></tr>";
     return str;
 }
