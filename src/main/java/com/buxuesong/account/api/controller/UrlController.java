@@ -138,7 +138,7 @@ public class UrlController {
     }
 
     /**
-     * 新股票基金汇总页面初始化，引入layui
+     * 收益汇总页面初始化
      *
      * @return
      */
@@ -146,6 +146,18 @@ public class UrlController {
     public ModelAndView depositInit(HttpServletRequest request, HttpServletResponse response) {
         ModelAndView m = new ModelAndView();
         m.setViewName("deposit");
+        return m;
+    }
+
+    /**
+     * 新收益汇总页面初始化，引入layui
+     *
+     * @return
+     */
+    @GetMapping(value = "/depositNew.html")
+    public ModelAndView depositNewInit(HttpServletRequest request, HttpServletResponse response) {
+        ModelAndView m = new ModelAndView();
+        m.setViewName("depositNew");
         return m;
     }
 }

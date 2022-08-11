@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>收益汇总</title>
+    <link rel="stylesheet" th:href="@{/css/main.admin.css}" type="text/css" media="all"/>
+    <link rel="stylesheet" th:href="@{/css/main.amazeui.min.css}" type="text/css" media="all"/>
+    <link href="https://cdn.staticfile.org/layui/2.7.6/css/layui.css" rel="stylesheet">
+    <style>
+        body{padding: 6px 16px;}
+        .demo-carousel{height: 200px; line-height: 200px; text-align: center;}
+    </style>
+</head>
+<body>
+<header class="menu">
+    <div th:replace="headerNew.html"></div>
+</header>
+<blockquote class="layui-elem-quote">收益汇总：您可在此页面查看股票基金每日收益汇总。</blockquote>
+<table class="layui-hide" id="demo" lay-filter="test"></table>
+<script th:src="@{/js/BigDecimal.js}"></script>
+<script th:src="@{/js/jquery.min.js}"></script>
+<script src="https://cdn.staticfile.org/layui/2.7.6/layui.js"></script>
+
+<script>
+    layui.use(function(){
+        // 得到需要的内置组件
+        var layer = layui.layer; //弹层
+        var table = layui.table; //表格
+
+        // 向世界问个好
+        layer.msg('收益汇总：您可在此页面查看股票基金每日收益汇总。');
+
+        // 执行一个 table 实例
+        table.render({
+            elem: '#demo'
+            // ,height: 600
+            ,url: '/deposit' //数据接口（此处为静态数据，仅作演示）
+            ,title: '收益汇总'
+            ,even: true //开启隔行背景
+            // ,page: true //开启分页
+            ,totalRow: true //开启合计行
+            ,parseData: function(res){ //res 即为原始返回的数据
+                res.fundDayIncome = parseFloat(res.fundDayIncome).toFixed(2)+'';
+                res.stockDayIncome = parseFloat(res.stockDayIncome).toFixed(2)+'';
+                res.totalDayIncome = parseFloat(res.totalDayIncome).toFixed(2)+'';
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.value.length, //解析数据长度
+                    "data": res.value //解析数据列表
+                };
+            }
+            ,cols: [ [ //表头
+                {field: 'date', title: '日期', width: 150, sort: true,totalRow: '合计：'}
+                ,{field: 'fundDayIncome', title: '基金收益', width:200, sort: true, totalRow: true}
+                ,{field: 'stockDayIncome', title: '股票收益', width:200, sort: true, totalRow: true}
+                ,{field: 'totalDayIncome', title: '总收益', width:200, sort: true, totalRow: true}
+
+            ] ]
+        });
+
+    });
+</script>
+</body>
+</html>
