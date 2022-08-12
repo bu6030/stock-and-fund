@@ -101,7 +101,7 @@ function showDialog(type){
     var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
     //获得窗口的水平位置
     var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
-    var url = '/addStockAndFundInit?type='+type;
+    var url = '/addStockAndFund.html?type='+type;
 
     window.open (url, 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
 }
@@ -140,5 +140,5 @@ function updateStock(code){
     var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
     //获得窗口的水平位置
     var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
-    window.open ('/updateStockAndFundInit?code='+code+'&type=stock', 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
+    window.open ('/updateStockAndFund.html?code='+code+'&type=stock', 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
 }
