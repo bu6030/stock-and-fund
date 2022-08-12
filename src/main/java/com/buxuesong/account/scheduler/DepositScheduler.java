@@ -29,7 +29,7 @@ public class DepositScheduler {
     private DepositMapper depositMapper;
 
     // 每天15点30分统计当日盈亏
-    @Scheduled(cron = "0 30 15 * * ?")
+    @Scheduled(cron = "0 30 15 ? * MON-FRI")
     public void autoStar() {
         log.info("======= DepositScheduler started =======");
         execute();
