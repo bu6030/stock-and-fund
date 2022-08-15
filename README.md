@@ -1,5 +1,5 @@
-#初始化表数据
-##盈利汇总数据
+# 初始化表数据
+## 盈利汇总数据
 ```
 CREATE TABLE DEPOSIT (
   DATE TEXT(10) PRIMARY KEY NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE DEPOSIT (
   TOTAL_MARKET_VALUE CHAR(20) NOT NULL
 );
 ```
-##基金数据
+## 基金数据
 ```
 CREATE TABLE FUND (
   CODE TEXT(10) PRIMARY KEY NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE FUND (
   APP CHAR(10) NOT NULL
 );
 ```
-##股票数据
+## 股票数据
 ```
 CREATE TABLE STOCK (
   CODE TEXT(10) PRIMARY KEY NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE STOCK (
   APP CHAR(10) NOT NULL
 );
 ```
-##字典数据
+## 字典数据
 ```
 CREATE TABLE PARAM (
   TYPE TEXT(10) NOT NULL,
