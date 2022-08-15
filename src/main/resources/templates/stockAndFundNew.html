@@ -27,6 +27,22 @@
 <script src="https://cdn.staticfile.org/layui/2.7.6/layui.js"></script>
 
 <script>
+    var appList;
+    $.ajax({
+        url:"/param?type=APP",
+        type:"get",
+        data :{},
+        dataType:'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data){
+            appList = data.value;
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
     layui.use(function(){
         // 得到需要的内置组件
         var layer = layui.layer; //弹层
@@ -46,16 +62,10 @@
             ,parseData: function(res){ //res 即为原始返回的数据
                 for(var i=0;i<res.value.length;i++){
                     var item = res.value[i];
-                    if(item.app == 'ZFB'){
-                        item.appNew = '支付宝';
-                    } else if(item.app == 'DFCF'){
-                        item.appNew = '东方财富';
-                    } else if(item.app == 'DFZQ'){
-                        item.appNew = '东方证券';
-                    } else if(item.app == 'ZGYH'){
-                        item.appNew = '中国银行';
-                    } else if(item.app == 'PAYH'){
-                        item.appNew = '平安银行';
+                    for(var k in appList) {
+                        if(item.app == appList[k].code){
+                            item.appNew = appList[k].name;
+                        }
                     }
                     if(item.type == 'STOCK'){
                         item.typeNew = '股票';

@@ -6,12 +6,28 @@ var stockDayIncome;
 var fundDayIncome;
 var stockTotalmarketValue;
 var fundTotalmarketValue;
+var appList;
 
 function getData() {
     var userId = $("#userId").val();
     var personName = $("#personName").val();
     var accountId = $("#accountId").val();
-    initStock();
+    $.ajax({
+        url:"/param?type=APP",
+        type:"get",
+        data :{},
+        dataType:'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data){
+            appList = data.value;
+            initStock();
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
     lay('#version').html('-v'+ laydate.v);
     // 30s刷新
     setInterval(function () {
@@ -146,17 +162,12 @@ function getFundTableHtml(result){
 }
 
 function getAppName(app){
-    if(app == "ZFB"){
-        return "支付宝";
-    } else if(app == "DFCF"){
-        return "东方财富";
-    } else if(app == "DFZQ"){
-        return "东方证券";
-    } else if(app == "ZGYH"){
-        return "中国银行";
-    } else if(app == "PAYH"){
-        return "平安银行";
+    for(var k in appList) {
+        if(app == appList[k].code){
+            return appList[k].name;
+        }
     }
+    return app;
 }
 
 function filterApp(app) {

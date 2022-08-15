@@ -1,10 +1,30 @@
 var pageSize = 15;
 var filteredApp = "ALL";
+var appList;
 
 function getData() {
     var userId = $("#userId").val();
     var personName = $("#personName").val();
     var accountId = $("#accountId").val();
+    $.ajax({
+        url:"/param?type=APP",
+        type:"get",
+        data :{},
+        dataType:'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data){
+            appList = data.value;
+            initData();
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+}
+
+function initData() {
     $.ajax({
         url:"/fund",
         type:"get",
@@ -34,6 +54,7 @@ function getData() {
         }
     }, 30000)
 }
+
 
 function getTableHtml(result){
     var str = "";
@@ -77,17 +98,12 @@ function getTableHtml(result){
 }
 
 function getAppName(app){
-    if(app == "ZFB"){
-        return "支付宝";
-    } else if(app == "DFCF"){
-        return "东方财富";
-    } else if(app == "DFZQ"){
-        return "东方证券";
-    } else if(app == "ZGYH"){
-        return "中国银行";
-    } else if(app == "PAYH"){
-        return "平安银行";
+    for(var k in appList) {
+        if(app == appList[k].code){
+            return appList[k].name;
+        }
     }
+    return app;
 }
 
 function filterApp(app) {
