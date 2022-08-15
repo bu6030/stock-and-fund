@@ -2,7 +2,9 @@ package com.buxuesong.account.api.controller;
 
 import com.buxuesong.account.model.SaveFundRequest;
 import com.buxuesong.account.model.SaveStockRequest;
+import com.buxuesong.account.persist.entity.Parameter;
 import com.buxuesong.account.service.FundService;
+import com.buxuesong.account.service.ParamService;
 import com.buxuesong.account.service.StockService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,8 @@ public class UrlController {
     private StockService stockService;
     @Autowired
     private FundService fundService;
+    @Autowired
+    private ParamService paramService;
 
     /**
      * 基金页面初始化
@@ -158,6 +162,50 @@ public class UrlController {
     public ModelAndView depositNewInit(HttpServletRequest request, HttpServletResponse response) {
         ModelAndView m = new ModelAndView();
         m.setViewName("depositNew");
+        return m;
+    }
+
+    /**
+     * 字典数据页面初始化
+     *
+     * @return
+     */
+    @GetMapping(value = "/param.html")
+    public ModelAndView paramInit(HttpServletRequest request, HttpServletResponse response) {
+        ModelAndView m = new ModelAndView();
+        m.setViewName("param");
+        return m;
+    }
+
+    /**
+     * 添加字典数据页面初始化
+     *
+     * @return
+     */
+    @GetMapping(value = "/addParam.html")
+    public ModelAndView addParamInit(@RequestParam String type, HttpServletRequest request, HttpServletResponse response) {
+        ModelAndView m = new ModelAndView();
+        m.setViewName("addParam");
+        m.getModel().put("type", type);
+        return m;
+    }
+
+    /**
+     * 修改股票基金页面初始化
+     *
+     * @return
+     */
+    @GetMapping(value = "/updateParam.html")
+    public ModelAndView updateParamInit(@RequestParam String type, @RequestParam String code, HttpServletRequest request,
+                                               HttpServletResponse response) {
+        log.info("修改字典参数初始化 type : {}, code : {}", type, code);
+        ModelAndView m = new ModelAndView();
+        m.setViewName("updateParam");
+        Parameter parameter = paramService.getParamByTypeAndCode(Parameter.builder().code(code).type(type).build());
+        log.info("修改字典参数初始化 parameter : {}", parameter);
+        m.getModel().put("code", parameter.getCode());
+        m.getModel().put("type", parameter.getType());
+        m.getModel().put("name", parameter.getName());
         return m;
     }
 }

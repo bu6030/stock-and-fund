@@ -1,5 +1,25 @@
 function getData() {
-
+    $.ajax({
+        url:"/param?type=APP",
+        type:"get",
+        data :{},
+        dataType:'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data){
+            var result = data.value;
+            var app = $("#app");
+            app.append("<option value=''>请选择</option>");
+            for(var k in result) {
+                var opt = $("<option></option>").text(result[k].name).val(result[k].code);
+                app.append(opt);
+            }
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
 }
 
 function submitStockAndFund(){

@@ -30,6 +30,11 @@ public class ParamServiceImpl implements ParamService {
     }
 
     @Override
+    public Parameter getParamByTypeAndCode(Parameter parameter) {
+        return paramMapper.findParamByTypeAndCode(parameter);
+    }
+
+    @Override
     public void saveParam(Parameter parameter) {
         Parameter prameterOld = paramMapper.findParamByTypeAndCode(parameter);
         if(prameterOld!=null){
