@@ -10,11 +10,17 @@ import java.util.List;
 @Repository
 public interface DepositMapper {
 
+    @Select("select DATE, FUND_DAY_INCOME fundDayIncome, STOCK_DAY_INCOME stockDayIncome, DAY_INCOME totalDayIncome, FUND_MARKET_VALUE fundMarketValue, STOCK_MARKET_VALUE stockMarketValue, TOTAL_MARKET_VALUE totalMarketValue from DEPOSIT where DATE = #{date} ")
+    Deposit findDepositByDate(@Param("date") String date);
+
     @Update("INSERT INTO DEPOSIT (DATE, FUND_DAY_INCOME, STOCK_DAY_INCOME, DAY_INCOME, FUND_MARKET_VALUE, STOCK_MARKET_VALUE, TOTAL_MARKET_VALUE) values (#{deposit.date},#{deposit.fundDayIncome},#{deposit.stockDayIncome},#{deposit.totalDayIncome},#{deposit.fundMarketValue},#{deposit.stockMarketValue},#{deposit.totalMarketValue}) ")
     int save(@Param("deposit") Deposit deposit);
 
     @Select("select DATE, FUND_DAY_INCOME fundDayIncome, STOCK_DAY_INCOME stockDayIncome, DAY_INCOME totalDayIncome, FUND_MARKET_VALUE fundMarketValue, STOCK_MARKET_VALUE stockMarketValue, TOTAL_MARKET_VALUE totalMarketValue from DEPOSIT order by DATE ASC")
     List<Deposit> findAllDeposit();
+
+    @Delete("delete from DEPOSIT where DATE = #{date} ")
+    int deleteDeposit(@Param("date") String date);
 
 }
 /**
