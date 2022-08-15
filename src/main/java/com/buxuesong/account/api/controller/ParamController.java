@@ -22,8 +22,9 @@ public class ParamController {
      * @return
      */
     @GetMapping(value = "/param")
-    public Response getDepositList(HttpServletRequest request, @RequestParam(value = "type", required = false) String type) throws Exception {
-        if(type == null){
+    public Response getDepositList(HttpServletRequest request, @RequestParam(value = "type", required = false) String type)
+        throws Exception {
+        if (type == null) {
             return Response.builder().code("00000000").value(paramService.getParamList()).build();
         } else {
             return Response.builder().code("00000000").value(paramService.getParamList(type)).build();

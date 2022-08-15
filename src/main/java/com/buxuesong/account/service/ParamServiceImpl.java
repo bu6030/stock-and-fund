@@ -37,9 +37,9 @@ public class ParamServiceImpl implements ParamService {
     @Override
     public void saveParam(Parameter parameter) {
         Parameter prameterOld = paramMapper.findParamByTypeAndCode(parameter);
-        if(prameterOld!=null){
+        if (prameterOld != null) {
             paramMapper.update(parameter);
-        }else {
+        } else {
             paramMapper.save(parameter);
         }
     }

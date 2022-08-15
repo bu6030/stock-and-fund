@@ -197,7 +197,7 @@ public class UrlController {
      */
     @GetMapping(value = "/updateParam.html")
     public ModelAndView updateParamInit(@RequestParam String type, @RequestParam String code, HttpServletRequest request,
-                                               HttpServletResponse response) {
+        HttpServletResponse response) {
         log.info("修改字典参数初始化 type : {}, code : {}", type, code);
         ModelAndView m = new ModelAndView();
         m.setViewName("updateParam");
