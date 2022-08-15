@@ -21,7 +21,16 @@
 <script th:src="@{/js/BigDecimal.js}"></script>
 <script th:src="@{/js/jquery.min.js}"></script>
 <script src="https://cdn.staticfile.org/layui/2.7.6/layui.js"></script>
-
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button type="button" class="layui-btn layui-btn-sm" lay-event="add">
+            <i class="layui-icon">&#xe654;</i>
+        </button>
+        <button type="button" class="layui-btn layui-btn-sm" lay-event="delete">
+            <i class="layui-icon">&#xe640;</i>
+        </button>
+    </div>
+</script>
 <script>
     layui.use(function(){
         // 得到需要的内置组件
@@ -40,6 +49,7 @@
             ,even: true //开启隔行背景
             // ,page: true //开启分页
             ,totalRow: true //开启合计行
+            ,toolbar: '#toolbarDemo' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
             ,parseData: function(res){ //res 即为原始返回的数据
                 for(var i=0;i<res.value.length;i++) {
                     var item = res.value[i];
@@ -75,8 +85,78 @@
                 ,{field: 'totalIncomePercent', title: '总盈利比率', width:200, sort: true}
             ] ]
         });
+        // 头工具栏事件
+        table.on('toolbar(test)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id)
+                ,data = checkStatus.data; //获取选中的数据
+            switch(obj.event){
+                case 'add':
+                    layer.msg('统计当日盈利');
+                    layer.confirm('真的提前统计当日盈利么?', function(index){
+                        layer.close(index);
+                        //向服务端发送删除指令
+                        deposit();
+                        // obj.del(); //删除对应行（tr）的DOM结构
+                    });
+                    break;
+                case 'delete':
+                    layer.msg('删除当日盈利');
+                    layer.confirm('真的删除当日盈利么?', function(index){
+                        layer.close(index);
+                        //向服务端发送删除指令
+                        deleteDeposit();
+                        // obj.del(); //删除对应行（tr）的DOM结构
+                    });
+                    break;
+            };
+        });
 
     });
+
+
+    function deposit(){
+        var url = "/deposit";
+        var req = {}
+        $.ajax({
+            url: url,
+            type:"post",
+            data : JSON.stringify(req),
+            dataType:'json',
+            contentType: 'application/json',
+            success: function (data){
+                if(data.code=="00000000") {
+                    location.reload();
+                }
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest.status);
+                console.log(XMLHttpRequest.readyState);
+                console.log(textStatus);
+            }
+        });
+    }
+
+    function deleteDeposit(){
+        var url = "/deposit";
+        var req = {}
+        $.ajax({
+            url: url,
+            type:"delete",
+            data : JSON.stringify(req),
+            dataType:'json',
+            contentType: 'application/json',
+            success: function (data){
+                if(data.code=="00000000") {
+                    location.reload();
+                }
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest.status);
+                console.log(XMLHttpRequest.readyState);
+                console.log(textStatus);
+            }
+        });
+    }
 </script>
 </body>
 </html>

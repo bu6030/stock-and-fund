@@ -70,3 +70,54 @@ function getTableHtml(result){
         +"</td></tr>";
     return str;
 }
+
+
+function deposit(){
+    if(!confirm("确定要提前统计当日盈利吗？")){
+        return;
+    }
+    var url = "/deposit";
+    var req = {}
+    $.ajax({
+        url: url,
+        type:"post",
+        data : JSON.stringify(req),
+        dataType:'json',
+        contentType: 'application/json',
+        success: function (data){
+            if(data.code=="00000000") {
+                getData();
+            }
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+}
+
+function deleteDeposit(){
+    if(!confirm("确定要删除当日盈利吗？")){
+        return;
+    }
+    var url = "/deposit";
+    var req = {}
+    $.ajax({
+        url: url,
+        type:"delete",
+        data : JSON.stringify(req),
+        dataType:'json',
+        contentType: 'application/json',
+        success: function (data){
+            if(data.code=="00000000") {
+                getData();
+            }
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+}
