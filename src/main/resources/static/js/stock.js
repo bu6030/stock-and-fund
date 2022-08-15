@@ -62,6 +62,15 @@ function getTableHtml(result){
     var totalDayIncome = new BigDecimal("0");
     var marketValue = new BigDecimal("0");
     var totalmarketValue = new BigDecimal("0");
+    var marketValuePercent = new BigDecimal("0");
+    for(var k in result) {
+        if (filteredApp != "ALL" && result[k].app != filteredApp) {
+            continue;
+        }
+        marketValue = (new BigDecimal(result[k].now)).multiply(new BigDecimal(result[k].bonds));
+        totalmarketValue = totalmarketValue.add(marketValue);
+    }
+
     for(var k in result) {
         if (filteredApp != "ALL" && result[k].app != filteredApp) {
             continue;
@@ -69,7 +78,8 @@ function getTableHtml(result){
         dayIncome = (new BigDecimal(result[k].change)).multiply(new BigDecimal(result[k].bonds));
         marketValue = (new BigDecimal(result[k].now)).multiply(new BigDecimal(result[k].bonds));
         totalDayIncome = totalDayIncome.add(dayIncome);
-        totalmarketValue = totalmarketValue.add(marketValue);
+        // totalmarketValue = totalmarketValue.add(marketValue);
+        marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalmarketValue);
         str += "<tr><td>"
             + "<a onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
             + "</td><td>" + result[k].code
@@ -79,9 +89,12 @@ function getTableHtml(result){
             + "</td><td>" + dayIncome
             + "</td><td>" + result[k].max
             + "</td><td>" + result[k].min
-            + "</td><td>" + result[k].now + "</td><td>" + result[k].costPrise
-            + "</td><td>" + result[k].bonds + "</td><td>" + result[k].incomePercent +"%"
+            + "</td><td>" + result[k].now
+            + "</td><td>" + result[k].costPrise
+            + "</td><td>" + result[k].bonds
+            + "</td><td>" + result[k].incomePercent +"%"
             + "</td><td>" + marketValue
+            + "</td><td>" + marketValuePercent + "%"
             + "</td><td>" + result[k].income
             + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"修改\" onclick=\"updateStock('" + result[k].code + "')\">"
             + "<span class=\"am-icon-pencil-square-o\"></span></button>"
@@ -90,7 +103,7 @@ function getTableHtml(result){
             +"</td></tr>";
         totalIncome = totalIncome.add(new BigDecimal(result[k].income));
     }
-    str += "<tr><td>合计</td><td colspan='4'></td><td>" + totalDayIncome + "</td><td colspan='6'></td><td>" + totalmarketValue + "</td><td>" + totalIncome
+    str += "<tr><td>合计</td><td colspan='4'></td><td>" + totalDayIncome + "</td><td colspan='6'></td><td>" + totalmarketValue + "</td></td><td></td><td>" + totalIncome
         +"</td><td></td></tr>";
     return str;
 }

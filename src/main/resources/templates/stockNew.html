@@ -68,6 +68,11 @@
             ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
             ,totalRow: true //开启合计行
             ,parseData: function(res){ //res 即为原始返回的数据
+                var totalMarketValue = new BigDecimal("0");
+                for(var i=0;i<res.value.length;i++) {
+                    var item = res.value[i];
+                    totalMarketValue = totalMarketValue.add((new BigDecimal(item.now)).multiply(new BigDecimal(item.bonds)));
+                }
                 for(var i=0;i<res.value.length;i++){
                     var item = res.value[i];
                     for(var k in appList) {
@@ -76,9 +81,12 @@
                         }
                     }
                     item.dayIncome = (new BigDecimal(item.change)).multiply(new BigDecimal(item.bonds)) +'';
-                    item.marketValue = (new BigDecimal(item.now)).multiply(new BigDecimal(item.bonds)) +'';
+                    var marketValue = new BigDecimal("0");
+                    marketValue = (new BigDecimal(item.now)).multiply(new BigDecimal(item.bonds));
+                    item.marketValue = marketValue +'';
                     item.changePercentNew = item.changePercent +'%';
                     item.incomePercentNew = item.incomePercent +'%';
+                    item.marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValue) + "%";
                 }
                 return {
                     "code": res.code, //解析接口状态
@@ -102,6 +110,7 @@
                 ,{field: 'bonds', title: '持仓', width: 135, sort: true}
                 ,{field: 'incomePercentNew', title: '收益率', width: 135}
                 ,{field: 'marketValue', title: '市值/金额', width: 135, sort: true, totalRow: true}
+                ,{field: 'marketValuePercent', title: '持仓比率', width: 110, sort: true}
                 ,{field: 'income', title: '收益', width: 135, sort: true, totalRow: true}
                 ,{title: '操作', width: 150, align:'center', toolbar: '#barDemo'}
             ] ]

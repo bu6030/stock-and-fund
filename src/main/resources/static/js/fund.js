@@ -63,6 +63,16 @@ function getTableHtml(result){
     var totalDayIncome = new BigDecimal("0");
     var marketValue = new BigDecimal("0");
     var totalmarketValue = new BigDecimal("0");
+    var marketValuePercent = new BigDecimal("0");
+    for(var k in result) {
+        if (filteredApp != "ALL" && result[k].app != filteredApp) {
+            continue;
+        }
+        marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].gsz)).multiply(new BigDecimal(result[k].bonds))).toFixed(2));
+        totalmarketValue = totalmarketValue.add(marketValue);
+    }
+
+
     for(var k in result) {
         if (filteredApp != "ALL" && result[k].app != filteredApp) {
             continue;
@@ -70,7 +80,8 @@ function getTableHtml(result){
         dayIncome = new BigDecimal(parseFloat((new BigDecimal(result[k].gszzl)).multiply((new BigDecimal(result[k].dwjz))).multiply(new BigDecimal(result[k].bonds)).divide(new BigDecimal("100"))).toFixed(2));
         marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].gsz)).multiply(new BigDecimal(result[k].bonds))).toFixed(2));
         totalDayIncome = totalDayIncome.add(dayIncome);
-        totalmarketValue = totalmarketValue.add(marketValue);
+        // totalmarketValue = totalmarketValue.add(marketValue);
+        marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalmarketValue);
         totalIncome = totalIncome.add(new BigDecimal(result[k].income));
         str += "<tr><td>"
             + "<a onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
@@ -84,6 +95,7 @@ function getTableHtml(result){
             + "</td><td>" + result[k].bonds
             + "</td><td>" + result[k].incomePercent + "%"
             + "</td><td>" + marketValue
+            + "</td><td>" + marketValuePercent + "%"
             + "</td><td>" + result[k].income
             + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"修改\" onclick=\"updateFund('" + result[k].fundCode + "')\">"
             + "<span class=\"am-icon-pencil-square-o\"></span></button>"
@@ -92,7 +104,7 @@ function getTableHtml(result){
             +"</td></tr>";
 
     }
-    str += "<tr><td>合计</td><td colspan='3'></td><td>" + totalDayIncome + "</td><td colspan='5'></td><td>" + totalmarketValue + "</td><td>" + totalIncome
+    str += "<tr><td>合计</td><td colspan='3'></td><td>" + totalDayIncome + "</td><td colspan='5'></td><td>" + totalmarketValue + "</td><td></td><td>" + totalIncome
         +"</td><td></td></tr>";
     return str;
 }

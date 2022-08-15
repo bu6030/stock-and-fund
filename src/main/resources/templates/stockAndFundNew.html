@@ -60,6 +60,16 @@
             ,size: 'sm' //小尺寸的表格
             ,totalRow: true //开启合计行
             ,parseData: function(res){ //res 即为原始返回的数据
+                var totalMarketValue = new BigDecimal("0");
+                for(var i=0;i<res.value.length;i++) {
+                    var item = res.value[i];
+                    if(item.type == 'STOCK'){
+                        totalMarketValue = totalMarketValue.add((new BigDecimal(item.now)).multiply(new BigDecimal(item.bonds)));
+                    }else if(item.type == 'FUND'){
+                        totalMarketValue = totalMarketValue.add(new BigDecimal(parseFloat((new BigDecimal(item.gsz)).multiply(new BigDecimal(item.bonds))).toFixed(2)));
+                    }
+                }
+
                 for(var i=0;i<res.value.length;i++){
                     var item = res.value[i];
                     for(var k in appList) {
@@ -70,24 +80,30 @@
                     if(item.type == 'STOCK'){
                         item.typeNew = '股票';
                         item.dayIncome = (new BigDecimal(item.change)).multiply(new BigDecimal(item.bonds)) +'';
-                        item.marketValue = (new BigDecimal(item.now)).multiply(new BigDecimal(item.bonds)) +'';
+                        var marketValue = new BigDecimal("0");
+                        marketValue = (new BigDecimal(item.now)).multiply(new BigDecimal(item.bonds));
+                        item.marketValue = marketValue +'';
                         item.changePercentAndGszzl = item.changePercent +'%';
                         item.incomePercentNew = item.incomePercent +'%';
                         item.nowAndGsz = item.now;
                         item.dwjzNew = 'N/A';
+                        item.marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValue) + "%";
                     }else if(item.type == 'FUND'){
                         item.typeNew = '基金';
                         item.dayIncome = new BigDecimal(parseFloat((new BigDecimal(item.gszzl))
                             .multiply((new BigDecimal(item.dwjz))).multiply(new BigDecimal(item.bonds))
                             .divide(new BigDecimal("100"))).toFixed(2)) +'';
-                        item.marketValue = new BigDecimal(parseFloat((new BigDecimal(item.gsz)).multiply(new BigDecimal(item.bonds))).toFixed(2)) +'';
+                        var marketValue = new BigDecimal("0");
+                        marketValue = new BigDecimal(parseFloat((new BigDecimal(item.gsz)).multiply(new BigDecimal(item.bonds))).toFixed(2));
+                        item.marketValue = marketValue +'';
                         item.changePercentAndGszzl = item.gszzl +'%';
                         item.dwjzNew = item.dwjz+ '(' + item.jzrq + ')';
                         item.incomePercentNew = item.incomePercent + "%";
                         item.nowAndGsz = item.gsz;
-                        item.change = 'N/A'
-                        item.max = 'N/A'
-                        item.min = 'N/A'
+                        item.change = 'N/A';
+                        item.max = 'N/A';
+                        item.min = 'N/A';
+                        item.marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValue) + "%";
                     }
                 }
                 return {
@@ -113,6 +129,7 @@
                 ,{field: 'bonds', title: '持仓', width: 110, sort: true}
                 ,{field: 'incomePercentNew', title: '收益率', width: 150}
                 ,{field: 'marketValue', title: '市值/金额', width: 150, sort: true, totalRow: true}
+                ,{field: 'marketValuePercent', title: '持仓比率', width: 110, sort: true}
                 ,{field: 'income', title: '收益', width: 150, sort: true, totalRow: true}
             ] ]
         });
