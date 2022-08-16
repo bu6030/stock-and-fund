@@ -84,9 +84,9 @@
                     var marketValue = new BigDecimal("0");
                     marketValue = (new BigDecimal(item.now)).multiply(new BigDecimal(item.bonds));
                     item.marketValue = marketValue +'';
-                    item.changePercentNew = item.changePercent +'%';
-                    item.incomePercentNew = item.incomePercent +'%';
-                    item.marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValue) + "%";
+                    // item.changePercentNew = item.changePercent +'%';
+                    // item.incomePercentNew = item.incomePercent +'%';
+                    item.marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValue) + "";
                 }
                 return {
                     "code": res.code, //解析接口状态
@@ -101,16 +101,16 @@
                 ,{field: 'code', title: '编码', width:120, sort: true}
                 ,{field: 'name', title: '股票名称', width:120}
                 ,{field: 'change', title: '涨跌', width:80}
-                ,{field: 'changePercentNew', title: '涨跌幅', width:100, sort: true}
+                ,{field: 'changePercent', title: '涨跌幅 %', width:120, sort: true}
                 ,{field: 'dayIncome', title: '当日盈利', width: 120, sort: true, totalRow: true}
                 ,{field: 'max', title: '最高价', width:120}
                 ,{field: 'min', title: '最低价', width: 120}
                 ,{field: 'now', title: '当前价', width: 120}
                 ,{field: 'costPrise', title: '成本价', width: 100}
                 ,{field: 'bonds', title: '持仓', width: 135, sort: true}
-                ,{field: 'incomePercentNew', title: '收益率', width: 135}
+                ,{field: 'incomePercent', title: '收益率 %', width: 135, sort: true}
                 ,{field: 'marketValue', title: '市值/金额', width: 135, sort: true, totalRow: true}
-                ,{field: 'marketValuePercent', title: '持仓比率', width: 110, sort: true}
+                ,{field: 'marketValuePercent', title: '持仓比率 %', width: 120, sort: true}
                 ,{field: 'income', title: '收益', width: 135, sort: true, totalRow: true}
                 ,{title: '操作', width: 150, align:'center', toolbar: '#barDemo'}
             ] ]

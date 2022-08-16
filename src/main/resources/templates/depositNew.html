@@ -53,9 +53,9 @@
             ,parseData: function(res){ //res 即为原始返回的数据
                 for(var i=0;i<res.value.length;i++) {
                     var item = res.value[i];
-                    item.fundIncomePercent = (parseFloat(item.fundDayIncome).toFixed(4) * 100/parseFloat(item.fundMarketValue)).toFixed(2) + "%";
-                    item.stockIncomePercent = (parseFloat(item.stockDayIncome).toFixed(4) * 100/parseFloat(item.stockMarketValue)).toFixed(2) + "%";
-                    item.totalIncomePercent = (parseFloat(item.totalDayIncome).toFixed(4) * 100/parseFloat(item.totalMarketValue)).toFixed(2) + "%";
+                    item.fundIncomePercent = (parseFloat(item.fundDayIncome).toFixed(4) * 100/parseFloat(item.fundMarketValue)).toFixed(2) + "";
+                    item.stockIncomePercent = (parseFloat(item.stockDayIncome).toFixed(4) * 100/parseFloat(item.stockMarketValue)).toFixed(2) + "";
+                    item.totalIncomePercent = (parseFloat(item.totalDayIncome).toFixed(4) * 100/parseFloat(item.totalMarketValue)).toFixed(2) + "";
                     item.fundDayIncome = parseFloat(item.fundDayIncome).toFixed(2) + '';
                     item.stockDayIncome = parseFloat(item.stockDayIncome).toFixed(2) + '';
                     item.totalDayIncome = parseFloat(item.totalDayIncome).toFixed(2) + '';
@@ -74,15 +74,15 @@
                 {field: 'date', title: '日期', width: 150, sort: true,totalRow: '合计：'}
                 ,{field: 'fundDayIncome', title: '基金收益', width:200, sort: true, totalRow: true}
                 ,{field: 'fundMarketValue', title: '基金市值', width:200, sort: true}
-                ,{field: 'fundIncomePercent', title: '基金盈利比率', width:200, sort: true}
+                ,{field: 'fundIncomePercent', title: '基金盈利比率 %', width:200, sort: true}
 
                 ,{field: 'stockDayIncome', title: '股票收益', width:200, sort: true, totalRow: true}
                 ,{field: 'stockMarketValue', title: '股票市值', width:200, sort: true}
-                ,{field: 'stockIncomePercent', title: '股票盈利比率', width:200, sort: true}
+                ,{field: 'stockIncomePercent', title: '股票盈利比率 %', width:200, sort: true}
 
                 ,{field: 'totalDayIncome', title: '总收益', width:200, sort: true, totalRow: true}
                 ,{field: 'totalMarketValue', title: '总市值', width:200, sort: true}
-                ,{field: 'totalIncomePercent', title: '总盈利比率', width:200, sort: true}
+                ,{field: 'totalIncomePercent', title: '总盈利比率 %', width:200, sort: true}
             ] ]
         });
         // 头工具栏事件
