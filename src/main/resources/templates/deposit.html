@@ -2,10 +2,10 @@
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>基金</title>
+    <title>收益汇总</title>
     <link rel="stylesheet" th:href="@{/css/main.admin.css}" type="text/css" media="all"/>
     <link rel="stylesheet" th:href="@{/css/main.amazeui.min.css}" type="text/css" media="all"/>
-    <script th:src="@{/js/fund.js}"></script>
+    <script th:src="@{/js/deposit.js}"></script>
     <script th:src="@{/js/jquery.min.js}"></script>
     <script th:src="@{/js/sidebar.js}"></script>
     <script th:src="@{/js/BigDecimal.js}"></script>
@@ -26,19 +26,16 @@
         <div class="daohang"></div>
         <div class="admin-biaogelist">
             <div class="listbiaoti am-cf">
-                <ul class="am-icon-users"> 基金明细
+                <ul class="am-icon-users"> 收益汇总
                 </ul>
                 <dl class="am-icon-home" style="float: right;">
-                    当前位置： 首页 > <a href="#">基金明细</a>
+                    当前位置： 首页 > <a href="#">收益汇总</a>
                 </dl>
                 <dl>
-                    <button type="button" onclick="showDialog('fund')" class="am-btn am-btn-danger am-round am-btn-xs am-icon-plus" > 添加基金</button>
+                    <button type="button" onclick="deposit()" class="am-btn am-btn-danger am-round am-btn-xs am-icon-plus" > 统计当日盈利</button>
+                    <button type="button" onclick="deleteDeposit()" class="am-btn am-btn-danger am-round am-btn-xs am-icon-remove" > 删除当日盈利</button>
                 </dl>
-                <dl>
-                    <div class="checkbox">
-                        <input id="enableAutoRefresh" type="checkbox" checked="checked" name="enableAutoRefresh"> 定时刷新
-                    </div>
-                </dl>
+
             </div>
             <div class="am-btn-toolbars am-btn-toolbar am-kg am-cf"></div>
             <form class="am-form am-g">
@@ -49,23 +46,16 @@
                 <table width="100%" class="am-table am-table-bordered am-table-radius am-table-striped">
                     <thead>
                     <tr class="am-success">
-                        <!--<th class="table-check"><input type="checkbox" /></th>-->
-
-                        <!--<th class="table-id">ID</th>-->
-                        <th class="table-author am-hide-sm-only">APP</th>
-                        <th class="table-title">编码</th>
-                        <th class="table-type">基金名称</th>
-                        <th class="table-author am-hide-sm-only">估算涨跌幅</th>
-                        <th class="table-author am-hide-sm-only">估算当日盈利</th>
-                        <th class="table-author am-hide-sm-only">当日净值</th>
-                        <th class="table-author am-hide-sm-only">估算净值</th>
-                        <th class="table-author am-hide-sm-only">持仓成本</th>
-                        <th class="table-date am-hide-sm-only">持有份额</th>
-                        <th class="table-author am-hide-sm-only">收益率</th>
-                        <th class="table-author am-hide-sm-only">市值/金额</th>
-                        <th class="table-author am-hide-sm-only">持仓占比</th>
-                        <th width="130px">收益</th>
-                        <th class="table-author am-hide-sm-only">操作</th>
+                        <th class="table-author am-hide-sm-only">日期</th>
+                        <th class="table-title">基金收益</th>
+                        <th class="table-title">基金市值</th>
+                        <th class="table-title">基金盈利百分比</th>
+                        <th class="table-type">股票收益</th>
+                        <th class="table-type">股票市值</th>
+                        <th class="table-type">股票盈利百分比</th>
+                        <th class="table-author am-hide-sm-only">总收益</th>
+                        <th class="table-author am-hide-sm-only">总市值</th>
+                        <th class="table-author am-hide-sm-only">总盈利百分比</th>
                     </tr>
                     </thead>
                     <tbody id="nr">

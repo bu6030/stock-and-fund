@@ -1,10 +1,30 @@
 var pageSize = 15;
 var filteredApp = "ALL";
+var appList;
 
 function getData() {
     var userId = $("#userId").val();
     var personName = $("#personName").val();
     var accountId = $("#accountId").val();
+    $.ajax({
+        url:"/param?type=APP",
+        type:"get",
+        data :{},
+        dataType:'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data){
+            appList = data.value;
+            initData();
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+}
+
+function initData(){
     $.ajax({
         url:"/stock",
         type:"get",
@@ -42,6 +62,15 @@ function getTableHtml(result){
     var totalDayIncome = new BigDecimal("0");
     var marketValue = new BigDecimal("0");
     var totalmarketValue = new BigDecimal("0");
+    var marketValuePercent = new BigDecimal("0");
+    for(var k in result) {
+        if (filteredApp != "ALL" && result[k].app != filteredApp) {
+            continue;
+        }
+        marketValue = (new BigDecimal(result[k].now)).multiply(new BigDecimal(result[k].bonds));
+        totalmarketValue = totalmarketValue.add(marketValue);
+    }
+
     for(var k in result) {
         if (filteredApp != "ALL" && result[k].app != filteredApp) {
             continue;
@@ -49,7 +78,8 @@ function getTableHtml(result){
         dayIncome = (new BigDecimal(result[k].change)).multiply(new BigDecimal(result[k].bonds));
         marketValue = (new BigDecimal(result[k].now)).multiply(new BigDecimal(result[k].bonds));
         totalDayIncome = totalDayIncome.add(dayIncome);
-        totalmarketValue = totalmarketValue.add(marketValue);
+        // totalmarketValue = totalmarketValue.add(marketValue);
+        marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalmarketValue);
         str += "<tr><td>"
             + "<a onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
             + "</td><td>" + result[k].code
@@ -59,9 +89,12 @@ function getTableHtml(result){
             + "</td><td>" + dayIncome
             + "</td><td>" + result[k].max
             + "</td><td>" + result[k].min
-            + "</td><td>" + result[k].now + "</td><td>" + result[k].costPrise
-            + "</td><td>" + result[k].bonds + "</td><td>" + result[k].incomePercent +"%"
+            + "</td><td>" + result[k].now
+            + "</td><td>" + result[k].costPrise
+            + "</td><td>" + result[k].bonds
+            + "</td><td>" + result[k].incomePercent +"%"
             + "</td><td>" + marketValue
+            + "</td><td>" + marketValuePercent + "%"
             + "</td><td>" + result[k].income
             + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"修改\" onclick=\"updateStock('" + result[k].code + "')\">"
             + "<span class=\"am-icon-pencil-square-o\"></span></button>"
@@ -70,23 +103,18 @@ function getTableHtml(result){
             +"</td></tr>";
         totalIncome = totalIncome.add(new BigDecimal(result[k].income));
     }
-    str += "<tr><td>合计</td><td colspan='4'></td><td>" + totalDayIncome + "</td><td colspan='6'></td><td>" + totalmarketValue + "</td><td>" + totalIncome
+    str += "<tr><td>合计</td><td colspan='4'></td><td>" + totalDayIncome + "</td><td colspan='6'></td><td>" + totalmarketValue + "</td></td><td></td><td>" + totalIncome
         +"</td><td></td></tr>";
     return str;
 }
 
 function getAppName(app){
-    if(app == "ZFB"){
-        return "支付宝";
-    } else if(app == "DFCF"){
-        return "东方财富";
-    } else if(app == "DFZQ"){
-        return "东方证券";
-    } else if(app == "ZGYH"){
-        return "中国银行";
-    } else if(app == "PAYH"){
-        return "平安银行";
+    for(var k in appList) {
+        if(app == appList[k].code){
+            return appList[k].name;
+        }
     }
+    return app;
 }
 
 function filterApp(app) {
@@ -101,7 +129,7 @@ function showDialog(type){
     var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
     //获得窗口的水平位置
     var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
-    var url = '/addStockAndFundInit?type='+type;
+    var url = '/addStockAndFund.html?type='+type;
 
     window.open (url, 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
 }
@@ -140,5 +168,5 @@ function updateStock(code){
     var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
     //获得窗口的水平位置
     var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
-    window.open ('/updateStockAndFundInit?code='+code+'&type=stock', 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
+    window.open ('/updateStockAndFund.html?code='+code+'&type=stock', 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
 }

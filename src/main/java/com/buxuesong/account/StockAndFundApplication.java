@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 //该注解会扫描相应的包
 @ServletComponentScan
+@EnableScheduling
 public class StockAndFundApplication extends SpringBootServletInitializer {
 
     @Override

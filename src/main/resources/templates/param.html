@@ -2,10 +2,10 @@
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>股票</title>
+    <title>字典数据维护</title>
     <link rel="stylesheet" th:href="@{/css/main.admin.css}" type="text/css" media="all"/>
     <link rel="stylesheet" th:href="@{/css/main.amazeui.min.css}" type="text/css" media="all"/>
-    <script th:src="@{/js/stock.js}"></script>
+    <script th:src="@{/js/param.js}"></script>
     <script th:src="@{/js/jquery.min.js}"></script>
     <script th:src="@{/js/sidebar.js}"></script>
     <script th:src="@{/js/BigDecimal.js}"></script>
@@ -26,18 +26,13 @@
         <div class="daohang"></div>
         <div class="admin-biaogelist">
             <div class="listbiaoti am-cf">
-                <ul class="am-icon-users"> 股票明细
+                <ul class="am-icon-users"> APP维护
                 </ul>
                 <dl class="am-icon-home" style="float: right;">
-                    当前位置： 首页 > <a href="#">股票明细</a>
+                    当前位置： 首页 > <a href="#">APP维护</a>
                 </dl>
                 <dl>
-                    <button type="button" onclick="showDialog('stock')" class="am-btn am-btn-danger am-round am-btn-xs am-icon-plus" > 添加股票</button>
-                </dl>
-                <dl>
-                    <div class="checkbox">
-                        <input id="enableAutoRefresh" type="checkbox" checked="checked" name="enableAutoRefresh"> 定时刷新
-                    </div>
+                    <button type="button" onclick="showDialog('APP')" class="am-btn am-btn-danger am-round am-btn-xs am-icon-plus" > 添加字典数据</button>
                 </dl>
             </div>
             <div class="am-btn-toolbars am-btn-toolbar am-kg am-cf"></div>
@@ -52,21 +47,9 @@
                         <!--<th class="table-check"><input type="checkbox" /></th>-->
 
                         <!--<th class="table-id">ID</th>-->
-                        <th class="table-author am-hide-sm-only">APP</th>
+                        <th class="table-author am-hide-sm-only">类型</th>
                         <th class="table-title">编码</th>
-                        <th class="table-type">股票名称</th>
-                        <th class="table-author am-hide-sm-only">涨跌</th>
-                        <th class="table-author am-hide-sm-only">涨跌幅</th>
-                        <th class="table-author am-hide-sm-only">当日盈利</th>
-                        <th class="table-author am-hide-sm-only">最高价</th>
-                        <th class="table-date am-hide-sm-only">最低价</th>
-                        <th class="table-author am-hide-sm-only">当前价</th>
-                        <th class="table-author am-hide-sm-only">成本价</th>
-                        <th class="table-author am-hide-sm-only">持仓</th>
-                        <th class="table-author am-hide-sm-only">收益率</th>
-                        <th class="table-author am-hide-sm-only">市值/金额</th>
-                        <th class="table-author am-hide-sm-only">持仓占比</th>
-                        <th class="table-author am-hide-sm-only">收益</th>
+                        <th class="table-type">名称</th>
                         <th class="table-author am-hide-sm-only">操作</th>
                     </tr>
                     </thead>

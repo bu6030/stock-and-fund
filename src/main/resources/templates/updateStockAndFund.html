@@ -21,6 +21,7 @@
     <div class="fbneirong">
         <form class="am-form" id="saveOutComeForm">
             <input type="hidden" id="type" th:value="${type}"/>
+            <input type="hidden" id="appHid" th:value="${app}"/>
             <div class="am-form-group am-cf">
                 <div class="zuo">股票/基金：</div>
                 <div class="you">
@@ -52,11 +53,11 @@
                 <div class="zuo">APP：</div>
                 <div class="you">
                     <select data-am-selected="{btnSize: 'sm'}" id="app">
-                        <option th:value="ZFB" th:selected="${app =='ZFB'}">支付宝</option>
-                        <option th:value="DFCF" th:selected="${app =='DFCF'}">东方财富</option>
-                        <option th:value="DFZQ" th:selected="${app =='DFZQ'}">东方证券</option>
-                        <option th:value="ZGYH" th:selected="${app =='ZGYH'}">中国银行</option>
-                        <option th:value="PAYH" th:selected="${app =='PAYH'}">平安银行</option>
+<!--                        <option th:value="ZFB" th:selected="${app =='ZFB'}">支付宝</option>-->
+<!--                        <option th:value="DFCF" th:selected="${app =='DFCF'}">东方财富</option>-->
+<!--                        <option th:value="DFZQ" th:selected="${app =='DFZQ'}">东方证券</option>-->
+<!--                        <option th:value="ZGYH" th:selected="${app =='ZGYH'}">中国银行</option>-->
+<!--                        <option th:value="PAYH" th:selected="${app =='PAYH'}">平安银行</option>-->
                     </select>
                 </div>
             </div>

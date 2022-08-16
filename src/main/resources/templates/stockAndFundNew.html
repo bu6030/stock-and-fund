@@ -27,6 +27,22 @@
 <script src="https://cdn.staticfile.org/layui/2.7.6/layui.js"></script>
 
 <script>
+    var appList;
+    $.ajax({
+        url:"/param?type=APP",
+        type:"get",
+        data :{},
+        dataType:'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data){
+            appList = data.value;
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
     layui.use(function(){
         // 得到需要的内置组件
         var layer = layui.layer; //弹层
@@ -44,40 +60,48 @@
             ,size: 'sm' //小尺寸的表格
             ,totalRow: true //开启合计行
             ,parseData: function(res){ //res 即为原始返回的数据
+                var totalMarketValue = new BigDecimal("0");
+                for(var i=0;i<res.value.length;i++) {
+                    var item = res.value[i];
+                    if(item.type == 'STOCK'){
+                        totalMarketValue = totalMarketValue.add((new BigDecimal(item.now)).multiply(new BigDecimal(item.bonds)));
+                    }else if(item.type == 'FUND'){
+                        totalMarketValue = totalMarketValue.add(new BigDecimal(parseFloat((new BigDecimal(item.gsz)).multiply(new BigDecimal(item.bonds))).toFixed(2)));
+                    }
+                }
+
                 for(var i=0;i<res.value.length;i++){
                     var item = res.value[i];
-                    if(item.app == 'ZFB'){
-                        item.appNew = '支付宝';
-                    } else if(item.app == 'DFCF'){
-                        item.appNew = '东方财富';
-                    } else if(item.app == 'DFZQ'){
-                        item.appNew = '东方证券';
-                    } else if(item.app == 'ZGYH'){
-                        item.appNew = '中国银行';
-                    } else if(item.app == 'PAYH'){
-                        item.appNew = '平安银行';
+                    for(var k in appList) {
+                        if(item.app == appList[k].code){
+                            item.appNew = appList[k].name;
+                        }
                     }
                     if(item.type == 'STOCK'){
                         item.typeNew = '股票';
                         item.dayIncome = (new BigDecimal(item.change)).multiply(new BigDecimal(item.bonds)) +'';
-                        item.marketValue = (new BigDecimal(item.now)).multiply(new BigDecimal(item.bonds)) +'';
-                        item.changePercentAndGszzl = item.changePercent +'%';
-                        item.incomePercentNew = item.incomePercent +'%';
+                        var marketValue = new BigDecimal("0");
+                        marketValue = (new BigDecimal(item.now)).multiply(new BigDecimal(item.bonds));
+                        item.marketValue = marketValue +'';
+                        item.changePercentAndGszzl = item.changePercent;
                         item.nowAndGsz = item.now;
                         item.dwjzNew = 'N/A';
+                        item.marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValue) + "";
                     }else if(item.type == 'FUND'){
                         item.typeNew = '基金';
                         item.dayIncome = new BigDecimal(parseFloat((new BigDecimal(item.gszzl))
                             .multiply((new BigDecimal(item.dwjz))).multiply(new BigDecimal(item.bonds))
                             .divide(new BigDecimal("100"))).toFixed(2)) +'';
-                        item.marketValue = new BigDecimal(parseFloat((new BigDecimal(item.gsz)).multiply(new BigDecimal(item.bonds))).toFixed(2)) +'';
-                        item.changePercentAndGszzl = item.gszzl +'%';
+                        var marketValue = new BigDecimal("0");
+                        marketValue = new BigDecimal(parseFloat((new BigDecimal(item.gsz)).multiply(new BigDecimal(item.bonds))).toFixed(2));
+                        item.marketValue = marketValue +'';
+                        item.changePercentAndGszzl = item.gszzl;
                         item.dwjzNew = item.dwjz+ '(' + item.jzrq + ')';
-                        item.incomePercentNew = item.incomePercent + "%";
                         item.nowAndGsz = item.gsz;
-                        item.change = 'N/A'
-                        item.max = 'N/A'
-                        item.min = 'N/A'
+                        item.change = 'N/A';
+                        item.max = 'N/A';
+                        item.min = 'N/A';
+                        item.marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValue) + "";
                     }
                 }
                 return {
@@ -94,15 +118,16 @@
                 ,{field: 'name', title: '股票/基金名称', width:190}
                 ,{field: 'change', title: '涨跌', width:70}
                 ,{field: 'dayIncome', title: '当日盈利', width: 100, sort: true, totalRow: true}
-                ,{field: 'changePercentAndGszzl', title: '涨跌幅', width:100, sort: true}
+                ,{field: 'changePercentAndGszzl', title: '涨跌幅 %', width:100, sort: true}
                 ,{field: 'max', title: '最高价', width:90}
                 ,{field: 'min', title: '最低价', width: 90}
                 ,{field: 'nowAndGsz', title: '当前价/估算净值', width: 110}
                 ,{field: 'dwjzNew', title: '当日净值', width: 180}
                 ,{field: 'costPrise', title: '成本价', width: 80}
                 ,{field: 'bonds', title: '持仓', width: 110, sort: true}
-                ,{field: 'incomePercentNew', title: '收益率', width: 150}
+                ,{field: 'incomePercent', title: '收益率 %', width: 150, sort: true}
                 ,{field: 'marketValue', title: '市值/金额', width: 150, sort: true, totalRow: true}
+                ,{field: 'marketValuePercent', title: '持仓比率 %', width: 110, sort: true}
                 ,{field: 'income', title: '收益', width: 150, sort: true, totalRow: true}
             ] ]
         });
