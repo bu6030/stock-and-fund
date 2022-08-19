@@ -151,8 +151,8 @@ function getMonthDeposit() {
 }
 
 function getYearDeposit() {
-    let date = new Date();
-    let year = date.getFullYear();
+    var date = new Date();
+    var year = date.getFullYear();
     var yearStartDate = year + '-01-01';
     var yearEndDate = year + '-12-31';
     $("#beginDate").val(yearStartDate);
@@ -161,37 +161,37 @@ function getYearDeposit() {
 }
 
 function getMonthStartDate() {
-    let date = new Date();
+    var date = new Date();
     date.setDate(1); // 将当前时间的日期设置成第一天
-    let year= date.getFullYear() ; // 得到当前年份
-    let month = date.getMonth()  + 1; // 得到当前月份（0-11月份，+1是当前月份）
+    var year= date.getFullYear() ; // 得到当前年份
+    var month = date.getMonth()  + 1; // 得到当前月份（0-11月份，+1是当前月份）
     month = month > 10 ? month :'0' + month; // 补零
-    let day = date.getDate(); // 得到当前天数，实际是本月第一天，因为前面setDate(1) 设置过了
+    var day = date.getDate(); // 得到当前天数，实际是本月第一天，因为前面setDate(1) 设置过了
     return year + '-' + month + '-' + day; // 这里传入的是字符串
 }
 
 function getMonthEndDate(){
-    let date  = new Date();
-    let year = date.getFullYear();
-    let month = date.getMonth() +1;
+    var date  = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth() +1;
     // 这里传入的是整数时间，返回的是下个月的第一天，因为月份是0-11
-    let nextMonthFirthDay = new Date(year,month,1); // 下个月的第一天
-    let oneDay = 1000*60 * 60 * 24; // 一天的时间毫秒数
-    let endDay = new Date(nextMonthFirthDay - oneDay);
-    let day = endDay.getDate(); // 本月最后一天
+    var nextMonthFirthDay = new Date(year,month,1); // 下个月的第一天
+    var oneDay = 1000*60 * 60 * 24; // 一天的时间毫秒数
+    var endDay = new Date(nextMonthFirthDay - oneDay);
+    var day = endDay.getDate(); // 本月最后一天
     // 这里传入的是字符串格式的时间，返回的是传入字符串的时间
     return year + '-' + month + '-' + day;
 }
 
 function getCurrentWeekFirstDay() {
-    let date = new Date();
-    let weekFirstDay = new Date(date - (date.getDay() - 1) * 86400000)
-    let firstMonth = Number(weekFirstDay.getMonth()) + 1
+    var date = new Date();
+    var weekFirstDay = new Date(date - (date.getDay() - 1) * 86400000)
+    var firstMonth = Number(weekFirstDay.getMonth()) + 1
 
     if (firstMonth < 10) {
         firstMonth = '0' + firstMonth
     }
-    let weekFirstDays = weekFirstDay.getDate();
+    var weekFirstDays = weekFirstDay.getDate();
     if (weekFirstDays < 10) {
         weekFirstDays = '0' + weekFirstDays;
     }
@@ -199,14 +199,14 @@ function getCurrentWeekFirstDay() {
 }
 
 function getCurrentWeekLastDay() {
-    let date = new Date();
-    let weekFirstDay = new Date(date - (date.getDay() - 1) * 86400000)
-    let weekLastDay = new Date((weekFirstDay / 1000 + 6 * 86400) * 1000)
-    let lastMonth = Number(weekLastDay.getMonth()) + 1
+    var date = new Date();
+    var weekFirstDay = new Date(date - (date.getDay() - 1) * 86400000)
+    var weekLastDay = new Date((weekFirstDay / 1000 + 6 * 86400) * 1000)
+    var lastMonth = Number(weekLastDay.getMonth()) + 1
     if (lastMonth < 10) {
         lastMonth = '0' + lastMonth
     }
-    let weekLastDays = weekLastDay.getDate();
+    var weekLastDays = weekLastDay.getDate();
     if (weekLastDays < 10) {
         weekLastDays = '0' + weekLastDays;
     }

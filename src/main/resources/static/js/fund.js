@@ -83,7 +83,9 @@ function getTableHtml(result){
         // totalmarketValue = totalmarketValue.add(marketValue);
         marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalmarketValue);
         totalIncome = totalIncome.add(new BigDecimal(result[k].income));
-        str += "<tr><td>"
+        var style = dayIncome >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"";
+
+        str += "<tr " + style + "><td>"
             + "<a onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
             + "</td><td>" + result[k].fundCode
             + "</td><td>" +result[k].fundName

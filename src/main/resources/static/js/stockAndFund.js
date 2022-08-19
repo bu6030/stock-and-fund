@@ -123,7 +123,9 @@ function getStockTableHtml(result, totalMarketValueResult){
         dayIncome = (new BigDecimal(result[k].change)).multiply(new BigDecimal(result[k].bonds));
         marketValue = (new BigDecimal(result[k].now)).multiply(new BigDecimal(result[k].bonds));
         marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult);
-        str += "<tr><td>"
+        var style = dayIncome >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"";
+
+        str += "<tr " + style + "><td>"
             + "<a onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
             + "</td><td>" + result[k].code
             + "</td><td>" +result[k].name
@@ -164,7 +166,9 @@ function getFundTableHtml(result, totalMarketValueResult){
         dayIncome = new BigDecimal(parseFloat((new BigDecimal(result[k].gszzl)).multiply((new BigDecimal(result[k].dwjz))).multiply(new BigDecimal(result[k].bonds)).divide(new BigDecimal("100"))).toFixed(2));
         marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].gsz)).multiply(new BigDecimal(result[k].bonds))).toFixed(2));
         marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult);
-        str += "<tr><td>"
+        var style = dayIncome >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"";
+
+        str += "<tr " + style + "><td>"
             + "<a onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
             + "</td><td>" + result[k].fundCode
             + "</td><td>" +result[k].fundName

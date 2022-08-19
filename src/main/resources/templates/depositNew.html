@@ -24,6 +24,11 @@
         -
         <input name="endDate" id="endDate" placeholder="请选择结束日期" onchange="depositDeateChanged()" style="width:190px;display: inline-block" type="date" class="layui-input"/>
     </div>
+    <div class="layui-btn-group">
+        <button type="button" class="layui-btn" onclick="getWeekDeposit()">筛选当周盈利</button>
+        <button type="button" class="layui-btn " onclick="getMonthDeposit()">筛选当月盈利</button>
+        <button type="button" class="layui-btn" onclick="getYearDeposit()">筛选当年盈利</button>
+    </div>
 </blockquote>
 <table class="layui-hide" id="demo" lay-filter="test"></table>
 <script th:src="@{/js/BigDecimal.js}"></script>
@@ -40,7 +45,7 @@
     </div>
 </script>
 <script>
-    let depositTable;
+    var depositTable;
     layui.use(function(){
         // 得到需要的内置组件
         var layer = layui.layer; //弹层
@@ -70,6 +75,7 @@
                     item.fundMarketValue = parseFloat(item.fundMarketValue).toFixed(2) + '';
                     item.stockMarketValue = parseFloat(item.stockMarketValue).toFixed(2) + '';
                     item.totalMarketValue = parseFloat(item.totalMarketValue).toFixed(2) + '';
+                    item.color = item.totalDayIncome >= 0?"#c12e2a":"#3e8f3e";
                 }
                 return {
                     "code": res.code, //解析接口状态
@@ -79,18 +85,18 @@
                 };
             }
             ,cols: [ [ //表头
-                {field: 'date', title: '日期', width: 150, sort: true,totalRow: '合计：'}
-                ,{field: 'fundDayIncome', title: '基金收益', width:200, sort: true, totalRow: true}
-                ,{field: 'fundMarketValue', title: '基金市值', width:200, sort: true}
-                ,{field: 'fundIncomePercent', title: '基金盈利比率 %', width:200, sort: true}
+                {field: 'date', title: '日期', width: 150, sort: true,totalRow: '合计：',templet: function(d){return '<span style="color: ' + d.color + '">'+ d.date +'</span>'}}
+                ,{field: 'fundDayIncome', title: '基金收益', width:200, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.fundDayIncome +'</span>'}}
+                ,{field: 'fundIncomePercent', title: '基金盈利比率 %', width:200, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.fundIncomePercent +'</span>'}}
+                ,{field: 'fundMarketValue', title: '基金市值', width:200, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.fundMarketValue +'</span>'}}
 
-                ,{field: 'stockDayIncome', title: '股票收益', width:200, sort: true, totalRow: true}
-                ,{field: 'stockMarketValue', title: '股票市值', width:200, sort: true}
-                ,{field: 'stockIncomePercent', title: '股票盈利比率 %', width:200, sort: true}
+                ,{field: 'stockDayIncome', title: '股票收益', width:200, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.stockDayIncome +'</span>'}}
+                ,{field: 'stockIncomePercent', title: '股票盈利比率 %', width:200, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.stockIncomePercent +'</span>'}}
+                ,{field: 'stockMarketValue', title: '股票市值', width:200, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.stockMarketValue +'</span>'}}
 
-                ,{field: 'totalDayIncome', title: '总收益', width:200, sort: true, totalRow: true}
-                ,{field: 'totalMarketValue', title: '总市值', width:200, sort: true}
-                ,{field: 'totalIncomePercent', title: '总盈利比率 %', width:200, sort: true}
+                ,{field: 'totalDayIncome', title: '总收益', width:200, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.totalDayIncome +'</span>'}}
+                ,{field: 'totalIncomePercent', title: '总盈利比率 %', width:200, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.totalIncomePercent +'</span>'}}
+                ,{field: 'totalMarketValue', title: '总市值', width:200, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.totalMarketValue +'</span>'}}
             ] ]
         });
         // 头工具栏事件
@@ -172,6 +178,87 @@
             url: '/deposit?beginDate='+beginDate+'&endDate='+endDate
         });
     }
+
+    function getWeekDeposit() {
+        var weekStartDate = getCurrentWeekFirstDay();
+        var weekEndDate = getCurrentWeekLastDay;
+        $("#beginDate").val(weekStartDate);
+        $("#endDate").val(weekEndDate);
+        depositDeateChanged();
+    };
+
+    function getMonthDeposit() {
+        var monthStartDate = getMonthStartDate();
+        var monthEndDate = getMonthEndDate();
+        $("#beginDate").val(monthStartDate);
+        $("#endDate").val(monthEndDate);
+        depositDeateChanged();
+    };
+
+    function getYearDeposit() {
+        var date = new Date();
+        var year = date.getFullYear();
+        var yearStartDate = year + '-01-01';
+        var yearEndDate = year + '-12-31';
+        $("#beginDate").val(yearStartDate);
+        $("#endDate").val(yearEndDate);
+        depositDeateChanged();
+    };
+
+    function getMonthStartDate() {
+        var date = new Date();
+        date.setDate(1); // 将当前时间的日期设置成第一天
+        var year= date.getFullYear() ; // 得到当前年份
+        var month = date.getMonth()  + 1; // 得到当前月份（0-11月份，+1是当前月份）
+        month = month > 10 ? month :'0' + month; // 补零
+        var day = date.getDate(); // 得到当前天数，实际是本月第一天，因为前面setDate(1) 设置过了
+        day = day > 10 ? day :'0' + day; // 补零
+        return year + '-' + month + '-' + day; // 这里传入的是字符串
+    };
+
+    function getMonthEndDate(){
+        var date  = new Date();
+        var year = date.getFullYear();
+        var month = date.getMonth() +1;
+        month = month > 10 ? month :'0' + month; // 补零
+        // 这里传入的是整数时间，返回的是下个月的第一天，因为月份是0-11
+        var nextMonthFirthDay = new Date(year,month,1); // 下个月的第一天
+        var oneDay = 1000*60 * 60 * 24; // 一天的时间毫秒数
+        var endDay = new Date(nextMonthFirthDay - oneDay);
+        var day = endDay.getDate(); // 本月最后一天
+        // 这里传入的是字符串格式的时间，返回的是传入字符串的时间
+        return year + '-' + month + '-' + day;
+    };
+
+    function getCurrentWeekFirstDay() {
+        var date = new Date();
+        var weekFirstDay = new Date(date - (date.getDay() - 1) * 86400000)
+        var firstMonth = Number(weekFirstDay.getMonth()) + 1
+
+        if (firstMonth < 10) {
+            firstMonth = '0' + firstMonth
+        }
+        var weekFirstDays = weekFirstDay.getDate();
+        if (weekFirstDays < 10) {
+            weekFirstDays = '0' + weekFirstDays;
+        }
+        return weekFirstDay.getFullYear() + '-' + firstMonth + '-' + weekFirstDays;
+    };
+
+    function getCurrentWeekLastDay() {
+        var date = new Date();
+        var weekFirstDay = new Date(date - (date.getDay() - 1) * 86400000)
+        var weekLastDay = new Date((weekFirstDay / 1000 + 6 * 86400) * 1000)
+        var lastMonth = Number(weekLastDay.getMonth()) + 1
+        if (lastMonth < 10) {
+            lastMonth = '0' + lastMonth
+        }
+        var weekLastDays = weekLastDay.getDate();
+        if (weekLastDays < 10) {
+            weekLastDays = '0' + weekLastDays;
+        }
+        return weekFirstDay.getFullYear() + '-' + lastMonth + '-' + weekLastDays;
+    };
 </script>
 </body>
 </html>
