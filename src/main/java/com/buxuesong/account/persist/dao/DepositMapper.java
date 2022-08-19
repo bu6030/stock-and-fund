@@ -19,13 +19,13 @@ public interface DepositMapper {
     @Select("select DATE, FUND_DAY_INCOME fundDayIncome, STOCK_DAY_INCOME stockDayIncome, DAY_INCOME totalDayIncome, FUND_MARKET_VALUE fundMarketValue, STOCK_MARKET_VALUE stockMarketValue, TOTAL_MARKET_VALUE totalMarketValue from DEPOSIT order by DATE ASC")
     List<Deposit> findAllDeposit();
 
-    @Select({"<script> select DATE, FUND_DAY_INCOME fundDayIncome, STOCK_DAY_INCOME stockDayIncome, DAY_INCOME totalDayIncome, " +
-            " FUND_MARKET_VALUE fundMarketValue, STOCK_MARKET_VALUE stockMarketValue, TOTAL_MARKET_VALUE totalMarketValue " +
-            " from DEPOSIT " +
-            " where 1=1 " +
-            " <if test=\"beginDate!=null and beginDate!=''\"> and DATE &gt;= #{beginDate} </if> " +
-            " <if test=\"endDate!=null and endDate!=''\"> and DATE &lt;= #{endDate} </if> " +
-            " order by DATE ASC</script>"})
+    @Select({ "<script> select DATE, FUND_DAY_INCOME fundDayIncome, STOCK_DAY_INCOME stockDayIncome, DAY_INCOME totalDayIncome, " +
+        " FUND_MARKET_VALUE fundMarketValue, STOCK_MARKET_VALUE stockMarketValue, TOTAL_MARKET_VALUE totalMarketValue " +
+        " from DEPOSIT " +
+        " where 1=1 " +
+        " <if test=\"beginDate!=null and beginDate!=''\"> and DATE &gt;= #{beginDate} </if> " +
+        " <if test=\"endDate!=null and endDate!=''\"> and DATE &lt;= #{endDate} </if> " +
+        " order by DATE ASC</script>" })
     List<Deposit> getDepositList(@Param("beginDate") String beginDate, @Param("endDate") String endDate);
 
     @Delete("delete from DEPOSIT where DATE = #{date} ")

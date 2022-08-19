@@ -29,9 +29,12 @@
                 <ul class="am-icon-users"> 收益汇总
                 </ul>
                 <dl style="float: right;">
+                    <button type="button" onclick="getWeekDeposit()" class="am-btn am-btn-danger am-round am-btn-xs am-icon-search" > 筛选当周盈利</button>
+                    <button type="button" onclick="getMonthDeposit()" class="am-btn am-btn-danger am-round am-btn-xs am-icon-search" > 筛选当月盈利</button>
+                    <button type="button" onclick="getYearDeposit()" class="am-btn am-btn-danger am-round am-btn-xs am-icon-search" > 筛选当年盈利</button>
                     <input type="text" class="demo-input" placeholder="请选择开始日期" id="beginDate">
                     <input type="text" class="demo-input" placeholder="请选择结束日期" id="endDate">
-                    <button type="button" onclick="getData()" class="am-btn am-btn-danger am-round am-btn-xs am-icon-plus" > 筛选</button>
+                    <button type="button" onclick="getData()" class="am-btn am-btn-danger am-round am-btn-xs am-icon-search" > 筛选</button>
                 </dl>
                 <dl class="am-icon-home" style="float: right;">
                     当前位置： 首页 > <a href="#">收益汇总</a>
