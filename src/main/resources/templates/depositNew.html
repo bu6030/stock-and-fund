@@ -17,6 +17,14 @@
     <div th:replace="headerNew.html"></div>
 </header>
 <blockquote class="layui-elem-quote">收益汇总：您可在此页面查看股票基金每日收益汇总。<a href="mailto:buxuesong@foxmail.com">有任何问题点击这里联系作者: buxuesong@foxmail.com</a></blockquote>
+
+<blockquote class="layui-elem-quote">
+    <div class="layui-input-inline mr0" style="width: 410px;">
+        <input name="beginDate" id="beginDate" placeholder="请选择开始日期" onchange="depositDeateChanged()" style="width:190px;display: inline-block" type="date" class="layui-input"/>
+        -
+        <input name="endDate" id="endDate" placeholder="请选择结束日期" onchange="depositDeateChanged()" style="width:190px;display: inline-block" type="date" class="layui-input"/>
+    </div>
+</blockquote>
 <table class="layui-hide" id="demo" lay-filter="test"></table>
 <script th:src="@{/js/BigDecimal.js}"></script>
 <script th:src="@{/js/jquery.min.js}"></script>
@@ -32,16 +40,16 @@
     </div>
 </script>
 <script>
+    let depositTable;
     layui.use(function(){
         // 得到需要的内置组件
         var layer = layui.layer; //弹层
         var table = layui.table; //表格
-
         // 向世界问个好
         layer.msg('收益汇总：您可在此页面查看股票基金每日收益汇总。');
 
         // 执行一个 table 实例
-        table.render({
+        depositTable = table.render({
             elem: '#demo'
             // ,height: 600
             ,url: '/deposit' //数据接口（此处为静态数据，仅作演示）
@@ -113,7 +121,6 @@
 
     });
 
-
     function deposit(){
         var url = "/deposit";
         var req = {}
@@ -155,6 +162,14 @@
                 console.log(XMLHttpRequest.readyState);
                 console.log(textStatus);
             }
+        });
+    }
+
+    function depositDeateChanged(){
+        var beginDate = $("#beginDate").val();
+        var endDate = $("#endDate").val();
+        depositTable.reload({
+            url: '/deposit?beginDate='+beginDate+'&endDate='+endDate
         });
     }
 </script>
