@@ -64,9 +64,9 @@ public class DepositServiceImpl implements DepositService {
     }
 
     @Override
-    public List<Deposit> getDepositList() {
-        List<Deposit> list = depositMapper.findAllDeposit();
-        log.info("Get deposit list : {}", list);
+    public List<Deposit> getDepositList(String beginDate, String endDate) {
+        List<Deposit> list = depositMapper.getDepositList(beginDate, endDate);
+        log.info("Get deposit list between {} and {} : {}", beginDate, endDate, list);
         return list;
     }
 

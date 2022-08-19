@@ -18,14 +18,14 @@ public class ParamServiceImpl implements ParamService {
     @Override
     public List<Parameter> getParamList() {
         List<Parameter> list = paramMapper.findAllParam();
-        log.info("Get deposit list : {}", list);
+        log.info("Get Parameter list : {}", list);
         return list;
     }
 
     @Override
     public List<Parameter> getParamList(String type) {
         List<Parameter> list = paramMapper.findParamByType(type);
-        log.info("Get deposit list : {}", list);
+        log.info("Get Parameter list : {}", list);
         return list;
     }
 

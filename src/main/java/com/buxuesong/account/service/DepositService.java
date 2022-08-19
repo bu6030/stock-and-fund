@@ -7,7 +7,7 @@ import java.util.List;
 public interface DepositService {
     void deposit();
 
-    List<Deposit> getDepositList();
+    List<Deposit> getDepositList(String beginDate, String endDate);
 
     Deposit getDepositByDate(String date);
 

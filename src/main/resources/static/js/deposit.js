@@ -1,12 +1,14 @@
 var pageSize = 15;
 
 function getData() {
+    var beginDate = $("#beginDate").val();
+    var endDate = $("#endDate").val();
+    var url = "/deposit?beginDate="+beginDate+"&endDate="+endDate;
     $.ajax({
-        url:"/deposit",
-        type:"get",
-        data :{
-        },
-        dataType:'json',
+        url: url,
+        type: "get",
+        data : {},
+        dataType: 'json',
         contentType: 'application/x-www-form-urlencoded',
         success: function (data){
             var result = data.value;
@@ -21,6 +23,15 @@ function getData() {
     });
 
     lay('#version').html('-v'+ laydate.v);
+    //执行一个laydate实例
+    laydate.render({
+        elem: '#beginDate' //指定元素
+        ,type: 'date'
+    });
+    laydate.render({
+        elem: '#endDate' //指定元素
+        ,type: 'date'
+    });
 }
 
 function getTableHtml(result){

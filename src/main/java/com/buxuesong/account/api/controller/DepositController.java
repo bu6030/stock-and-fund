@@ -21,8 +21,8 @@ public class DepositController {
      * @return
      */
     @GetMapping(value = "/deposit")
-    public Response getDepositList(HttpServletRequest request) throws Exception {
-        return Response.builder().code("00000000").value(depositService.getDepositList()).build();
+    public Response getDepositList(HttpServletRequest request,@RequestParam(value = "beginDate",required = false) String beginDate,@RequestParam(value = "endDate",required = false) String endDate) throws Exception {
+         return Response.builder().code("00000000").value(depositService.getDepositList(beginDate, endDate)).build();
     }
 
     /**
