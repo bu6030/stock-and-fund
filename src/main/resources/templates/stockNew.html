@@ -97,21 +97,21 @@
             ,cols: [ [ //表头
                 {type: 'checkbox'}
                 ,{field: 'appNew', title: 'APP', width: 120, sort: true,totalRow: '合计：',templet: function(d){return '<span style="color: ' + d.color + '">'+ d.appNew +'</span>'}}
-                ,{field: 'code', title: '编码', width:120, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.code +'</span>'}}
+                ,{field: 'code', title: '编码', width:110, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.code +'</span>'}}
                 ,{field: 'name', title: '股票名称', width:120,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.name +'</span>'}}
                 ,{field: 'change', title: '涨跌', width:80,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.change +'</span>'}}
                 ,{field: 'changePercent', title: '涨跌幅 %', width:120, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.changePercent +'</span>'}}
                 ,{field: 'dayIncome', title: '当日盈利', width: 120, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.dayIncome +'</span>'}}
-                ,{field: 'max', title: '最高价', width:120,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.max +'</span>'}}
-                ,{field: 'min', title: '最低价', width: 120,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.min +'</span>'}}
-                ,{field: 'now', title: '当前价', width: 120,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.now +'</span>'}}
+                ,{field: 'max', title: '最高价', width:100,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.max +'</span>'}}
+                ,{field: 'min', title: '最低价', width: 100,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.min +'</span>'}}
+                ,{field: 'now', title: '当前价', width: 100,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.now +'</span>'}}
                 ,{field: 'costPrise', title: '成本价', width: 100,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.costPrise +'</span>'}}
-                ,{field: 'bonds', title: '持仓', width: 135, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.bonds +'</span>'}}
-                ,{field: 'incomePercent', title: '收益率 %', width: 135, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.incomePercent +'</span>'}}
+                ,{field: 'bonds', title: '持仓', width: 100, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.bonds +'</span>'}}
+                ,{field: 'incomePercent', title: '收益率 %', width: 120, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.incomePercent +'</span>'}}
                 ,{field: 'marketValue', title: '市值/金额', width: 135, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.marketValue +'</span>'}}
                 ,{field: 'marketValuePercent', title: '持仓比率 %', width: 120, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.marketValuePercent +'</span>'}}
-                ,{field: 'income', title: '收益', width: 135, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.income +'</span>'}}
-                ,{title: '操作', width: 150, align:'center', toolbar: '#barDemo'}
+                ,{field: 'income', title: '收益', width: 120, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.income +'</span>'}}
+                ,{title: '操作', width: 135, align:'center', toolbar: '#barDemo'}
             ] ]
         });
 
