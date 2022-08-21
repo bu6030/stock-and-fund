@@ -232,7 +232,7 @@
 
     function getCurrentWeekFirstDay() {
         var date = new Date();
-        var weekFirstDay = new Date(date - (date.getDay() - 1) * 86400000)
+        var weekFirstDay = new Date(date - (getWeekDay(date) - 1) * 86400000)
         var firstMonth = Number(weekFirstDay.getMonth()) + 1
 
         if (firstMonth < 10) {
@@ -247,7 +247,7 @@
 
     function getCurrentWeekLastDay() {
         var date = new Date();
-        var weekFirstDay = new Date(date - (date.getDay() - 1) * 86400000)
+        var weekFirstDay = new Date(date - (getWeekDay(date) - 1) * 86400000)
         var weekLastDay = new Date((weekFirstDay / 1000 + 6 * 86400) * 1000)
         var lastMonth = Number(weekLastDay.getMonth()) + 1
         if (lastMonth < 10) {
@@ -258,6 +258,11 @@
             weekLastDays = '0' + weekLastDays;
         }
         return weekFirstDay.getFullYear() + '-' + lastMonth + '-' + weekLastDays;
+    };
+
+    // 当周日时，day为0，因此获取当周周期时间时，会到下周周期
+    function getWeekDay(date){
+        return date.getDay() == 0 ? 7:date.getDay();
     };
 </script>
 </body>
