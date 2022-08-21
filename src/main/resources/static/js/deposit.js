@@ -185,11 +185,11 @@ function getMonthEndDate(){
 
 function getCurrentWeekFirstDay() {
     var date = new Date();
-    var weekFirstDay = new Date(date - (date.getDay() - 1) * 86400000)
-    var firstMonth = Number(weekFirstDay.getMonth()) + 1
+    var weekFirstDay = new Date(date - (getWeekDay(date) - 1) * 86400000);
+    var firstMonth = Number(weekFirstDay.getMonth()) + 1;
 
     if (firstMonth < 10) {
-        firstMonth = '0' + firstMonth
+        firstMonth = '0' + firstMonth;
     }
     var weekFirstDays = weekFirstDay.getDate();
     if (weekFirstDays < 10) {
@@ -200,11 +200,11 @@ function getCurrentWeekFirstDay() {
 
 function getCurrentWeekLastDay() {
     var date = new Date();
-    var weekFirstDay = new Date(date - (date.getDay() - 1) * 86400000)
-    var weekLastDay = new Date((weekFirstDay / 1000 + 6 * 86400) * 1000)
-    var lastMonth = Number(weekLastDay.getMonth()) + 1
+    var weekFirstDay = new Date(date - (getWeekDay(date) - 1) * 86400000);
+    var weekLastDay = new Date((weekFirstDay / 1000 + 6 * 86400) * 1000);
+    var lastMonth = Number(weekLastDay.getMonth()) + 1;
     if (lastMonth < 10) {
-        lastMonth = '0' + lastMonth
+        lastMonth = '0' + lastMonth;
     }
     var weekLastDays = weekLastDay.getDate();
     if (weekLastDays < 10) {
@@ -212,3 +212,8 @@ function getCurrentWeekLastDay() {
     }
     return weekFirstDay.getFullYear() + '-' + lastMonth + '-' + weekLastDays;
 }
+
+// 当周日时，day为0，因此获取当周周期时间时，会到下周周期
+function getWeekDay(date){
+    return date.getDay() == 0 ? 7:date.getDay();
+};
