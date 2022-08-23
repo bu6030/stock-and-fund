@@ -73,6 +73,7 @@ function getTableHtml(result){
     }
 
     str += "<tr><td>合计"
+        + "</td><td>"
         + "</td><td>" + parseFloat(totalFundDayIncome).toFixed(2)
         + "</td><td>"
         + "</td><td>"
@@ -80,7 +81,6 @@ function getTableHtml(result){
         + "</td><td>"
         + "</td><td>"
         + "</td><td>" + parseFloat(totalTotalDayIncome).toFixed(2)
-        + "</td><td>"
         + "</td><td>"
         +"</td></tr>";
     return str;
