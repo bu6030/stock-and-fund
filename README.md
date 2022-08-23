@@ -1,3 +1,28 @@
+# 股基神器
+自己写着玩的一个股票基金SpringBoot小项目，我给它命名股基神奇  
+我自己有多个APP购买股票基金的情况，每次还要到多个APP查看，很费劲  
+因此自己写了个汇总的，录入基金股票编码，购买成本，持仓数量来添加股票基金，便可以实时查看价格以及盈亏
+可实时查看股票基金实时价格，周一至周五交易时间定时刷新  
+单独查看股票或者基金实时价格，以及汇总股票基金实时价格
+添加删除股票基金  
+查看历史盈亏记录，可按周月年筛选统计  
+周一至周五下午3点30自动统计当日盈亏  
+手动添加股票基金APP，例如东方财富，支付宝，微信等
+多个页面UI，Bootstrap以及Layui样式
+
+## 本机Docker环境一键部署
+1. 本地package出jar包
+2. 修改localDeployment.sh文件中的本地sqllite文件绝对路径位置，也就是项目中的stock-and-fund.db文件的绝对路径
+执行项目根目录下localDeployment.sh
+./localDeployment.sh
+3. 本机访问http://localhost:8080
+
+## 本机Idea启动
+1. 修改Run/Debug Configurations->Spring Boot中增加环境变量，sqllite文件绝对路径位置，也就是项目中的stock-and-fund.db文件的绝对路径
+sqllite.db.file=/XXXX/XXXX/stock-and-fund.db
+2. 本机通过SpringBoot start类直接run main方法启动
+3. 本机访问http://localhost:8080
+
 # 初始化表数据
 ## 盈利汇总数据
 ```
@@ -39,27 +64,3 @@ CREATE TABLE PARAM (
 );
 CREATE INDEX IDX_PARAM_TYPE ON PARAM(TYPE);
 ```
-# stocke-and-fund
-自己写着玩的一个股票基金SpringBoot小项目  
-我自己有多个APP购买股票基金的情况，每次还要到多个APP查看，很费劲  
-因此自己写了个汇总的，录入基金股票编码，购买成本，持仓数量来添加股票基金，便可以实时查看价格以及盈亏
-可实时查看股票基金实时价格，周一至周五交易时间定时刷新  
-单独查看股票或者基金实时价格，以及汇总股票基金实时价格
-添加删除股票基金  
-查看历史盈亏记录，可按周月年筛选统计  
-周一至周五下午3点30自动统计当日盈亏  
-手动添加股票基金APP，例如东方财富，支付宝，微信等
-多个页面UI，Bootstrap以及Layui样式
-
-## 本机Docker环境一键部署
-1. 本地package出jar包
-2. 修改localDeployment.sh文件中的本地sqllite文件绝对路径位置，也就是项目中的stock-and-fund.db文件的绝对路径
-执行项目根目录下localDeployment.sh
-./localDeployment.sh
-3. 本机访问http://localhost:8080/main
-
-## 本机Idea启动
-1. 修改Run/Debug Configurations->Spring Boot中增加环境变量，sqllite文件绝对路径位置，也就是项目中的stock-and-fund.db文件的绝对路径
-sqllite.db.file=/XXXX/XXXX/stock-and-fund.db
-2. 本机通过SpringBoot start类直接run main方法启动
-3. 本机访问http://localhost:8080/main
