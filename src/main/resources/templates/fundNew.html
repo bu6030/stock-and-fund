@@ -88,7 +88,8 @@
                     item.marketValue = marketValue + '';
                     item.dwjzNew = item.dwjz+ '(' + item.jzrq + ')';
                     item.marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValue) + "";
-                    item.color = item.dayIncome >= 0?"#c12e2a":"#3e8f3e";
+                    item.dayInComeColor = item.dayIncome >= 0?"#c12e2a":"#3e8f3e";
+                    item.toltalIncomeColor = item.income >= 0?"#c12e2a":"#3e8f3e";
                 }
                 return {
                     "code": res.code, //解析接口状态
@@ -99,19 +100,19 @@
             }
             ,cols: [ [ //表头
                 {type: 'checkbox'}
-                ,{field: 'appNew', title: 'APP', width: 120, sort: true,totalRow: '合计：',templet: function(d){return '<span style="color: ' + d.color + '">'+ d.appNew +'</span>'}}
-                ,{field: 'fundCode', title: '基金编码', width:110, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.fundCode +'</span>'}}
-                ,{field: 'fundName', title: '基金名称', width:215,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.fundName +'</span>'}}
-                ,{field: 'gszzl', title: '涨跌幅 %', width:120, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.gszzl +'</span>'}}
-                ,{field: 'dayIncome', title: '当日盈利', width:120, totalRow: true, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.dayIncome +'</span>'}}
-                ,{field: 'dwjzNew', title: '当日净值', width: 180,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.dwjzNew +'</span>'}}
-                ,{field: 'gsz', title: '估算净值', width:110, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.gsz +'</span>'}}
-                ,{field: 'costPrise', title: '持仓成本', width: 110,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.costPrise +'</span>'}}
-                ,{field: 'bonds', title: '持有份额', width:120, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.bonds +'</span>'}}
-                ,{field: 'incomePercent', title: '收益率 %', width: 110, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.incomePercent +'</span>'}}
-                ,{field: 'marketValue', title: '市值/金额', width: 110, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.marketValue +'</span>'}}
-                ,{field: 'marketValuePercent', title: '持仓比率 %', width: 120, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.marketValuePercent +'</span>'}}
-                ,{field: 'income', title: '收益', width: 110, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.income +'</span>'}}
+                ,{field: 'appNew', title: 'APP', width: 120, sort: true,totalRow: '合计：'}
+                ,{field: 'fundCode', title: '基金编码', width:110, sort: true}
+                ,{field: 'fundName', title: '基金名称', width:215}
+                ,{field: 'gszzl', title: '涨跌幅 %', width:120, sort: true,templet: function(d){return '<span style="color: ' + d.dayInComeColor + '">'+ d.gszzl +'</span>'}}
+                ,{field: 'dayIncome', title: '当日盈利', width:120, totalRow: true, sort: true,templet: function(d){return '<span style="color: ' + d.dayInComeColor + '">'+ d.dayIncome +'</span>'}}
+                ,{field: 'dwjzNew', title: '当日净值', width: 180}
+                ,{field: 'gsz', title: '估算净值', width:110, sort: true}
+                ,{field: 'costPrise', title: '持仓成本', width: 110}
+                ,{field: 'bonds', title: '持有份额', width:120, sort: true}
+                ,{field: 'marketValue', title: '市值/金额', width: 110, sort: true, totalRow: true}
+                ,{field: 'marketValuePercent', title: '持仓比率 %', width: 120, sort: true}
+                ,{field: 'incomePercent', title: '收益率 %', width: 110, sort: true,templet: function(d){return '<span style="color: ' + d.toltalIncomeColor + '">'+ d.incomePercent +'</span>'}}
+                ,{field: 'income', title: '收益', width: 110, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.toltalIncomeColor + '">'+ d.income +'</span>'}}
                 ,{title: '操作', width: 150, align:'center', toolbar: '#barDemo'}
             ] ]
         });

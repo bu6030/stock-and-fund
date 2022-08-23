@@ -123,15 +123,16 @@ function getStockTableHtml(result, totalMarketValueResult){
         dayIncome = (new BigDecimal(result[k].change)).multiply(new BigDecimal(result[k].bonds));
         marketValue = (new BigDecimal(result[k].now)).multiply(new BigDecimal(result[k].bonds));
         marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult);
-        var style = dayIncome >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"";
+        var dayIncomeStyle = dayIncome >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"";
+        var totalIncomeStyle = result[k].income >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"";
 
-        str += "<tr " + style + "><td>"
+        str += "<tr><td>"
             + "<a onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
             + "</td><td>" + result[k].code
             + "</td><td>" +result[k].name
-            + "</td><td>" + result[k].change
-            + "</td><td>" + dayIncome
-            + "</td><td>" + result[k].changePercent +"%"
+            + "</td><td " + dayIncomeStyle + ">" + result[k].change
+            + "</td><td " + dayIncomeStyle + ">" + dayIncome
+            + "</td><td " + dayIncomeStyle + ">" + result[k].changePercent +"%"
             + "</td><td>" +result[k].max
             + "</td><td>" + result[k].min
             + "</td><td>" + result[k].now
@@ -139,8 +140,8 @@ function getStockTableHtml(result, totalMarketValueResult){
             + "</td><td>" + result[k].bonds
             + "</td><td>" + marketValue
             + "</td><td>" + marketValuePercent + "%"
-            + "</td><td>" + result[k].incomePercent +"%"
-            + "</td><td>" + result[k].income
+            + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent +"%"
+            + "</td><td " + totalIncomeStyle + ">" + result[k].income
             +"</td></tr>";
         stockTotalIncome = stockTotalIncome.add(new BigDecimal(result[k].income));
         stockDayIncome = stockDayIncome.add(dayIncome);
@@ -166,15 +167,16 @@ function getFundTableHtml(result, totalMarketValueResult){
         dayIncome = new BigDecimal(parseFloat((new BigDecimal(result[k].gszzl)).multiply((new BigDecimal(result[k].dwjz))).multiply(new BigDecimal(result[k].bonds)).divide(new BigDecimal("100"))).toFixed(2));
         marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].gsz)).multiply(new BigDecimal(result[k].bonds))).toFixed(2));
         marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult);
-        var style = dayIncome >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"";
+        var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
+        var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
 
-        str += "<tr " + style + "><td>"
+        str += "<tr><td>"
             + "<a onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
             + "</td><td>" + result[k].fundCode
             + "</td><td>" +result[k].fundName
             + "</td><td>"
-            + "</td><td>" + dayIncome
-            + "</td><td>" +result[k].gszzl + "%"
+            + "</td><td " + dayIncomeStyle + ">" + dayIncome
+            + "</td><td " + dayIncomeStyle + ">" +result[k].gszzl + "%"
             + "</td><td>"
             + "</td><td>" + result[k].dwjz + "(" + result[k].jzrq + ")"
             + "</td><td>" + result[k].gsz
@@ -182,8 +184,8 @@ function getFundTableHtml(result, totalMarketValueResult){
             + "</td><td>" + result[k].bonds
             + "</td><td>" + marketValue
             + "</td><td>" + marketValuePercent + "%"
-            + "</td><td>" + result[k].incomePercent + "%"
-            + "</td><td>" + result[k].income
+            + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent + "%"
+            + "</td><td " + totalIncomeStyle + ">" + result[k].income
             +"</td></tr>";
         fundTotalIncome = fundTotalIncome.add(new BigDecimal(result[k].income));
         fundDayIncome = fundDayIncome.add(dayIncome);

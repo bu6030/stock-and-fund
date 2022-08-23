@@ -44,7 +44,6 @@ function getTableHtml(result){
     var totalStockMarketValue = 0;
     var totalTotalMarketValue = 0;
     for(var k in result) {
-        var style = result[k].totalDayIncome >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"";
         totalFundDayIncome = totalFundDayIncome + parseFloat(result[k].fundDayIncome);
         totalStockDayIncome = totalStockDayIncome + parseFloat(result[k].stockDayIncome);
         totalTotalDayIncome = totalTotalDayIncome + parseFloat(result[k].totalDayIncome);
@@ -52,19 +51,23 @@ function getTableHtml(result){
         var fundIncomePercent = parseFloat(result[k].fundDayIncome).toFixed(4) * 100/parseFloat(result[k].fundMarketValue);
         var stockIncomePercent = parseFloat(result[k].stockDayIncome).toFixed(4) * 100/parseFloat(result[k].stockMarketValue);
         var totalIncomePercent = parseFloat(result[k].totalDayIncome).toFixed(4) * 100/parseFloat(result[k].totalMarketValue);
+        var stockDayIncomeStyle = result[k].stockDayIncome == 0 ? "" : (result[k].stockDayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
+        var fundDayIncomeStyle = result[k].fundDayIncome == 0 ? "" : (result[k].fundDayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
+        var totalDayIncomeStyle = result[k].totalDayIncome == 0 ? "" : (result[k].totalDayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
 
-        str += "<tr " + style + "><td>" + result[k].date
-            + "</td><td>" + parseFloat(result[k].fundDayIncome).toFixed(2)
+        str += "<tr><td>" + result[k].date
+            + "</td><td " + fundDayIncomeStyle + ">" + parseFloat(fundIncomePercent).toFixed(2)  + "%"
+            + "</td><td " + fundDayIncomeStyle + ">" + parseFloat(result[k].fundDayIncome).toFixed(2)
             + "</td><td>" + parseFloat(result[k].fundMarketValue).toFixed(2)
-            + "</td><td>" + parseFloat(fundIncomePercent).toFixed(2)  + "%"
 
-            + "</td><td>" + parseFloat(result[k].stockDayIncome).toFixed(2)
+            + "</td><td " + stockDayIncomeStyle + ">" + parseFloat(stockIncomePercent).toFixed(2)  + "%"
+            + "</td><td " + stockDayIncomeStyle + ">" + parseFloat(result[k].stockDayIncome).toFixed(2)
             + "</td><td>" + parseFloat(result[k].stockMarketValue).toFixed(2)
-            + "</td><td>" + parseFloat(stockIncomePercent).toFixed(2)  + "%"
 
-            + "</td><td>" + parseFloat(result[k].totalDayIncome).toFixed(2)
+            + "</td><td " + totalDayIncomeStyle + ">" + parseFloat(totalIncomePercent).toFixed(2)  + "%"
+            + "</td><td " + totalDayIncomeStyle + ">" + parseFloat(result[k].totalDayIncome).toFixed(2)
             + "</td><td>" + parseFloat(result[k].totalMarketValue).toFixed(2)
-            + "</td><td>" + parseFloat(totalIncomePercent).toFixed(2)  + "%"
+
             +"</td></tr>";
 
     }

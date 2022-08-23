@@ -75,7 +75,9 @@
                     item.fundMarketValue = parseFloat(item.fundMarketValue).toFixed(2) + '';
                     item.stockMarketValue = parseFloat(item.stockMarketValue).toFixed(2) + '';
                     item.totalMarketValue = parseFloat(item.totalMarketValue).toFixed(2) + '';
-                    item.color = item.totalDayIncome >= 0?"#c12e2a":"#3e8f3e";
+                    item.stockDayIncomeColor = item.stockDayIncome >= 0?"#c12e2a":"#3e8f3e";
+                    item.fundDayIncomeColor = item.fundDayIncome >= 0?"#c12e2a":"#3e8f3e";
+                    item.totalDayIncomeColor = item.totalDayIncome >= 0?"#c12e2a":"#3e8f3e";
                 }
                 return {
                     "code": res.code, //解析接口状态
@@ -86,17 +88,17 @@
             }
             ,cols: [ [ //表头
                 {field: 'date', title: '日期', width: 190, sort: true,totalRow: '合计：',templet: function(d){return '<span style="color: ' + d.color + '">'+ d.date +'</span>'}}
-                ,{field: 'fundDayIncome', title: '基金收益', width:185, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.fundDayIncome +'</span>'}}
-                ,{field: 'fundIncomePercent', title: '基金盈利比率 %', width:185, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.fundIncomePercent +'</span>'}}
-                ,{field: 'fundMarketValue', title: '基金市值', width:185, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.fundMarketValue +'</span>'}}
+                ,{field: 'fundIncomePercent', title: '基金盈利比率 %', width:185, sort: true,templet: function(d){return '<span style="color: ' + d.fundDayIncomeColor + '">'+ d.fundIncomePercent +'</span>'}}
+                ,{field: 'fundDayIncome', title: '基金收益', width:185, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.fundDayIncomeColor + '">'+ d.fundDayIncome +'</span>'}}
+                ,{field: 'fundMarketValue', title: '基金市值', width:185, sort: true}
 
-                ,{field: 'stockDayIncome', title: '股票收益', width:185, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.stockDayIncome +'</span>'}}
-                ,{field: 'stockIncomePercent', title: '股票盈利比率 %', width:185, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.stockIncomePercent +'</span>'}}
-                ,{field: 'stockMarketValue', title: '股票市值', width:185, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.stockMarketValue +'</span>'}}
+                ,{field: 'stockIncomePercent', title: '股票盈利比率 %', width:185, sort: true,templet: function(d){return '<span style="color: ' + d.stockDayIncomeColor + '">'+ d.stockIncomePercent +'</span>'}}
+                ,{field: 'stockDayIncome', title: '股票收益', width:185, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.stockDayIncomeColor + '">'+ d.stockDayIncome +'</span>'}}
+                ,{field: 'stockMarketValue', title: '股票市值', width:185, sort: true}
 
-                ,{field: 'totalDayIncome', title: '总收益', width:185, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.totalDayIncome +'</span>'}}
-                ,{field: 'totalIncomePercent', title: '总盈利比率 %', width:185, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.totalIncomePercent +'</span>'}}
-                ,{field: 'totalMarketValue', title: '总市值', width:185, sort: true,templet: function(d){return '<span style="color: ' + d.color + '">'+ d.totalMarketValue +'</span>'}}
+                ,{field: 'totalIncomePercent', title: '总盈利比率 %', width:185, sort: true,templet: function(d){return '<span style="color: ' + d.totalDayIncomeColor + '">'+ d.totalIncomePercent +'</span>'}}
+                ,{field: 'totalDayIncome', title: '总收益', width:185, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.totalDayIncomeColor + '">'+ d.totalDayIncome +'</span>'}}
+                ,{field: 'totalMarketValue', title: '总市值', width:185, sort: true}
             ] ]
         });
         // 头工具栏事件

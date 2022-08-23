@@ -83,22 +83,23 @@ function getTableHtml(result){
         // totalmarketValue = totalmarketValue.add(marketValue);
         marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalmarketValue);
         totalIncome = totalIncome.add(new BigDecimal(result[k].income));
-        var style = dayIncome >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"";
+        var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
+        var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
 
-        str += "<tr " + style + "><td>"
+        str += "<tr><td>"
             + "<a onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
             + "</td><td>" + result[k].fundCode
-            + "</td><td>" +result[k].fundName
-            + "</td><td>" +result[k].gszzl + "%"
-            + "</td><td>" + dayIncome
+            + "</td><td>" + result[k].fundName
+            + "</td><td " + dayIncomeStyle + ">" +result[k].gszzl + "%"
+            + "</td><td " + dayIncomeStyle + ">" + dayIncome
             + "</td><td>" + result[k].dwjz + "(" + result[k].jzrq + ")"
             + "</td><td>" + result[k].gsz
-            + "</td><td>" +result[k].costPrise
+            + "</td><td>" + result[k].costPrise
             + "</td><td>" + result[k].bonds
-            + "</td><td>" + result[k].incomePercent + "%"
             + "</td><td>" + marketValue
             + "</td><td>" + marketValuePercent + "%"
-            + "</td><td>" + result[k].income
+            + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent + "%"
+            + "</td><td " + totalIncomeStyle + ">" + result[k].income
             + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"修改\" onclick=\"updateFund('" + result[k].fundCode + "')\">"
             + "<span class=\"am-icon-pencil-square-o\"></span></button>"
             + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"删除\" onclick=\"deleteFund('" + result[k].fundCode + "')\">"

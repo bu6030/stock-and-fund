@@ -80,24 +80,25 @@ function getTableHtml(result){
         totalDayIncome = totalDayIncome.add(dayIncome);
         // totalmarketValue = totalmarketValue.add(marketValue);
         marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalmarketValue);
-        var style = dayIncome >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"";
+        var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
+        var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
 
-        str += "<tr " + style + "><td>"
+        str += "<tr><td>"
             + "<a onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
             + "</td><td>" + result[k].code
             + "</td><td>" +result[k].name
-            + "</td><td>" + result[k].change
-            + "</td><td>" + result[k].changePercent +"%"
-            + "</td><td>" + dayIncome
+            + "</td><td " + dayIncomeStyle + ">" + result[k].change
+            + "</td><td " + dayIncomeStyle + ">" + result[k].changePercent +"%"
+            + "</td><td " + dayIncomeStyle + ">" + dayIncome
             + "</td><td>" + result[k].max
             + "</td><td>" + result[k].min
             + "</td><td>" + result[k].now
             + "</td><td>" + result[k].costPrise
             + "</td><td>" + result[k].bonds
-            + "</td><td>" + result[k].incomePercent +"%"
             + "</td><td>" + marketValue
             + "</td><td>" + marketValuePercent + "%"
-            + "</td><td>" + result[k].income
+            + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent +"%"
+            + "</td><td " + totalIncomeStyle + ">" + result[k].income
             + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"修改\" onclick=\"updateStock('" + result[k].code + "')\">"
             + "<span class=\"am-icon-pencil-square-o\"></span></button>"
             + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"删除\" onclick=\"deleteStock('" + result[k].code + "')\">"
