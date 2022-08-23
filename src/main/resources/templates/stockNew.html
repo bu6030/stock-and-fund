@@ -85,8 +85,8 @@
                     marketValue = (new BigDecimal(item.now)).multiply(new BigDecimal(item.bonds));
                     item.marketValue = marketValue +'';
                     item.marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValue) + "";
-                    item.dayInComeColor = item.dayIncome >= 0?"#c12e2a":"#3e8f3e";
-                    item.toltalIncomeColor = item.income >= 0?"#c12e2a":"#3e8f3e";
+                    item.dayInComeColor = item.dayIncome == 0 ? "" : (item.dayIncome >= 0?"#c12e2a":"#3e8f3e");
+                    item.toltalIncomeColor = item.income == 0 ? "" : (item.income >= 0?"#c12e2a":"#3e8f3e");
                 }
                 return {
                     "code": res.code, //解析接口状态
