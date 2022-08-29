@@ -13,8 +13,10 @@
 
 ![image](https://user-images.githubusercontent.com/11482988/187102488-be39a81a-bc0a-46a8-a314-af22bd5c6cdf.png)  
 <center>股票页面Bootstrap风格</center>  
+
 ![image](https://user-images.githubusercontent.com/11482988/187102524-749f81ed-582f-4ff2-b677-5faf4e66a238.png)  
 <center>股票页面Layui风格</center>  
+
 ![image](https://user-images.githubusercontent.com/11482988/187102545-3205da6e-578e-400d-8fa5-f65590ad06d5.png)  
 <center>添加/修改股票页面</center>  
 ![image](https://user-images.githubusercontent.com/11482988/187102557-eceb7eb4-bb02-46fc-88e7-e826b36dab94.png)  
