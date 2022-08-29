@@ -9,7 +9,8 @@
 周一至周五下午3点30自动统计当日盈亏  
 手动添加股票基金APP，例如东方财富，支付宝，微信等  
 多个页面UI，Bootstrap以及Layui样式  
-具体内容们可以查看我的帖子：<https://zhuanlan.zhihu.com/p/557316975>
+具体内容们可以查看我的帖子：<https://zhuanlan.zhihu.com/p/557316975>  
+
 ![image](https://user-images.githubusercontent.com/11482988/187102488-be39a81a-bc0a-46a8-a314-af22bd5c6cdf.png)  
 <center>股票页面Bootstrap风格</center>  
 ![image](https://user-images.githubusercontent.com/11482988/187102524-749f81ed-582f-4ff2-b677-5faf4e66a238.png)  
