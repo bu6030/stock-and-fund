@@ -29,6 +29,8 @@
 </script>
 <script th:src="@{/js/BigDecimal.js}"></script>
 <script th:src="@{/js/jquery.min.js}"></script>
+<!-- 自动刷新 -->
+<script th:src="@{/js/trading-time-refresh.js}"></script>
 <script src="https://cdn.staticfile.org/layui/2.7.6/layui.js"></script>
 
 <script>
@@ -151,22 +153,10 @@
                     }
                     break;
             };
-            // var time = setInterval(function() {
-            //     if (nowCount>0){
-            //         insTb.reload({page: {curr: nowCurr}});
-            //     }
-            // }, 120000);
-
         });
 
         //定时刷新
-        var time = setInterval(function () {
-            var date = new Date();
-            if ($("#enableAutoRefresh").is(":checked") && date.toLocaleTimeString() >= "09:15:00"
-                && date.toLocaleTimeString() <= "15:00:00") {
-                window.location.reload()
-            }
-        }, 30000);
+        var time = setInterval('autoRefresh()', 30000)
 
         // 单元格工具事件
         table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"

@@ -33,13 +33,7 @@ function getData() {
     });
     lay('#version').html('-v'+ laydate.v);
     // 30s刷新
-    setInterval(function () {
-        var date = new Date();
-        if ($("#enableAutoRefresh").is(":checked") && date.toLocaleTimeString() >= "09:15:00"
-            && date.toLocaleTimeString() <= "15:00:00") {
-            window.location.reload()
-        }
-    }, 30000)
+    setInterval('autoRefresh()', 30000)
 }
 
 function initStock(){

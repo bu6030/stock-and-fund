@@ -24,6 +24,8 @@
 
 <script th:src="@{/js/BigDecimal.js}"></script>
 <script th:src="@{/js/jquery.min.js}"></script>
+<!-- 自动刷新 -->
+<script th:src="@{/js/trading-time-refresh.js}"></script>
 <script src="https://cdn.staticfile.org/layui/2.7.6/layui.js"></script>
 
 <script>
@@ -135,13 +137,7 @@
         });
 
         //定时刷新
-        var time = setInterval(function () {
-            var date = new Date();
-            if ($("#enableAutoRefresh").is(":checked") && date.toLocaleTimeString() >= "09:15:00"
-                && date.toLocaleTimeString() <= "15:00:00") {
-                window.location.reload()
-            }
-        }, 30000);
+        var time = setInterval('autoRefresh()', 30000)
 
     });
 </script>
