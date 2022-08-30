@@ -5,12 +5,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@SpringBootApplication
+@EnableCaching
+@EnableScheduling
 //该注解会扫描相应的包
 @ServletComponentScan
-@EnableScheduling
+@SpringBootApplication
 public class StockAndFundApplication extends SpringBootServletInitializer {
 
     @Override

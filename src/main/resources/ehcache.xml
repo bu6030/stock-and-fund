@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
+         updateCheck="false">
+    <!-- 缓存在本地磁盘存储路径 -->
+    <diskStore path="user.dir/ehcache-data" />
+
+    <!-- defaultCache:默认的缓存配置信息-->
+    <defaultCache maxElementsInMemory="10000" eternal="false"
+                  timeToIdleSeconds="21600" timeToLiveSeconds="21600" overflowToDisk="true" />
+
+    <!-- 缓存会过期，内存中缓存数量超过最大数量后，会保存到磁盘 -->
+    <cache name="fund" maxElementsInMemory="10000" eternal="false"
+           timeToIdleSeconds="21600" timeToLiveSeconds="21600" overflowToDisk="true" />
+    <cache name="stock" maxElementsInMemory="10000" eternal="false"
+           timeToIdleSeconds="21600" timeToLiveSeconds="21600" overflowToDisk="true" />
+</ehcache>
