@@ -11,16 +11,16 @@
 多个页面UI，Bootstrap以及Layui样式  
 具体内容们可以查看我的帖子：<https://zhuanlan.zhihu.com/p/557316975>  
 # 修改历史
-1.增加30s自动刷新 By bu6030 2022/8/1 15:57  
-2.修改为开盘时间自动刷新，非交易时间不自动刷新 By bu6030 2022/8/3 17:36  
-3.对基金股票按照code正序排序 By bu6030 2022/8/4 0:27  
-4.修改docker挂在db文件，解决每次重启数据清零的问题 By bu6030 2022/8/4 10:04  
-5.修改股票码去掉sh，sz后正序排序 By bu6030 2022/8/4 10:19  
-6.股票基金先按证券公司app排序，在按照code排序 Xuesong.Bu 2022/8/4 10:33  
-7.修改开盘前新浪基金返回估算净值为0展示出错 By bu6030 2022/8/5 9:55  
-8.新基金页面引入layui Xuesong.Bu 2022/8/5 17:58  
-9.修改新基金/股票页面 bu6030 2022/8/6 22:39  
-10.修改新基金股票汇总页面 bu6030 2022/8/7 12:35  
+1. 增加30s自动刷新 By bu6030 2022/8/1 15:57  
+2. 修改为开盘时间自动刷新，非交易时间不自动刷新 By bu6030 2022/8/3 17:36  
+3. 对基金股票按照code正序排序 By bu6030 2022/8/4 0:27  
+4. 修改docker挂在db文件，解决每次重启数据清零的问题 By bu6030 2022/8/4 10:04  
+5. 修改股票码去掉sh，sz后正序排序 By bu6030 2022/8/4 10:19  
+6. 股票基金先按证券公司app排序，在按照code排序 Xuesong.Bu 2022/8/4 10:33  
+7. 修改开盘前新浪基金返回估算净值为0展示出错 By bu6030 2022/8/5 9:55  
+8. 新基金页面引入layui Xuesong.Bu 2022/8/5 17:58  
+9. 修改新基金/股票页面 bu6030 2022/8/6 22:39  
+10. 修改新基金股票汇总页面 bu6030 2022/8/7 12:35  
 11. 统计当日盈亏 bu6030 2022/8/11 20:00  
 12. 修改盈利汇总 Xuesong.Bu 2022/8/12 17:06  
 13. 增加盈利统计手动统计以及删除当日统计 Xuesong.Bu 2022/8/15 13:40  
@@ -36,7 +36,7 @@
 23. 修改颜色后串行，修改版本页面为Layui以及Bootstrap bu6030 2022/8/23 19:47  
 24. 增加独立自动刷新js Xuesong.Bu 2022/8/29 12:55  
 25. 增加layui过滤app，支持点击app只展示该app的股票、基金 Xuesong.Bu 2022/8/30 17:01  
-
+# UI页面
 ![image](https://user-images.githubusercontent.com/11482988/187102488-be39a81a-bc0a-46a8-a314-af22bd5c6cdf.png)  
 <center>股票页面Bootstrap风格</center>  
 
@@ -73,7 +73,7 @@
 ![image](https://user-images.githubusercontent.com/11482988/187102693-1cbdb686-0feb-43f8-ad79-67c409aaff2d.png)  
 <center>添加/修改字典数据</center>  
 
-
+# 部署
 ## 本机Docker环境一键部署
 1. 本地package出jar包
 2. 修改localDeployment.sh文件中的本地sqllite文件绝对路径位置，也就是项目中的stock-and-fund.db文件的绝对路径
@@ -87,7 +87,7 @@ sqllite.db.file=/XXXX/XXXX/stock-and-fund.db
 2. 本机通过SpringBoot start类直接run main方法启动
 3. 本机访问http://localhost:8080
 
-# 初始化表数据
+# 初始化表结构
 ## 盈利汇总数据
 ```
 CREATE TABLE DEPOSIT (
