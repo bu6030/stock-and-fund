@@ -35,6 +35,7 @@
 
 <script>
     var appList;
+    var fundTable;
     $.ajax({
         url:"/param?type=APP",
         type:"get",
@@ -60,7 +61,7 @@
         layer.msg('基金：您可在此页面查看基金当日情况，以及添加修改删除基金。');
 
         // 执行一个 table 实例
-        table.render({
+        fundTable = table.render({
             elem: '#demo'
             // ,height: 600
             ,url: '/fund' //数据接口（此处为静态数据，仅作演示）
@@ -102,7 +103,7 @@
             }
             ,cols: [ [ //表头
                 {type: 'checkbox'}
-                ,{field: 'appNew', title: 'APP', width: 120, sort: true,totalRow: '合计：'}
+                ,{field: 'appNew', title: 'APP', width: 120, sort: true,totalRow: '合计：',templet: function(d){return '<a style="color: #0000FF" onclick="filterApp(\'' + d.app + '\')">'+ d.appNew +'</a>'}}
                 ,{field: 'fundCode', title: '基金编码', width:110, sort: true}
                 ,{field: 'fundName', title: '基金名称', width:215}
                 ,{field: 'gszzl', title: '涨跌幅 %', width:120, sort: true,templet: function(d){return '<span style="color: ' + d.dayInComeColor + '">'+ d.gszzl +'</span>'}}
@@ -264,6 +265,13 @@
             }
         });
     }
+
+    function filterApp(app) {
+        fundTable.reload({
+            url: '/fund?app='+app
+        });
+    }
+
 </script>
 </body>
 </html>

@@ -71,7 +71,7 @@ public class DepositServiceImpl implements DepositService {
     }
 
     private BigDecimal depositFundDayIncome() {
-        List<String> fundListFrom = fundService.getFundList();
+        List<String> fundListFrom = fundService.getFundList(null);
         List<FundBean> funds = fundService.getFundDetails(fundListFrom);
         BigDecimal fundTotalDayIncome = new BigDecimal("0");
         for (FundBean fund : funds) {
@@ -85,7 +85,7 @@ public class DepositServiceImpl implements DepositService {
     }
 
     private BigDecimal depositStockDayIncome() {
-        List<String> stockListFrom = stockService.getStockList();
+        List<String> stockListFrom = stockService.getStockList(null);
         List<StockBean> stocks = stockService.getStockDetails(stockListFrom);
         BigDecimal stockTotalDayIncome = new BigDecimal("0");
         for (StockBean stock : stocks) {
@@ -99,7 +99,7 @@ public class DepositServiceImpl implements DepositService {
     }
 
     private BigDecimal depositFundMarketValue() {
-        List<String> fundListFrom = fundService.getFundList();
+        List<String> fundListFrom = fundService.getFundList(null);
         List<FundBean> funds = fundService.getFundDetails(fundListFrom);
         BigDecimal fundTotalMarketValue = new BigDecimal("0");
         for (FundBean fund : funds) {
@@ -112,7 +112,7 @@ public class DepositServiceImpl implements DepositService {
     }
 
     private BigDecimal depositStockMarketValue() {
-        List<String> stockListFrom = stockService.getStockList();
+        List<String> stockListFrom = stockService.getStockList(null);
         List<StockBean> stocks = stockService.getStockDetails(stockListFrom);
         BigDecimal stockTotalMarketValue = new BigDecimal("0");
         for (StockBean stock : stocks) {

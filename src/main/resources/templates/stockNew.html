@@ -35,6 +35,7 @@
 
 <script>
     var appList;
+    var stockTable;
     $.ajax({
         url:"/param?type=APP",
         type:"get",
@@ -60,7 +61,7 @@
         layer.msg('股票：您可在此页面查看股票当日情况，以及添加修改删除股票。');
 
         // 执行一个 table 实例
-        table.render({
+        stockTable = table.render({
             elem: '#demo'
             // ,height: 600
             ,url: '/stock' //数据接口（此处为静态数据，仅作演示）
@@ -99,7 +100,7 @@
             }
             ,cols: [ [ //表头
                 {type: 'checkbox'}
-                ,{field: 'appNew', title: 'APP', width: 120, sort: true,totalRow: '合计：'}
+                ,{field: 'appNew', title: 'APP', width: 120, sort: true,totalRow: '合计：',templet: function(d){return '<a style="color: #0000FF" onclick="filterApp(\'' + d.app + '\')">'+ d.appNew +'</a>'}}
                 ,{field: 'code', title: '编码', width:110, sort: true}
                 ,{field: 'name', title: '股票名称', width:120}
                 ,{field: 'change', title: '涨跌', width:80,templet: function(d){return '<span style="color: ' + d.dayInComeColor + '">'+ d.change +'</span>'}}
@@ -261,6 +262,12 @@
                 console.log(XMLHttpRequest.readyState);
                 console.log(textStatus);
             }
+        });
+    }
+
+    function filterApp(app) {
+        stockTable.reload({
+            url: '/stock?app='+app
         });
     }
 </script>

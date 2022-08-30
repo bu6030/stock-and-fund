@@ -161,9 +161,9 @@ public class FundServiceImpl implements FundService {
     }
 
     @Override
-    public List<String> getFundList() {
-        List<SaveFundRequest> fund = fundMapper.findAllFund();
-        log.info("数据库中的基金为：{}", fund);
+    public List<String> getFundList(String app) {
+        List<SaveFundRequest> fund = fundMapper.findAllFund(app);
+        log.info("APP: {} ,数据库中的基金为：{}", app, fund);
         if (fund == null || fund.isEmpty()) {
             return new ArrayList<>();
         }

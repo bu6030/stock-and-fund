@@ -123,9 +123,9 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
-    public List<String> getStockList() {
-        List<SaveStockRequest> stock = stockMapper.findAllStock();
-        log.info("数据库中的股票为：{}", stock);
+    public List<String> getStockList(String app) {
+        List<SaveStockRequest> stock = stockMapper.findAllStock(app);
+        log.info("APP: {} ,数据库中的股票为：{}", app, stock);
         if (stock == null || stock.isEmpty()) {
             return new ArrayList<>();
         }

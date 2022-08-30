@@ -13,7 +13,7 @@ public interface StockService {
 
     void deleteStock(SaveStockRequest saveStockRequest);
 
-    List<String> getStockList();
+    List<String> getStockList(String app);
 
     SaveStockRequest findStockByCode(String code);
 }

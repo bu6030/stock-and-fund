@@ -10,7 +10,7 @@ public interface FundService {
 
     boolean saveFund(SaveFundRequest saveFundRequest);
 
-    List<String> getFundList();
+    List<String> getFundList(String app);
 
     void deleteFund(SaveFundRequest saveFundRequest);
 

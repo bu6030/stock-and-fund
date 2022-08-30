@@ -22,8 +22,8 @@ public class StockController {
      * @return
      */
     @GetMapping(value = "/stock")
-    public Response getStockList(HttpServletRequest request) throws Exception {
-        List<String> stockListFromRedis = stockService.getStockList();
+    public Response getStockList(HttpServletRequest request, @RequestParam(value = "app", required = false) String app) throws Exception {
+        List<String> stockListFromRedis = stockService.getStockList(app);
         return Response.builder().code("00000000").value(stockService.getStockDetails(stockListFromRedis)).build();
     }
 

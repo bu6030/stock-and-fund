@@ -31,8 +31,8 @@ public class FundController {
      * @return
      */
     @GetMapping(value = "/fund")
-    public Response getFundList(HttpServletRequest request) throws Exception {
-        List<String> fundListFromRedis = fundService.getFundList();
+    public Response getFundList(HttpServletRequest request, @RequestParam(value = "app", required = false) String app) throws Exception {
+        List<String> fundListFromRedis = fundService.getFundList(app);
         return Response.builder().code("00000000").value(fundService.getFundDetails(fundListFromRedis)).build();
     }
 
@@ -68,9 +68,9 @@ public class FundController {
      * @return
      */
     @GetMapping(value = "/stockAndFund")
-    public Response getStockAndFundList(HttpServletRequest request) throws Exception {
-        List<String> fundListFrom = fundService.getFundList();
-        List<String> stcokListFrom = stockService.getStockList();
+    public Response getStockAndFundList(HttpServletRequest request, @RequestParam(value = "app", required = false) String app) throws Exception {
+        List<String> fundListFrom = fundService.getFundList(app);
+        List<String> stcokListFrom = stockService.getStockList(app);
         List<FundBean> funds = fundService.getFundDetails(fundListFrom);
         List<StockBean> stocks = stockService.getStockDetails(stcokListFrom);
         List<StockAndFundBean> stockAndFundsFromFunds = funds.stream()
