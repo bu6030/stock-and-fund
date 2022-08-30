@@ -14,7 +14,8 @@ public interface FundMapper {
     @Update("INSERT INTO FUND (CODE, COST_PRICE, BONDS, APP) values (#{saveFundRequest.code},#{saveFundRequest.costPrise},#{saveFundRequest.bonds},#{saveFundRequest.app}) ")
     int save(@Param("saveFundRequest") SaveFundRequest saveFundRequest);
 
-    @Select({ "<script> select CODE, COST_PRICE costPrise, BONDS, APP from FUND WHERE 1=1 <if test=\"app!=null and app!=''\"> and APP = #{app}  </if> order by APP ASC, CODE ASC </script>"})
+    @Select({
+        "<script> select CODE, COST_PRICE costPrise, BONDS, APP from FUND WHERE 1=1 <if test=\"app!=null and app!=''\"> and APP = #{app}  </if> order by APP ASC, CODE ASC </script>" })
     List<SaveFundRequest> findAllFund(@Param("app") String app);
 
     @Select("select CODE, COST_PRICE costPrise, BONDS, APP from FUND where code = #{code}")

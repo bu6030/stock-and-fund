@@ -68,7 +68,8 @@ public class FundController {
      * @return
      */
     @GetMapping(value = "/stockAndFund")
-    public Response getStockAndFundList(HttpServletRequest request, @RequestParam(value = "app", required = false) String app) throws Exception {
+    public Response getStockAndFundList(HttpServletRequest request, @RequestParam(value = "app", required = false) String app)
+        throws Exception {
         List<String> fundListFrom = fundService.getFundList(app);
         List<String> stcokListFrom = stockService.getStockList(app);
         List<FundBean> funds = fundService.getFundDetails(fundListFrom);

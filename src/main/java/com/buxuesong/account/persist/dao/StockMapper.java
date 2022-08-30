@@ -13,7 +13,8 @@ public interface StockMapper {
     @Update("INSERT INTO STOCK (CODE, COST_PRICE, BONDS, APP) values (#{saveStockRequest.code},#{saveStockRequest.costPrise},#{saveStockRequest.bonds},#{saveStockRequest.app}) ")
     int save(@Param("saveStockRequest") SaveStockRequest saveStockRequest);
 
-    @Select({"<script> select CODE, COST_PRICE costPrise, BONDS, APP from STOCK WHERE 1=1 <if test=\"app!=null and app!=''\"> and APP = #{app} </if> order by APP ASC, substr(code,3,6) ASC </script>"})
+    @Select({
+        "<script> select CODE, COST_PRICE costPrise, BONDS, APP from STOCK WHERE 1=1 <if test=\"app!=null and app!=''\"> and APP = #{app} </if> order by APP ASC, substr(code,3,6) ASC </script>" })
     List<SaveStockRequest> findAllStock(@Param("app") String app);
 
     @Select("select CODE, COST_PRICE costPrise, BONDS, APP from STOCK where code = #{code}")
