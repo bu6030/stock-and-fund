@@ -3,13 +3,11 @@ package com.buxuesong.account.service;
 import com.buxuesong.account.model.SaveStockRequest;
 import com.buxuesong.account.model.StockBean;
 import com.buxuesong.account.persist.dao.StockMapper;
+import com.buxuesong.account.utils.DateTimeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -25,9 +23,7 @@ public class StockServiceImpl implements StockService {
     private StockMapper stockMapper;
 
     @Autowired
-    private RestTemplate restTemplate;
-
-    private static final String GET_STOCK_INFO_URL = "http://qt.gtimg.cn/q={param}";
+    private StockCacheService stockCacheService;
 
     @Override
     public List<StockBean> getStockDetails(List<String> codes) {
@@ -49,7 +45,13 @@ public class StockServiceImpl implements StockService {
         String urlPara = String.join(",", codeList);
 
         try {
-            String result = getStockInfoFromApi(urlPara);
+            String result = null;
+            if (DateTimeUtils.isTradingTime()) {
+                result = stockCacheService.getStockInfoFromApi(urlPara);
+            } else {
+                result = stockCacheService.getStockInfoFromApiCache(urlPara);
+            }
+
             log.info("获取股票信息 {}", result);
             String[] lines = result.split("\n");
             for (String line : lines) {
@@ -99,7 +101,7 @@ public class StockServiceImpl implements StockService {
     @Override
     public boolean saveStock(SaveStockRequest saveStockRequest) {
         try {
-            String result = getStockInfoFromApi(saveStockRequest.getCode());
+            String result = stockCacheService.getStockInfoFromApi(saveStockRequest.getCode());
             String code = result.substring(result.indexOf("_") + 1, result.indexOf("="));
             String dataStr = result.substring(result.indexOf("=") + 2, result.length() - 2);
             String[] values = dataStr.split("~");
@@ -142,15 +144,4 @@ public class StockServiceImpl implements StockService {
         return stockMapper.findStockByCode(code);
     }
 
-    private String getStockInfoFromApi(String param) {
-        ResponseEntity<String> response = null;
-        try {
-            response = restTemplate.exchange(
-                GET_STOCK_INFO_URL, HttpMethod.GET, null, String.class, param);
-        } catch (Exception e) {
-            log.info("获取腾讯股票接口异常: {]", e);
-            return null;
-        }
-        return response.getBody();
-    }
 }
