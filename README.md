@@ -36,6 +36,7 @@
 23. 修改颜色后串行，修改版本页面为Layui以及Bootstrap bu6030 2022/8/23 19:47  
 24. 增加独立自动刷新js Xuesong.Bu 2022/8/29 12:55  
 25. 增加layui过滤app，支持点击app只展示该app的股票、基金 Xuesong.Bu 2022/8/30 17:01  
+26. 增加非交易时间从缓存取，减少接口调用 bu6030 2022/8/31 上午12:56  
 # UI页面
 ![image](https://user-images.githubusercontent.com/11482988/187102488-be39a81a-bc0a-46a8-a314-af22bd5c6cdf.png)  
 <center>股票页面Bootstrap风格</center>  
