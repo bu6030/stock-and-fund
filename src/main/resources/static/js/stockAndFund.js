@@ -117,8 +117,8 @@ function getStockTableHtml(result, totalMarketValueResult){
         dayIncome = (new BigDecimal(result[k].change)).multiply(new BigDecimal(result[k].bonds));
         marketValue = (new BigDecimal(result[k].now)).multiply(new BigDecimal(result[k].bonds));
         marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult);
-        var dayIncomeStyle = dayIncome >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"";
-        var totalIncomeStyle = result[k].income >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"";
+        var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
+        var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
 
         str += "<tr><td>"
             + "<a onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
