@@ -38,6 +38,7 @@
 25. 增加layui过滤app，支持点击app只展示该app的股票、基金 Xuesong.Bu 2022/8/30 17:01  
 26. 增加非交易时间从缓存取，减少接口调用 bu6030 2022/8/31 00:56  
 27. 修改按月筛选day小于10时报错，day小于10前面补0，例如2022-09-02 Xuesong.Bu 2022/9/2 22:11  
+28. 修改Bootstrap股票基金汇总中股票或基金当日盈利为0，不变色 Xuesong.Bu 2022/9/7 13:48
 # UI页面
 ![image](https://user-images.githubusercontent.com/11482988/187102488-be39a81a-bc0a-46a8-a314-af22bd5c6cdf.png)  
 <center>股票页面Bootstrap风格</center>  
