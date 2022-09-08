@@ -1,4 +1,7 @@
 function getData() {
+    if($("#type").val()=='stock') {
+        $("#bonds").val(100);
+    }
     $.ajax({
         url:"/param?type=APP",
         type:"get",
