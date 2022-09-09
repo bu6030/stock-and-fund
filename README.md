@@ -49,7 +49,7 @@
 ![image](https://user-images.githubusercontent.com/11482988/187102524-749f81ed-582f-4ff2-b677-5faf4e66a238.png)  
 <center>股票页面Layui风格</center>  
 
-![image](https://user-images.githubusercontent.com/11482988/187102545-3205da6e-578e-400d-8fa5-f65590ad06d5.png)  
+![image](https://user-images.githubusercontent.com/11482988/189321022-9f6b4889-4730-4b29-aed0-a63692496693.png)  
 <center>添加/修改股票页面</center>  
 
 ![image](https://user-images.githubusercontent.com/11482988/187102557-eceb7eb4-bb02-46fc-88e7-e826b36dab94.png)  
@@ -76,7 +76,7 @@
 ![image](https://user-images.githubusercontent.com/11482988/187102675-6c9b9fce-5f26-4388-8ad8-1cba51ec98a8.png)  
 <center>字典数据页面Layui风格</center>  
 
-![image](https://user-images.githubusercontent.com/11482988/187102693-1cbdb686-0feb-43f8-ad79-67c409aaff2d.png)  
+![image](https://user-images.githubusercontent.com/11482988/189321234-e7416c96-5cb4-4b1a-af9d-a593dc0c0b6d.png)  
 <center>添加/修改字典数据</center>  
 
 # 部署
