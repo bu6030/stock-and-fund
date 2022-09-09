@@ -20,6 +20,55 @@
 <div class="checkbox">
     <input id="enableAutoRefresh" type="checkbox" checked="checked" name="enableAutoRefresh"> 定时刷新
 </div>
+
+<div>
+    <div id="model" style="display: none;">
+        <div class="modal-dialog modal-lg" style="padding-top: 10px;padding-bottom: 10px;padding-left: 10px;padding-right: 10px">
+            <div class="modal-content">
+
+                <!-- 模态框主体 -->
+                <div class="modal-body">
+                    <form class="am-form" id="saveOutComeForm">
+                        <input type="hidden" id="type" th:value="stock"/>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">股票编码：</div>
+                            <div class="you">
+                                <input type="text" class="am-input-sm" id="code" placeholder="股票请输入编码sh(上证)/sz(深证)开头+6位股票编码">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">持仓成本：</div>
+                            <div class="you">
+                                <input type="number" class="am-input-sm" id="costPrise" placeholder="请输入持仓成本">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">持有份额：</div>
+                            <div class="you">
+                                <input type="number" class="am-input-sm" id="bonds" placeholder="请输入持有份额">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">APP：</div>
+                            <div class="you">
+                                <select data-am-selected="{btnSize: 'sm'}" id="app">
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 模态框底部 -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="submitStockAndFund()">保存</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 <table class="layui-hide" id="demo" lay-filter="test"></table>
 
 <script type="text/html" id="barDemo">
@@ -36,6 +85,7 @@
 <script>
     var appList;
     var stockTable;
+    var active;
     $.ajax({
         url:"/param?type=APP",
         type:"get",
@@ -44,6 +94,13 @@
         contentType: 'application/x-www-form-urlencoded',
         success: function (data){
             appList = data.value;
+            var app = $("#app");
+            app.find('option').remove();
+            app.append("<option value=''>请选择</option>");
+            for(var k in appList) {
+                var opt = $("<option></option>").text(appList[k].name).val(appList[k].code);
+                app.append(opt);
+            }
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
             console.log(XMLHttpRequest.status);
@@ -133,7 +190,7 @@
                     } else if(data.length > 1){
                         layer.msg('只能同时编辑一个');
                     } else {
-                        updateStock(checkStatus.data[0].code);
+                        updateStock(checkStatus.data[0].code, checkStatus.data[0].costPrise, checkStatus.data[0].bonds, checkStatus.data[0].app);
                     }
                     break;
                 case 'delete':
@@ -163,7 +220,8 @@
                 ,layEvent = obj.event; //获得 lay-event 对应的值
             if(layEvent === 'edit') {
                 layer.msg('编辑操作');
-                updateStock(data.code);
+
+                updateStock(data.code, data.costPrise, data.bonds, data.app);
             } else if (layEvent === 'delete') {
                 layer.confirm('真的删除'+ data.name +'么?', function(index){
                     layer.close(index);
@@ -217,28 +275,56 @@
         //         }
         //     }
         // });
+        active = {
+            add: function () {
+                layer.open({
+                    type: 1
+                    ,title: '添加/修改股票'
+                    , id: 'layerDemo' //防止重复弹出
+                    , content: $('#model')
+                    // ,btn: '关闭全部'
+                    , area: ['800px', '600px']//定义宽和高
+                    , btnAlign: 'c' //按钮居中
+                    , shade: 0 //不显示遮罩
+                    , yes: function () {
+                        layer.closeAll();
+                    }
+                });
+            }
+        };
     });
 
     function showDialog(type) {
-        var iHeight = 600;
-        var iWidth = 800;
-        //获得窗口的垂直位置
-        var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
-        //获得窗口的水平位置
-        var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
-        var url = '/addStockAndFund.html?type='+type;
-
-        window.open (url, 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
+        $("#code").val('');
+        $("#costPrise").val('');
+        $("#bonds").val('100');
+        $("#app").val('');
+        active.add();
+        // var iHeight = 600;
+        // var iWidth = 800;
+        // //获得窗口的垂直位置
+        // var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+        // //获得窗口的水平位置
+        // var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+        // var url = '/addStockAndFund.html?type='+type;
+        //
+        // window.open (url, 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
     }
 
-    function updateStock(code) {
-        var iHeight = 600;
-        var iWidth = 800;
-        //获得窗口的垂直位置
-        var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
-        //获得窗口的水平位置
-        var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
-        window.open ('/updateStockAndFund.html?code='+code+'&type=stock', 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
+    function updateStock(code, costPrise, bonds, app) {
+        $("#code").val(code);
+        $("#costPrise").val(costPrise);
+        $("#bonds").val(bonds);
+        $("#app").val(app);
+        active.add();
+
+        // var iHeight = 600;
+        // var iWidth = 800;
+        // //获得窗口的垂直位置
+        // var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+        // //获得窗口的水平位置
+        // var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+        // window.open ('/updateStockAndFund.html?code='+code+'&type=stock', 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
     }
 
     function deleteStock(code) {
@@ -267,6 +353,44 @@
     function filterApp(app) {
         stockTable.reload({
             url: '/stock?app='+app
+        });
+    }
+
+    function submitStockAndFund(){
+        var type =$("#type").val();
+        var code =$("#code").val();
+        var costPrise =$("#costPrise").val();
+        var bonds =$("#bonds").val();
+        var app = $("#app").val();
+        var req = {
+            "code": code,
+            "costPrise": costPrise,
+            "bonds": bonds,
+            "app": app
+        }
+        var url = null;
+        if(type=="fund"){
+            url = "/saveFund";
+        }else{
+            url = "/saveStock";
+        }
+        $.ajax({
+            url: url,
+            type:"post",
+            data : JSON.stringify(req),
+            dataType:'json',
+            contentType: 'application/json',
+            success: function (data){
+                if(data.code!="00000000"){
+                    alert("添加失败！");
+                }
+                location.reload();
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest.status);
+                console.log(XMLHttpRequest.readyState);
+                console.log(textStatus);
+            }
         });
     }
 </script>
