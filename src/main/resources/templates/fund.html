@@ -5,10 +5,12 @@
     <title>基金</title>
     <link rel="stylesheet" th:href="@{/css/main.admin.css}" type="text/css" media="all"/>
     <link rel="stylesheet" th:href="@{/css/main.amazeui.min.css}" type="text/css" media="all"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css" media="all"/>
     <script th:src="@{/js/fund.js}"></script>
     <script th:src="@{/js/jquery.min.js}"></script>
     <script th:src="@{/js/sidebar.js}"></script>
     <script th:src="@{/js/BigDecimal.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
     <!-- 日历控件 -->
     <script th:src="@{/js/laydate.js}"></script>
     <!-- 自动刷新 -->
@@ -23,7 +25,66 @@
 <div class="am-cf admin-main">
 
     <div th:replace="sidebar.html"></div>
+    <!-- 模态框 -->
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
 
+                <!-- 模态框头部 -->
+                <div class="modal-header">
+                    <h4 class="modal-title">添加股票/基金</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- 模态框主体 -->
+                <div class="modal-body">
+                        <form class="am-form" id="saveOutComeForm">
+                            <input type="hidden" id="type" th:value="fund"/>
+                            <div class="am-form-group am-cf">
+                                <div class="zuo">股票/基金：</div>
+                                <div class="you">
+                                    <select disabled="disabled" data-am-selected="{btnSize: 'sm'}">
+                                        <option th:value="2" th:selected="true">基金</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="am-form-group am-cf">
+                                <div class="zuo">股票/基金编码：</div>
+                                <div class="you">
+                                    <input type="text" class="am-input-sm" id="code" placeholder="股票请输入编码sh(上证)/sz(深证)开头+6位股票编码；基金请输入6位基金编码">
+                                </div>
+                            </div>
+                            <div class="am-form-group am-cf">
+                                <div class="zuo">持仓成本：</div>
+                                <div class="you">
+                                    <input type="number" class="am-input-sm" id="costPrise" placeholder="请输入持仓成本">
+                                </div>
+                            </div>
+                            <div class="am-form-group am-cf">
+                                <div class="zuo">持有份额：</div>
+                                <div class="you">
+                                    <input type="number" class="am-input-sm" id="bonds" placeholder="请输入持有份额">
+                                </div>
+                            </div>
+                            <div class="am-form-group am-cf">
+                                <div class="zuo">APP：</div>
+                                <div class="you">
+                                    <select data-am-selected="{btnSize: 'sm'}" id="app">
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                </div>
+
+                <!-- 模态框底部 -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="submitStockAndFund()">保存</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
     <div class=" admin-content">
         <div class="daohang"></div>
         <div class="admin-biaogelist">
@@ -34,7 +95,11 @@
                     当前位置： 首页 > <a href="#">基金明细</a>
                 </dl>
                 <dl>
-                    <button type="button" onclick="showDialog('fund')" class="am-btn am-btn-danger am-round am-btn-xs am-icon-plus" > 添加基金</button>
+<!--                    <button type="button" onclick="showDialog('fund')" class="am-btn am-btn-danger am-round am-btn-xs am-icon-plus" > 添加基金</button>-->
+                    <button type="button" onclick="showDialog('fund')" class="btn btn-primary" data-toggle="modal">
+<!--                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">-->
+                        添加基金
+                    </button>
                 </dl>
                 <dl>
                     <div class="checkbox">
