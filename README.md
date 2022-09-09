@@ -41,6 +41,7 @@
 28. 修改Bootstrap股票基金汇总中股票或基金当日盈利为0，不变色 Xuesong.Bu 2022/9/7 13:48
 29. 股票新增默认1手，也就是100股 bu6030 2022/9/8 21:18
 30. 去掉基金股票编码展示，优化页面ui Xuesong.Bu 2022/9/8 23:23
+31. 股票/基金/字典数据的添加/修改页面修改弹窗为模态框modal Xuesong.Bu 2022/9/9 23:30
 # UI页面
 ![image](https://user-images.githubusercontent.com/11482988/187102488-be39a81a-bc0a-46a8-a314-af22bd5c6cdf.png)  
 <center>股票页面Bootstrap风格</center>  
