@@ -32,7 +32,7 @@
 
                 <!-- 模态框头部 -->
                 <div class="modal-header">
-                    <h4 class="modal-title">添加股票/基金</h4>
+                    <h4 class="modal-title">添加/修改基金</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
@@ -41,17 +41,9 @@
                         <form class="am-form" id="saveOutComeForm">
                             <input type="hidden" id="type" th:value="fund"/>
                             <div class="am-form-group am-cf">
-                                <div class="zuo">股票/基金：</div>
+                                <div class="zuo">基金编码：</div>
                                 <div class="you">
-                                    <select disabled="disabled" data-am-selected="{btnSize: 'sm'}">
-                                        <option th:value="2" th:selected="true">基金</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="am-form-group am-cf">
-                                <div class="zuo">股票/基金编码：</div>
-                                <div class="you">
-                                    <input type="text" class="am-input-sm" id="code" placeholder="股票请输入编码sh(上证)/sz(深证)开头+6位股票编码；基金请输入6位基金编码">
+                                    <input type="text" class="am-input-sm" id="code" placeholder="请输入6位基金编码">
                                 </div>
                             </div>
                             <div class="am-form-group am-cf">

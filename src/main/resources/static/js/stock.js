@@ -25,6 +25,13 @@ function getData() {
 }
 
 function initData(){
+    var app = $("#app");
+    app.find('option').remove();
+    app.append("<option value=''>请选择</option>");
+    for(var k in appList) {
+        var opt = $("<option></option>").text(appList[k].name).val(appList[k].code);
+        app.append(opt);
+    }
     $.ajax({
         url:"/stock",
         type:"get",
@@ -78,7 +85,7 @@ function getTableHtml(result){
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
 
         str += "<tr><td>"
-            + "<a onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
+            + "<a href='#' onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
             + "</td><td>" +result[k].name
             + "</td><td " + dayIncomeStyle + ">" + result[k].change
             + "</td><td " + dayIncomeStyle + ">" + result[k].changePercent +"%"
@@ -92,7 +99,7 @@ function getTableHtml(result){
             + "</td><td>" + marketValuePercent + "%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent +"%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].income
-            + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"修改\" onclick=\"updateStock('" + result[k].code + "')\">"
+            + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"修改\" onclick=\"updateStock('" + result[k].code + "','" + result[k].costPrise + "','" + result[k].bonds + "','" + result[k].app + "')\">"
             + "<span class=\"am-icon-pencil-square-o\"></span></button>"
             + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"删除\" onclick=\"deleteStock('" + result[k].code + "')\">"
             + "<span class=\"am-icon-remove\"></span></button>"
@@ -119,15 +126,20 @@ function filterApp(app) {
 }
 
 function showDialog(type){
-    var iHeight = 600;
-    var iWidth = 800;
-    //获得窗口的垂直位置
-    var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
-    //获得窗口的水平位置
-    var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
-    var url = '/addStockAndFund.html?type='+type;
-
-    window.open (url, 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
+    $("#code").val('');
+    $("#costPrise").val('');
+    $("#bonds").val('100');
+    $("#app").val('');
+    $("#myModal").modal();
+    // var iHeight = 600;
+    // var iWidth = 800;
+    // //获得窗口的垂直位置
+    // var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+    // //获得窗口的水平位置
+    // var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+    // var url = '/addStockAndFund.html?type='+type;
+    //
+    // window.open (url, 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
 }
 
 function deleteStock(code){
@@ -157,12 +169,59 @@ function deleteStock(code){
     });
 }
 
-function updateStock(code){
-    var iHeight = 600;
-    var iWidth = 800;
-    //获得窗口的垂直位置
-    var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
-    //获得窗口的水平位置
-    var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
-    window.open ('/updateStockAndFund.html?code='+code+'&type=stock', 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
+function updateStock(code, costPrise, bonds, app){
+    $("#code").val(code);
+    $("#costPrise").val(costPrise);
+    $("#bonds").val(bonds);
+    $("#app").val(app);
+    $("#myModal").modal();
+
+    // var iHeight = 600;
+    // var iWidth = 800;
+    // //获得窗口的垂直位置
+    // var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+    // //获得窗口的水平位置
+    // var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+    // window.open ('/updateStockAndFund.html?code='+code+'&type=stock', 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
+}
+
+function submitStockAndFund(){
+    var type =$("#type").val();
+    var code =$("#code").val();
+    var costPrise =$("#costPrise").val();
+    var bonds =$("#bonds").val();
+    var app = $("#app").val();
+    var req = {
+        "code": code,
+        "costPrise": costPrise,
+        "bonds": bonds,
+        "app": app
+    }
+    var url = null;
+    if(type=="fund"){
+        url = "/saveFund";
+    }else{
+        url = "/saveStock";
+    }
+    $.ajax({
+        url: url,
+        type:"post",
+        data : JSON.stringify(req),
+        dataType:'json',
+        contentType: 'application/json',
+        success: function (data){
+            if(data.code!="00000000"){
+                alert("添加失败！");
+                $("#myModal").modal( "hide" );
+            }else{
+                // window.opener.getData();
+                location.reload();
+            }
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
 }
