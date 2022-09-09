@@ -20,18 +20,61 @@
 <div class="checkbox">
     <input id="enableAutoRefresh" type="checkbox" checked="checked" name="enableAutoRefresh"> 定时刷新
 </div>
+<div>
+    <div id="model" style="display: none;">
+        <div class="modal-dialog modal-lg" style="padding-top: 10px;padding-bottom: 10px;padding-left: 10px;padding-right: 10px">
+            <div class="modal-content">
+
+                <!-- 模态框主体 -->
+                <div class="modal-body">
+                    <form class="am-form" id="saveOutComeForm">
+                        <input type="hidden" id="type" th:value="APP"/>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">字典数据类型：</div>
+                            <div class="you">
+                                <select disabled="disabled" data-am-selected="{btnSize: 'sm'}">
+                                    <option th:value="1" th:selected="true">APP</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">字典数据编码：</div>
+                            <div class="you">
+                                <input type="text" class="am-input-sm" id="code" placeholder="请输入字典数据名称，例如东方财富拼音缩写，DFCF">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">字典数据名称：</div>
+                            <div class="you">
+                                <input type="text" class="am-input-sm" id="name" placeholder="请输入字典数据名称，例如东方财富">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 模态框底部 -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="submitParam()">保存</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
 <table class="layui-hide" id="demo" lay-filter="test"></table>
 
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delete">删除</a>
-<!--    <a class="layui-btn layui-btn-xs" lay-event="more">更多 <i class="layui-icon layui-icon-down"></i></a>-->
+    <!--    <a class="layui-btn layui-btn-xs" lay-event="more">更多 <i class="layui-icon layui-icon-down"></i></a>-->
 </script>
 <script th:src="@{/js/BigDecimal.js}"></script>
 <script th:src="@{/js/jquery.min.js}"></script>
 <script src="https://cdn.staticfile.org/layui/2.7.6/layui.js"></script>
 
 <script>
+    var active;
     layui.use(function(){
         // 得到需要的内置组件
         var layer = layui.layer; //弹层
@@ -83,7 +126,7 @@
                     } else if(data.length > 1){
                         layer.msg('只能同时编辑一个');
                     } else {
-                        updateParam(checkStatus.data[0].code, checkStatus.data[0].type);
+                        updateParam(checkStatus.data[0].code, checkStatus.data[0].type, checkStatus.data[0].name);
                     }
                     break;
                 case 'delete':
@@ -110,39 +153,62 @@
                 ,layEvent = obj.event; //获得 lay-event 对应的值
             if(layEvent === 'edit') {
                 layer.msg('编辑操作');
-                updateParam(data.code, data.type);
+                updateParam(data.code, data.type, data.name);
             } else if (layEvent === 'delete') {
-                    layer.confirm('真的删除'+ data.name +'么?', function(index){
-                        layer.close(index);
-                        //向服务端发送删除指令
-                        deleteParam(data.code, data.type);
-                        // obj.del(); //删除对应行（tr）的DOM结构
-                        location.reload();
-                    });
+                layer.confirm('真的删除'+ data.name +'么?', function(index){
+                    layer.close(index);
+                    //向服务端发送删除指令
+                    deleteParam(data.code, data.type);
+                    // obj.del(); //删除对应行（tr）的DOM结构
+                    location.reload();
+                });
             }
         });
+        active = {
+            add: function () {
+                layer.open({
+                    type: 1
+                    ,title: '添加/修改字典数据'
+                    , id: 'layerDemo' //防止重复弹出
+                    , content: $('#model')
+                    // ,btn: '关闭全部'
+                    , area: ['800px', '400px']//定义宽和高
+                    , btnAlign: 'c' //按钮居中
+                    , shade: 0 //不显示遮罩
+                    , yes: function () {
+                        layer.closeAll();
+                    }
+                });
+            }
+        };
     });
 
     function showDialog(type){
-        var iHeight = 600;
-        var iWidth = 800;
-        //获得窗口的垂直位置
-        var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
-        //获得窗口的水平位置
-        var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
-        var url = '/addParam.html?type='+type;
-
-        window.open (url, 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
+        $("#code").val('');
+        $("#name").val('');
+        active.add();
+        // var iHeight = 600;
+        // var iWidth = 800;
+        // //获得窗口的垂直位置
+        // var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+        // //获得窗口的水平位置
+        // var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+        // var url = '/addParam.html?type='+type;
+        //
+        // window.open (url, 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
     }
 
-    function updateParam(code, type){
-        var iHeight = 600;
-        var iWidth = 800;
-        //获得窗口的垂直位置
-        var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
-        //获得窗口的水平位置
-        var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
-        window.open ('/updateParam.html?code='+code+'&type='+type, 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
+    function updateParam(code, type, name){
+        $("#code").val(code);
+        $("#name").val(name);
+        active.add();
+        // var iHeight = 600;
+        // var iWidth = 800;
+        // //获得窗口的垂直位置
+        // var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+        // //获得窗口的水平位置
+        // var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+        // window.open ('/updateParam.html?code='+code+'&type='+type, 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
     }
 
     function deleteParam(code, type){
@@ -161,6 +227,36 @@
                 if(data.code=="00000000") {
                     getData();
                 }
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest.status);
+                console.log(XMLHttpRequest.readyState);
+                console.log(textStatus);
+            }
+        });
+    }
+
+    function submitParam(){
+        var type =$("#type").val();
+        var code =$("#code").val();
+        var name =$("#name").val();
+        var req = {
+            "code": code,
+            "type": type,
+            "name": name
+        }
+        var url = "/param";
+        $.ajax({
+            url: url,
+            type:"post",
+            data : JSON.stringify(req),
+            dataType:'json',
+            contentType: 'application/json',
+            success: function (data){
+                if(data.code!="00000000"){
+                    alert("添加失败！");
+                }
+                location.reload();
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 console.log(XMLHttpRequest.status);
