@@ -79,7 +79,6 @@ function getTableHtml(result){
 
         str += "<tr><td>"
             + "<a onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
-            + "</td><td>" + result[k].code
             + "</td><td>" +result[k].name
             + "</td><td " + dayIncomeStyle + ">" + result[k].change
             + "</td><td " + dayIncomeStyle + ">" + result[k].changePercent +"%"
@@ -100,7 +99,7 @@ function getTableHtml(result){
             +"</td></tr>";
         totalIncome = totalIncome.add(new BigDecimal(result[k].income));
     }
-    str += "<tr><td>合计</td><td colspan='4'></td><td>" + totalDayIncome + "</td><td colspan='6'></td><td>" + totalmarketValue + "</td></td><td></td><td>" + totalIncome
+    str += "<tr><td>合计</td><td colspan='3'></td><td>" + totalDayIncome + "</td><td colspan='6'></td><td>" + totalmarketValue + "</td></td><td></td><td>" + totalIncome
         +"</td><td></td></tr>";
     return str;
 }

@@ -122,7 +122,6 @@ function getStockTableHtml(result, totalMarketValueResult){
 
         str += "<tr><td>"
             + "<a onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
-            + "</td><td>" + result[k].code
             + "</td><td>" +result[k].name
             + "</td><td " + dayIncomeStyle + ">" + result[k].change
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
@@ -141,7 +140,7 @@ function getStockTableHtml(result, totalMarketValueResult){
         stockDayIncome = stockDayIncome.add(dayIncome);
         stockTotalmarketValue = stockTotalmarketValue.add(marketValue);
     }
-    str += "<tr><td>合计</td><td colspan='3'></td><td>" + stockDayIncome + "</td><td colspan='6'></td><td>" + stockTotalmarketValue + "</td><td></td><td></td><td>" + stockTotalIncome
+    str += "<tr><td>合计</td><td colspan='2'></td><td>" + stockDayIncome + "</td><td colspan='6'></td><td>" + stockTotalmarketValue + "</td><td></td><td></td><td>" + stockTotalIncome
         +"</td></tr>";
     return str;
 }
@@ -166,12 +165,9 @@ function getFundTableHtml(result, totalMarketValueResult){
 
         str += "<tr><td>"
             + "<a onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
-            + "</td><td>" + result[k].fundCode
-            + "</td><td>" +result[k].fundName
-            + "</td><td>"
+            + "</td><td colspan=\"2\">" +result[k].fundName
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
-            + "</td><td " + dayIncomeStyle + ">" +result[k].gszzl + "%"
-            + "</td><td>"
+            + "</td><td " + dayIncomeStyle + " colspan='2'>" +result[k].gszzl + "%"
             + "</td><td>" + result[k].dwjz + "(" + result[k].jzrq + ")"
             + "</td><td>" + result[k].gsz
             + "</td><td>" +result[k].costPrise
@@ -185,9 +181,9 @@ function getFundTableHtml(result, totalMarketValueResult){
         fundDayIncome = fundDayIncome.add(dayIncome);
         fundTotalmarketValue = fundTotalmarketValue.add(marketValue);
     }
-    str += "<tr><td>合计</td><td colspan='3'></td><td>" + fundDayIncome + "</td><td colspan='6'></td><td>" + fundTotalmarketValue + "</td><td></td><td></td><td>" + fundTotalIncome
+    str += "<tr><td>合计</td><td colspan='2'></td><td>" + fundDayIncome + "</td><td colspan='6'></td><td>" + fundTotalmarketValue + "</td><td></td><td></td><td>" + fundTotalIncome
         +"</td></tr>";
-    str += "<tr><td>股票基金汇总合计</td><td colspan='3'></td><td>" + fundDayIncome.add(stockDayIncome) + "</td><td colspan='6'></td><td>" + totalMarketValueResult + "</td><td></td><td></td><td>" + fundTotalIncome.add(stockTotalIncome)
+    str += "<tr><td>股票基金汇总合计</td><td colspan='2'></td><td>" + fundDayIncome.add(stockDayIncome) + "</td><td colspan='6'></td><td>" + totalMarketValueResult + "</td><td></td><td></td><td>" + fundTotalIncome.add(stockTotalIncome)
         +"</td></tr>";
 
     return str;

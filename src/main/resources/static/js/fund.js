@@ -82,7 +82,6 @@ function getTableHtml(result){
 
         str += "<tr><td>"
             + "<a onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
-            + "</td><td>" + result[k].fundCode
             + "</td><td>" + result[k].fundName
             + "</td><td " + dayIncomeStyle + ">" +result[k].gszzl + "%"
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
@@ -101,7 +100,7 @@ function getTableHtml(result){
             +"</td></tr>";
 
     }
-    str += "<tr><td>合计</td><td colspan='3'></td><td>" + totalDayIncome + "</td><td colspan='5'></td><td>" + totalmarketValue + "</td><td></td><td>" + totalIncome
+    str += "<tr><td>合计</td><td colspan='2'></td><td>" + totalDayIncome + "</td><td colspan='5'></td><td>" + totalmarketValue + "</td><td></td><td>" + totalIncome
         +"</td><td></td></tr>";
     return str;
 }

@@ -101,7 +101,6 @@
             ,cols: [ [ //表头
                 {type: 'checkbox'}
                 ,{field: 'appNew', title: 'APP', width: 120, sort: true,totalRow: '合计：',templet: function(d){return '<a style="color: #0000FF" onclick="filterApp(\'' + d.app + '\')">'+ d.appNew +'</a>'}}
-                ,{field: 'code', title: '编码', width:110, sort: true}
                 ,{field: 'name', title: '股票名称', width:120}
                 ,{field: 'change', title: '涨跌', width:80,templet: function(d){return '<span style="color: ' + d.dayInComeColor + '">'+ d.change +'</span>'}}
                 ,{field: 'changePercent', title: '涨跌幅 %', width:120, sort: true,templet: function(d){return '<span style="color: ' + d.dayInComeColor + '">'+ d.changePercent +'</span>'}}
