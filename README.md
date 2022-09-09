@@ -40,6 +40,7 @@
 27. 修改按月筛选day小于10时报错，day小于10前面补0，例如2022-09-02 Xuesong.Bu 2022/9/2 22:11  
 28. 修改Bootstrap股票基金汇总中股票或基金当日盈利为0，不变色 Xuesong.Bu 2022/9/7 13:48
 29. 股票新增默认1手，也就是100股 bu6030 2022/9/8 21:18
+30. 去掉基金股票编码展示，优化页面ui Xuesong.Bu 2022/9/8 23:23
 # UI页面
 ![image](https://user-images.githubusercontent.com/11482988/187102488-be39a81a-bc0a-46a8-a314-af22bd5c6cdf.png)  
 <center>股票页面Bootstrap风格</center>  
