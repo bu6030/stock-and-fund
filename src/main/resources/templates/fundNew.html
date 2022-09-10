@@ -59,8 +59,8 @@
 
                 <!-- 模态框底部 -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="submitStockAndFund()">保存</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    <button type="button" class="layui-btn" onclick="submitStockAndFund()">保存</button>
+                    <button type="button" class="layui-btn" onclick="layer.closeAll();">关闭</button>
                 </div>
             </div>
         </div>
@@ -84,6 +84,7 @@
     var appList;
     var fundTable;
     var active;
+    var modalLayer;
     $.ajax({
         url:"/param?type=APP",
         type:"get",
@@ -275,7 +276,7 @@
         // });
         active = {
             add: function () {
-                layer.open({
+                modalLayer = layer.open({
                     type: 1
                     ,title: '添加/修改基金'
                     , id: 'layerDemo' //防止重复弹出
@@ -390,6 +391,7 @@
             }
         });
     }
+
 </script>
 </body>
 </html>
