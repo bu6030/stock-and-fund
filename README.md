@@ -43,6 +43,8 @@
 30. 去掉基金股票编码展示，优化页面ui Xuesong.Bu 2022/9/8 23:23
 31. 股票/基金/字典数据的添加/修改页面修改弹窗为模态框modal Xuesong.Bu 2022/9/9 23:30
 32. 修改layer关闭按钮不关闭问题 bu6030 2022/9/10 23:55
+33. 添加基金去掉默认份额100份 bu6030 2022/9/10 23:02
+34. layui去掉当日净值 Xuesong.Bu 2022/9/15 22:03
 # UI页面
 ![image](https://user-images.githubusercontent.com/11482988/187102488-be39a81a-bc0a-46a8-a314-af22bd5c6cdf.png)  
 <center>股票页面Bootstrap风格</center>  
