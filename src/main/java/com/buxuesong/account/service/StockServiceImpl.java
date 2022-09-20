@@ -1,7 +1,9 @@
 package com.buxuesong.account.service;
 
+import com.buxuesong.account.model.BuyOrSellStockRequest;
 import com.buxuesong.account.model.SaveStockRequest;
 import com.buxuesong.account.model.StockBean;
+import com.buxuesong.account.persist.dao.BuyOrSellMapper;
 import com.buxuesong.account.persist.dao.StockMapper;
 import com.buxuesong.account.utils.DateTimeUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,9 @@ public class StockServiceImpl implements StockService {
 
     @Autowired
     private StockMapper stockMapper;
+
+    @Autowired
+    private BuyOrSellMapper buyOrSellMapper;
 
     @Autowired
     private StockCacheService stockCacheService;
@@ -144,4 +149,38 @@ public class StockServiceImpl implements StockService {
         return stockMapper.findStockByCode(code);
     }
 
+    @Override
+    public void buyOrSellStock(BuyOrSellStockRequest buyOrSellStockRequest) {
+        buyOrSellMapper.save(buyOrSellStockRequest);
+        SaveStockRequest saveStockRequest = stockMapper.findStockByCode(buyOrSellStockRequest.getCode());
+        // 购买
+        if ("1".equals(buyOrSellStockRequest.getType())) {
+            int restBound = 0;
+            BigDecimal newCostPrice;
+            // 说明未持有该股票新买入
+            if (saveStockRequest == null) {
+                restBound = buyOrSellStockRequest.getBonds();
+                newCostPrice = buyOrSellStockRequest.getPrice().add(buyOrSellStockRequest.getCost());
+                // 说明持有该股票再次买入
+            } else {
+                restBound = saveStockRequest.getBonds() + buyOrSellStockRequest.getBonds();
+                BigDecimal newBuyTotalFee = buyOrSellStockRequest.getPrice().multiply(new BigDecimal(buyOrSellStockRequest.getBonds()))
+                    .add(buyOrSellStockRequest.getCost());
+                newCostPrice = saveStockRequest.getCostPrise().multiply(new BigDecimal(saveStockRequest.getBonds())).add(newBuyTotalFee)
+                    .divide(new BigDecimal(restBound));
+            }
+            saveStockRequest.setBonds(restBound);
+            saveStockRequest.setCostPrise(newCostPrice);
+            // 卖出
+        } else {
+            int restBound = saveStockRequest.getBonds() - buyOrSellStockRequest.getBonds();
+            BigDecimal newSellTotalFee = buyOrSellStockRequest.getPrice().multiply(new BigDecimal(buyOrSellStockRequest.getBonds()))
+                .subtract(buyOrSellStockRequest.getCost());
+            BigDecimal newCostPrice = saveStockRequest.getCostPrise().multiply(new BigDecimal(saveStockRequest.getBonds()))
+                .subtract(newSellTotalFee).divide(new BigDecimal(restBound));
+            saveStockRequest.setBonds(restBound);
+            saveStockRequest.setCostPrise(newCostPrice);
+        }
+        stockMapper.updateStock(saveStockRequest);
+    }
 }

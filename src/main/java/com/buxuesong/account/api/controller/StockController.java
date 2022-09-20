@@ -1,5 +1,6 @@
 package com.buxuesong.account.api.controller;
 
+import com.buxuesong.account.model.BuyOrSellStockRequest;
 import com.buxuesong.account.model.SaveStockRequest;
 import com.buxuesong.account.model.res.Response;
 import com.buxuesong.account.service.StockService;
@@ -52,4 +53,17 @@ public class StockController {
         stockService.deleteStock(saveStockRequest);
         return Response.builder().value(true).code("00000000").build();
     }
+
+    /**
+     * 买卖股票接口
+     *
+     * @return
+     */
+    @PostMapping(value = "/buyOrSellStock")
+    public Response buyOrSellStock(@RequestBody BuyOrSellStockRequest buyOrSellStockRequest) throws Exception {
+        log.info("Buy or sell stock request: {}", buyOrSellStockRequest);
+        stockService.buyOrSellStock(buyOrSellStockRequest);
+        return Response.builder().value(true).code("00000000").build();
+    }
+
 }
