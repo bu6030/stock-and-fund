@@ -69,10 +69,61 @@
     </div>
 </div>
 
+<!-- 买卖模态框 -->
+<div>
+    <div id="buyOrSellModal" style="display: none;">
+        <div class="modal-dialog modal-lg" style="padding-top: 10px;padding-bottom: 10px;padding-left: 10px;padding-right: 10px">
+            <div class="modal-content">
+
+                <!-- 模态框主体 -->
+                <div class="modal-body">
+                    <form class="am-form" id="buyOrSellForm">
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">买入/卖出：</div>
+                            <div class="you">
+                                <select data-am-selected="{btnSize: 'sm'}" id="buyOrSell">
+                                    <option value="1">买入</option>
+                                    <option value="2">卖出</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">操作股数：</div>
+                            <div class="you">
+                                <input type="number" class="am-input-sm" id="handleBonds" placeholder="请输入操作股数，买入/卖出股数">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">买入/卖出股价：</div>
+                            <div class="you">
+                                <input type="number" class="am-input-sm" id="price" placeholder="请输入买入/卖出股价">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">手续费：</div>
+                            <div class="you">
+                                <input type="number" class="am-input-sm" id="cost" placeholder="请输入手续费">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 模态框底部 -->
+                <div class="modal-footer">
+                    <button type="button" class="layui-btn" onclick="submitBuyOrSell()">保存</button>
+                    <button type="button" class="layui-btn" onclick="layer.closeAll();">关闭</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 <table class="layui-hide" id="demo" lay-filter="test"></table>
 
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="buyOrSell">买卖</a>
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delete">删除</a>
     <!--    <a class="layui-btn layui-btn-xs" lay-event="more">更多 <i class="layui-icon layui-icon-down"></i></a>-->
 </script>
@@ -218,7 +269,7 @@
                 ,{field: 'marketValuePercent', title: '持仓比率 %', width: 120, sort: true}
                 ,{field: 'incomePercent', title: '收益率 %', width: 120, sort: true,templet: function(d){return '<span style="color: ' + d.toltalIncomeColor + '">'+ d.incomePercent +'</span>'}}
                 ,{field: 'income', title: '收益', width: 120, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.toltalIncomeColor + '">'+ d.income +'</span>'}}
-                ,{title: '操作', width: 135, align:'center', toolbar: '#barDemo'}
+                ,{title: '操作', width: 200, align:'center', toolbar: '#barDemo'}
             ] ]
         });
 
@@ -277,6 +328,8 @@
                     // obj.del(); //删除对应行（tr）的DOM结构
                     location.reload();
                 });
+            } else if (layEvent === 'buyOrSell') {
+                buyOrSell(data.code);
             }
             // } else if(layEvent === 'more'){
             //     //下拉菜单
@@ -337,6 +390,21 @@
                         layer.closeAll();
                     }
                 });
+            },
+            buyOrSell: function () {
+                layer.open({
+                    type: 1
+                    ,title: '买入/卖出股票'
+                    , id: 'layerDemo' //防止重复弹出
+                    , content: $('#buyOrSellModal')
+                    // ,btn: '关闭全部'
+                    , area: ['800px', '600px']//定义宽和高
+                    , btnAlign: 'c' //按钮居中
+                    , shade: 0 //不显示遮罩
+                    , yes: function () {
+                        layer.closeAll();
+                    }
+                });
             }
         };
     });
@@ -356,6 +424,11 @@
         // var url = '/addStockAndFund.html?type='+type;
         //
         // window.open (url, 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
+    }
+
+    function buyOrSell(code) {
+        $("#code").val(code);
+        active.buyOrSell();
     }
 
     function updateStock(code, costPrise, bonds, app) {
@@ -439,6 +512,50 @@
                 console.log(textStatus);
             }
         });
+    }
+
+    function submitBuyOrSell(){
+        var code =$("#code").val();
+        var cost =$("#cost").val();
+        var price =$("#price").val();
+        var handleBonds =$("#handleBonds").val();
+        var buyOrSell = $("#buyOrSell").val();
+        var req = {
+            "date": formatDate(new Date()),
+            "code": code,
+            "price": price,
+            "cost": cost,
+            "bonds": handleBonds,
+            "type": buyOrSell
+        }
+        var url = "/buyOrSellStock";
+        $.ajax({
+            url: url,
+            type:"post",
+            data : JSON.stringify(req),
+            dataType:'json',
+            contentType: 'application/json',
+            success: function (data){
+                if(data.code!="00000000"){
+                    alert("添加失败！");
+                }
+                location.reload();
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest.status);
+                console.log(XMLHttpRequest.readyState);
+                console.log(textStatus);
+            }
+        });
+    }
+
+    function formatDate (date) {
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        var d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        return y + '-' + m + '-' + d;
     }
 </script>
 </body>

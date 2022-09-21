@@ -10,6 +10,24 @@ public class BuyOrSellStockRequest {
     private int bonds;
     private BigDecimal cost;
     private String app;
+    private BigDecimal openPrice;
+    private BigDecimal income;
+
+    public BigDecimal getOpenPrice() {
+        return openPrice;
+    }
+
+    public void setOpenPrice(BigDecimal openPrice) {
+        this.openPrice = openPrice;
+    }
+
+    public BigDecimal getIncome() {
+        return income;
+    }
+
+    public void setIncome(BigDecimal income) {
+        this.income = income;
+    }
 
     public String getType() {
         return type;
@@ -70,13 +88,15 @@ public class BuyOrSellStockRequest {
     @Override
     public String toString() {
         return "BuyOrSellStockRequest{" +
-            "date='" + date + '\'' +
-            ", code='" + code + '\'' +
-            ", price=" + price +
-            ", type='" + type + '\'' +
-            ", bonds=" + bonds +
-            ", cost=" + cost +
-            ", app='" + app + '\'' +
-            '}';
+                "date='" + date + '\'' +
+                ", code='" + code + '\'' +
+                ", price=" + price +
+                ", type='" + type + '\'' +
+                ", bonds=" + bonds +
+                ", cost=" + cost +
+                ", app='" + app + '\'' +
+                ", openPrice=" + openPrice +
+                ", income=" + income +
+                '}';
     }
 }

@@ -157,6 +157,23 @@ public class StockServiceImpl implements StockService {
 
     @Override
     public void buyOrSellStock(BuyOrSellStockRequest buyOrSellStockRequest) {
+        SaveStockRequest stockRequest = stockMapper.findStockByCode(buyOrSellStockRequest.getCode());
+        List<String> list = new ArrayList<>();
+        list.add(stockRequest.getCode() + "," + stockRequest.getCostPrise() + "," + stockRequest.getBonds() + ","
+                + stockRequest.getApp());
+        StockBean stock = getStockDetails(list).get(0);
+        // 开盘价格
+        BigDecimal openPrice = (new BigDecimal(stock.getNow())).subtract(new BigDecimal(stock.getChange()));
+        log.info("开盘价格： {}", openPrice);
+        buyOrSellStockRequest.setOpenPrice(openPrice);
+        // 计算卖出盈利，买入不用计算
+        if ("2".equals(buyOrSellStockRequest.getType())) {
+            BigDecimal income = buyOrSellStockRequest.getPrice().subtract(openPrice).multiply(new BigDecimal(buyOrSellStockRequest.getBonds())).subtract(buyOrSellStockRequest.getCost());
+            log.info("卖出当日收益： {}", income);
+            buyOrSellStockRequest.setIncome(income);
+        } else {
+            buyOrSellStockRequest.setIncome(new BigDecimal("0"));
+        }
         buyOrSellMapper.save(buyOrSellStockRequest);
         SaveStockRequest saveStockRequest = stockMapper.findStockByCode(buyOrSellStockRequest.getCode());
         // 购买
@@ -166,14 +183,15 @@ public class StockServiceImpl implements StockService {
             // 说明未持有该股票新买入
             if (saveStockRequest == null) {
                 restBound = buyOrSellStockRequest.getBonds();
-                newCostPrice = buyOrSellStockRequest.getPrice().add(buyOrSellStockRequest.getCost());
+                newCostPrice = buyOrSellStockRequest.getPrice().multiply(new BigDecimal(buyOrSellStockRequest.getBonds())).add(buyOrSellStockRequest.getCost())
+                        .divide(new BigDecimal(restBound), 2, BigDecimal.ROUND_HALF_UP);
                 // 说明持有该股票再次买入
             } else {
                 restBound = saveStockRequest.getBonds() + buyOrSellStockRequest.getBonds();
                 BigDecimal newBuyTotalFee = buyOrSellStockRequest.getPrice().multiply(new BigDecimal(buyOrSellStockRequest.getBonds()))
                     .add(buyOrSellStockRequest.getCost());
                 newCostPrice = saveStockRequest.getCostPrise().multiply(new BigDecimal(saveStockRequest.getBonds())).add(newBuyTotalFee)
-                    .divide(new BigDecimal(restBound));
+                    .divide(new BigDecimal(restBound), 2, BigDecimal.ROUND_HALF_UP);
             }
             saveStockRequest.setBonds(restBound);
             saveStockRequest.setCostPrise(newCostPrice);
@@ -183,7 +201,7 @@ public class StockServiceImpl implements StockService {
             BigDecimal newSellTotalFee = buyOrSellStockRequest.getPrice().multiply(new BigDecimal(buyOrSellStockRequest.getBonds()))
                 .subtract(buyOrSellStockRequest.getCost());
             BigDecimal newCostPrice = saveStockRequest.getCostPrise().multiply(new BigDecimal(saveStockRequest.getBonds()))
-                .subtract(newSellTotalFee).divide(new BigDecimal(restBound));
+                .subtract(newSellTotalFee).divide(new BigDecimal(restBound), 2, BigDecimal.ROUND_HALF_UP);
             saveStockRequest.setBonds(restBound);
             saveStockRequest.setCostPrise(newCostPrice);
         }
