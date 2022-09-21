@@ -114,7 +114,54 @@ function getStockTableHtml(result, totalMarketValueResult){
         if (filteredApp != "ALL" && result[k].app != filteredApp) {
             continue;
         }
-        dayIncome = (new BigDecimal(result[k].change)).multiply(new BigDecimal(result[k].bonds));
+        var buyOrSells = result[k].buyOrSellStockRequestList;
+        var todayBuyIncom = new BigDecimal("0");
+        var todaySellIncom = new BigDecimal("0");
+        var maxBuyOrSellBonds = 0;
+        for(var l in buyOrSells) {
+            if(buyOrSells[l].bonds > maxBuyOrSellBonds){
+                maxBuyOrSellBonds = buyOrSells[l].bonds;
+            }
+            // 当天购买过
+            if(buyOrSells[l].type == "1") {
+                console.log("买入价格"+buyOrSells[l].price);
+                var buyIncome = new BigDecimal("0");
+                buyIncome = (new BigDecimal(result[k].change))
+                    .add(new BigDecimal(result[k].now))
+                    .subtract(new BigDecimal(buyOrSells[l].price+""))
+                    .multiply(new BigDecimal(buyOrSells[l].bonds+""))
+                    .subtract(new BigDecimal(buyOrSells[l].cost+""));
+                todayBuyIncom = todayBuyIncom.add(buyIncome);
+                console.log("买入收益："+todayBuyIncom);
+            }
+            // 当天卖出过
+            if(buyOrSells[l].type == "2") {
+                console.log("卖出价格"+buyOrSells[l].price);
+                var sellIncome = new BigDecimal("0");
+                //开盘价格
+                var openPrice = (new BigDecimal(result[k].now)).subtract(new BigDecimal(result[k].change));
+                console.log("当前价格："+(new BigDecimal(result[k].now)));
+                console.log("涨跌价格："+(new BigDecimal(result[k].change)));
+                console.log("开盘价格："+openPrice);
+                sellIncome = (new BigDecimal(buyOrSells[l].price+"")).subtract(openPrice)
+                    .multiply(new BigDecimal(buyOrSells[l].bonds+""))
+                    .subtract(new BigDecimal(buyOrSells[l].cost+""));
+                todaySellIncom = todaySellIncom.add(sellIncome);
+                console.log("卖出收益："+todaySellIncom);
+            }
+        }
+        console.log("买卖最大数"+maxBuyOrSellBonds);
+        if (maxBuyOrSellBonds < result[k].bonds){
+            var restBonds = (new BigDecimal(result[k].bonds)).subtract(new BigDecimal(maxBuyOrSellBonds+""));
+            console.log("剩余股数："+restBonds);
+            dayIncome = (new BigDecimal(result[k].change)).multiply(restBonds);
+        } else {
+            dayIncome = new BigDecimal("0");
+        }
+        console.log(result[k].name+"计算当日买卖前："+ dayIncome);
+        console.log(result[k].name+"计算："+ dayIncome.add(todayBuyIncom).add(todaySellIncom));
+        dayIncome = dayIncome.add(todayBuyIncom).add(todaySellIncom);
+        console.log(result[k].name+"计算当日买卖后："+ dayIncome);
         marketValue = (new BigDecimal(result[k].now)).multiply(new BigDecimal(result[k].bonds));
         marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult);
         var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");

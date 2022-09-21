@@ -1,5 +1,6 @@
 package com.buxuesong.account.service;
 
+import com.buxuesong.account.model.BuyOrSellStockRequest;
 import com.buxuesong.account.model.FundBean;
 import com.buxuesong.account.model.StockBean;
 import com.buxuesong.account.persist.dao.DepositMapper;
@@ -89,8 +90,52 @@ public class DepositServiceImpl implements DepositService {
         List<StockBean> stocks = stockService.getStockDetails(stockListFrom);
         BigDecimal stockTotalDayIncome = new BigDecimal("0");
         for (StockBean stock : stocks) {
-            BigDecimal dayIncome = (new BigDecimal(stock.getChange()).multiply(new BigDecimal(stock.getBonds()))).setScale(2,
-                BigDecimal.ROUND_HALF_UP);
+            int maxBuyOrSellBonds = 0;
+            BigDecimal todayBuyIncome = new BigDecimal("0");
+            BigDecimal todaySellIncom = new BigDecimal("0");
+            BigDecimal dayIncome = new BigDecimal("0");
+            for (BuyOrSellStockRequest buyOrSellStockRequest : stock.getBuyOrSellStockRequestList()) {
+                if (buyOrSellStockRequest.getBonds() > maxBuyOrSellBonds) {
+                    maxBuyOrSellBonds = buyOrSellStockRequest.getBonds();
+                }
+                // 当天购买过
+                if (buyOrSellStockRequest.getType().equals("1")) {
+                    log.info("买入价格: {}", buyOrSellStockRequest.getPrice());
+                    BigDecimal buyIncome = new BigDecimal("0");
+                    buyIncome = (new BigDecimal(stock.getChange()))
+                        .add(new BigDecimal(stock.getNow()))
+                        .subtract(new BigDecimal(buyOrSellStockRequest.getPrice() + ""))
+                        .multiply(new BigDecimal(buyOrSellStockRequest.getBonds() + ""))
+                        .subtract(new BigDecimal(buyOrSellStockRequest.getCost() + ""));
+                    todayBuyIncome = todayBuyIncome.add(buyIncome);
+                    log.info("买入收益： {}", todayBuyIncome);
+                }
+                // 当天卖出过
+                if (buyOrSellStockRequest.getType().equals("2")) {
+                    log.info("卖出价格： {}", buyOrSellStockRequest.getPrice());
+                    BigDecimal sellIncome = new BigDecimal("0");
+                    // 开盘价格
+                    BigDecimal openPrice = (new BigDecimal(stock.getNow())).subtract(new BigDecimal(stock.getChange()));
+                    log.info("开盘价格： {}", openPrice);
+                    sellIncome = (new BigDecimal(buyOrSellStockRequest.getPrice() + "")).subtract(openPrice)
+                        .multiply(new BigDecimal(buyOrSellStockRequest.getBonds() + ""))
+                        .subtract(new BigDecimal(buyOrSellStockRequest.getCost() + ""));
+                    todaySellIncom = todaySellIncom.add(sellIncome);
+                    log.info("卖出收益： {}", todaySellIncom);
+                }
+            }
+            log.info("买卖最大数: {}", maxBuyOrSellBonds);
+            if (maxBuyOrSellBonds < Integer.parseInt(stock.getBonds())) {
+                BigDecimal restBonds = (new BigDecimal(stock.getBonds())).subtract(new BigDecimal(maxBuyOrSellBonds + ""));
+                log.info("剩余股数： {}", restBonds);
+                dayIncome = (new BigDecimal(stock.getChange())).multiply(restBonds).setScale(2,
+                    BigDecimal.ROUND_HALF_UP);
+            } else {
+                dayIncome = new BigDecimal("0").setScale(2,
+                    BigDecimal.ROUND_HALF_UP);
+                ;
+            }
+            dayIncome = dayIncome.add(todayBuyIncome).add(todaySellIncom);
             stockTotalDayIncome = stockTotalDayIncome.add(dayIncome);
         }
         log.info("股票当日盈利: {}", stockTotalDayIncome);

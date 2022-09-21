@@ -2,6 +2,7 @@ package com.buxuesong.account.model;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -27,6 +28,7 @@ public class StockBean {
     private String app;// 支付宝/东方财富/东方证券
     private String incomePercent;// 收益率
     private String income;// 收益
+    private List<BuyOrSellStockRequest> buyOrSellStockRequestList;
 
     public StockBean() {
     }
@@ -180,6 +182,14 @@ public class StockBean {
         this.income = income;
     }
 
+    public List<BuyOrSellStockRequest> getBuyOrSellStockRequestList() {
+        return buyOrSellStockRequestList;
+    }
+
+    public void setBuyOrSellStockRequestList(List<BuyOrSellStockRequest> buyOrSellStockRequestList) {
+        this.buyOrSellStockRequestList = buyOrSellStockRequestList;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -211,6 +221,7 @@ public class StockBean {
             ", app='" + app + '\'' +
             ", incomePercent='" + incomePercent + '\'' +
             ", income='" + income + '\'' +
+            ", buyOrSellStockRequestList=" + buyOrSellStockRequestList +
             '}';
     }
 }

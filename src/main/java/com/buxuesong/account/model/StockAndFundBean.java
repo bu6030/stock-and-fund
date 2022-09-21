@@ -3,6 +3,8 @@ package com.buxuesong.account.model;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Builder
 public class StockAndFundBean {
@@ -31,5 +33,6 @@ public class StockAndFundBean {
     private String time;
     private String max;// 最高价
     private String min;// 最低价
+    private List<BuyOrSellStockRequest> buyOrSellStockRequestList;
 
 }

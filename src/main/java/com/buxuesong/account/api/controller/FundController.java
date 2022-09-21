@@ -90,6 +90,7 @@ public class FundController {
                 // 股票部分内容
                 .now(s.getNow()).change(s.getChange()).changePercent(s.getChangePercent())
                 .time(s.getTime()).max(s.getMax()).min(s.getMin())
+                .buyOrSellStockRequestList(s.getBuyOrSellStockRequestList())
                 .build())
             .collect(Collectors.toList());
         stockAndFundsFromStocks.addAll(stockAndFundsFromFunds);

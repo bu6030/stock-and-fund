@@ -13,9 +13,11 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -59,6 +61,8 @@ public class StockServiceImpl implements StockService {
 
             log.info("获取股票信息 {}", result);
             String[] lines = result.split("\n");
+            List<BuyOrSellStockRequest> buyOrSellStockRequests = buyOrSellMapper.findAllBuyOrSellStocks(LocalDate.now().toString());
+            log.info("当日买卖的股票信息 {}", buyOrSellStockRequests);
             for (String line : lines) {
                 String code = line.substring(line.indexOf("_") + 1, line.indexOf("="));
                 String dataStr = line.substring(line.indexOf("=") + 2, line.length() - 2);
@@ -71,6 +75,8 @@ public class StockServiceImpl implements StockService {
                 bean.setTime(values[30]);
                 bean.setMax(values[33]);// 33
                 bean.setMin(values[34]);// 34
+                bean.setBuyOrSellStockRequestList(buyOrSellStockRequests.stream().filter(s -> s.getCode().equals(code))
+                    .collect(Collectors.toList()));
 
                 BigDecimal now = new BigDecimal(values[3]);
                 String costPriceStr = bean.getCostPrise();
@@ -181,6 +187,7 @@ public class StockServiceImpl implements StockService {
             saveStockRequest.setBonds(restBound);
             saveStockRequest.setCostPrise(newCostPrice);
         }
+        log.info("买卖后的saveStockRequest： {}", saveStockRequest);
         stockMapper.updateStock(saveStockRequest);
     }
 }
