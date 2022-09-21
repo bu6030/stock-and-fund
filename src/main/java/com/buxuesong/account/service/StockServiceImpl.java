@@ -160,7 +160,7 @@ public class StockServiceImpl implements StockService {
         SaveStockRequest stockRequest = stockMapper.findStockByCode(buyOrSellStockRequest.getCode());
         List<String> list = new ArrayList<>();
         list.add(stockRequest.getCode() + "," + stockRequest.getCostPrise() + "," + stockRequest.getBonds() + ","
-                + stockRequest.getApp());
+            + stockRequest.getApp());
         StockBean stock = getStockDetails(list).get(0);
         // 开盘价格
         BigDecimal openPrice = (new BigDecimal(stock.getNow())).subtract(new BigDecimal(stock.getChange()));
@@ -168,7 +168,8 @@ public class StockServiceImpl implements StockService {
         buyOrSellStockRequest.setOpenPrice(openPrice);
         // 计算卖出盈利，买入不用计算
         if ("2".equals(buyOrSellStockRequest.getType())) {
-            BigDecimal income = buyOrSellStockRequest.getPrice().subtract(openPrice).multiply(new BigDecimal(buyOrSellStockRequest.getBonds())).subtract(buyOrSellStockRequest.getCost());
+            BigDecimal income = buyOrSellStockRequest.getPrice().subtract(openPrice)
+                .multiply(new BigDecimal(buyOrSellStockRequest.getBonds())).subtract(buyOrSellStockRequest.getCost());
             log.info("卖出当日收益： {}", income);
             buyOrSellStockRequest.setIncome(income);
         } else {
@@ -183,8 +184,9 @@ public class StockServiceImpl implements StockService {
             // 说明未持有该股票新买入
             if (saveStockRequest == null) {
                 restBound = buyOrSellStockRequest.getBonds();
-                newCostPrice = buyOrSellStockRequest.getPrice().multiply(new BigDecimal(buyOrSellStockRequest.getBonds())).add(buyOrSellStockRequest.getCost())
-                        .divide(new BigDecimal(restBound), 2, BigDecimal.ROUND_HALF_UP);
+                newCostPrice = buyOrSellStockRequest.getPrice().multiply(new BigDecimal(buyOrSellStockRequest.getBonds()))
+                    .add(buyOrSellStockRequest.getCost())
+                    .divide(new BigDecimal(restBound), 2, BigDecimal.ROUND_HALF_UP);
                 // 说明持有该股票再次买入
             } else {
                 restBound = saveStockRequest.getBonds() + buyOrSellStockRequest.getBonds();
@@ -200,8 +202,11 @@ public class StockServiceImpl implements StockService {
             int restBound = saveStockRequest.getBonds() - buyOrSellStockRequest.getBonds();
             BigDecimal newSellTotalFee = buyOrSellStockRequest.getPrice().multiply(new BigDecimal(buyOrSellStockRequest.getBonds()))
                 .subtract(buyOrSellStockRequest.getCost());
-            BigDecimal newCostPrice = saveStockRequest.getCostPrise().multiply(new BigDecimal(saveStockRequest.getBonds()))
-                .subtract(newSellTotalFee).divide(new BigDecimal(restBound), 2, BigDecimal.ROUND_HALF_UP);
+            BigDecimal newCostPrice = new BigDecimal("0");
+            if (restBound != 0) {
+                newCostPrice = saveStockRequest.getCostPrise().multiply(new BigDecimal(saveStockRequest.getBonds()))
+                    .subtract(newSellTotalFee).divide(new BigDecimal(restBound), 2, BigDecimal.ROUND_HALF_UP);
+            }
             saveStockRequest.setBonds(restBound);
             saveStockRequest.setCostPrise(newCostPrice);
         }

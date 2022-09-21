@@ -108,7 +108,7 @@ public class DepositServiceImpl implements DepositService {
                 }
                 // 当天卖出过
                 if (buyOrSellStockRequest.getType().equals("2")) {
-                    todaySellIncom = todaySellIncom.add(new BigDecimal(buyOrSellStockRequest.getIncome()+""));
+                    todaySellIncom = todaySellIncom.add(new BigDecimal(buyOrSellStockRequest.getIncome() + ""));
                     log.info("卖出收益： {}", todaySellIncom);
                 }
             }

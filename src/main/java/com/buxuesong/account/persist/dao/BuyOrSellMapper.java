@@ -12,10 +12,10 @@ import java.util.List;
 public interface BuyOrSellMapper {
 
     @Update(" INSERT INTO BUY_OR_SELL (DATE, CODE, TYPE, PRICE," +
-            " COST, BONDS, INCOME, OPENPRICE) " +
-            " values " +
-            " (#{buyOrSellStockRequest.date},#{buyOrSellStockRequest.code},#{buyOrSellStockRequest.type},#{buyOrSellStockRequest.price}," +
-            " #{buyOrSellStockRequest.cost},#{buyOrSellStockRequest.bonds},#{buyOrSellStockRequest.income},#{buyOrSellStockRequest.openPrice}) ")
+        " COST, BONDS, INCOME, OPENPRICE) " +
+        " values " +
+        " (#{buyOrSellStockRequest.date},#{buyOrSellStockRequest.code},#{buyOrSellStockRequest.type},#{buyOrSellStockRequest.price}," +
+        " #{buyOrSellStockRequest.cost},#{buyOrSellStockRequest.bonds},#{buyOrSellStockRequest.income},#{buyOrSellStockRequest.openPrice}) ")
     int save(@Param("buyOrSellStockRequest") BuyOrSellStockRequest buyOrSellStockRequest);
 
     @Update("UPDATE PARAM set NAME = #{parameter.name} where TYPE = #{parameter.type} and CODE = #{parameter.code} ")

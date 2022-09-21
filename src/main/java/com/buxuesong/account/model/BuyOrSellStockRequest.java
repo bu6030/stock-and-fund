@@ -88,15 +88,15 @@ public class BuyOrSellStockRequest {
     @Override
     public String toString() {
         return "BuyOrSellStockRequest{" +
-                "date='" + date + '\'' +
-                ", code='" + code + '\'' +
-                ", price=" + price +
-                ", type='" + type + '\'' +
-                ", bonds=" + bonds +
-                ", cost=" + cost +
-                ", app='" + app + '\'' +
-                ", openPrice=" + openPrice +
-                ", income=" + income +
-                '}';
+            "date='" + date + '\'' +
+            ", code='" + code + '\'' +
+            ", price=" + price +
+            ", type='" + type + '\'' +
+            ", bonds=" + bonds +
+            ", cost=" + cost +
+            ", app='" + app + '\'' +
+            ", openPrice=" + openPrice +
+            ", income=" + income +
+            '}';
     }
 }
