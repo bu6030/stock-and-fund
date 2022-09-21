@@ -95,32 +95,20 @@ public class DepositServiceImpl implements DepositService {
             BigDecimal todaySellIncom = new BigDecimal("0");
             BigDecimal dayIncome = new BigDecimal("0");
             for (BuyOrSellStockRequest buyOrSellStockRequest : stock.getBuyOrSellStockRequestList()) {
-                if (buyOrSellStockRequest.getBonds() > maxBuyOrSellBonds) {
-                    maxBuyOrSellBonds = buyOrSellStockRequest.getBonds();
-                }
                 // 当天购买过
                 if (buyOrSellStockRequest.getType().equals("1")) {
+                    maxBuyOrSellBonds = maxBuyOrSellBonds + buyOrSellStockRequest.getBonds();
                     log.info("买入价格: {}", buyOrSellStockRequest.getPrice());
-                    BigDecimal buyIncome = new BigDecimal("0");
-                    buyIncome = (new BigDecimal(stock.getChange()))
-                        .add(new BigDecimal(stock.getNow()))
+                    log.info("当前价格: {}", stock.getNow());
+                    BigDecimal buyIncome = (new BigDecimal(stock.getNow()))
                         .subtract(new BigDecimal(buyOrSellStockRequest.getPrice() + ""))
-                        .multiply(new BigDecimal(buyOrSellStockRequest.getBonds() + ""))
-                        .subtract(new BigDecimal(buyOrSellStockRequest.getCost() + ""));
+                        .multiply(new BigDecimal(buyOrSellStockRequest.getBonds() + ""));
                     todayBuyIncome = todayBuyIncome.add(buyIncome);
                     log.info("买入收益： {}", todayBuyIncome);
                 }
                 // 当天卖出过
                 if (buyOrSellStockRequest.getType().equals("2")) {
-                    log.info("卖出价格： {}", buyOrSellStockRequest.getPrice());
-                    BigDecimal sellIncome = new BigDecimal("0");
-                    // 开盘价格
-                    BigDecimal openPrice = (new BigDecimal(stock.getNow())).subtract(new BigDecimal(stock.getChange()));
-                    log.info("开盘价格： {}", openPrice);
-                    sellIncome = (new BigDecimal(buyOrSellStockRequest.getPrice() + "")).subtract(openPrice)
-                        .multiply(new BigDecimal(buyOrSellStockRequest.getBonds() + ""))
-                        .subtract(new BigDecimal(buyOrSellStockRequest.getCost() + ""));
-                    todaySellIncom = todaySellIncom.add(sellIncome);
+                    todaySellIncom = todaySellIncom.add(new BigDecimal(buyOrSellStockRequest.getIncome()+""));
                     log.info("卖出收益： {}", todaySellIncom);
                 }
             }

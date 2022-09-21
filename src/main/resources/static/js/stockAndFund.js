@@ -119,39 +119,25 @@ function getStockTableHtml(result, totalMarketValueResult){
         var todaySellIncom = new BigDecimal("0");
         var maxBuyOrSellBonds = 0;
         for(var l in buyOrSells) {
-            if(buyOrSells[l].bonds > maxBuyOrSellBonds){
-                maxBuyOrSellBonds = buyOrSells[l].bonds;
-            }
             // 当天购买过
             if(buyOrSells[l].type == "1") {
+                maxBuyOrSellBonds = maxBuyOrSellBonds + buyOrSells[l].bonds;
                 console.log("买入价格"+buyOrSells[l].price);
-                var buyIncome = new BigDecimal("0");
-                buyIncome = (new BigDecimal(result[k].change))
-                    .add(new BigDecimal(result[k].now))
+                console.log("当前价格"+result[k].now);
+                var buyIncome = (new BigDecimal(result[k].now))
                     .subtract(new BigDecimal(buyOrSells[l].price+""))
-                    .multiply(new BigDecimal(buyOrSells[l].bonds+""))
-                    .subtract(new BigDecimal(buyOrSells[l].cost+""));
+                    .multiply(new BigDecimal(buyOrSells[l].bonds+""));
                 todayBuyIncom = todayBuyIncom.add(buyIncome);
                 console.log("买入收益："+todayBuyIncom);
             }
             // 当天卖出过
             if(buyOrSells[l].type == "2") {
-                console.log("卖出价格"+buyOrSells[l].price);
-                var sellIncome = new BigDecimal("0");
-                //开盘价格
-                var openPrice = (new BigDecimal(result[k].now)).subtract(new BigDecimal(result[k].change));
-                console.log("当前价格："+(new BigDecimal(result[k].now)));
-                console.log("涨跌价格："+(new BigDecimal(result[k].change)));
-                console.log("开盘价格："+openPrice);
-                sellIncome = (new BigDecimal(buyOrSells[l].price+"")).subtract(openPrice)
-                    .multiply(new BigDecimal(buyOrSells[l].bonds+""))
-                    .subtract(new BigDecimal(buyOrSells[l].cost+""));
-                todaySellIncom = todaySellIncom.add(sellIncome);
+                todaySellIncom = todaySellIncom.add(new BigDecimal(buyOrSells[l].income+""));
                 console.log("卖出收益："+todaySellIncom);
             }
         }
         console.log("买卖最大数"+maxBuyOrSellBonds);
-        if (maxBuyOrSellBonds < result[k].bonds){
+        if (maxBuyOrSellBonds < result[k].bonds) {
             var restBonds = (new BigDecimal(result[k].bonds)).subtract(new BigDecimal(maxBuyOrSellBonds+""));
             console.log("剩余股数："+restBonds);
             dayIncome = (new BigDecimal(result[k].change)).multiply(restBonds);

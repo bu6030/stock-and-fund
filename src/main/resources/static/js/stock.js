@@ -83,6 +83,7 @@ function getTableHtml(result){
         for(var l in buyOrSells) {
             // 当天购买过
             if(buyOrSells[l].type == "1") {
+                maxBuyOrSellBonds = maxBuyOrSellBonds + buyOrSells[l].bonds;
                 console.log("买入价格"+buyOrSells[l].price);
                 console.log("当前价格"+result[k].now);
                 var buyIncome = (new BigDecimal(result[k].now))
@@ -93,7 +94,6 @@ function getTableHtml(result){
             }
             // 当天卖出过
             if(buyOrSells[l].type == "2") {
-                maxBuyOrSellBonds = maxBuyOrSellBonds + buyOrSells[l].bonds;
                 todaySellIncom = todaySellIncom.add(new BigDecimal(buyOrSells[l].income+""));
                 console.log("卖出收益："+todaySellIncom);
             }
