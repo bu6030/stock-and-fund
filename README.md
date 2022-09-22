@@ -58,6 +58,9 @@
 ![image](https://user-images.githubusercontent.com/11482988/191644906-f475dd4c-2a19-4bfb-a597-2d0805f07a18.png)
 <center>股票页面Layui风格</center>  
 
+![image](https://user-images.githubusercontent.com/11482988/191645032-f6877706-45c7-4dba-8dd2-95a76e9c6d1b.png)
+<center>买入/卖出股票页面</center>  
+
 ![image](https://user-images.githubusercontent.com/11482988/189321022-9f6b4889-4730-4b29-aed0-a63692496693.png)  
 <center>添加/修改股票页面</center>  
 
