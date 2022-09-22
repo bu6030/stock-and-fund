@@ -134,6 +134,8 @@ function getTableHtml(result){
             + "</td><td " + totalIncomeStyle + ">" + result[k].income
             + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"修改\" onclick=\"updateStock('" + result[k].code + "','" + result[k].costPrise + "','" + result[k].bonds + "','" + result[k].app + "')\">"
             + "<span class=\"am-icon-pencil-square-o\"></span></button>"
+            + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"买卖\" onclick=\"buyOrSell('" + result[k].code + "')\">"
+            + "<span class=\"am-icon-shopping-cart\"></span></button>"
             + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"删除\" onclick=\"deleteStock('" + result[k].code + "')\">"
             + "<span class=\"am-icon-remove\"></span></button>"
             +"</td></tr>";
@@ -257,4 +259,54 @@ function submitStockAndFund(){
             console.log(textStatus);
         }
     });
+}
+
+function buyOrSell(code) {
+    $("#code").val(code);
+    $("#buyOrSellModal").modal();
+}
+
+
+function submitBuyOrSell(){
+    var code =$("#code").val();
+    var cost =$("#cost").val();
+    var price =$("#price").val();
+    var handleBonds =$("#handleBonds").val();
+    var buyOrSell = $("#buyOrSell").val();
+    var req = {
+        "date": formatDate(new Date()),
+        "code": code,
+        "price": price,
+        "cost": cost,
+        "bonds": handleBonds,
+        "type": buyOrSell
+    }
+    var url = "/buyOrSellStock";
+    $.ajax({
+        url: url,
+        type:"post",
+        data : JSON.stringify(req),
+        dataType:'json',
+        contentType: 'application/json',
+        success: function (data){
+            if(data.code!="00000000"){
+                alert("买卖失败！");
+            }
+            location.reload();
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+}
+
+function formatDate (date) {
+    var y = date.getFullYear();
+    var m = date.getMonth() + 1;
+    m = m < 10 ? ('0' + m) : m;
+    var d = date.getDate();
+    d = d < 10 ? ('0' + d) : d;
+    return y + '-' + m + '-' + d;
 }
