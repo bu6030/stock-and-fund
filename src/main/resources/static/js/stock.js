@@ -310,3 +310,12 @@ function formatDate (date) {
     d = d < 10 ? ('0' + d) : d;
     return y + '-' + m + '-' + d;
 }
+
+function buyOrSellChanged() {
+    var buyOrSell =$("#buyOrSell").val();
+    if(buyOrSell == "1"){
+        $("#cost").val(5);
+    } else {
+        $("#cost").val(0);
+    }
+}

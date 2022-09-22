@@ -81,7 +81,7 @@
                         <div class="am-form-group am-cf">
                             <div class="zuo">买入/卖出：</div>
                             <div class="you">
-                                <select data-am-selected="{btnSize: 'sm'}" id="buyOrSell">
+                                <select data-am-selected="{btnSize: 'sm'}" id="buyOrSell" onchange="buyOrSellChanged()">
                                     <option value="1">买入</option>
                                     <option value="2">卖出</option>
                                 </select>
@@ -90,7 +90,7 @@
                         <div class="am-form-group am-cf">
                             <div class="zuo">操作股数：</div>
                             <div class="you">
-                                <input type="number" class="am-input-sm" id="handleBonds" placeholder="请输入操作股数，买入/卖出股数">
+                                <input type="number" class="am-input-sm" id="handleBonds" value="100" placeholder="请输入操作股数，买入/卖出股数">
                             </div>
                         </div>
                         <div class="am-form-group am-cf">
@@ -102,7 +102,7 @@
                         <div class="am-form-group am-cf">
                             <div class="zuo">手续费：</div>
                             <div class="you">
-                                <input type="number" class="am-input-sm" id="cost" placeholder="请输入手续费">
+                                <input type="number" class="am-input-sm" id="cost" value="5" placeholder="请输入手续费">
                             </div>
                         </div>
                     </form>
@@ -543,6 +543,15 @@
         var d = date.getDate();
         d = d < 10 ? ('0' + d) : d;
         return y + '-' + m + '-' + d;
+    }
+
+    function buyOrSellChanged() {
+        var buyOrSell =$("#buyOrSell").val();
+        if(buyOrSell == "1"){
+            $("#cost").val(5);
+        } else {
+            $("#cost").val(0);
+        }
     }
 </script>
 </body>
