@@ -52,10 +52,10 @@
 39. Bootstrap版本增加股票买卖 Xuesong.Bu 2022/9/22 21:39
 40. 增加买卖股票默认值，购买默认成本5元，卖出默认手续费0元（东方财富第二天才结算，咱们第二天手动更新成本即可） Xuesong.Bu 2022/9/22 22:03
 # UI页面
-![image](https://user-images.githubusercontent.com/11482988/187102488-be39a81a-bc0a-46a8-a314-af22bd5c6cdf.png)  
+![image](https://user-images.githubusercontent.com/11482988/191644817-b8fd3dcf-e8aa-4582-84b0-afb2927d156d.png) 
 <center>股票页面Bootstrap风格</center>  
 
-![image](https://user-images.githubusercontent.com/11482988/187102524-749f81ed-582f-4ff2-b677-5faf4e66a238.png)  
+![image](https://user-images.githubusercontent.com/11482988/191644906-f475dd4c-2a19-4bfb-a597-2d0805f07a18.png)
 <center>股票页面Layui风格</center>  
 
 ![image](https://user-images.githubusercontent.com/11482988/189321022-9f6b4889-4730-4b29-aed0-a63692496693.png)  
