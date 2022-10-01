@@ -168,9 +168,9 @@ function getMonthStartDate() {
     date.setDate(1); // 将当前时间的日期设置成第一天
     var year= date.getFullYear() ; // 得到当前年份
     var month = date.getMonth()  + 1; // 得到当前月份（0-11月份，+1是当前月份）
-    month = month > 10 ? month :'0' + month; // 补零
+    month = month >= 10 ? month :'0' + month; // 补零
     var day = date.getDate(); // 得到当前天数，实际是本月第一天，因为前面setDate(1) 设置过了
-    day = day > 10 ? day :'0' + day; // 补零
+    day = day >= 10 ? day :'0' + day; // 补零
     return year + '-' + month + '-' + day; // 这里传入的是字符串
 }
 
