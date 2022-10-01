@@ -178,6 +178,7 @@ function getMonthEndDate(){
     var date  = new Date();
     var year = date.getFullYear();
     var month = date.getMonth() +1;
+    month = month >= 10 ? month :'0' + month; // 补零
     // 这里传入的是整数时间，返回的是下个月的第一天，因为月份是0-11
     var nextMonthFirthDay = new Date(year,month,1); // 下个月的第一天
     var oneDay = 1000*60 * 60 * 24; // 一天的时间毫秒数
