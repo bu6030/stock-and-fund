@@ -3,11 +3,15 @@ package com.buxuesong.account.service;
 import com.buxuesong.account.model.BuyOrSellStockRequest;
 import com.buxuesong.account.model.FundBean;
 import com.buxuesong.account.model.StockBean;
+import com.buxuesong.account.model.TradingDateResponse;
 import com.buxuesong.account.persist.dao.DepositMapper;
 import com.buxuesong.account.persist.entity.Deposit;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -16,6 +20,11 @@ import java.util.List;
 @Slf4j
 @Service
 public class DepositServiceImpl implements DepositService {
+
+    private static final String GET_TRADE_DATE_URL = "http://www.szse.cn/api/report/exchange/onepersistenthour/monthList";
+
+    @Autowired
+    private RestTemplate restTemplate;
     @Autowired
     private DepositMapper depositMapper;
     @Autowired
@@ -31,6 +40,11 @@ public class DepositServiceImpl implements DepositService {
     @Override
     public void deposit() {
         LocalDate date = LocalDate.now();
+        if (!isTradingDate(date.toString())) {
+            log.info("非交易日期，不统计");
+            return;
+        }
+
         Deposit deposit = depositMapper.findDepositByDate(date.toString());
         if (deposit != null) {
             log.info("已经存在当日盈利汇总： {}", deposit);
@@ -156,5 +170,31 @@ public class DepositServiceImpl implements DepositService {
         log.info("股票总市值: {}", stockTotalMarketValue);
         return stockTotalMarketValue;
 
+    }
+
+    private boolean isTradingDate(String date) {
+        List<TradingDateResponse.TradingDate> tradingDates = getTradingDate().getData();
+        TradingDateResponse.TradingDate tradingDate = tradingDates.stream()
+            .filter(s -> date.equals(s.getJyrq()))
+            .findFirst().get();
+        log.info("当天交易状态: {}", tradingDate);
+        if ("1".equals(tradingDate.getJybz())) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public TradingDateResponse getTradingDate() {
+        log.info("获取交易日期，URL：{}", GET_TRADE_DATE_URL);
+        ResponseEntity<TradingDateResponse> response = null;
+        try {
+            response = restTemplate.exchange(
+                GET_TRADE_DATE_URL, HttpMethod.GET, null, TradingDateResponse.class);
+        } catch (Exception e) {
+            log.info("获取天天基金接口异常: {]", e);
+            return null;
+        }
+        return response.getBody();
     }
 }
