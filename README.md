@@ -54,6 +54,7 @@
 40. 增加买卖股票默认值，购买默认成本5元，卖出默认手续费0元（东方财富第二天才结算，咱们第二天手动更新成本即可） Xuesong.Bu 2022/9/22 22:03
 41. 买卖后计算成本保留三位小数 Xuesong.Bu 2022/9/23 14:16
 42. 修改十月份获取当月第一天错误 bu6030 2022/10/1 20:32
+43. 修改定时刷新，bootstrap页面增加过滤隐藏展示股票功能 Xuesong.Bu 2022/10/28 16:18
 # UI页面
 ![image](https://user-images.githubusercontent.com/11482988/191644817-b8fd3dcf-e8aa-4582-84b0-afb2927d156d.png) 
 <center>股票页面Bootstrap风格</center>  
