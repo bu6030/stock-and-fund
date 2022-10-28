@@ -18,6 +18,7 @@ public class StockAndFundBean {
     private String app;// 支付宝/东方财富/东方证券
     private String incomePercent;// 收益率
     private String income;// 收益
+    private boolean hide;
 
     // 基金部分
     private String jzrq;// 净值日期

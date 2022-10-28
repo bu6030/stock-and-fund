@@ -22,9 +22,11 @@ function getData() {
             console.log(textStatus);
         }
     });
+    // 30s刷新
+    setInterval('autoRefresh()', 30000);
 }
 
-function initData(){
+function initData() {
     var app = $("#app");
     app.find('option').remove();
     app.append("<option value=''>请选择</option>");
@@ -52,8 +54,6 @@ function initData(){
     });
 
     lay('#version').html('-v'+ laydate.v);
-    // 30s刷新
-    setInterval('autoRefresh()', 30000)
 }
 
 function getTableHtml(result){
@@ -68,12 +68,18 @@ function getTableHtml(result){
         if (filteredApp != "ALL" && result[k].app != filteredApp) {
             continue;
         }
+        if ($("#enableFilterHide").is(":checked") && result[k].hide == true) {
+            continue;
+        }
         marketValue = (new BigDecimal(result[k].now)).multiply(new BigDecimal(result[k].bonds));
         totalmarketValue = totalmarketValue.add(marketValue);
     }
 
     for(var k in result) {
         if (filteredApp != "ALL" && result[k].app != filteredApp) {
+            continue;
+        }
+        if ($("#enableFilterHide").is(":checked") && result[k].hide == true) {
             continue;
         }
         var buyOrSells = result[k].buyOrSellStockRequestList;
@@ -132,7 +138,7 @@ function getTableHtml(result){
             + "</td><td>" + marketValuePercent + "%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent +"%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].income
-            + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"修改\" onclick=\"updateStock('" + result[k].code + "','" + result[k].costPrise + "','" + result[k].bonds + "','" + result[k].app + "')\">"
+            + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"修改\" onclick=\"updateStock('" + result[k].code + "','" + result[k].costPrise + "','" + result[k].bonds + "','" + result[k].app + "','" + result[k].hide + "')\">"
             + "<span class=\"am-icon-pencil-square-o\"></span></button>"
             + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"买卖\" onclick=\"buyOrSell('" + result[k].code + "')\">"
             + "<span class=\"am-icon-shopping-cart\"></span></button>"
@@ -204,13 +210,13 @@ function deleteStock(code){
     });
 }
 
-function updateStock(code, costPrise, bonds, app){
+function updateStock(code, costPrise, bonds, app, hide){
     $("#code").val(code);
     $("#costPrise").val(costPrise);
     $("#bonds").val(bonds);
     $("#app").val(app);
+    $("#hide").val(hide);
     $("#myModal").modal();
-
     // var iHeight = 600;
     // var iWidth = 800;
     // //获得窗口的垂直位置
@@ -226,11 +232,13 @@ function submitStockAndFund(){
     var costPrise =$("#costPrise").val();
     var bonds =$("#bonds").val();
     var app = $("#app").val();
+        var hide = $("#hide").val();
     var req = {
         "code": code,
         "costPrise": costPrise,
         "bonds": bonds,
-        "app": app
+        "app": app,
+        "hide": hide
     }
     var url = null;
     if(type=="fund"){

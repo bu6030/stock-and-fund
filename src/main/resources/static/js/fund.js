@@ -22,6 +22,8 @@ function getData() {
             console.log(textStatus);
         }
     });
+    // 30s刷新
+    setInterval('autoRefresh()', 30000);
 }
 
 function initData() {
@@ -52,8 +54,6 @@ function initData() {
     });
 
     lay('#version').html('-v'+ laydate.v);
-    // 30s刷新
-    setInterval('autoRefresh()', 30000)
 }
 
 

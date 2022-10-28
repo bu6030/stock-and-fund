@@ -38,9 +38,15 @@
                         <input id="enableAutoRefresh" type="checkbox" checked="checked" name="enableAutoRefresh"> 定时刷新
                     </div>
                 </dl>
+                <dl>
+                    <div class="checkbox">
+                        <input id="enableFilterHide" type="checkbox" checked="checked" name="enableAutoRefresh"> 不展示隐藏股票
+                    </div>
+                </dl>
             </div>
             <div class="am-btn-toolbars am-btn-toolbar am-kg am-cf"></div>
             <form class="am-form am-g">
+                <input type="hidden" id="hideHidden" th:value="${hide}"/>
                 <input type="hidden" th:value="${userId}" id="userId"/>
                 <input type="hidden" th:value="${personName}" id="personName"/>
                 <input type="hidden" id="accountId"/>

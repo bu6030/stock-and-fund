@@ -8,6 +8,8 @@ public class SaveFundRequest {
     private String bonds;
     private String app;
 
+    private boolean hide;
+
     public String getCode() {
         return code;
     }
@@ -40,6 +42,14 @@ public class SaveFundRequest {
         this.app = app;
     }
 
+    public boolean isHide() {
+        return hide;
+    }
+
+    public void setHide(boolean hide) {
+        this.hide = hide;
+    }
+
     @Override
     public String toString() {
         return "SaveFundRequest{" +
@@ -47,6 +57,7 @@ public class SaveFundRequest {
             ", costPrise='" + costPrise + '\'' +
             ", bonds='" + bonds + '\'' +
             ", app='" + app + '\'' +
+            ", hide='" + hide + '\'' +
             '}';
     }
 }

@@ -29,7 +29,7 @@
     <div class="modal fade" id="myModal">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-
+                <input type="hidden" id="hideHidden" th:value="${hide}"/>
                 <!-- 模态框头部 -->
                 <div class="modal-header">
                     <h4 class="modal-title">添加/修改股票</h4>
@@ -62,6 +62,15 @@
                             <div class="zuo">APP：</div>
                             <div class="you">
                                 <select data-am-selected="{btnSize: 'sm'}" id="app">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">是否隐藏：</div>
+                            <div class="you">
+                                <select id="hide" data-am-selected="{btnSize: 'sm'}">
+                                    <option th:value="false" th:selected="${hideHidden == false}">否</option>
+                                    <option th:value="true" th:selected="${hideHidden == true}">是</option>
                                 </select>
                             </div>
                         </div>
@@ -149,6 +158,11 @@
                 <dl>
                     <div class="checkbox">
                         <input id="enableAutoRefresh" type="checkbox" checked="checked" name="enableAutoRefresh"> 定时刷新
+                    </div>
+                </dl>
+                <dl>
+                    <div class="checkbox">
+                        <input id="enableFilterHide" type="checkbox" checked="checked" name="enableAutoRefresh"> 不展示隐藏股票
                     </div>
                 </dl>
             </div>

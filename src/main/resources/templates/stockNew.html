@@ -553,6 +553,12 @@
             $("#cost").val(0);
         }
     }
+
+    function initData() {
+        stockTable.reload({
+            url: '/stock'
+        });
+    }
 </script>
 </body>
 </html>

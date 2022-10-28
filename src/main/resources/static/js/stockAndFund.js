@@ -23,7 +23,7 @@ function getData() {
         contentType: 'application/x-www-form-urlencoded',
         success: function (data){
             appList = data.value;
-            initStock();
+            initData();
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
             console.log(XMLHttpRequest.status);
@@ -33,10 +33,10 @@ function getData() {
     });
     lay('#version').html('-v'+ laydate.v);
     // 30s刷新
-    setInterval('autoRefresh()', 30000)
+    setInterval('autoRefresh()', 30000);
 }
 
-function initStock(){
+function initData(){
     $.ajax({
         url:"/stock",
         type:"get",
@@ -112,6 +112,9 @@ function getStockTableHtml(result, totalMarketValueResult){
     var marketValuePercent = new BigDecimal("0");
     for(var k in result) {
         if (filteredApp != "ALL" && result[k].app != filteredApp) {
+            continue;
+        }
+        if ($("#enableFilterHide").is(":checked") && result[k].hide == true) {
             continue;
         }
         var buyOrSells = result[k].buyOrSellStockRequestList;

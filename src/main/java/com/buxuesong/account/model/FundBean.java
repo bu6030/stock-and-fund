@@ -24,6 +24,8 @@ public class FundBean {
     private String incomePercent;// 收益率
     private String income;// 收益
 
+    private boolean hide;// 是否隐藏
+
     public FundBean() {
     }
 
@@ -69,7 +71,7 @@ public class FundBean {
         String[] fundJingZhiArr = lines[1].split(",");
         BigDecimal gsz = null;
         BigDecimal dwjz = null;
-        if(!lines[0].contains(",")){
+        if (!lines[0].contains(",")) {
             gsz = new BigDecimal(fundJingZhiArr[1]);
             dwjz = new BigDecimal(fundJingZhiArr[1]);
         } else {
@@ -186,6 +188,14 @@ public class FundBean {
         this.app = app;
     }
 
+    public boolean isHide() {
+        return hide;
+    }
+
+    public void setHide(boolean hide) {
+        this.hide = hide;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -216,6 +226,7 @@ public class FundBean {
             ", incomePercent='" + incomePercent + '\'' +
             ", income='" + income + '\'' +
             ", app='" + app + '\'' +
+            ", hide='" + hide + '\'' +
             '}';
     }
 }

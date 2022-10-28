@@ -145,7 +145,7 @@ public class StockServiceImpl implements StockService {
         List<String> list = new ArrayList<>();
         for (SaveStockRequest stockRequest : stock) {
             String stockArr = stockRequest.getCode() + "," + stockRequest.getCostPrise() + "," + stockRequest.getBonds() + ","
-                + stockRequest.getApp();
+                + stockRequest.getApp() + "," + stockRequest.getHide();
             list.add(stockArr);
         }
         return list;

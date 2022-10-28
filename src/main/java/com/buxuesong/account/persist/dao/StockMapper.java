@@ -10,17 +10,17 @@ import java.util.List;
 @Repository
 public interface StockMapper {
 
-    @Update("INSERT INTO STOCK (CODE, COST_PRICE, BONDS, APP) values (#{saveStockRequest.code},#{saveStockRequest.costPrise},#{saveStockRequest.bonds},#{saveStockRequest.app}) ")
+    @Update("INSERT INTO STOCK (CODE, COST_PRICE, BONDS, APP, HIDE) values (#{saveStockRequest.code},#{saveStockRequest.costPrise},#{saveStockRequest.bonds},#{saveStockRequest.app},#{saveStockRequest.hide}) ")
     int save(@Param("saveStockRequest") SaveStockRequest saveStockRequest);
 
     @Select({
-        "<script> select CODE, COST_PRICE costPrise, BONDS, APP from STOCK WHERE 1=1 <if test=\"app!=null and app!=''\"> and APP = #{app} </if> order by APP ASC, substr(code,3,6) ASC </script>" })
+        "<script> select CODE, COST_PRICE costPrise, BONDS, APP, HIDE from STOCK WHERE 1=1 <if test=\"app!=null and app!=''\"> and APP = #{app} </if> order by APP ASC, substr(code,3,6) ASC </script>" })
     List<SaveStockRequest> findAllStock(@Param("app") String app);
 
-    @Select("select CODE, COST_PRICE costPrise, BONDS, APP from STOCK where code = #{code}")
+    @Select("select CODE, COST_PRICE costPrise, BONDS, APP, HIDE from STOCK where code = #{code}")
     SaveStockRequest findStockByCode(String code);
 
-    @Update("update STOCK set COST_PRICE = #{saveStockRequest.costPrise}, BONDS = #{saveStockRequest.bonds}, APP = #{saveStockRequest.app} where CODE = #{saveStockRequest.code} ")
+    @Update("update STOCK set COST_PRICE = #{saveStockRequest.costPrise}, BONDS = #{saveStockRequest.bonds}, APP = #{saveStockRequest.app}, HIDE = #{saveStockRequest.hide} where CODE = #{saveStockRequest.code} ")
     int updateStock(@Param("saveStockRequest") SaveStockRequest saveStockRequest);
 
     @Delete("delete from STOCK where CODE = #{saveStockRequest.code} ")

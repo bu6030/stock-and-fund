@@ -30,6 +30,8 @@ public class StockBean {
     private String income;// 收益
     private List<BuyOrSellStockRequest> buyOrSellStockRequestList;
 
+    private boolean hide;// 是否隐藏
+
     public StockBean() {
     }
 
@@ -63,6 +65,7 @@ public class StockBean {
                 this.costPrise = codeStr[1];
                 this.bonds = codeStr[2];
                 this.app = codeStr[3];
+                this.hide = Boolean.parseBoolean(codeStr[4]);
             } else {
                 this.code = codeStr[0];
                 this.costPrise = codeStr[1];
@@ -182,6 +185,14 @@ public class StockBean {
         this.income = income;
     }
 
+    public boolean isHide() {
+        return hide;
+    }
+
+    public void setHide(boolean hide) {
+        this.hide = hide;
+    }
+
     public List<BuyOrSellStockRequest> getBuyOrSellStockRequestList() {
         return buyOrSellStockRequestList;
     }
@@ -221,6 +232,7 @@ public class StockBean {
             ", app='" + app + '\'' +
             ", incomePercent='" + incomePercent + '\'' +
             ", income='" + income + '\'' +
+            ", hide='" + hide + '\'' +
             ", buyOrSellStockRequestList=" + buyOrSellStockRequestList +
             '}';
     }
