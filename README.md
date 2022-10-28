@@ -57,43 +57,43 @@
 43. 修改定时刷新，bootstrap页面增加过滤隐藏展示股票功能 Xuesong.Bu 2022/10/28 16:18
 # UI页面
 ![image](https://user-images.githubusercontent.com/11482988/191644817-b8fd3dcf-e8aa-4582-84b0-afb2927d156d.png) 
-<center>股票页面Bootstrap风格</center>  
+股票页面Bootstrap风格  
 
 ![image](https://user-images.githubusercontent.com/11482988/191644906-f475dd4c-2a19-4bfb-a597-2d0805f07a18.png)
-<center>股票页面Layui风格</center>  
+股票页面Layui风格  
 
 ![image](https://user-images.githubusercontent.com/11482988/191645032-f6877706-45c7-4dba-8dd2-95a76e9c6d1b.png)
-<center>买入/卖出股票页面</center>  
+买入/卖出股票页面  
 
 ![image](https://user-images.githubusercontent.com/11482988/189321022-9f6b4889-4730-4b29-aed0-a63692496693.png)  
-<center>添加/修改股票页面</center>  
+添加/修改股票页面  
 
 ![image](https://user-images.githubusercontent.com/11482988/187102557-eceb7eb4-bb02-46fc-88e7-e826b36dab94.png)  
-<center>基金页面Bootstrap风格</center>  
+基金页面Bootstrap风格  
 
 ![image](https://user-images.githubusercontent.com/11482988/187102572-6cca4390-d854-4bab-a4b0-a8dc3e6113fb.png)  
-<center>基金页面Layui风格</center>  
+基金页面Layui风格  
 
 ![image](https://user-images.githubusercontent.com/11482988/187102586-7532e589-0548-4158-aa55-3ff5e91f678e.png)  
-<center>股票基金汇总Bootstrap风格</center>  
+股票基金汇总Bootstrap风格  
 
 ![image](https://user-images.githubusercontent.com/11482988/187102599-fc19736d-808e-4ac6-8f3d-044c7b846e27.png)
-<center>股票基金汇总Layui风格</center>  
+股票基金汇总Layui风格  
 
 ![image](https://user-images.githubusercontent.com/11482988/187102638-8cbf30d5-a500-4c76-8bce-6313a7b916df.png)  
-<center>收益汇总Bootstrap风格</center>  
+收益汇总Bootstrap风格  
 
 ![image](https://user-images.githubusercontent.com/11482988/187102651-fa629e8c-0524-4c6a-aa56-9091f9f0ed50.png)  
-<center>收益汇总Layui风格</center>  
+收益汇总Layui风格  
 
 ![image](https://user-images.githubusercontent.com/11482988/187102663-91f5d6bc-15fa-403f-a674-3561b531aaa8.png)  
-<center>字典数据页面Bootstrap风格</center>  
+字典数据页面Bootstrap风格  
 
 ![image](https://user-images.githubusercontent.com/11482988/187102675-6c9b9fce-5f26-4388-8ad8-1cba51ec98a8.png)  
-<center>字典数据页面Layui风格</center>  
+字典数据页面Layui风格  
 
 ![image](https://user-images.githubusercontent.com/11482988/189321234-e7416c96-5cb4-4b1a-af9d-a593dc0c0b6d.png)  
-<center>添加/修改字典数据</center>  
+添加/修改字典数据  
 
 # 部署
 ## 本机Docker环境一键部署
