@@ -238,3 +238,7 @@ function filterApp(app) {
     filteredApp = app;
     getData();
 }
+
+function enableFilterHideChanged() {
+    initData();
+}

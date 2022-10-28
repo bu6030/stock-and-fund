@@ -327,3 +327,7 @@ function buyOrSellChanged() {
         $("#cost").val(0);
     }
 }
+
+function enableFilterHideChanged() {
+    initData();
+}
