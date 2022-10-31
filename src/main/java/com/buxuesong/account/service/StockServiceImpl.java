@@ -160,7 +160,7 @@ public class StockServiceImpl implements StockService {
         SaveStockRequest stockRequest = stockMapper.findStockByCode(buyOrSellStockRequest.getCode());
         List<String> list = new ArrayList<>();
         list.add(stockRequest.getCode() + "," + stockRequest.getCostPrise() + "," + stockRequest.getBonds() + ","
-            + stockRequest.getApp());
+            + stockRequest.getApp() + "," + stockRequest.getHide());
         StockBean stock = getStockDetails(list).get(0);
         // 开盘价格
         BigDecimal openPrice = (new BigDecimal(stock.getNow())).subtract(new BigDecimal(stock.getChange()));
