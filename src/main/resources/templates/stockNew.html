@@ -318,50 +318,7 @@
             } else if (layEvent === 'buyOrSell') {
                 buyOrSell(data.code);
             }
-            // } else if(layEvent === 'more'){
-            //     //下拉菜单
-            //     dropdown.render({
-            //         elem: this //触发事件的 DOM 对象
-            //         ,show: true //外部事件触发即显示
-            //         ,data: [{
-            //             title: '编辑'
-            //             ,id: 'edit'
-            //         },{
-            //             title: '删除'
-            //             ,id: 'del'
-            //         }]
-            //         ,click: function(menudata){
-            //             if(menudata.id === 'del'){
-            //                 layer.confirm('真的删除'+ data.fundName +'么?', function(index){
-            //                     layer.close(index);
-            //                     //向服务端发送删除指令
-            //                     deleteFund(data.fundCode, obj);
-            //                     // obj.del(); //删除对应行（tr）的DOM结构
-            //                     location.reload();
-            //                 });
-            //             } else if(menudata.id === 'edit'){
-            //                 layer.msg('编辑操作，当前行 CODE:'+ data.fundCode);
-            //                 updateFund(data.fundCode);
-            //             }
-            //         }
-            //         ,align: 'right' //右对齐弹出
-            //         ,style: 'box-shadow: 1px 1px 10px rgb(0 0 0 / 12%);' //设置额外样式
-            //     })
-            // }
         });
-        // // 分页
-        // laypage.render({
-        //     elem: 'pageDemo' //分页容器的id
-        //     ,count: 1000 //数据总数
-        //     ,limit: 10 //每页显示的数据条数
-        //     ,skin: '#1E9FFF' //自定义选中色值
-        //     //,layout: ['prev', 'page', 'next', 'count', 'limit', 'refresh', 'skip'] //自定义排版
-        //     ,jump: function(obj, first){
-        //         if(!first){
-        //             layer.msg('第'+ obj.curr +'页', {offset: 'b'});
-        //         }
-        //     }
-        // });
         active = {
             add: function () {
                 layer.open({
@@ -402,15 +359,6 @@
         $("#bonds").val('100');
         $("#app").val('');
         active.add();
-        // var iHeight = 600;
-        // var iWidth = 800;
-        // //获得窗口的垂直位置
-        // var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
-        // //获得窗口的水平位置
-        // var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
-        // var url = '/addStockAndFund.html?type='+type;
-        //
-        // window.open (url, 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
     }
 
     function buyOrSell(code) {
@@ -424,14 +372,6 @@
         $("#bonds").val(bonds);
         $("#app").val(app);
         active.add();
-
-        // var iHeight = 600;
-        // var iWidth = 800;
-        // //获得窗口的垂直位置
-        // var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
-        // //获得窗口的水平位置
-        // var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
-        // window.open ('/updateStockAndFund.html?code='+code+'&type=stock', 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
     }
 
     function deleteStock(code) {

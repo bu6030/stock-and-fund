@@ -14,6 +14,13 @@ function getData() {
         contentType: 'application/x-www-form-urlencoded',
         success: function (data){
             appList = data.value;
+            var app = $("#app");
+            app.find('option').remove();
+            app.append("<option value=''>请选择</option>");
+            for(var k in appList) {
+                var opt = $("<option></option>").text(appList[k].name).val(appList[k].code);
+                app.append(opt);
+            }
             initData();
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -27,13 +34,6 @@ function getData() {
 }
 
 function initData() {
-    var app = $("#app");
-    app.find('option').remove();
-    app.append("<option value=''>请选择</option>");
-    for(var k in appList) {
-        var opt = $("<option></option>").text(appList[k].name).val(appList[k].code);
-        app.append(opt);
-    }
     $.ajax({
         url:"/fund",
         type:"get",

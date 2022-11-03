@@ -65,49 +65,6 @@ public class UrlController {
     }
 
     /**
-     * 添加股票基金页面初始化
-     *
-     * @return
-     */
-    @GetMapping(value = "/addStockAndFund.html")
-    public ModelAndView addStockAndFundInit(@RequestParam String type, HttpServletRequest request, HttpServletResponse response) {
-        ModelAndView m = new ModelAndView();
-        m.setViewName("addStockAndFund");
-        m.getModel().put("type", type);
-        return m;
-    }
-
-    /**
-     * 修改股票基金页面初始化
-     *
-     * @return
-     */
-    @GetMapping(value = "/updateStockAndFund.html")
-    public ModelAndView updateStockAndFundInit(@RequestParam String type, @RequestParam String code, HttpServletRequest request,
-        HttpServletResponse response) {
-        log.info("修改股票基金初始化 type : {}, code : {}", type, code);
-        ModelAndView m = new ModelAndView();
-        m.setViewName("updateStockAndFund");
-        m.getModel().put("type", type);
-        if (type.equals("fund")) {
-            SaveFundRequest saveFundRequest = fundService.findFundByCode(code);
-            log.info("修改股票基金初始化 saveFundRequest : {}", saveFundRequest);
-            m.getModel().put("code", saveFundRequest.getCode());
-            m.getModel().put("costPrise", saveFundRequest.getCostPrise());
-            m.getModel().put("bonds", saveFundRequest.getBonds());
-            m.getModel().put("app", saveFundRequest.getApp());
-        } else {
-            SaveStockRequest saveStockRequest = stockService.findStockByCode(code);
-            log.info("修改股票基金初始化 saveStockRequest : {}", saveStockRequest);
-            m.getModel().put("code", saveStockRequest.getCode());
-            m.getModel().put("costPrise", saveStockRequest.getCostPrise());
-            m.getModel().put("bonds", saveStockRequest.getBonds());
-            m.getModel().put("app", saveStockRequest.getApp());
-        }
-        return m;
-    }
-
-    /**
      * 收益汇总页面初始化
      *
      * @return
