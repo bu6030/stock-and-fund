@@ -100,7 +100,7 @@ function getTableHtml(result){
             + "</td><td>" + marketValuePercent + "%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent + "%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].income
-            + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"修改\" onclick=\"updateFund('" + result[k].fundCode + "','" + result[k].costPrise + "','" + result[k].bonds + "','" + result[k].app + "')\">"
+            + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"修改\" onclick=\"updateFund('" + result[k].fundCode + "','" + result[k].costPrise + "','" + result[k].bonds + "','" + result[k].app + "','" + result[k].fundName + "')\">"
             + "<span class=\"am-icon-pencil-square-o\"></span></button>"
             + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"删除\" onclick=\"deleteFund('" + result[k].fundCode + "')\">"
             + "<span class=\"am-icon-remove\"></span></button>"
@@ -169,7 +169,7 @@ function deleteFund(code){
     });
 }
 
-function updateFund(code, costPrise, bonds, app){
+function updateFund(code, costPrise, bonds, app, name){
     // var iHeight = 600;
     // var iWidth = 800;
     // //获得窗口的垂直位置
@@ -177,6 +177,7 @@ function updateFund(code, costPrise, bonds, app){
     // //获得窗口的水平位置
     // var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
 
+    $("#name").val(name);
     $("#code").val(code);
     $("#costPrise").val(costPrise);
     $("#bonds").val(bonds);

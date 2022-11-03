@@ -31,6 +31,12 @@
                     <form class="am-form" id="saveOutComeForm">
                         <input type="hidden" id="type" th:value="stock"/>
                         <div class="am-form-group am-cf">
+                            <div class="zuo">股票名称：</div>
+                            <div class="you">
+                                <input type="text" disabled="disabled" class="am-input-sm" id="name" >
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
                             <div class="zuo">股票编码：</div>
                             <div class="you">
                                 <input type="text" class="am-input-sm" id="code" placeholder="股票请输入编码sh(上证)/sz(深证)开头+6位股票编码">
@@ -79,6 +85,12 @@
                 <div class="modal-body">
                     <form class="am-form" id="buyOrSellForm">
                         <div class="am-form-group am-cf">
+                            <div class="am-form-group am-cf">
+                                <div class="zuo">股票名称：</div>
+                                <div class="you">
+                                    <input type="text" disabled="disabled" class="am-input-sm" id="nameBuyOrSell" >
+                                </div>
+                            </div>
                             <div class="zuo">买入/卖出：</div>
                             <div class="you">
                                 <select data-am-selected="{btnSize: 'sm'}" id="buyOrSell" onchange="buyOrSellChanged()">
@@ -275,7 +287,7 @@
                     } else if(data.length > 1){
                         layer.msg('只能同时编辑一个');
                     } else {
-                        updateStock(checkStatus.data[0].code, checkStatus.data[0].costPrise, checkStatus.data[0].bonds, checkStatus.data[0].app);
+                        updateStock(checkStatus.data[0].code, checkStatus.data[0].costPrise, checkStatus.data[0].bonds, checkStatus.data[0].app, checkStatus.data[0].name);
                     }
                     break;
                 case 'delete':
@@ -306,7 +318,7 @@
             if(layEvent === 'edit') {
                 layer.msg('编辑操作');
 
-                updateStock(data.code, data.costPrise, data.bonds, data.app);
+                updateStock(data.code, data.costPrise, data.bonds, data.app, data.name);
             } else if (layEvent === 'delete') {
                 layer.confirm('真的删除'+ data.name +'么?', function(index){
                     layer.close(index);
@@ -316,7 +328,7 @@
                     location.reload();
                 });
             } else if (layEvent === 'buyOrSell') {
-                buyOrSell(data.code);
+                buyOrSell(data.code, data.name);
             }
         });
         active = {
@@ -361,16 +373,18 @@
         active.add();
     }
 
-    function buyOrSell(code) {
+    function buyOrSell(code, name) {
         $("#code").val(code);
+        $("#nameBuyOrSell").val(name);
         active.buyOrSell();
     }
 
-    function updateStock(code, costPrise, bonds, app) {
+    function updateStock(code, costPrise, bonds, app, name) {
         $("#code").val(code);
         $("#costPrise").val(costPrise);
         $("#bonds").val(bonds);
         $("#app").val(app);
+        $("#name").val(name);
         active.add();
     }
 

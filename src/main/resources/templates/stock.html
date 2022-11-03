@@ -41,6 +41,12 @@
                     <form class="am-form" id="saveOutComeForm">
                         <input type="hidden" id="type" th:value="stock"/>
                         <div class="am-form-group am-cf">
+                            <div class="zuo">股票名称：</div>
+                            <div class="you">
+                                <input type="text" disabled="disabled" class="am-input-sm" id="name" >
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
                             <div class="zuo">股票编码：</div>
                             <div class="you">
                                 <input type="text" class="am-input-sm" id="code" placeholder="股票请输入编码sh(上证)/sz(深证)开头+6位股票编码">
@@ -100,6 +106,12 @@
                 <!-- 模态框主体 -->
                 <div class="modal-body">
                     <form class="am-form" id="buyOrSellForm">
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">股票名称：</div>
+                            <div class="you">
+                                <input type="text" disabled="disabled" class="am-input-sm" id="nameBuyOrSell" >
+                            </div>
+                        </div>
                         <div class="am-form-group am-cf">
                             <div class="zuo">买入/卖出：</div>
                             <div class="you">

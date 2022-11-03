@@ -30,6 +30,12 @@
                     <form class="am-form" id="saveOutComeForm">
                         <input type="hidden" id="type" th:value="fund"/>
                         <div class="am-form-group am-cf">
+                            <div class="zuo">基金名称：</div>
+                            <div class="you">
+                                <input type="text" disabled="disabled" class="am-input-sm" id="name" >
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
                             <div class="zuo">基金编码：</div>
                             <div class="you">
                                 <input type="text" class="am-input-sm" id="code" placeholder="请输入6位基金编码">
@@ -190,7 +196,7 @@
                     } else if(data.length > 1){
                         layer.msg('只能同时编辑一个');
                     } else {
-                        updateFund(checkStatus.data[0].fundCode, checkStatus.data[0].costPrise, checkStatus.data[0].bonds, checkStatus.data[0].app);
+                        updateFund(checkStatus.data[0].fundCode, checkStatus.data[0].costPrise, checkStatus.data[0].bonds, checkStatus.data[0].app, checkStatus.data[0].fundName);
                     }
                     break;
                 case 'delete':
@@ -220,7 +226,7 @@
                 ,layEvent = obj.event; //获得 lay-event 对应的值
             if(layEvent === 'edit') {
                 layer.msg('编辑操作');
-                updateFund(data.fundCode, data.costPrise, data.bonds, data.app);
+                updateFund(data.fundCode, data.costPrise, data.bonds, data.app, data.fundName);
             } else if (layEvent === 'delete') {
                     layer.confirm('真的删除'+ data.fundName +'么?', function(index){
                         layer.close(index);
@@ -256,30 +262,15 @@
         $("#bonds").val('');
         $("#app").val('');
         active.add();
-        // var iHeight = 600;
-        // var iWidth = 800;
-        // //获得窗口的垂直位置
-        // var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
-        // //获得窗口的水平位置
-        // var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
-        // var url = '/addStockAndFund.html?type='+type;
-        //
-        // window.open (url, 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
     }
 
-    function updateFund(code, costPrise, bonds, app) {
+    function updateFund(code, costPrise, bonds, app, name) {
         $("#code").val(code);
         $("#costPrise").val(costPrise);
         $("#bonds").val(bonds);
         $("#app").val(app);
+        $("#name").val(name);
         active.add();
-        // var iHeight = 600;
-        // var iWidth = 800;
-        // //获得窗口的垂直位置
-        // var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
-        // //获得窗口的水平位置
-        // var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
-        // window.open ('/updateStockAndFund.html?code='+code+'&type=fund', 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
     }
 
     function deleteFund(code) {

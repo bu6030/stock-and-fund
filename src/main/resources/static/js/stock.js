@@ -138,9 +138,9 @@ function getTableHtml(result){
             + "</td><td>" + marketValuePercent + "%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent +"%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].income
-            + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"修改\" onclick=\"updateStock('" + result[k].code + "','" + result[k].costPrise + "','" + result[k].bonds + "','" + result[k].app + "','" + result[k].hide + "')\">"
+            + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"修改\" onclick=\"updateStock('" + result[k].code + "','" + result[k].costPrise + "','" + result[k].bonds + "','" + result[k].app + "','" + result[k].hide + "','" + result[k].name + "')\">"
             + "<span class=\"am-icon-pencil-square-o\"></span></button>"
-            + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"买卖\" onclick=\"buyOrSell('" + result[k].code + "')\">"
+            + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"买卖\" onclick=\"buyOrSell('" + result[k].code + "','" + result[k].name + "')\">"
             + "<span class=\"am-icon-shopping-cart\"></span></button>"
             + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"删除\" onclick=\"deleteStock('" + result[k].code + "')\">"
             + "<span class=\"am-icon-remove\"></span></button>"
@@ -172,15 +172,6 @@ function showDialog(type){
     $("#bonds").val('100');
     $("#app").val('');
     $("#myModal").modal();
-    // var iHeight = 600;
-    // var iWidth = 800;
-    // //获得窗口的垂直位置
-    // var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
-    // //获得窗口的水平位置
-    // var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
-    // var url = '/addStockAndFund.html?type='+type;
-    //
-    // window.open (url, 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
 }
 
 function deleteStock(code){
@@ -210,20 +201,14 @@ function deleteStock(code){
     });
 }
 
-function updateStock(code, costPrise, bonds, app, hide){
+function updateStock(code, costPrise, bonds, app, hide, name){
     $("#code").val(code);
     $("#costPrise").val(costPrise);
     $("#bonds").val(bonds);
     $("#app").val(app);
     $("#hide").val(hide);
+    $("#name").val(name);
     $("#myModal").modal();
-    // var iHeight = 600;
-    // var iWidth = 800;
-    // //获得窗口的垂直位置
-    // var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
-    // //获得窗口的水平位置
-    // var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
-    // window.open ('/updateStockAndFund.html?code='+code+'&type=stock', 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
 }
 
 function submitStockAndFund(){
@@ -269,8 +254,9 @@ function submitStockAndFund(){
     });
 }
 
-function buyOrSell(code) {
+function buyOrSell(code, name) {
     $("#code").val(code);
+    $("#nameBuyOrSell").val(name);
     $("#buyOrSellModal").modal();
 }
 
