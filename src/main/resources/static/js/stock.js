@@ -167,6 +167,7 @@ function filterApp(app) {
 }
 
 function showDialog(type){
+    $("#name").val('');
     $("#code").val('');
     $("#costPrise").val('');
     $("#bonds").val('100');
