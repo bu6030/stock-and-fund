@@ -152,7 +152,9 @@
                     marketValue = new BigDecimal(parseFloat((new BigDecimal(item.gsz)).multiply(new BigDecimal(item.bonds))).toFixed(2));
                     item.marketValue = marketValue + '';
                     item.dwjzNew = item.dwjz+ '(' + item.jzrq + ')';
-                    item.marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValue) + "";
+                    if (totalMarketValue.compareTo(new BigDecimal("0")) != 0) {
+                        item.marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValue) + "";
+                    }
                     item.dayInComeColor = item.dayIncome == 0 ? "" : (item.dayIncome >= 0?"#c12e2a":"#3e8f3e");
                     item.toltalIncomeColor = item.income == 0 ? "" : (item.income >= 0?"#c12e2a":"#3e8f3e");
                 }

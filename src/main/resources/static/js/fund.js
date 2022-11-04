@@ -82,7 +82,9 @@ function getTableHtml(result){
         marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].gsz)).multiply(new BigDecimal(result[k].bonds))).toFixed(2));
         totalDayIncome = totalDayIncome.add(dayIncome);
         // totalmarketValue = totalmarketValue.add(marketValue);
-        marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalmarketValue);
+        if (totalmarketValue.compareTo(new BigDecimal("0")) != 0) {
+            marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalmarketValue);
+        }
         totalIncome = totalIncome.add(new BigDecimal(result[k].income));
         var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");

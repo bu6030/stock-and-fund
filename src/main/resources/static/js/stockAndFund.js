@@ -152,7 +152,9 @@ function getStockTableHtml(result, totalMarketValueResult){
         dayIncome = dayIncome.add(todayBuyIncom).add(todaySellIncom);
         console.log(result[k].name+"计算当日买卖后："+ dayIncome);
         marketValue = (new BigDecimal(result[k].now)).multiply(new BigDecimal(result[k].bonds));
-        marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult);
+        if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
+            marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult);
+        }
         var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
 
@@ -195,7 +197,9 @@ function getFundTableHtml(result, totalMarketValueResult){
         }
         dayIncome = new BigDecimal(parseFloat((new BigDecimal(result[k].gszzl)).multiply((new BigDecimal(result[k].dwjz))).multiply(new BigDecimal(result[k].bonds)).divide(new BigDecimal("100"))).toFixed(2));
         marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].gsz)).multiply(new BigDecimal(result[k].bonds))).toFixed(2));
-        marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult);
+        if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
+            marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult);
+        }
         var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
 
