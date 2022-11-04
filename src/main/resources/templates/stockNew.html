@@ -236,7 +236,7 @@
                     }
                     console.log(item.name+"计算当日买卖前："+ dayIncome);
                     console.log(item.name+"计算："+ dayIncome.add(todayBuyIncom).add(todaySellIncom));
-                    item.dayIncome = dayIncome.add(todayBuyIncom).add(todaySellIncom);
+                    item.dayIncome = dayIncome.add(todayBuyIncom).add(todaySellIncom) + "";
                     console.log(item.name+"计算当日买卖后："+ dayIncome);
                     var marketValue = new BigDecimal("0");
                     marketValue = (new BigDecimal(item.now)).multiply(new BigDecimal(item.bonds));
