@@ -22,7 +22,7 @@ public class ParamController {
      * @return
      */
     @GetMapping(value = "/param")
-    public Response getDepositList(HttpServletRequest request, @RequestParam(value = "type", required = false) String type)
+    public Response getParamList(HttpServletRequest request, @RequestParam(value = "type", required = false) String type)
         throws Exception {
         if (type == null) {
             return Response.builder().code("00000000").value(paramEntity.getParamList()).build();
@@ -48,7 +48,7 @@ public class ParamController {
      * @return
      */
     @DeleteMapping(value = "/param")
-    public Response deleteDeposit(HttpServletRequest request, @RequestBody ParamRequest paramRequest) throws Exception {
+    public Response deleteParam(HttpServletRequest request, @RequestBody ParamRequest paramRequest) throws Exception {
         paramEntity.deleteParam(paramRequest);
         return Response.builder().code("00000000").build();
     }

@@ -3,7 +3,7 @@ package com.buxuesong.account.apis.controller;
 import com.buxuesong.account.apis.model.response.Response;
 import com.buxuesong.account.apis.model.request.BuyOrSellStockRequest;
 import com.buxuesong.account.apis.model.request.StockRequest;
-import com.buxuesong.account.domain.StockService;
+import com.buxuesong.account.domain.model.stock.StockEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 public class StockController {
     @Autowired
-    private StockService stockService;
+    private StockEntity stockEntity;
 
     /**
      * 获取股票信息列表接口
@@ -24,8 +24,8 @@ public class StockController {
      */
     @GetMapping(value = "/stock")
     public Response getStockList(HttpServletRequest request, @RequestParam(value = "app", required = false) String app) throws Exception {
-        List<String> stockListFromRedis = stockService.getStockList(app);
-        return Response.builder().code("00000000").value(stockService.getStockDetails(stockListFromRedis)).build();
+        List<String> stockListFromRedis = stockEntity.getStockList(app);
+        return Response.builder().code("00000000").value(stockEntity.getStockDetails(stockListFromRedis)).build();
     }
 
     /**
@@ -36,7 +36,7 @@ public class StockController {
     @PostMapping(value = "/saveStock")
     public Response saveStock(@RequestBody StockRequest stockRequest) throws Exception {
         log.info("Save stock request: {}", stockRequest);
-        if (stockService.saveStock(stockRequest)) {
+        if (stockEntity.saveStock(stockRequest)) {
             return Response.builder().value(true).code("00000000").build();
         }
         return Response.builder().value(true).code("00000001").build();
@@ -50,7 +50,7 @@ public class StockController {
     @PostMapping(value = "/deleteStock")
     public Response deleteStock(@RequestBody StockRequest stockRequest) throws Exception {
         log.info("Delete stock request: {}", stockRequest);
-        stockService.deleteStock(stockRequest);
+        stockEntity.deleteStock(stockRequest);
         return Response.builder().value(true).code("00000000").build();
     }
 
@@ -62,7 +62,7 @@ public class StockController {
     @PostMapping(value = "/buyOrSellStock")
     public Response buyOrSellStock(@RequestBody BuyOrSellStockRequest buyOrSellStockRequest) throws Exception {
         log.info("Buy or sell stock request: {}", buyOrSellStockRequest);
-        stockService.buyOrSellStock(buyOrSellStockRequest);
+        stockEntity.buyOrSellStock(buyOrSellStockRequest);
         return Response.builder().value(true).code("00000000").build();
     }
 

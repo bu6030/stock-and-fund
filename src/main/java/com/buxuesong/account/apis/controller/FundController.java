@@ -5,8 +5,6 @@ import com.buxuesong.account.apis.model.response.Response;
 import com.buxuesong.account.domain.model.fund.FundEntity;
 import com.buxuesong.account.apis.model.response.StockAndFundBean;
 import com.buxuesong.account.domain.model.stock.StockEntity;
-import com.buxuesong.account.domain.FundService;
-import com.buxuesong.account.domain.StockService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +18,10 @@ import java.util.stream.Collectors;
 public class FundController {
 
     @Autowired
-    private FundService fundService;
+    private FundEntity fundEntity;
 
     @Autowired
-    private StockService stockService;
+    private StockEntity stockEntity;
 
     /**
      * 获取基金信息列表接口
@@ -32,8 +30,8 @@ public class FundController {
      */
     @GetMapping(value = "/fund")
     public Response getFundList(HttpServletRequest request, @RequestParam(value = "app", required = false) String app) throws Exception {
-        List<String> fundListFromRedis = fundService.getFundList(app);
-        return Response.builder().code("00000000").value(fundService.getFundDetails(fundListFromRedis)).build();
+        List<String> fundListFromRedis = fundEntity.getFundList(app);
+        return Response.builder().code("00000000").value(fundEntity.getFundDetails(fundListFromRedis)).build();
     }
 
     /**
@@ -44,7 +42,7 @@ public class FundController {
     @PostMapping(value = "/saveFund")
     public Response saveFund(@RequestBody FundRequest fundRequest) throws Exception {
         log.info("Save fund request: {}", fundRequest);
-        if (fundService.saveFund(fundRequest)) {
+        if (fundEntity.saveFund(fundRequest)) {
             return Response.builder().value(true).code("00000000").build();
         }
         return Response.builder().value(true).code("00000001").build();
@@ -58,7 +56,7 @@ public class FundController {
     @PostMapping(value = "/deleteFund")
     public Response deleteFund(@RequestBody FundRequest fundRequest) throws Exception {
         log.info("Delete fund request: {}", fundRequest);
-        fundService.deleteFund(fundRequest);
+        fundEntity.deleteFund(fundRequest);
         return Response.builder().value(true).code("00000000").build();
     }
 
@@ -70,10 +68,10 @@ public class FundController {
     @GetMapping(value = "/stockAndFund")
     public Response getStockAndFundList(HttpServletRequest request, @RequestParam(value = "app", required = false) String app)
         throws Exception {
-        List<String> fundListFrom = fundService.getFundList(app);
-        List<String> stcokListFrom = stockService.getStockList(app);
-        List<FundEntity> funds = fundService.getFundDetails(fundListFrom);
-        List<StockEntity> stocks = stockService.getStockDetails(stcokListFrom);
+        List<String> fundListFrom = fundEntity.getFundList(app);
+        List<String> stcokListFrom = stockEntity.getStockList(app);
+        List<FundEntity> funds = fundEntity.getFundDetails(fundListFrom);
+        List<StockEntity> stocks = stockEntity.getStockDetails(stcokListFrom);
         List<StockAndFundBean> stockAndFundsFromFunds = funds.stream()
             .map(s -> StockAndFundBean.builder().type("FUND").code(s.getFundCode())
                 .name(s.getFundName()).costPrise(s.getCostPrise()).bonds(s.getBonds())

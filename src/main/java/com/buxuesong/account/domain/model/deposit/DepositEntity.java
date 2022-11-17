@@ -1,8 +1,6 @@
 package com.buxuesong.account.domain.model.deposit;
 
 import com.buxuesong.account.apis.model.request.BuyOrSellStockRequest;
-import com.buxuesong.account.domain.FundService;
-import com.buxuesong.account.domain.StockService;
 import com.buxuesong.account.infrastructure.adapter.rest.SzseRestClient;
 import com.buxuesong.account.domain.model.fund.FundEntity;
 import com.buxuesong.account.domain.model.stock.StockEntity;
@@ -25,9 +23,9 @@ public class DepositEntity {
     @Autowired
     private DepositMapper depositMapper;
     @Autowired
-    private FundService fundService;
+    private FundEntity fundEntity;
     @Autowired
-    private StockService stockService;
+    private StockEntity stockEntity;
 
     public DepositPO getDepositByDate(String date) {
         return depositMapper.findDepositByDate(date);
@@ -79,8 +77,8 @@ public class DepositEntity {
     }
 
     private BigDecimal depositFundDayIncome() {
-        List<String> fundListFrom = fundService.getFundList(null);
-        List<FundEntity> funds = fundService.getFundDetails(fundListFrom);
+        List<String> fundListFrom = fundEntity.getFundList(null);
+        List<FundEntity> funds = fundEntity.getFundDetails(fundListFrom);
         BigDecimal fundTotalDayIncome = new BigDecimal("0");
         for (FundEntity fund : funds) {
             BigDecimal dayIncome = (new BigDecimal(fund.getGszzl())
@@ -93,8 +91,8 @@ public class DepositEntity {
     }
 
     private BigDecimal depositStockDayIncome() {
-        List<String> stockListFrom = stockService.getStockList(null);
-        List<StockEntity> stocks = stockService.getStockDetails(stockListFrom);
+        List<String> stockListFrom = stockEntity.getStockList(null);
+        List<StockEntity> stocks = stockEntity.getStockDetails(stockListFrom);
         BigDecimal stockTotalDayIncome = new BigDecimal("0");
         for (StockEntity stock : stocks) {
             int maxBuyOrSellBonds = 0;
@@ -139,8 +137,8 @@ public class DepositEntity {
     }
 
     private BigDecimal depositFundMarketValue() {
-        List<String> fundListFrom = fundService.getFundList(null);
-        List<FundEntity> funds = fundService.getFundDetails(fundListFrom);
+        List<String> fundListFrom = fundEntity.getFundList(null);
+        List<FundEntity> funds = fundEntity.getFundDetails(fundListFrom);
         BigDecimal fundTotalMarketValue = new BigDecimal("0");
         for (FundEntity fund : funds) {
             BigDecimal marketValue = (new BigDecimal(fund.getGsz())
@@ -152,8 +150,8 @@ public class DepositEntity {
     }
 
     private BigDecimal depositStockMarketValue() {
-        List<String> stockListFrom = stockService.getStockList(null);
-        List<StockEntity> stocks = stockService.getStockDetails(stockListFrom);
+        List<String> stockListFrom = stockEntity.getStockList(null);
+        List<StockEntity> stocks = stockEntity.getStockDetails(stockListFrom);
         BigDecimal stockTotalMarketValue = new BigDecimal("0");
         for (StockEntity stock : stocks) {
             BigDecimal marketValue = (new BigDecimal(stock.getNow()).multiply(new BigDecimal(stock.getBonds()))).setScale(2,

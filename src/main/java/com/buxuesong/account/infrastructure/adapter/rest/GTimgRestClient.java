@@ -16,7 +16,7 @@ public class GTimgRestClient {
 
     private static final String GET_STOCK_INFO_URL = "http://qt.gtimg.cn/q={param}";
 
-    public String getStockInfoFromApi(String param) {
+    public String getStockInfo(String param) {
         log.info("通过腾讯股票接口获取股票，编码：{}， URL：{}", param, GET_STOCK_INFO_URL);
         ResponseEntity<String> response = null;
         try {
