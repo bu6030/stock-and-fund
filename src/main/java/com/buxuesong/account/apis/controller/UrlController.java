@@ -2,7 +2,6 @@ package com.buxuesong.account.apis.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -72,19 +71,6 @@ public class UrlController {
     public ModelAndView paramInit(HttpServletRequest request, HttpServletResponse response) {
         ModelAndView m = new ModelAndView();
         m.setViewName("param");
-        return m;
-    }
-
-    /**
-     * 添加字典数据页面初始化
-     *
-     * @return
-     */
-    @GetMapping(value = "/addParam.html")
-    public ModelAndView addParamInit(@RequestParam String type, HttpServletRequest request, HttpServletResponse response) {
-        ModelAndView m = new ModelAndView();
-        m.setViewName("addParam");
-        m.getModel().put("type", type);
         return m;
     }
 
