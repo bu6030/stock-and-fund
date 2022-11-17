@@ -5,7 +5,7 @@ import com.buxuesong.account.infrastructure.adapter.rest.SzseRestClient;
 import com.buxuesong.account.domain.model.fund.FundEntity;
 import com.buxuesong.account.domain.model.stock.StockEntity;
 import com.buxuesong.account.infrastructure.adapter.rest.response.TradingDateResponse;
-import com.buxuesong.account.infrastructure.persistent.entity.DepositPO;
+import com.buxuesong.account.infrastructure.persistent.po.DepositPO;
 import com.buxuesong.account.infrastructure.persistent.repository.DepositMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

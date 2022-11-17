@@ -1,6 +1,6 @@
 package com.buxuesong.account.infrastructure.persistent.repository;
 
-import com.buxuesong.account.infrastructure.persistent.entity.DepositPO;
+import com.buxuesong.account.infrastructure.persistent.po.DepositPO;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 

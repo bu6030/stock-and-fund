@@ -1,7 +1,7 @@
 package com.buxuesong.account.domain.model.param;
 
 import com.buxuesong.account.apis.model.request.ParamRequest;
-import com.buxuesong.account.infrastructure.persistent.entity.ParamPO;
+import com.buxuesong.account.infrastructure.persistent.po.ParamPO;
 import com.buxuesong.account.infrastructure.persistent.repository.ParamMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
