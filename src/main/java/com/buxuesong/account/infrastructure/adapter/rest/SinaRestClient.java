@@ -28,7 +28,7 @@ public class SinaRestClient {
             response = restTemplate.exchange(
                     GET_FUND_INFO_SINA_URL, HttpMethod.GET, httpEntity, String.class, System.currentTimeMillis(), code, code);
         } catch (Exception e) {
-            log.info("获取天天基金接口异常: {]", e);
+            log.info("获取新浪基金接口异常: {]", e);
             return null;
         }
         return response.getBody();
