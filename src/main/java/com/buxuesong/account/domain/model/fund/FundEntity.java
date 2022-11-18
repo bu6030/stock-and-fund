@@ -5,6 +5,7 @@ import com.buxuesong.account.domain.service.FundCacheService;
 import com.buxuesong.account.infrastructure.adapter.rest.SinaRestClient;
 import com.buxuesong.account.infrastructure.adapter.rest.TiantianFundRestClient;
 import com.buxuesong.account.infrastructure.general.utils.DateTimeUtils;
+import com.buxuesong.account.infrastructure.persistent.po.FundPO;
 import com.buxuesong.account.infrastructure.persistent.repository.FundMapper;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
@@ -377,36 +378,34 @@ public class FundEntity {
             log.info("获取基金信息异常 {}", e.getMessage());
             return false;
         }
-        FundRequest fundRequestFromTable = fundMapper.findFundByCode(fundRequest.getCode());
-        if (fundRequestFromTable != null) {
-            fundMapper.updateFund(fundRequest);
+        FundPO fundPOFromTable = fundMapper.findFundByCode(fundRequest.getCode());
+        if (fundPOFromTable != null) {
+            fundMapper.updateFund(FundPO.builder().app(fundRequest.getApp()).bonds(fundRequest.getBonds()).code(fundRequest.getCode())
+                    .costPrise(fundRequest.getCostPrise()).hide(fundRequest.isHide()).build());
         } else {
-            fundMapper.save(fundRequest);
+            fundMapper.save(FundPO.builder().app(fundRequest.getApp()).bonds(fundRequest.getBonds()).code(fundRequest.getCode())
+                    .costPrise(fundRequest.getCostPrise()).hide(fundRequest.isHide()).build());
         }
         return true;
     }
 
     public void deleteFund(FundRequest fundRequest) {
-        fundMapper.deleteFund(fundRequest);
+        fundMapper.deleteFund(FundPO.builder().app(fundRequest.getApp()).bonds(fundRequest.getBonds()).code(fundRequest.getCode())
+                .costPrise(fundRequest.getCostPrise()).hide(fundRequest.isHide()).build());
     }
 
     public List<String> getFundList(String app) {
-        List<FundRequest> fund = fundMapper.findAllFund(app);
+        List<FundPO> fund = fundMapper.findAllFund(app);
         log.info("APP: {} ,数据库中的基金为：{}", app, fund);
         if (fund == null || fund.isEmpty()) {
             return new ArrayList<>();
         }
         List<String> list = new ArrayList<>();
-        for (FundRequest fundRequest : fund) {
-            String fundArr = fundRequest.getCode() + "," + fundRequest.getCostPrise() + "," + fundRequest.getBonds() + ","
-                    + fundRequest.getApp();
+        for (FundPO fundPO : fund) {
+            String fundArr = fundPO.getCode() + "," + fundPO.getCostPrise() + "," + fundPO.getBonds() + ","
+                    + fundPO.getApp();
             list.add(fundArr);
         }
         return list;
     }
-
-    public FundRequest findFundByCode(String code) {
-        return fundMapper.findFundByCode(code);
-    }
-
 }

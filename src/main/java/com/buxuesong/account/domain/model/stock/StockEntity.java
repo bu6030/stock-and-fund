@@ -376,10 +376,6 @@ public class StockEntity {
         return list;
     }
 
-    public StockPO findStockByCode(String code) {
-        return stockMapper.findStockByCode(code);
-    }
-
     public void buyOrSellStock(BuyOrSellStockRequest buyOrSellStockRequest) {
         StockPO stockPO = stockMapper.findStockByCode(buyOrSellStockRequest.getCode());
         List<String> list = new ArrayList<>();

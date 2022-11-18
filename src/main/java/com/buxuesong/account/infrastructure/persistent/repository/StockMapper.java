@@ -1,6 +1,5 @@
 package com.buxuesong.account.infrastructure.persistent.repository;
 
-import com.buxuesong.account.apis.model.request.StockRequest;
 import com.buxuesong.account.infrastructure.persistent.po.StockPO;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
