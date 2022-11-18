@@ -26,7 +26,7 @@ public class SinaRestClient {
         HttpEntity<?> httpEntity = new HttpEntity<>(headers);
         try {
             response = restTemplate.exchange(
-                    GET_FUND_INFO_SINA_URL, HttpMethod.GET, httpEntity, String.class, System.currentTimeMillis(), code, code);
+                GET_FUND_INFO_SINA_URL, HttpMethod.GET, httpEntity, String.class, System.currentTimeMillis(), code, code);
         } catch (Exception e) {
             log.info("获取新浪基金接口异常: {]", e);
             return null;

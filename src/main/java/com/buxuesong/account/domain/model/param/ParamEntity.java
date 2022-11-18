@@ -38,6 +38,7 @@ public class ParamEntity {
     }
 
     public void deleteParam(ParamRequest paramRequest) {
-        paramMapper.delete(ParamPO.builder().code(paramRequest.getCode()).name(paramRequest.getName()).type(paramRequest.getType()).build());
+        paramMapper
+            .delete(ParamPO.builder().code(paramRequest.getCode()).name(paramRequest.getName()).type(paramRequest.getType()).build());
     }
 }

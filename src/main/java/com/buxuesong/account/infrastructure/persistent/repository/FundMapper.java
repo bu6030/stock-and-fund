@@ -1,6 +1,5 @@
 package com.buxuesong.account.infrastructure.persistent.repository;
 
-import com.buxuesong.account.apis.model.request.FundRequest;
 import com.buxuesong.account.infrastructure.persistent.po.FundPO;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;

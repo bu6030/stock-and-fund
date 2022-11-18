@@ -32,9 +32,9 @@ public class ParamRequest {
     @Override
     public String toString() {
         return "ParamRequest{" +
-                "type='" + type + '\'' +
-                ", code='" + code + '\'' +
-                ", name='" + name + '\'' +
-                '}';
+            "type='" + type + '\'' +
+            ", code='" + code + '\'' +
+            ", name='" + name + '\'' +
+            '}';
     }
 }

@@ -22,7 +22,7 @@ public class SzseRestClient {
         ResponseEntity<TradingDateResponse> response = null;
         try {
             response = restTemplate.exchange(
-                    GET_TRADE_DATE_URL, HttpMethod.GET, null, TradingDateResponse.class);
+                GET_TRADE_DATE_URL, HttpMethod.GET, null, TradingDateResponse.class);
         } catch (Exception e) {
             log.info("获取交易日期接口异常: {]", e);
             return null;

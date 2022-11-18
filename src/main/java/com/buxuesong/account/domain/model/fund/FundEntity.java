@@ -243,9 +243,6 @@ public class FundEntity {
             '}';
     }
 
-
-
-
     @Autowired
     private SinaRestClient sinaRestClient;
 
@@ -299,9 +296,9 @@ public class FundEntity {
                                 bean.setIncomePercent("0");
                             } else {
                                 BigDecimal incomePercentDec = incomeDiff.divide(costPriceDec, 8, RoundingMode.HALF_UP)
-                                        .multiply(BigDecimal.TEN)
-                                        .multiply(BigDecimal.TEN)
-                                        .setScale(3, RoundingMode.HALF_UP);
+                                    .multiply(BigDecimal.TEN)
+                                    .multiply(BigDecimal.TEN)
+                                    .setScale(3, RoundingMode.HALF_UP);
                                 bean.setIncomePercent(incomePercentDec.toString());
                             }
 
@@ -309,7 +306,7 @@ public class FundEntity {
                             if (StringUtils.isNotEmpty(bondStr)) {
                                 BigDecimal bondDec = new BigDecimal(bondStr);
                                 BigDecimal incomeDec = incomeDiff.multiply(bondDec)
-                                        .setScale(2, RoundingMode.HALF_UP);
+                                    .setScale(2, RoundingMode.HALF_UP);
                                 bean.setIncome(incomeDec.toString());
                             }
                         }
@@ -337,9 +334,9 @@ public class FundEntity {
                             bean.setIncomePercent("0");
                         } else {
                             BigDecimal incomePercentDec = incomeDiff.divide(costPriceDec, 8, RoundingMode.HALF_UP)
-                                    .multiply(BigDecimal.TEN)
-                                    .multiply(BigDecimal.TEN)
-                                    .setScale(3, RoundingMode.HALF_UP);
+                                .multiply(BigDecimal.TEN)
+                                .multiply(BigDecimal.TEN)
+                                .setScale(3, RoundingMode.HALF_UP);
                             bean.setIncomePercent(incomePercentDec.toString());
                         }
 
@@ -347,7 +344,7 @@ public class FundEntity {
                         if (StringUtils.isNotEmpty(bondStr)) {
                             BigDecimal bondDec = new BigDecimal(bondStr);
                             BigDecimal incomeDec = incomeDiff.multiply(bondDec)
-                                    .setScale(2, RoundingMode.HALF_UP);
+                                .setScale(2, RoundingMode.HALF_UP);
                             bean.setIncome(incomeDec.toString());
                         }
                     }
@@ -381,17 +378,17 @@ public class FundEntity {
         FundPO fundPOFromTable = fundMapper.findFundByCode(fundRequest.getCode());
         if (fundPOFromTable != null) {
             fundMapper.updateFund(FundPO.builder().app(fundRequest.getApp()).bonds(fundRequest.getBonds()).code(fundRequest.getCode())
-                    .costPrise(fundRequest.getCostPrise()).hide(fundRequest.isHide()).build());
+                .costPrise(fundRequest.getCostPrise()).hide(fundRequest.isHide()).build());
         } else {
             fundMapper.save(FundPO.builder().app(fundRequest.getApp()).bonds(fundRequest.getBonds()).code(fundRequest.getCode())
-                    .costPrise(fundRequest.getCostPrise()).hide(fundRequest.isHide()).build());
+                .costPrise(fundRequest.getCostPrise()).hide(fundRequest.isHide()).build());
         }
         return true;
     }
 
     public void deleteFund(FundRequest fundRequest) {
         fundMapper.deleteFund(FundPO.builder().app(fundRequest.getApp()).bonds(fundRequest.getBonds()).code(fundRequest.getCode())
-                .costPrise(fundRequest.getCostPrise()).hide(fundRequest.isHide()).build());
+            .costPrise(fundRequest.getCostPrise()).hide(fundRequest.isHide()).build());
     }
 
     public List<String> getFundList(String app) {
@@ -403,7 +400,7 @@ public class FundEntity {
         List<String> list = new ArrayList<>();
         for (FundPO fundPO : fund) {
             String fundArr = fundPO.getCode() + "," + fundPO.getCostPrise() + "," + fundPO.getBonds() + ","
-                    + fundPO.getApp();
+                + fundPO.getApp();
             list.add(fundArr);
         }
         return list;

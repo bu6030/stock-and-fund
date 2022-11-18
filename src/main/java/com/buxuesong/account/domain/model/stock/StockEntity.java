@@ -244,9 +244,6 @@ public class StockEntity {
             '}';
     }
 
-
-
-
     @Autowired
     private StockMapper stockMapper;
 
@@ -302,7 +299,7 @@ public class StockEntity {
                 bean.setMax(values[33]);// 33
                 bean.setMin(values[34]);// 34
                 bean.setBuyOrSellStockRequestList(buyOrSellStockPOs.stream().filter(s -> s.getCode().equals(code))
-                        .collect(Collectors.toList()));
+                    .collect(Collectors.toList()));
 
                 BigDecimal now = new BigDecimal(values[3]);
                 String costPriceStr = bean.getCostPrise();
@@ -313,9 +310,9 @@ public class StockEntity {
                         bean.setIncomePercent("0");
                     } else {
                         BigDecimal incomePercentDec = incomeDiff.divide(costPriceDec, 5, RoundingMode.HALF_UP)
-                                .multiply(BigDecimal.TEN)
-                                .multiply(BigDecimal.TEN)
-                                .setScale(3, RoundingMode.HALF_UP);
+                            .multiply(BigDecimal.TEN)
+                            .multiply(BigDecimal.TEN)
+                            .setScale(3, RoundingMode.HALF_UP);
                         bean.setIncomePercent(incomePercentDec.toString());
                     }
 
@@ -323,7 +320,7 @@ public class StockEntity {
                     if (StringUtils.isNotEmpty(bondStr)) {
                         BigDecimal bondDec = new BigDecimal(bondStr);
                         BigDecimal incomeDec = incomeDiff.multiply(bondDec)
-                                .setScale(2, RoundingMode.HALF_UP);
+                            .setScale(2, RoundingMode.HALF_UP);
                         bean.setIncome(incomeDec.toString());
                     }
                 }
@@ -349,17 +346,17 @@ public class StockEntity {
         StockPO stockPOFromTable = stockMapper.findStockByCode(stockRequest.getCode());
         if (stockPOFromTable != null) {
             stockMapper.updateStock(StockPO.builder().app(stockRequest.getApp()).bonds(stockRequest.getBonds()).code(stockRequest.getCode())
-                    .costPrise(stockRequest.getCostPrise()).hide(stockRequest.getHide()).build());
+                .costPrise(stockRequest.getCostPrise()).hide(stockRequest.getHide()).build());
         } else {
             stockMapper.save(StockPO.builder().app(stockRequest.getApp()).bonds(stockRequest.getBonds()).code(stockRequest.getCode())
-                    .costPrise(stockRequest.getCostPrise()).hide(stockRequest.getHide()).build());
+                .costPrise(stockRequest.getCostPrise()).hide(stockRequest.getHide()).build());
         }
         return true;
     }
 
     public void deleteStock(StockRequest stockRequest) {
         stockMapper.deleteStock(StockPO.builder().app(stockRequest.getApp()).bonds(stockRequest.getBonds()).code(stockRequest.getCode())
-                .costPrise(stockRequest.getCostPrise()).hide(stockRequest.getHide()).build());
+            .costPrise(stockRequest.getCostPrise()).hide(stockRequest.getHide()).build());
     }
 
     public List<String> getStockList(String app) {
@@ -371,7 +368,7 @@ public class StockEntity {
         List<String> list = new ArrayList<>();
         for (StockPO stockPO : stock) {
             String stockArr = stockPO.getCode() + "," + stockPO.getCostPrise() + "," + stockPO.getBonds() + ","
-                    + stockPO.getApp() + "," + stockPO.isHide();
+                + stockPO.getApp() + "," + stockPO.isHide();
             list.add(stockArr);
         }
         return list;
@@ -381,7 +378,7 @@ public class StockEntity {
         StockPO stockPO = stockMapper.findStockByCode(buyOrSellStockRequest.getCode());
         List<String> list = new ArrayList<>();
         list.add(stockPO.getCode() + "," + stockPO.getCostPrise() + "," + stockPO.getBonds() + ","
-                + stockPO.getApp() + "," + stockPO.isHide());
+            + stockPO.getApp() + "," + stockPO.isHide());
         StockEntity stock = getStockDetails(list).get(0);
         // 开盘价格
         BigDecimal openPrice = (new BigDecimal(stock.getNow())).subtract(new BigDecimal(stock.getChange()));
@@ -390,17 +387,17 @@ public class StockEntity {
         // 计算卖出盈利，买入不用计算
         if ("2".equals(buyOrSellStockRequest.getType())) {
             BigDecimal income = buyOrSellStockRequest.getPrice().subtract(openPrice)
-                    .multiply(new BigDecimal(buyOrSellStockRequest.getBonds())).subtract(buyOrSellStockRequest.getCost());
+                .multiply(new BigDecimal(buyOrSellStockRequest.getBonds())).subtract(buyOrSellStockRequest.getCost());
             log.info("卖出当日收益： {}", income);
             buyOrSellStockRequest.setIncome(income);
         } else {
             buyOrSellStockRequest.setIncome(new BigDecimal("0"));
         }
         buyOrSellMapper.save(BuyOrSellStockPO.builder().type(buyOrSellStockRequest.getType()).cost(buyOrSellStockRequest.getCost())
-                .date(buyOrSellStockRequest.getDate()).price(buyOrSellStockRequest.getPrice())
-                .bonds(buyOrSellStockRequest.getBonds()).app(buyOrSellStockRequest.getApp())
-                .income(buyOrSellStockRequest.getIncome()).openPrice(buyOrSellStockRequest.getOpenPrice())
-                .build());
+            .date(buyOrSellStockRequest.getDate()).price(buyOrSellStockRequest.getPrice())
+            .bonds(buyOrSellStockRequest.getBonds()).app(buyOrSellStockRequest.getApp())
+            .income(buyOrSellStockRequest.getIncome()).openPrice(buyOrSellStockRequest.getOpenPrice())
+            .build());
         // 购买
         if ("1".equals(buyOrSellStockRequest.getType())) {
             int restBound = 0;
@@ -409,15 +406,15 @@ public class StockEntity {
             if (stockPO == null) {
                 restBound = buyOrSellStockRequest.getBonds();
                 newCostPrice = buyOrSellStockRequest.getPrice().multiply(new BigDecimal(buyOrSellStockRequest.getBonds()))
-                        .add(buyOrSellStockRequest.getCost())
-                        .divide(new BigDecimal(restBound), 3, BigDecimal.ROUND_HALF_UP);
+                    .add(buyOrSellStockRequest.getCost())
+                    .divide(new BigDecimal(restBound), 3, BigDecimal.ROUND_HALF_UP);
                 // 说明持有该股票再次买入
             } else {
                 restBound = stockPO.getBonds() + buyOrSellStockRequest.getBonds();
                 BigDecimal newBuyTotalFee = buyOrSellStockRequest.getPrice().multiply(new BigDecimal(buyOrSellStockRequest.getBonds()))
-                        .add(buyOrSellStockRequest.getCost());
+                    .add(buyOrSellStockRequest.getCost());
                 newCostPrice = stockPO.getCostPrise().multiply(new BigDecimal(stockPO.getBonds())).add(newBuyTotalFee)
-                        .divide(new BigDecimal(restBound), 3, BigDecimal.ROUND_HALF_UP);
+                    .divide(new BigDecimal(restBound), 3, BigDecimal.ROUND_HALF_UP);
             }
             stockPO.setBonds(restBound);
             stockPO.setCostPrise(newCostPrice);
@@ -425,11 +422,11 @@ public class StockEntity {
         } else {
             int restBound = stockPO.getBonds() - buyOrSellStockRequest.getBonds();
             BigDecimal newSellTotalFee = buyOrSellStockRequest.getPrice().multiply(new BigDecimal(buyOrSellStockRequest.getBonds()))
-                    .subtract(buyOrSellStockRequest.getCost());
+                .subtract(buyOrSellStockRequest.getCost());
             BigDecimal newCostPrice = new BigDecimal("0");
             if (restBound != 0) {
                 newCostPrice = stockPO.getCostPrise().multiply(new BigDecimal(stockPO.getBonds()))
-                        .subtract(newSellTotalFee).divide(new BigDecimal(restBound), 3, BigDecimal.ROUND_HALF_UP);
+                    .subtract(newSellTotalFee).divide(new BigDecimal(restBound), 3, BigDecimal.ROUND_HALF_UP);
             }
             stockPO.setBonds(restBound);
             stockPO.setCostPrise(newCostPrice);

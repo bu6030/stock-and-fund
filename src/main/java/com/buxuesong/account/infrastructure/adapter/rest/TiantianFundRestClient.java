@@ -19,13 +19,13 @@ public class TiantianFundRestClient {
     public String getFundInfo(String code) {
         log.info("通过天天基金接口获取基金，编码：{}， URL：{}", code, GET_FUND_INFO_URL);
         String url = UriComponentsBuilder.fromUriString(GET_FUND_INFO_URL)
-                .queryParam("rt", System.currentTimeMillis())
-                .build()
-                .toUriString();
+            .queryParam("rt", System.currentTimeMillis())
+            .build()
+            .toUriString();
         ResponseEntity<String> response = null;
         try {
             response = restTemplate.exchange(
-                    url, HttpMethod.GET, null, String.class, code);
+                url, HttpMethod.GET, null, String.class, code);
         } catch (Exception e) {
             log.info("获取天天基金接口异常: {]", e);
             return null;
