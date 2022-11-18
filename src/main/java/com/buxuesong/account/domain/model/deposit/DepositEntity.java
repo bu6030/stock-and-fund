@@ -5,6 +5,7 @@ import com.buxuesong.account.infrastructure.adapter.rest.SzseRestClient;
 import com.buxuesong.account.domain.model.fund.FundEntity;
 import com.buxuesong.account.domain.model.stock.StockEntity;
 import com.buxuesong.account.infrastructure.adapter.rest.response.TradingDateResponse;
+import com.buxuesong.account.infrastructure.persistent.po.BuyOrSellStockPO;
 import com.buxuesong.account.infrastructure.persistent.po.DepositPO;
 import com.buxuesong.account.infrastructure.persistent.repository.DepositMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -99,21 +100,21 @@ public class DepositEntity {
             BigDecimal todayBuyIncome = new BigDecimal("0");
             BigDecimal todaySellIncom = new BigDecimal("0");
             BigDecimal dayIncome = new BigDecimal("0");
-            for (BuyOrSellStockRequest buyOrSellStockRequest : stock.getBuyOrSellStockRequestList()) {
+            for (BuyOrSellStockPO buyOrSellStockPO : stock.getBuyOrSellStockRequestList()) {
                 // 当天购买过
-                if (buyOrSellStockRequest.getType().equals("1")) {
-                    maxBuyOrSellBonds = maxBuyOrSellBonds + buyOrSellStockRequest.getBonds();
-                    log.info("买入价格: {}", buyOrSellStockRequest.getPrice());
+                if (buyOrSellStockPO.getType().equals("1")) {
+                    maxBuyOrSellBonds = maxBuyOrSellBonds + buyOrSellStockPO.getBonds();
+                    log.info("买入价格: {}", buyOrSellStockPO.getPrice());
                     log.info("当前价格: {}", stock.getNow());
                     BigDecimal buyIncome = (new BigDecimal(stock.getNow()))
-                        .subtract(new BigDecimal(buyOrSellStockRequest.getPrice() + ""))
-                        .multiply(new BigDecimal(buyOrSellStockRequest.getBonds() + ""));
+                        .subtract(new BigDecimal(buyOrSellStockPO.getPrice() + ""))
+                        .multiply(new BigDecimal(buyOrSellStockPO.getBonds() + ""));
                     todayBuyIncome = todayBuyIncome.add(buyIncome);
                     log.info("买入收益： {}", todayBuyIncome);
                 }
                 // 当天卖出过
-                if (buyOrSellStockRequest.getType().equals("2")) {
-                    todaySellIncom = todaySellIncom.add(new BigDecimal(buyOrSellStockRequest.getIncome() + ""));
+                if (buyOrSellStockPO.getType().equals("2")) {
+                    todaySellIncom = todaySellIncom.add(new BigDecimal(buyOrSellStockPO.getIncome() + ""));
                     log.info("卖出收益： {}", todaySellIncom);
                 }
             }

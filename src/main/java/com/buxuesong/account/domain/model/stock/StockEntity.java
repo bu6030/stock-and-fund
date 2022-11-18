@@ -5,6 +5,7 @@ import com.buxuesong.account.apis.model.request.StockRequest;
 import com.buxuesong.account.domain.service.StockCacheService;
 import com.buxuesong.account.infrastructure.adapter.rest.GTimgRestClient;
 import com.buxuesong.account.infrastructure.general.utils.DateTimeUtils;
+import com.buxuesong.account.infrastructure.persistent.po.BuyOrSellStockPO;
 import com.buxuesong.account.infrastructure.persistent.po.StockPO;
 import com.buxuesong.account.infrastructure.persistent.repository.BuyOrSellMapper;
 import com.buxuesong.account.infrastructure.persistent.repository.StockMapper;
@@ -43,7 +44,7 @@ public class StockEntity {
     private String app;// 支付宝/东方财富/东方证券
     private String incomePercent;// 收益率
     private String income;// 收益
-    private List<BuyOrSellStockRequest> buyOrSellStockRequestList;
+    private List<BuyOrSellStockPO> buyOrSellStockRequestList;
 
     private boolean hide;// 是否隐藏
 
@@ -199,11 +200,11 @@ public class StockEntity {
         this.hide = hide;
     }
 
-    public List<BuyOrSellStockRequest> getBuyOrSellStockRequestList() {
+    public List<BuyOrSellStockPO> getBuyOrSellStockRequestList() {
         return buyOrSellStockRequestList;
     }
 
-    public void setBuyOrSellStockRequestList(List<BuyOrSellStockRequest> buyOrSellStockRequestList) {
+    public void setBuyOrSellStockRequestList(List<BuyOrSellStockPO> buyOrSellStockRequestList) {
         this.buyOrSellStockRequestList = buyOrSellStockRequestList;
     }
 
@@ -286,8 +287,8 @@ public class StockEntity {
 
             log.info("获取股票信息 {}", result);
             String[] lines = result.split("\n");
-            List<BuyOrSellStockRequest> buyOrSellStockRequests = buyOrSellMapper.findAllBuyOrSellStocks(LocalDate.now().toString());
-            log.info("当日买卖的股票信息 {}", buyOrSellStockRequests);
+            List<BuyOrSellStockPO> buyOrSellStockPOs = buyOrSellMapper.findAllBuyOrSellStocks(LocalDate.now().toString());
+            log.info("当日买卖的股票信息 {}", buyOrSellStockPOs);
             for (String line : lines) {
                 String code = line.substring(line.indexOf("_") + 1, line.indexOf("="));
                 String dataStr = line.substring(line.indexOf("=") + 2, line.length() - 2);
@@ -300,7 +301,7 @@ public class StockEntity {
                 bean.setTime(values[30]);
                 bean.setMax(values[33]);// 33
                 bean.setMin(values[34]);// 34
-                bean.setBuyOrSellStockRequestList(buyOrSellStockRequests.stream().filter(s -> s.getCode().equals(code))
+                bean.setBuyOrSellStockRequestList(buyOrSellStockPOs.stream().filter(s -> s.getCode().equals(code))
                         .collect(Collectors.toList()));
 
                 BigDecimal now = new BigDecimal(values[3]);
@@ -395,7 +396,11 @@ public class StockEntity {
         } else {
             buyOrSellStockRequest.setIncome(new BigDecimal("0"));
         }
-        buyOrSellMapper.save(buyOrSellStockRequest);
+        buyOrSellMapper.save(BuyOrSellStockPO.builder().type(buyOrSellStockRequest.getType()).cost(buyOrSellStockRequest.getCost())
+                .date(buyOrSellStockRequest.getDate()).price(buyOrSellStockRequest.getPrice())
+                .bonds(buyOrSellStockRequest.getBonds()).app(buyOrSellStockRequest.getApp())
+                .income(buyOrSellStockRequest.getIncome()).openPrice(buyOrSellStockRequest.getOpenPrice())
+                .build());
         // 购买
         if ("1".equals(buyOrSellStockRequest.getType())) {
             int restBound = 0;

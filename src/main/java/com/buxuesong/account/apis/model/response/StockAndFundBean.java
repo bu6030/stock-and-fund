@@ -1,6 +1,6 @@
 package com.buxuesong.account.apis.model.response;
 
-import com.buxuesong.account.apis.model.request.BuyOrSellStockRequest;
+import com.buxuesong.account.infrastructure.persistent.po.BuyOrSellStockPO;
 import lombok.Builder;
 import lombok.Data;
 
@@ -35,6 +35,6 @@ public class StockAndFundBean {
     private String time;
     private String max;// 最高价
     private String min;// 最低价
-    private List<BuyOrSellStockRequest> buyOrSellStockRequestList;
+    private List<BuyOrSellStockPO> buyOrSellStockRequestList;
 
 }
