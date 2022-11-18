@@ -5,6 +5,7 @@ import com.buxuesong.account.apis.model.request.StockRequest;
 import com.buxuesong.account.domain.service.StockCacheService;
 import com.buxuesong.account.infrastructure.adapter.rest.GTimgRestClient;
 import com.buxuesong.account.infrastructure.general.utils.DateTimeUtils;
+import com.buxuesong.account.infrastructure.persistent.po.StockPO;
 import com.buxuesong.account.infrastructure.persistent.repository.BuyOrSellMapper;
 import com.buxuesong.account.infrastructure.persistent.repository.StockMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -344,43 +345,46 @@ public class StockEntity {
             log.info("获取股票信息异常 {}", e.getMessage());
             return false;
         }
-        StockRequest stockRequestFromTable = stockMapper.findStockByCode(stockRequest.getCode());
-        if (stockRequestFromTable != null) {
-            stockMapper.updateStock(stockRequest);
+        StockPO stockPOFromTable = stockMapper.findStockByCode(stockRequest.getCode());
+        if (stockPOFromTable != null) {
+            stockMapper.updateStock(StockPO.builder().app(stockRequest.getApp()).bonds(stockRequest.getBonds()).code(stockRequest.getCode())
+                    .costPrise(stockRequest.getCostPrise()).hide(stockRequest.getHide()).build());
         } else {
-            stockMapper.save(stockRequest);
+            stockMapper.save(StockPO.builder().app(stockRequest.getApp()).bonds(stockRequest.getBonds()).code(stockRequest.getCode())
+                    .costPrise(stockRequest.getCostPrise()).hide(stockRequest.getHide()).build());
         }
         return true;
     }
 
     public void deleteStock(StockRequest stockRequest) {
-        stockMapper.deleteStock(stockRequest);
+        stockMapper.deleteStock(StockPO.builder().app(stockRequest.getApp()).bonds(stockRequest.getBonds()).code(stockRequest.getCode())
+                .costPrise(stockRequest.getCostPrise()).hide(stockRequest.getHide()).build());
     }
 
     public List<String> getStockList(String app) {
-        List<StockRequest> stock = stockMapper.findAllStock(app);
+        List<StockPO> stock = stockMapper.findAllStock(app);
         log.info("APP: {} ,数据库中的股票为：{}", app, stock);
         if (stock == null || stock.isEmpty()) {
             return new ArrayList<>();
         }
         List<String> list = new ArrayList<>();
-        for (StockRequest stockRequest : stock) {
-            String stockArr = stockRequest.getCode() + "," + stockRequest.getCostPrise() + "," + stockRequest.getBonds() + ","
-                    + stockRequest.getApp() + "," + stockRequest.getHide();
+        for (StockPO stockPO : stock) {
+            String stockArr = stockPO.getCode() + "," + stockPO.getCostPrise() + "," + stockPO.getBonds() + ","
+                    + stockPO.getApp() + "," + stockPO.isHide();
             list.add(stockArr);
         }
         return list;
     }
 
-    public StockRequest findStockByCode(String code) {
+    public StockPO findStockByCode(String code) {
         return stockMapper.findStockByCode(code);
     }
 
     public void buyOrSellStock(BuyOrSellStockRequest buyOrSellStockRequest) {
-        StockRequest stockRequest = stockMapper.findStockByCode(buyOrSellStockRequest.getCode());
+        StockPO stockPO = stockMapper.findStockByCode(buyOrSellStockRequest.getCode());
         List<String> list = new ArrayList<>();
-        list.add(stockRequest.getCode() + "," + stockRequest.getCostPrise() + "," + stockRequest.getBonds() + ","
-                + stockRequest.getApp() + "," + stockRequest.getHide());
+        list.add(stockPO.getCode() + "," + stockPO.getCostPrise() + "," + stockPO.getBonds() + ","
+                + stockPO.getApp() + "," + stockPO.isHide());
         StockEntity stock = getStockDetails(list).get(0);
         // 开盘价格
         BigDecimal openPrice = (new BigDecimal(stock.getNow())).subtract(new BigDecimal(stock.getChange()));
@@ -396,41 +400,40 @@ public class StockEntity {
             buyOrSellStockRequest.setIncome(new BigDecimal("0"));
         }
         buyOrSellMapper.save(buyOrSellStockRequest);
-        StockRequest saveStockRequest = stockMapper.findStockByCode(buyOrSellStockRequest.getCode());
         // 购买
         if ("1".equals(buyOrSellStockRequest.getType())) {
             int restBound = 0;
             BigDecimal newCostPrice;
             // 说明未持有该股票新买入
-            if (saveStockRequest == null) {
+            if (stockPO == null) {
                 restBound = buyOrSellStockRequest.getBonds();
                 newCostPrice = buyOrSellStockRequest.getPrice().multiply(new BigDecimal(buyOrSellStockRequest.getBonds()))
                         .add(buyOrSellStockRequest.getCost())
                         .divide(new BigDecimal(restBound), 3, BigDecimal.ROUND_HALF_UP);
                 // 说明持有该股票再次买入
             } else {
-                restBound = saveStockRequest.getBonds() + buyOrSellStockRequest.getBonds();
+                restBound = stockPO.getBonds() + buyOrSellStockRequest.getBonds();
                 BigDecimal newBuyTotalFee = buyOrSellStockRequest.getPrice().multiply(new BigDecimal(buyOrSellStockRequest.getBonds()))
                         .add(buyOrSellStockRequest.getCost());
-                newCostPrice = saveStockRequest.getCostPrise().multiply(new BigDecimal(saveStockRequest.getBonds())).add(newBuyTotalFee)
+                newCostPrice = stockPO.getCostPrise().multiply(new BigDecimal(stockPO.getBonds())).add(newBuyTotalFee)
                         .divide(new BigDecimal(restBound), 3, BigDecimal.ROUND_HALF_UP);
             }
-            saveStockRequest.setBonds(restBound);
-            saveStockRequest.setCostPrise(newCostPrice);
+            stockPO.setBonds(restBound);
+            stockPO.setCostPrise(newCostPrice);
             // 卖出
         } else {
-            int restBound = saveStockRequest.getBonds() - buyOrSellStockRequest.getBonds();
+            int restBound = stockPO.getBonds() - buyOrSellStockRequest.getBonds();
             BigDecimal newSellTotalFee = buyOrSellStockRequest.getPrice().multiply(new BigDecimal(buyOrSellStockRequest.getBonds()))
                     .subtract(buyOrSellStockRequest.getCost());
             BigDecimal newCostPrice = new BigDecimal("0");
             if (restBound != 0) {
-                newCostPrice = saveStockRequest.getCostPrise().multiply(new BigDecimal(saveStockRequest.getBonds()))
+                newCostPrice = stockPO.getCostPrise().multiply(new BigDecimal(stockPO.getBonds()))
                         .subtract(newSellTotalFee).divide(new BigDecimal(restBound), 3, BigDecimal.ROUND_HALF_UP);
             }
-            saveStockRequest.setBonds(restBound);
-            saveStockRequest.setCostPrise(newCostPrice);
+            stockPO.setBonds(restBound);
+            stockPO.setCostPrise(newCostPrice);
         }
-        log.info("买卖后的saveStockRequest： {}", saveStockRequest);
-        stockMapper.updateStock(saveStockRequest);
+        log.info("买卖后的stockPO： {}", stockPO);
+        stockMapper.updateStock(stockPO);
     }
 }
