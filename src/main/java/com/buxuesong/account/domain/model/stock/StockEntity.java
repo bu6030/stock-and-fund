@@ -2,7 +2,7 @@ package com.buxuesong.account.domain.model.stock;
 
 import com.buxuesong.account.apis.model.request.BuyOrSellStockRequest;
 import com.buxuesong.account.apis.model.request.StockRequest;
-import com.buxuesong.account.domain.service.StockCacheService;
+import com.buxuesong.account.domain.service.CacheService;
 import com.buxuesong.account.infrastructure.adapter.rest.GTimgRestClient;
 import com.buxuesong.account.infrastructure.general.utils.DateTimeUtils;
 import com.buxuesong.account.infrastructure.persistent.po.BuyOrSellStockPO;
@@ -251,7 +251,7 @@ public class StockEntity {
     private BuyOrSellMapper buyOrSellMapper;
 
     @Autowired
-    private StockCacheService stockCacheService;
+    private CacheService cacheService;
 
     @Autowired
     private GTimgRestClient gTimgRestClient;
@@ -279,7 +279,7 @@ public class StockEntity {
             if (DateTimeUtils.isTradingTime()) {
                 result = gTimgRestClient.getStockInfo(urlPara);
             } else {
-                result = stockCacheService.getStockInfo(urlPara);
+                result = cacheService.getStockInfo(urlPara);
             }
 
             log.info("获取股票信息 {}", result);

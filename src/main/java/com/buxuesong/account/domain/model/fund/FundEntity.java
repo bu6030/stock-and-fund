@@ -1,7 +1,7 @@
 package com.buxuesong.account.domain.model.fund;
 
 import com.buxuesong.account.apis.model.request.FundRequest;
-import com.buxuesong.account.domain.service.FundCacheService;
+import com.buxuesong.account.domain.service.CacheService;
 import com.buxuesong.account.infrastructure.adapter.rest.SinaRestClient;
 import com.buxuesong.account.infrastructure.adapter.rest.TiantianFundRestClient;
 import com.buxuesong.account.infrastructure.general.utils.DateTimeUtils;
@@ -253,7 +253,7 @@ public class FundEntity {
     @Autowired
     private FundMapper fundMapper;
     @Autowired
-    private FundCacheService fundCacheService;
+    private CacheService cacheService;
 
     public List<FundEntity> getFundDetails(List<String> codes) {
         List<FundEntity> funds = new ArrayList<>();
@@ -276,7 +276,7 @@ public class FundEntity {
                 if (DateTimeUtils.isTradingTime()) {
                     result = tiantianFundRestClient.getFundInfo(code);
                 } else {
-                    result = fundCacheService.getFundInfoFromTiantianFund(code);
+                    result = cacheService.getFundInfoFromTiantianFund(code);
                 }
 
                 // 天天基金存在基金信息
@@ -320,7 +320,7 @@ public class FundEntity {
                     if (DateTimeUtils.isTradingTime()) {
                         result = sinaRestClient.getFundInfo(code);
                     } else {
-                        result = fundCacheService.getFundInfoFromSina(code);
+                        result = cacheService.getFundInfoFromSina(code);
                     }
                     log.info("sina基金结果： {}", result);
                     FundEntity bean = FundEntity.loadFundFromSina(code, result);
