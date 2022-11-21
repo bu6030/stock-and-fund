@@ -393,7 +393,8 @@ public class StockEntity {
         } else {
             buyOrSellStockRequest.setIncome(new BigDecimal("0"));
         }
-        buyOrSellMapper.save(BuyOrSellStockPO.builder().type(buyOrSellStockRequest.getType()).cost(buyOrSellStockRequest.getCost())
+        buyOrSellMapper.save(BuyOrSellStockPO.builder().code(buyOrSellStockRequest.getCode()).type(buyOrSellStockRequest.getType())
+            .cost(buyOrSellStockRequest.getCost())
             .date(buyOrSellStockRequest.getDate()).price(buyOrSellStockRequest.getPrice())
             .bonds(buyOrSellStockRequest.getBonds()).app(buyOrSellStockRequest.getApp())
             .income(buyOrSellStockRequest.getIncome()).openPrice(buyOrSellStockRequest.getOpenPrice())
