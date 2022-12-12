@@ -2,12 +2,12 @@ package com.buxuesong.account.infrastructure.general.utils;
 
 import com.buxuesong.account.infrastructure.general.config.MailConfig;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
 import javax.mail.*;
 import javax.mail.internet.*;
-import java.io.File;
 import java.util.Date;
 import java.util.Properties;
 
@@ -26,22 +26,28 @@ public class MailUtils {
      */
     public void sendMail(String subject, String content, String mailTo) throws Exception {
         MimeMessage message = createMail();
+        BodyPart messageBodyPart = new MimeBodyPart();
+        Multipart multipart = new MimeMultipart();
         // Config the sender
         InternetAddress form = new InternetAddress(mailConfig.getUsername());
-        MimeMessageHelper msg = new MimeMessageHelper(message, true);
-        File file = new File(mailConfig.getDbRealPath());
-        msg.addAttachment("stock-and-fund.db", file);
-        msg.setFrom(form);
         message.setFrom(form);
-        // 邮件接收者
+        // 配置邮件
         InternetAddress[] iaToList = InternetAddress.parse(mailTo);
-        msg.setTo(iaToList);
-        // 邮件主题
-        msg.setSubject(subject);
-        // 邮件正文
-        msg.setText(content.toString());
-        // 邮件发送时间
-        msg.setSentDate(new Date());
+        message.setRecipients(Message.RecipientType.TO, iaToList);
+        message.setSentDate(new Date());
+        message.setSubject(subject);
+        message.setText(content.toString());
+        // 设置邮件内容为html
+        messageBodyPart.setContent(content.toString(), "text/html;charset=utf-8");
+        multipart.addBodyPart(messageBodyPart);
+        // 增加db文件附件发送
+        MimeBodyPart mailArchieve = new MimeBodyPart();
+        FileDataSource fds = new FileDataSource(mailConfig.getDbRealPath());
+        mailArchieve.setDataHandler(new DataHandler(fds));
+        mailArchieve.setFileName(MimeUtility.encodeText(fds.getName(), "UTF-8", "B"));
+        multipart.addBodyPart(mailArchieve);
+
+        message.setContent(multipart);
         // Start to send
         Transport.send(message);
     }
