@@ -18,7 +18,7 @@ public class SendDBMailTask {
     private boolean sendDbMailTaskEnable;
 
     // 每周一至周五15点30分统计当日盈亏
-    @Scheduled(cron = "45 0/1 * * * MON-FRI")
+    @Scheduled(cron = "0 35 15 ? * MON-FRI")
     public void sendDBMail() {
         log.info("======= SendDBMailTask started =======");
         if (!sendDbMailTaskEnable) {
