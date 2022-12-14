@@ -149,9 +149,13 @@ function getTableHtml(result){
             +"</td></tr>";
         totalIncome = totalIncome.add(new BigDecimal(result[k].income));
     }
-    var totalDayIncomePercent = totalDayIncome.multiply(new BigDecimal("100")).divide(totalmarketValue);
+    var totalDayIncomePercent = new BigDecimal("0");
+    var totalIncomePercent = new BigDecimal("0");
+    if (totalmarketValue != 0) {
+        totalDayIncomePercent = totalDayIncome.multiply(new BigDecimal("100")).divide(totalmarketValue);
+        totalIncomePercent = totalIncome.multiply(new BigDecimal("100")).divide(totalmarketValue);
+    }
     var totalDayIncomePercentStyle = totalDayIncome == 0 ? "" : (totalDayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
-    var totalIncomePercent = totalIncome.multiply(new BigDecimal("100")).divide(totalmarketValue);
     var totalIncomePercentStyle = totalIncome == 0 ? "" : (totalIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
     str += "<tr><td>合计</td><td colspan='2'></td><td " + totalDayIncomePercentStyle + ">" + totalDayIncomePercent + "%</td><td " + totalDayIncomePercentStyle + ">" + totalDayIncome + "</td><td colspan='5'></td><td colspan='2'>" + totalmarketValue + "</td></td><td " + totalIncomePercentStyle + ">" + totalIncomePercent + "%</td><td " + totalIncomePercentStyle + ">" + totalIncome
         +"</td><td></td></tr>";

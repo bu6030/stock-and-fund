@@ -178,9 +178,13 @@ function getStockTableHtml(result, totalMarketValueResult){
         stockDayIncome = stockDayIncome.add(dayIncome);
         stockTotalmarketValue = stockTotalmarketValue.add(marketValue);
     }
-    var stockDayIncomePercent = stockDayIncome.multiply(new BigDecimal("100")).divide(stockTotalmarketValue);
+    var stockDayIncomePercent = new BigDecimal("0");
+    var stockTotalIncomePercent = new BigDecimal("0");
+    if (stockTotalmarketValue != 0) {
+        stockDayIncomePercent = stockDayIncome.multiply(new BigDecimal("100")).divide(stockTotalmarketValue);
+        stockTotalIncomePercent = stockTotalIncome.multiply(new BigDecimal("100")).divide(stockTotalmarketValue);
+    }
     var stockDayIncomePercentStyle = stockDayIncome == 0 ? "" : (stockDayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
-    var stockTotalIncomePercent = stockTotalIncome.multiply(new BigDecimal("100")).divide(stockTotalmarketValue);
     var stockTotalIncomePercentStyle = stockTotalIncome == 0 ? "" : (stockTotalIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
     str += "<tr><td>合计</td><td colspan='2'></td><td " + stockDayIncomePercentStyle + ">" + stockDayIncome + "</td><td " + stockDayIncomePercentStyle + ">" + stockDayIncomePercent + "%</td><td colspan='5'></td><td colspan='2'>" + stockTotalmarketValue + "</td><td " + stockTotalIncomePercentStyle + ">" + stockTotalIncomePercent + "%</td><td " + stockTotalIncomePercentStyle + ">" + stockTotalIncome
         +"</td></tr>";
@@ -225,18 +229,26 @@ function getFundTableHtml(result, totalMarketValueResult){
         fundDayIncome = fundDayIncome.add(dayIncome);
         fundTotalmarketValue = fundTotalmarketValue.add(marketValue);
     }
-    var fundDayIncomePercent = fundDayIncome.multiply(new BigDecimal("100")).divide(fundTotalmarketValue);
+    var fundDayIncomePercent = new BigDecimal("0");
+    var fundTotalIncomePercent = new BigDecimal("0");
+    if (fundTotalmarketValue != 0) {
+        fundDayIncomePercent = fundDayIncome.multiply(new BigDecimal("100")).divide(fundTotalmarketValue);
+        fundTotalIncomePercent = fundTotalIncome.multiply(new BigDecimal("100")).divide(fundTotalmarketValue);
+    }
     var fundDayIncomePercentStyle = fundDayIncome == 0 ? "" : (fundDayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
-    var fundTotalIncomePercent = fundTotalIncome.multiply(new BigDecimal("100")).divide(fundTotalmarketValue);
     var fundTotalIncomePercentStyle = fundTotalIncome == 0 ? "" : (fundTotalIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
     str += "<tr><td>合计</td><td colspan='2'></td><td " + fundDayIncomePercentStyle + ">" + fundDayIncome + "</td><td colspan='2' " + fundDayIncomePercentStyle + ">" + fundDayIncomePercent + "%</td><td colspan='4'></td><td colspan='2'>" + fundTotalmarketValue + "</td><td " + fundTotalIncomePercentStyle + ">" + fundTotalIncomePercent + "%</td><td " + fundTotalIncomePercentStyle + ">" + fundTotalIncome
         +"</td></tr>";
 
     var allDayIncome = fundDayIncome.add(stockDayIncome);
     var allTotalIncome = fundTotalIncome.add(stockTotalIncome);
-    var allDayIncomePercent = allDayIncome.multiply(new BigDecimal("100")).divide(totalMarketValueResult);
+    var allDayIncomePercent = new BigDecimal("0");
+    var allTotalIncomePercent = new BigDecimal("0");
+    if (totalMarketValueResult != 0) {
+        allDayIncomePercent = allDayIncome.multiply(new BigDecimal("100")).divide(totalMarketValueResult);
+        allTotalIncomePercent = allTotalIncome.multiply(new BigDecimal("100")).divide(totalMarketValueResult);
+    }
     var allDayIncomePercentStyle = allDayIncome == 0 ? "" : (allDayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
-    var allTotalIncomePercent = allTotalIncome.multiply(new BigDecimal("100")).divide(totalMarketValueResult);
     var allTotalIncomePercentStyle = allTotalIncome == 0 ? "" : (allTotalIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
 
     str += "<tr><td>股票基金汇总合计</td><td colspan='2'></td><td " + allDayIncomePercentStyle + ">" + allDayIncome + "</td><td colspan='2' " + allDayIncomePercentStyle + ">" + allDayIncomePercent + "%</td><td colspan='4'></td><td colspan='2'>" + totalMarketValueResult + "</td><td " + allTotalIncomePercentStyle + ">" + allTotalIncomePercent + "%</td><td " + allTotalIncomePercentStyle + ">" + allTotalIncome
