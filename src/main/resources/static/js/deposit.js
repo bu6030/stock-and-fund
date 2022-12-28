@@ -140,7 +140,7 @@ function deleteDeposit(){
 
 function getWeekDeposit() {
     var weekStartDate = getCurrentWeekFirstDay();
-    var weekEndDate = getCurrentWeekLastDay;
+    var weekEndDate = getCurrentWeekLastDay();
     $("#beginDate").val(weekStartDate);
     $("#endDate").val(weekEndDate);
     getData();
@@ -216,7 +216,7 @@ function getCurrentWeekLastDay() {
     if (weekLastDays < 10) {
         weekLastDays = '0' + weekLastDays;
     }
-    return weekFirstDay.getFullYear() + '-' + lastMonth + '-' + weekLastDays;
+    return weekLastDay.getFullYear() + '-' + lastMonth + '-' + weekLastDays;
 }
 
 // 当周日时，day为0，因此获取当周周期时间时，会到下周周期
