@@ -25,7 +25,7 @@ public interface DepositMapper {
         " where 1=1 " +
         " <if test=\"beginDate!=null and beginDate!=''\"> and DATE &gt;= #{beginDate} </if> " +
         " <if test=\"endDate!=null and endDate!=''\"> and DATE &lt;= #{endDate} </if> " +
-        " order by DATE ASC</script>" })
+        " order by DATE DESC</script>" })
     List<DepositPO> getDepositList(@Param("beginDate") String beginDate, @Param("endDate") String endDate);
 
     @Delete("delete from DEPOSIT where DATE = #{date} ")
