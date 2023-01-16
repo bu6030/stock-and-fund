@@ -7,8 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-
 @Slf4j
 @RestController
 public class ParamController {
@@ -22,7 +20,7 @@ public class ParamController {
      * @return
      */
     @GetMapping(value = "/param")
-    public Response getParamList(HttpServletRequest request, @RequestParam(value = "type", required = false) String type)
+    public Response getParamList(@RequestParam(value = "type", required = false) String type)
         throws Exception {
         if (type == null) {
             return Response.builder().code("00000000").value(paramEntity.getParamList()).build();
@@ -37,7 +35,7 @@ public class ParamController {
      * @return
      */
     @PostMapping(value = "/param")
-    public Response saveParam(HttpServletRequest request, @RequestBody ParamRequest paramRequest) throws Exception {
+    public Response saveParam(@RequestBody ParamRequest paramRequest) throws Exception {
         paramEntity.saveParam(paramRequest);
         return Response.builder().code("00000000").build();
     }
@@ -48,7 +46,7 @@ public class ParamController {
      * @return
      */
     @DeleteMapping(value = "/param")
-    public Response deleteParam(HttpServletRequest request, @RequestBody ParamRequest paramRequest) throws Exception {
+    public Response deleteParam(@RequestBody ParamRequest paramRequest) throws Exception {
         paramEntity.deleteParam(paramRequest);
         return Response.builder().code("00000000").build();
     }

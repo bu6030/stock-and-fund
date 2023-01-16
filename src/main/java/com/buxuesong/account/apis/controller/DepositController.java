@@ -6,8 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-
 @Slf4j
 @RestController
 public class DepositController {
@@ -21,7 +19,7 @@ public class DepositController {
      * @return
      */
     @GetMapping(value = "/deposit")
-    public Response getDepositList(HttpServletRequest request, @RequestParam(value = "beginDate", required = false) String beginDate,
+    public Response getDepositList(@RequestParam(value = "beginDate", required = false) String beginDate,
         @RequestParam(value = "endDate", required = false) String endDate) throws Exception {
         return Response.builder().code("00000000").value(depositEntity.getDepositList(beginDate, endDate)).build();
     }
@@ -32,7 +30,7 @@ public class DepositController {
      * @return
      */
     @PostMapping(value = "/deposit")
-    public Response depositToday(HttpServletRequest request) throws Exception {
+    public Response depositToday() throws Exception {
         depositEntity.deposit();
         return Response.builder().code("00000000").build();
     }
@@ -43,7 +41,7 @@ public class DepositController {
      * @return
      */
     @DeleteMapping(value = "/deposit")
-    public Response deleteDeposit(HttpServletRequest request) throws Exception {
+    public Response deleteDeposit() throws Exception {
         depositEntity.deleteDeposit();
         return Response.builder().code("00000000").build();
     }

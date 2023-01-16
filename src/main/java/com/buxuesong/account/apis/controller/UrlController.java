@@ -5,9 +5,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 @Slf4j
 @RestController
 public class UrlController {
@@ -20,7 +17,7 @@ public class UrlController {
      * @return
      */
     @GetMapping(value = "/fund.html")
-    public ModelAndView fundInit(HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView fundInit() {
         ModelAndView m = new ModelAndView();
         m.setViewName("fund");
         return m;
@@ -32,7 +29,7 @@ public class UrlController {
      * @return
      */
     @GetMapping(value = "/stock.html")
-    public ModelAndView stockInit(HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView stockInit() {
         ModelAndView m = new ModelAndView();
         m.setViewName("stock");
         return m;
@@ -44,7 +41,7 @@ public class UrlController {
      * @return
      */
     @GetMapping(value = { "/main.html", "/" })
-    public ModelAndView stockAndFundInit(HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView stockAndFundInit() {
         ModelAndView m = new ModelAndView();
         m.setViewName("stockAndFund");
         return m;
@@ -56,7 +53,7 @@ public class UrlController {
      * @return
      */
     @GetMapping(value = "/deposit.html")
-    public ModelAndView depositInit(HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView depositInit() {
         ModelAndView m = new ModelAndView();
         m.setViewName("deposit");
         return m;
@@ -68,7 +65,7 @@ public class UrlController {
      * @return
      */
     @GetMapping(value = "/param.html")
-    public ModelAndView paramInit(HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView paramInit() {
         ModelAndView m = new ModelAndView();
         m.setViewName("param");
         return m;
@@ -81,7 +78,7 @@ public class UrlController {
      * @return
      */
     @GetMapping(value = "/fundNew.html")
-    public ModelAndView fundNewInit(HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView fundNewInit() {
         ModelAndView m = new ModelAndView();
         m.setViewName("fundNew");
         return m;
@@ -93,7 +90,7 @@ public class UrlController {
      * @return
      */
     @GetMapping(value = "/stockNew.html")
-    public ModelAndView stockNewInit(HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView stockNewInit() {
         ModelAndView m = new ModelAndView();
         m.setViewName("stockNew");
         return m;
@@ -105,7 +102,7 @@ public class UrlController {
      * @return
      */
     @GetMapping(value = "/stockAndFundNew.html")
-    public ModelAndView stockAndFundNewInit(HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView stockAndFundNewInit() {
         ModelAndView m = new ModelAndView();
         m.setViewName("stockAndFundNew");
         return m;
@@ -117,7 +114,7 @@ public class UrlController {
      * @return
      */
     @GetMapping(value = "/depositNew.html")
-    public ModelAndView depositNewInit(HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView depositNewInit() {
         ModelAndView m = new ModelAndView();
         m.setViewName("depositNew");
         return m;
@@ -129,7 +126,7 @@ public class UrlController {
      * @return
      */
     @GetMapping(value = "/paramNew.html")
-    public ModelAndView paramNewInit(HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView paramNewInit() {
         ModelAndView m = new ModelAndView();
         m.setViewName("paramNew");
         return m;

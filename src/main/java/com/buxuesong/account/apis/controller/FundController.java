@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +28,7 @@ public class FundController {
      * @return
      */
     @GetMapping(value = "/fund")
-    public Response getFundList(HttpServletRequest request, @RequestParam(value = "app", required = false) String app) throws Exception {
+    public Response getFundList(@RequestParam(value = "app", required = false) String app) throws Exception {
         List<String> fundListFromRedis = fundEntity.getFundList(app);
         return Response.builder().code("00000000").value(fundEntity.getFundDetails(fundListFromRedis)).build();
     }
@@ -66,7 +65,7 @@ public class FundController {
      * @return
      */
     @GetMapping(value = "/stockAndFund")
-    public Response getStockAndFundList(HttpServletRequest request, @RequestParam(value = "app", required = false) String app)
+    public Response getStockAndFundList(@RequestParam(value = "app", required = false) String app)
         throws Exception {
         List<String> fundListFrom = fundEntity.getFundList(app);
         List<String> stcokListFrom = stockEntity.getStockList(app);
