@@ -6,6 +6,7 @@ import com.buxuesong.account.infrastructure.adapter.rest.TiantianFundRestClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -40,4 +41,11 @@ public class CacheService {
         log.info("通过腾讯股票接口缓存获取股票，编码：{}， URL：{}", param);
         return gTimgRestClient.getStockInfo(param);
     }
+
+    @CacheEvict(cacheNames = "cache", allEntries = true)
+    public int removeAllCache() {
+        log.info("removeAllCache，让缓存失效");
+        return 0;
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.buxuesong.account.domain.model.deposit;
 
 import com.buxuesong.account.apis.model.request.BuyOrSellStockRequest;
+import com.buxuesong.account.domain.service.CacheService;
 import com.buxuesong.account.infrastructure.adapter.rest.SzseRestClient;
 import com.buxuesong.account.domain.model.fund.FundEntity;
 import com.buxuesong.account.domain.model.stock.StockEntity;
@@ -27,12 +28,15 @@ public class DepositEntity {
     private FundEntity fundEntity;
     @Autowired
     private StockEntity stockEntity;
+    @Autowired
+    private CacheService cacheService;
 
     public DepositPO getDepositByDate(String date) {
         return depositMapper.findDepositByDate(date);
     }
 
     public void deposit() {
+        cacheService.removeAllCache();
         LocalDate date = LocalDate.now();
         if (!isTradingDate(date.toString())) {
             log.info("非交易日期，不统计");
