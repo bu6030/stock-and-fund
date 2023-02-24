@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +32,24 @@ public class FundController {
     public Response getFundList(@RequestParam(value = "app", required = false) String app) throws Exception {
         List<String> fundListFromRedis = fundEntity.getFundList(app);
         return Response.builder().code("00000000").value(fundEntity.getFundDetails(fundListFromRedis)).build();
+    }
+
+    /**
+     * 获取单个基金信息接口
+     *
+     * @return
+     */
+    @GetMapping(value = "/chrome/fund")
+    public Response getFundList(@RequestParam(value = "fundCode", required = false) String fundCode,
+                                @RequestParam(value = "costPrise", required = false) String costPrise,
+                                @RequestParam(value = "bonds", required = false) String bonds,
+                                @RequestParam(value = "app", required = false) String app
+                                ) throws Exception {
+
+        String fundArr = fundCode + "," + costPrise + "," + bonds + "," + app;
+        List<String> fundListFromRedis = new ArrayList<>();
+        fundListFromRedis.add(fundArr);
+        return Response.builder().code("00000000").value(fundEntity.getFundDetails(fundListFromRedis).get(0)).build();
     }
 
     /**
