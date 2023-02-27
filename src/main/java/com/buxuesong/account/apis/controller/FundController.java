@@ -35,24 +35,6 @@ public class FundController {
     }
 
     /**
-     * 获取单个基金信息接口
-     *
-     * @return
-     */
-    @GetMapping(value = "/chrome/fund")
-    public Response getFundList(@RequestParam(value = "fundCode", required = false) String fundCode,
-                                @RequestParam(value = "costPrise", required = false) String costPrise,
-                                @RequestParam(value = "bonds", required = false) String bonds,
-                                @RequestParam(value = "app", required = false) String app
-                                ) throws Exception {
-
-        String fundArr = fundCode + "," + costPrise + "," + bonds + "," + app;
-        List<String> fundListFromRedis = new ArrayList<>();
-        fundListFromRedis.add(fundArr);
-        return Response.builder().code("00000000").value(fundEntity.getFundDetails(fundListFromRedis).get(0)).build();
-    }
-
-    /**
      * 保存/修改基金接口
      *
      * @return
