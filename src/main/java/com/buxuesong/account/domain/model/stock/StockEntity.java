@@ -4,6 +4,8 @@ import com.buxuesong.account.apis.model.request.BuyOrSellStockRequest;
 import com.buxuesong.account.apis.model.request.StockRequest;
 import com.buxuesong.account.domain.service.CacheService;
 import com.buxuesong.account.infrastructure.adapter.rest.GTimgRestClient;
+import com.buxuesong.account.infrastructure.adapter.rest.SinaRestClient;
+import com.buxuesong.account.infrastructure.adapter.rest.response.StockDayHistoryResponse;
 import com.buxuesong.account.infrastructure.general.utils.DateTimeUtils;
 import com.buxuesong.account.infrastructure.persistent.po.BuyOrSellStockPO;
 import com.buxuesong.account.infrastructure.persistent.po.StockPO;
@@ -256,6 +258,9 @@ public class StockEntity {
     @Autowired
     private GTimgRestClient gTimgRestClient;
 
+    @Autowired
+    private SinaRestClient sinaRestClient;
+
     public List<StockEntity> getStockDetails(List<String> codes) {
         List<StockEntity> stocks = new ArrayList<>();
         List<String> codeList = new ArrayList<>();
@@ -324,6 +329,13 @@ public class StockEntity {
                         bean.setIncome(incomeDec.toString());
                     }
                 }
+                // 增加20日最高最低价格
+                List<StockDayHistoryResponse> stockDayHistory = sinaRestClient.getStockDayHistory(code);
+                log.info("Stock day history is {}", stockDayHistory);
+                StockDayHistoryResponse max = stockDayHistory.stream().max((s1, s2) -> Double.compare(s1.getHigh(), s2.getHigh())).get();
+                StockDayHistoryResponse min = stockDayHistory.stream().min((s1, s2) -> Double.compare(s1.getLow(), s2.getLow())).get();
+                log.info("Stock day history max is {}, low is {}", max, min);
+
                 stocks.add(bean);
             }
         } catch (Exception e) {
