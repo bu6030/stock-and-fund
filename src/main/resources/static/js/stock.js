@@ -130,9 +130,9 @@ function getTableHtml(result){
         var now = new BigDecimal(result[k].now + "");
         var donchianChennel = "";
         if (now.compareTo(day20Max) > 0) {
-            donchianChennel = "突破20日最高价，建议买入！！！";
+            donchianChennel = "破20高";
         } else if(now.compareTo(day20Min) < 0) {
-            donchianChennel = "突破20日最低价，建议卖出！！！";
+            donchianChennel = "破20低";
         } else {
             donchianChennel = "监控中";
         }
@@ -145,14 +145,12 @@ function getTableHtml(result){
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
             + "</td><td>" + result[k].max
             + "</td><td>" + result[k].min
+            + "</td><td>" + "最高:" + day20Max + "；最低：" + day20Min + "；" + donchianChennel
             + "</td><td>" + result[k].now
             + "</td><td>" + result[k].costPrise
             + "</td><td>" + result[k].bonds
             + "</td><td>" + marketValue
             + "</td><td>" + marketValuePercent + "%"
-            + "</td><td>" + day20Max
-            + "</td><td>" + day20Min
-            + "</td><td>" + donchianChennel
             + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent +"%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].income
             + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"修改\" onclick=\"updateStock('" + result[k].code + "','" + result[k].costPrise + "','" + result[k].bonds + "','" + result[k].app + "','" + result[k].hide + "','" + result[k].name + "')\">"
@@ -172,7 +170,7 @@ function getTableHtml(result){
     }
     var totalDayIncomePercentStyle = totalDayIncome == 0 ? "" : (totalDayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
     var totalIncomePercentStyle = totalIncome == 0 ? "" : (totalIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
-    str += "<tr><td>合计</td><td colspan='2'></td><td " + totalDayIncomePercentStyle + ">" + totalDayIncomePercent + "%</td><td " + totalDayIncomePercentStyle + ">" + totalDayIncome + "</td><td colspan='5'></td><td colspan='2'>" + totalmarketValue + "</td></td><td " + totalIncomePercentStyle + ">" + totalIncomePercent + "%</td><td " + totalIncomePercentStyle + ">" + totalIncome
+    str += "<tr><td>合计</td><td colspan='2'></td><td " + totalDayIncomePercentStyle + ">" + totalDayIncomePercent + "%</td><td " + totalDayIncomePercentStyle + ">" + totalDayIncome + "</td><td colspan='6'></td><td colspan='2'>" + totalmarketValue + "</td></td><td " + totalIncomePercentStyle + ">" + totalIncomePercent + "%</td><td " + totalIncomePercentStyle + ">" + totalIncome
         +"</td><td></td></tr>";
     return str;
 }

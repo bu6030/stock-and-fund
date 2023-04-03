@@ -89,6 +89,7 @@ public class FundController {
                 .now(s.getNow()).change(s.getChange()).changePercent(s.getChangePercent())
                 .time(s.getTime()).max(s.getMax()).min(s.getMin())
                 .buyOrSellStockRequestList(s.getBuyOrSellStockRequestList())
+                .day20Min(s.getDay20Min()).day20Max(s.getDay20Max())
                 .build())
             .collect(Collectors.toList());
         stockAndFundsFromStocks.addAll(stockAndFundsFromFunds);
