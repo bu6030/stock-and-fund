@@ -162,10 +162,13 @@ function getStockTableHtml(result, totalMarketValueResult){
         var day20Min = new BigDecimal(result[k].day20Min + "");
         var now = new BigDecimal(result[k].now + "");
         var donchianChennel = "";
+        var donchianChennelStyle = "";
         if (now.compareTo(day20Max) > 0) {
             donchianChennel = "破20高";
+            donchianChennelStyle = "style=\"color:#c12e2a\"";
         } else if(now.compareTo(day20Min) < 0) {
             donchianChennel = "破20低";
+            donchianChennelStyle = "style=\"color:#3e8f3e\"";
         } else {
             donchianChennel = "监控中";
         }
@@ -178,7 +181,7 @@ function getStockTableHtml(result, totalMarketValueResult){
             + "</td><td " + dayIncomeStyle + ">" + result[k].changePercent +"%"
             + "</td><td>" +result[k].max
             + "</td><td>" + result[k].min
-            + "</td><td>" + "最高:" + day20Max + "；最低：" + day20Min + "；" + donchianChennel
+            + "</td><td " + donchianChennelStyle + ">" + "最高:" + day20Max + "；最低：" + day20Min + "；" + donchianChennel
             + "</td><td>" + result[k].now
             + "</td><td>" + result[k].costPrise
             + "</td><td>" + result[k].bonds
