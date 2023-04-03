@@ -45,7 +45,8 @@ public class SinaRestClient {
         ResponseEntity<ArrayList<StockDayHistoryResponse>> response = null;
         try {
             response = restTemplate.exchange(
-                    GET_STOCK_DAY_HISTORY_SINA_URL, HttpMethod.GET, null, new ParameterizedTypeReference<ArrayList<StockDayHistoryResponse>>() {}, code);
+                GET_STOCK_DAY_HISTORY_SINA_URL, HttpMethod.GET, null,
+                new ParameterizedTypeReference<ArrayList<StockDayHistoryResponse>>() {}, code);
         } catch (Exception e) {
             log.info("获取新浪股票接口异常: {]", e);
             return null;

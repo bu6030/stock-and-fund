@@ -50,6 +50,10 @@ public class StockEntity {
 
     private boolean hide;// 是否隐藏
 
+    // 唐安奇通道法，最近20个交易日最高价格以及最低价格
+    private String day20Max;
+    private String day20Min;
+
     public StockEntity() {
     }
 
@@ -202,6 +206,22 @@ public class StockEntity {
         this.hide = hide;
     }
 
+    public String getDay20Max() {
+        return day20Max;
+    }
+
+    public void setDay20Max(String day20Max) {
+        this.day20Max = day20Max;
+    }
+
+    public String getDay20Min() {
+        return day20Min;
+    }
+
+    public void setDay20Min(String day20Min) {
+        this.day20Min = day20Min;
+    }
+
     public List<BuyOrSellStockPO> getBuyOrSellStockRequestList() {
         return buyOrSellStockRequestList;
     }
@@ -330,12 +350,15 @@ public class StockEntity {
                     }
                 }
                 // 增加20日最高最低价格
-                List<StockDayHistoryResponse> stockDayHistory = sinaRestClient.getStockDayHistory(code);
+                List<StockDayHistoryResponse> stockDayHistory = cacheService.getStockDayHistory(code);
                 log.info("Stock day history is {}", stockDayHistory);
-                StockDayHistoryResponse max = stockDayHistory.stream().max((s1, s2) -> Double.compare(s1.getHigh(), s2.getHigh())).get();
-                StockDayHistoryResponse min = stockDayHistory.stream().min((s1, s2) -> Double.compare(s1.getLow(), s2.getLow())).get();
-                log.info("Stock day history max is {}, low is {}", max, min);
-
+                StockDayHistoryResponse maxStockDay20 = stockDayHistory.stream().max((s1, s2) -> Double.compare(s1.getHigh(), s2.getHigh()))
+                    .get();
+                StockDayHistoryResponse minStockDay20 = stockDayHistory.stream().min((s1, s2) -> Double.compare(s1.getLow(), s2.getLow()))
+                    .get();
+                log.info("Stock day history max is {}, low is {}", maxStockDay20, minStockDay20);
+                bean.setDay20Max(maxStockDay20.getHigh() + "");
+                bean.setDay20Min(minStockDay20.getLow() + "");
                 stocks.add(bean);
             }
         } catch (Exception e) {

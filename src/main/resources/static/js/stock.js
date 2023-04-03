@@ -125,6 +125,18 @@ function getTableHtml(result){
         var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
 
+        var day20Max = new BigDecimal(result[k].day20Max + "");
+        var day20Min = new BigDecimal(result[k].day20Min + "");
+        var now = new BigDecimal(result[k].now + "");
+        var donchianChennel = "";
+        if (now.compareTo(day20Max) > 0) {
+            donchianChennel = "突破20日最高价，建议买入！！！";
+        } else if(now.compareTo(day20Min) < 0) {
+            donchianChennel = "突破20日最低价，建议卖出！！！";
+        } else {
+            donchianChennel = "监控中";
+        }
+
         str += "<tr><td>"
             + "<a href='#' onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
             + "</td><td>" +result[k].name
@@ -138,6 +150,9 @@ function getTableHtml(result){
             + "</td><td>" + result[k].bonds
             + "</td><td>" + marketValue
             + "</td><td>" + marketValuePercent + "%"
+            + "</td><td>" + day20Max
+            + "</td><td>" + day20Min
+            + "</td><td>" + donchianChennel
             + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent +"%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].income
             + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"修改\" onclick=\"updateStock('" + result[k].code + "','" + result[k].costPrise + "','" + result[k].bonds + "','" + result[k].app + "','" + result[k].hide + "','" + result[k].name + "')\">"
