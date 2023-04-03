@@ -66,7 +66,11 @@
 51. 增加当日盈亏/合计盈亏比例，展示盈利亏损颜色 Xuesong.Bu 2022/12/14, 16:04
 52. 盈利汇总倒序排列，合计放在最前面 Xuesong.Bu 2022/12/28, 09:27
 53. 收益汇总，年底当周日期跨年导致统计当周盈利报错 Xuesong.Bu 2022/12/28, 09:44
-54. 修改为SpringBoot3.0 Xuesong.Bu 2023/1/16, 16:05
+54. 修改为SpringBoot3.0 Xuesong.Bu 2023/1/16, 23:05
+55. 缓存没有失效问题，导致统计错误 Xuesong.Bu 2023/1/17, 21:15
+56. 为chrome插件提供接口 Xuesong.Bu 2023/2/27, 22:50
+57. 防止统计数据偶尔抽风没跑 Xuesong.Bu 2023/3/15, 23:06
+58. 获取20天最高最低价格，增加唐安奇通道法监控程序 bu6030 2023/4/3 00:26
 # UI页面
 ![image](https://user-images.githubusercontent.com/11482988/191644817-b8fd3dcf-e8aa-4582-84b0-afb2927d156d.png) 
 股票页面Bootstrap风格  
