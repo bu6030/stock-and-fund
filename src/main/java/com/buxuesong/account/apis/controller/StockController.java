@@ -65,4 +65,15 @@ public class StockController {
         return Response.builder().value(true).code("00000000").build();
     }
 
+    /**
+     * 通过唐安奇通道法计算股票
+     *
+     * @return
+     */
+    @GetMapping(value = "/stock/compute")
+    public Response computeStock(@RequestParam(value = "code", required = false) String code,
+        @RequestParam(value = "dataLen", required = false) String dataLen) throws Exception {
+        return Response.builder().code("00000000").value(stockEntity.computeStock(code, dataLen)).build();
+    }
+
 }

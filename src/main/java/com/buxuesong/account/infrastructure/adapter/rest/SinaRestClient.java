@@ -22,7 +22,7 @@ public class SinaRestClient {
 
     private static final String GET_FUND_INFO_SINA_URL = "https://hq.sinajs.cn/?_={timestamp}/&list=sz{code},f_{code}";
 
-    private static final String GET_STOCK_DAY_HISTORY_SINA_URL = "https://money.finance.sina.com.cn/quotes_service/api/json_v2.php/CN_MarketData.getKLineData?symbol={code}&scale=240&datalen=20";
+    private static final String GET_STOCK_DAY_HISTORY_SINA_URL = "https://money.finance.sina.com.cn/quotes_service/api/json_v2.php/CN_MarketData.getKLineData?symbol={code}&scale=240&datalen={datalen}";
 
     public String getFundInfo(String code) {
         log.info("通过新浪基金接口获取基金，编码：{}， URL：{}", code, GET_FUND_INFO_SINA_URL);
@@ -40,13 +40,13 @@ public class SinaRestClient {
         return response.getBody();
     }
 
-    public ArrayList<StockDayHistoryResponse> getStockDayHistory(String code) {
+    public ArrayList<StockDayHistoryResponse> getStockDayHistory(String code, String dataLen) {
         log.info("通过新浪股票接口获取股票历史，编码：{}， URL：{}", code, GET_STOCK_DAY_HISTORY_SINA_URL);
         ResponseEntity<ArrayList<StockDayHistoryResponse>> response = null;
         try {
             response = restTemplate.exchange(
                 GET_STOCK_DAY_HISTORY_SINA_URL, HttpMethod.GET, null,
-                new ParameterizedTypeReference<ArrayList<StockDayHistoryResponse>>() {}, code);
+                new ParameterizedTypeReference<ArrayList<StockDayHistoryResponse>>() {}, code, dataLen);
         } catch (Exception e) {
             log.info("获取新浪股票接口异常: {]", e);
             return null;

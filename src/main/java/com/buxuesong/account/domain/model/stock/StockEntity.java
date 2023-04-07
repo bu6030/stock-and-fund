@@ -350,7 +350,7 @@ public class StockEntity {
                     }
                 }
                 // 增加20日最高最低价格
-                List<StockDayHistoryResponse> stockDayHistory = cacheService.getStockDayHistory(code);
+                List<StockDayHistoryResponse> stockDayHistory = cacheService.getStockDayHistory(code, "20");
                 log.info("Stock day history is {}", stockDayHistory);
                 StockDayHistoryResponse maxStockDay20 = stockDayHistory.stream().max((s1, s2) -> Double.compare(s1.getHigh(), s2.getHigh()))
                     .get();
@@ -470,4 +470,41 @@ public class StockEntity {
         log.info("买卖后的stockPO： {}", stockPO);
         stockMapper.updateStock(stockPO);
     }
+
+    public String computeStock(String code, String dataLen) {
+        List<StockDayHistoryResponse> stockDayHistory = cacheService.getStockDayHistory(code, dataLen);
+        log.info("Stock day history is {}", stockDayHistory);
+        boolean haveOne = false;
+        Double buyPrice = 0D;
+        Double totalIncome = 0D;
+        StockDayHistoryResponse currentStockDay = null;
+        // 从第21天开始计算
+        for (int i = 20; i < stockDayHistory.size(); i++) {
+            List<StockDayHistoryResponse> stockDayHistory20 = stockDayHistory.subList(i - 20, i);
+            List<StockDayHistoryResponse> stockDayHistory10 = stockDayHistory.subList(i - 10, i);
+            currentStockDay = stockDayHistory.get(i);
+            StockDayHistoryResponse maxStockDay = stockDayHistory20.stream().max((s1, s2) -> Double.compare(s1.getHigh(), s2.getHigh()))
+                .get();
+            StockDayHistoryResponse minStockDay = stockDayHistory20.stream().min((s1, s2) -> Double.compare(s1.getLow(), s2.getLow()))
+                .get();
+            if (!haveOne && currentStockDay.getHigh() > maxStockDay.getHigh()) {
+                buyPrice = (currentStockDay.getHigh() + currentStockDay.getLow()) / 2D;
+                haveOne = true;
+                log.info("Buy one at : {} , price is {}", currentStockDay.getDay(), buyPrice);
+            }
+            if (haveOne && currentStockDay.getLow() < minStockDay.getLow()) {
+                Double sellPrice = (currentStockDay.getHigh() + currentStockDay.getLow()) / 2D;
+                Double income = (sellPrice - buyPrice) * 100D;
+                totalIncome += income;
+                haveOne = false;
+                log.info("Sell one at : {} , sell price is {} , income is {}", currentStockDay.getDay(), sellPrice, income);
+            }
+        }
+        if (haveOne) {
+            totalIncome += (currentStockDay.getHigh() + currentStockDay.getLow()) / 2D;
+        }
+        log.info("Total income is {}", totalIncome);
+        return "Total income is " + totalIncome;
+    }
+
 }

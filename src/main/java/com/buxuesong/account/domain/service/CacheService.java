@@ -45,10 +45,10 @@ public class CacheService {
         return gTimgRestClient.getStockInfo(param);
     }
 
-    @Cacheable(key = "'stock_day_his_'+#param")
-    public ArrayList<StockDayHistoryResponse> getStockDayHistory(String param) {
-        log.info("通过新浪股票接口缓存获取股票日线历史，编码：{}", param);
-        return sinaRestClient.getStockDayHistory(param);
+    @Cacheable(key = "'stock_day_his_'+#param+#dataLen")
+    public ArrayList<StockDayHistoryResponse> getStockDayHistory(String param, String dataLen) {
+        log.info("通过新浪股票接口缓存获取股票日线历史，编码：{} , 获取交易日长度：{}", param, dataLen);
+        return sinaRestClient.getStockDayHistory(param, dataLen);
     }
 
     @CacheEvict(cacheNames = "cache", allEntries = true)
