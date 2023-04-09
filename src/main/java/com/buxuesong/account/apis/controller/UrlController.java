@@ -59,6 +59,13 @@ public class UrlController {
         return m;
     }
 
+    @GetMapping(value = "/depositYear.html")
+    public ModelAndView depositYearInit() {
+        ModelAndView m = new ModelAndView();
+        m.setViewName("depositYear");
+        return m;
+    }
+
     /**
      * 字典数据页面初始化
      *
