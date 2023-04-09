@@ -81,6 +81,12 @@ public class DepositEntity {
         return list;
     }
 
+    public List<DepositPO> getDepositYearSummitList(String beginDate, String endDate) {
+        List<DepositPO> list = depositMapper.getDepositYearSummitList(beginDate, endDate);
+        log.info("Get deposit year summit list between {} and {} : {}", beginDate, endDate, list);
+        return list;
+    }
+
     private BigDecimal depositFundDayIncome() {
         List<String> fundListFrom = fundEntity.getFundList(null);
         List<FundEntity> funds = fundEntity.getFundDetails(fundListFrom);

@@ -45,4 +45,10 @@ public class DepositController {
         depositEntity.deleteDeposit();
         return Response.builder().code("00000000").build();
     }
+
+    @GetMapping(value = "/deposit/year")
+    public Response getDepositYearSummitList(@RequestParam(value = "beginDate", required = false) String beginDate,
+                                   @RequestParam(value = "endDate", required = false) String endDate) throws Exception {
+        return Response.builder().code("00000000").value(depositEntity.getDepositYearSummitList(beginDate, endDate)).build();
+    }
 }
