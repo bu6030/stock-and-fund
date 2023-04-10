@@ -480,8 +480,10 @@ public class StockEntity {
         StockDayHistoryResponse currentStockDay = null;
         // 从第21天开始计算
         for (int i = 20; i < stockDayHistory.size(); i++) {
-            List<StockDayHistoryResponse> stockDayHistory20 = stockDayHistory.subList(i - 20, i);
-            List<StockDayHistoryResponse> stockDayHistory10 = stockDayHistory.subList(i - 10, i);
+            List<StockDayHistoryResponse> stockDayHistory20 = stockDayHistory.subList(i - 20, i).stream().map(s -> s.clone())
+                .collect(Collectors.toList());
+            List<StockDayHistoryResponse> stockDayHistory10 = stockDayHistory.subList(i - 10, i).stream().map(s -> s.clone())
+                .collect(Collectors.toList());
             currentStockDay = stockDayHistory.get(i);
             StockDayHistoryResponse maxStockDay = stockDayHistory20.stream().max((s1, s2) -> Double.compare(s1.getHigh(), s2.getHigh()))
                 .get();

@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -15,4 +13,9 @@ public class StockDayHistoryResponse {
     private String day;
     private Double high;
     private Double low;
+
+    public StockDayHistoryResponse clone() {
+        StockDayHistoryResponse clone = new StockDayHistoryResponse(this.getDay(), this.getHigh(), this.getLow());
+        return clone;
+    }
 }

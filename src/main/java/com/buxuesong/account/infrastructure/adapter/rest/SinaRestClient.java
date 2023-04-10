@@ -2,6 +2,9 @@ package com.buxuesong.account.infrastructure.adapter.rest;
 
 import com.buxuesong.account.infrastructure.adapter.rest.response.StockDayHistoryResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -52,5 +55,18 @@ public class SinaRestClient {
             return null;
         }
         return response.getBody();
+    }
+
+    public static void main(String[] args) throws Exception {
+        //第1页地址
+        String url = "http://vip.stock.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/000550.phtml";    //发送http请求
+        Document document = Jsoup.connect(url).get();
+        //在id=J_goodsList的div下，获取所有带有data-sku属性的li标签
+        Elements lis = document.select("#sharebonus_1");
+        lis.forEach(li -> {
+            Elements fenhongList = li.select("tbody");
+            System.out.println(fenhongList.text());
+        }
+        );
     }
 }
