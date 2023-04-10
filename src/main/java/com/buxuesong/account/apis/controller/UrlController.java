@@ -66,6 +66,14 @@ public class UrlController {
         return m;
     }
 
+    @GetMapping(value = "/depositMonth.html")
+    public ModelAndView depositMonthInit() {
+        ModelAndView m = new ModelAndView();
+        m.setViewName("depositYear");
+        m.getModel().put("type", "month");
+        return m;
+    }
+
     /**
      * 字典数据页面初始化
      *
@@ -124,6 +132,21 @@ public class UrlController {
     public ModelAndView depositNewInit() {
         ModelAndView m = new ModelAndView();
         m.setViewName("depositNew");
+        return m;
+    }
+
+    @GetMapping(value = "/depositMonthNew.html")
+    public ModelAndView depositMonthNew() {
+        ModelAndView m = new ModelAndView();
+        m.setViewName("depositYearNew");
+        m.getModel().put("type", "month");
+        return m;
+    }
+
+    @GetMapping(value = "/depositYearNew.html")
+    public ModelAndView depositYearNew() {
+        ModelAndView m = new ModelAndView();
+        m.setViewName("depositYearNew");
         return m;
     }
 

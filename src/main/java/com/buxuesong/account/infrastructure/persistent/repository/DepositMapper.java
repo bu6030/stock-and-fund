@@ -39,6 +39,17 @@ public interface DepositMapper {
             " order by substr(DATE, 0, 5) DESC</script>" })
     List<DepositPO> getDepositYearSummitList(@Param("beginDate") String beginDate, @Param("endDate") String endDate);
 
+    @Select({
+        "<script> select substr(DATE, 0, 8) date, sum(FUND_DAY_INCOME) fundDayIncome, sum(STOCK_DAY_INCOME) stockDayIncome, sum(DAY_INCOME) totalDayIncome "
+            +
+            " from DEPOSIT " +
+            " where 1=1 " +
+            " <if test=\"beginDate!=null and beginDate!=''\"> and DATE &gt;= #{beginDate} </if> " +
+            " <if test=\"endDate!=null and endDate!=''\"> and DATE &lt;= #{endDate} </if> " +
+            " group by substr(DATE, 0, 8) " +
+            " order by substr(DATE, 0, 8) DESC</script>" })
+    List<DepositPO> getDepositMonthSummitList(@Param("beginDate") String beginDate, @Param("endDate") String endDate);
+
     @Delete("delete from DEPOSIT where DATE = #{date} ")
     int deleteDeposit(@Param("date") String date);
 

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>收益汇总</title>
+    <link rel="stylesheet" th:href="@{/css/main.admin.css}" type="text/css" media="all"/>
+    <link rel="stylesheet" th:href="@{/css/main.amazeui.min.css}" type="text/css" media="all"/>
+    <link href="https://cdn.staticfile.org/layui/2.7.6/css/layui.css" rel="stylesheet">
+    <style>
+        body{padding: 6px 16px;}
+        .demo-carousel{height: 200px; line-height: 200px; text-align: center;}
+    </style>
+</head>
+<body>
+<header class="menu">
+    <div th:replace="headerNew.html"></div>
+</header>
+<blockquote class="layui-elem-quote">收益汇总：您可在此页面查看股票基金月度/年度收益汇总。<a href="mailto:buxuesong@foxmail.com">有任何问题点击这里联系作者: buxuesong@foxmail.com</a></blockquote>
+
+<blockquote class="layui-elem-quote">
+</blockquote>
+<table class="layui-hide" id="demo" lay-filter="test"></table>
+<script th:src="@{/js/BigDecimal.js}"></script>
+<script th:src="@{/js/jquery.min.js}"></script>
+<script src="https://cdn.staticfile.org/layui/2.7.6/layui.js"></script>
+<script>
+    var depositTable;
+    layui.use(function(){
+        // 得到需要的内置组件
+        var layer = layui.layer; //弹层
+        var table = layui.table; //表格
+        // 向世界问个好
+        layer.msg('收益汇总：您可在此页面查看股票基金月度/年度收益汇总。');
+        var type = $("#type").val();
+        var url;
+        if("month" == type){
+            url = "/deposit/month";
+        } else {
+            url = "/deposit/year";
+        }
+        // 执行一个 table 实例
+        depositTable = table.render({
+            elem: '#demo'
+            // ,height: 600
+            ,url: url //数据接口
+            ,title: '收益汇总'
+            ,even: true //开启隔行背景
+            // ,page: true //开启分页
+            ,totalRow: true //开启合计行
+            ,parseData: function(res){ //res 即为原始返回的数据
+                for(var i=0;i<res.value.length;i++) {
+                    var item = res.value[i];
+                    item.fundDayIncome = parseFloat(item.fundDayIncome).toFixed(2) + '';
+                    item.stockDayIncome = parseFloat(item.stockDayIncome).toFixed(2) + '';
+                    item.totalDayIncome = parseFloat(item.totalDayIncome).toFixed(2) + '';
+                    item.stockDayIncomeColor = item.stockDayIncome == 0 ? "" : (item.stockDayIncome >= 0?"#c12e2a":"#3e8f3e");
+                    item.fundDayIncomeColor = item.fundDayIncome == 0 ? "" : (item.fundDayIncome >= 0?"#c12e2a":"#3e8f3e");
+                    item.totalDayIncomeColor = item.totalDayIncome == 0 ? "" : (item.totalDayIncome >= 0?"#c12e2a":"#3e8f3e");
+                }
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.value.length, //解析数据长度
+                    "data": res.value //解析数据列表
+                };
+            }
+            ,cols: [ [ //表头
+                {field: 'date', title: '日期', width: 190, sort: true,totalRow: '合计：',templet: function(d){return '<span style="color: ' + d.color + '">'+ d.date +'</span>'}}
+                ,{field: 'fundDayIncome', title: '基金收益', width:250, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.fundDayIncomeColor + '">'+ d.fundDayIncome +'</span>'}}
+                ,{field: 'stockDayIncome', title: '股票收益', width:250, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.stockDayIncomeColor + '">'+ d.stockDayIncome +'</span>'}}
+                ,{field: 'totalDayIncome', title: '总收益', width:250, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.totalDayIncomeColor + '">'+ d.totalDayIncome +'</span>'}}
+            ] ]
+        });
+    });
+</script>
+<input id="type" th:type="hidden" th:value="${type}">
+</body>
+</html>

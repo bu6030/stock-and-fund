@@ -3,7 +3,15 @@ var pageSize = 15;
 function getData() {
     var beginDate = $("#beginDate").val();
     var endDate = $("#endDate").val();
-    var url = "/deposit/year";
+
+    var type = $("#type").val();
+    var url;
+    if("month" == type){
+        url = "/deposit/month";
+    } else {
+        url = "/deposit/year";
+    }
+
     $.ajax({
         url: url,
         type: "get",
