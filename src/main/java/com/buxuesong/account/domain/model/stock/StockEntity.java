@@ -5,6 +5,7 @@ import com.buxuesong.account.apis.model.request.StockRequest;
 import com.buxuesong.account.domain.service.CacheService;
 import com.buxuesong.account.infrastructure.adapter.rest.GTimgRestClient;
 import com.buxuesong.account.infrastructure.adapter.rest.SinaRestClient;
+import com.buxuesong.account.infrastructure.adapter.rest.response.ShareBonusResponse;
 import com.buxuesong.account.infrastructure.adapter.rest.response.StockDayHistoryResponse;
 import com.buxuesong.account.infrastructure.general.utils.DateTimeUtils;
 import com.buxuesong.account.infrastructure.persistent.po.BuyOrSellStockPO;
@@ -473,11 +474,16 @@ public class StockEntity {
 
     public String computeStock(String code, String dataLen) {
         List<StockDayHistoryResponse> stockDayHistory = cacheService.getStockDayHistory(code, dataLen);
-        log.info("Stock day history is {}", stockDayHistory);
+        Map<String, ShareBonusResponse> shareBonusResponseMap = sinaRestClient
+            .getShareBonusHistory(code.replaceAll("sh", "").replace("sz", ""));
         boolean haveOne = false;
-        Double buyPrice = 0D;
-        Double totalIncome = 0D;
+        BigDecimal buyPrice = BigDecimal.ZERO;
+        BigDecimal totalIncome = BigDecimal.ZERO;
+        // 持有多少股
+        BigDecimal bonds = BigDecimal.ZERO;
         StockDayHistoryResponse currentStockDay = null;
+        int totalCnt = 0;
+        int successCnt = 0;
         // 从第21天开始计算
         for (int i = 20; i < stockDayHistory.size(); i++) {
             List<StockDayHistoryResponse> stockDayHistory20 = stockDayHistory.subList(i - 20, i).stream().map(s -> s.clone())
@@ -487,26 +493,67 @@ public class StockEntity {
             currentStockDay = stockDayHistory.get(i);
             StockDayHistoryResponse maxStockDay = stockDayHistory20.stream().max((s1, s2) -> Double.compare(s1.getHigh(), s2.getHigh()))
                 .get();
-            StockDayHistoryResponse minStockDay = stockDayHistory20.stream().min((s1, s2) -> Double.compare(s1.getLow(), s2.getLow()))
+            StockDayHistoryResponse minStockDay = stockDayHistory10.stream().min((s1, s2) -> Double.compare(s1.getLow(), s2.getLow()))
                 .get();
+            // 未持有，并且突破20日新高，买入
             if (!haveOne && currentStockDay.getHigh() > maxStockDay.getHigh()) {
-                buyPrice = (currentStockDay.getHigh() + currentStockDay.getLow()) / 2D;
+                buyPrice = (new BigDecimal(currentStockDay.getHigh())).add(new BigDecimal(currentStockDay.getLow()))
+                    .divide(new BigDecimal(2));
                 haveOne = true;
-                log.info("Buy one at : {} , price is {}", currentStockDay.getDay(), buyPrice);
+                bonds = new BigDecimal(100);
+                log.info("Buy one at : {} , price is {}", currentStockDay.getDay(), buyPrice.setScale(2, BigDecimal.ROUND_UP));
             }
+            // 已经持有，并且当前日期分红除权，重新计算
+            if (haveOne && shareBonusResponseMap.get(currentStockDay.getDay()) != null) {
+                ShareBonusResponse shareBonusResponse = shareBonusResponseMap.get(currentStockDay.getDay());
+                // 有分红
+                if (shareBonusResponse.getShareMoney().compareTo(BigDecimal.ZERO) > 0) {
+                    BigDecimal income = shareBonusResponse.getShareMoney().multiply(new BigDecimal(10));
+                    buyPrice = buyPrice.subtract(shareBonusResponse.getShareMoney().divide(new BigDecimal(10)));
+                    totalIncome = totalIncome.add(income);
+                    log.info("Share bonus at : {} , income is {}, total income is {}, new buy price is {}", currentStockDay.getDay(),
+                        income.setScale(2, BigDecimal.ROUND_UP), totalIncome.setScale(2, BigDecimal.ROUND_UP),
+                        buyPrice.setScale(2, BigDecimal.ROUND_UP));
+                }
+                // 有转股
+                if (shareBonusResponse.getShareStock().compareTo(BigDecimal.ZERO) > 0) {
+                    bonds = bonds.add(shareBonusResponse.getShareStock().multiply(new BigDecimal(10)));
+                    log.info("Share stock at : {} , new bonds is {}", currentStockDay.getDay(), bonds.setScale(2, BigDecimal.ROUND_UP));
+                }
+                // 有赠股
+                if (shareBonusResponse.getSendStock().compareTo(BigDecimal.ZERO) > 0) {
+                    bonds = bonds.add(shareBonusResponse.getSendStock().multiply(new BigDecimal(10)));
+                    log.info("Share stock at : {} , new bonds is {}", currentStockDay.getDay(), bonds.setScale(2, BigDecimal.ROUND_UP));
+                }
+            }
+            // 已经持有，并且持有达到突破10/20日最低价格卖出
             if (haveOne && currentStockDay.getLow() < minStockDay.getLow()) {
-                Double sellPrice = (currentStockDay.getHigh() + currentStockDay.getLow()) / 2D;
-                Double income = (sellPrice - buyPrice) * 100D;
-                totalIncome += income;
+                BigDecimal sellPrice = (new BigDecimal(currentStockDay.getHigh())).add(new BigDecimal(currentStockDay.getLow()))
+                    .divide(new BigDecimal(2));
+                BigDecimal income = sellPrice.multiply(bonds).subtract(buyPrice.multiply(new BigDecimal(100)));
+                totalIncome = totalIncome.add(income);
                 haveOne = false;
-                log.info("Sell one at : {} , sell price is {} , income is {}", currentStockDay.getDay(), sellPrice, income);
+                bonds = BigDecimal.ZERO;
+                totalCnt++;
+                if (income.compareTo(BigDecimal.ZERO) > 0) {
+                    successCnt++;
+                }
+                log.info("Sell one at : {} , sell price is {} , income is {}, total income is {}", currentStockDay.getDay(),
+                    sellPrice.setScale(2, BigDecimal.ROUND_UP), income.setScale(2, BigDecimal.ROUND_UP),
+                    totalIncome.setScale(2, BigDecimal.ROUND_UP));
             }
         }
         if (haveOne) {
-            totalIncome += (currentStockDay.getHigh() + currentStockDay.getLow()) / 2D;
+            totalIncome = totalIncome
+                .add((new BigDecimal(currentStockDay.getHigh())).add(new BigDecimal(currentStockDay.getLow())).divide(new BigDecimal(2)));
         }
-        log.info("Total income is {}", totalIncome);
-        return "Total income is " + totalIncome;
+        log.info("successCnt is {}, totalCnt is {}", successCnt, totalCnt);
+        BigDecimal successRate = (new BigDecimal(successCnt)).divide(new BigDecimal(totalCnt), 4, BigDecimal.ROUND_UP)
+            .multiply(new BigDecimal(100));
+        log.info("Total income is {}, success rate is {}%", totalIncome.setScale(2, BigDecimal.ROUND_UP),
+            successRate.setScale(2, BigDecimal.ROUND_UP));
+        return String.format("Total income is %s, success rate is %s%%", totalIncome.setScale(2, BigDecimal.ROUND_UP),
+            successRate.setScale(2, BigDecimal.ROUND_UP));
     }
 
 }
