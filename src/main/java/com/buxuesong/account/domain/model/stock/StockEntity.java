@@ -503,9 +503,11 @@ public class StockEntity {
             List<StockDayHistoryResponse> stockDayHistory20 = stockDayHistory.subList(i - 20, i);
             List<StockDayHistoryResponse> stockDayHistory10 = stockDayHistory.subList(i - 10, i);
             currentStockDay = stockDayHistory.get(i);
-            StockDayHistoryResponse maxStockDay = stockDayHistory20.stream().max(Comparator.comparingDouble(StockDayHistoryResponse::getHigh))
+            StockDayHistoryResponse maxStockDay = stockDayHistory20.stream()
+                .max(Comparator.comparingDouble(StockDayHistoryResponse::getHigh))
                 .get();
-            StockDayHistoryResponse minStockDay = stockDayHistory10.stream().min(Comparator.comparingDouble(StockDayHistoryResponse::getLow))
+            StockDayHistoryResponse minStockDay = stockDayHistory10.stream()
+                .min(Comparator.comparingDouble(StockDayHistoryResponse::getLow))
                 .get();
             // 未持有，并且突破20日新高，买入
             if (!haveOne && currentStockDay.getHigh() > maxStockDay.getHigh()) {
