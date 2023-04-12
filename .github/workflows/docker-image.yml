@@ -45,7 +45,6 @@ jobs:
         asset_path: target/stock-and-fund-*.jar
         asset_name: ${{ github.ref }}.tar.gz
         asset_content_type: application/gzip
-        
 
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
