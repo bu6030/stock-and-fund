@@ -248,14 +248,18 @@
                     item.toltalIncomeColor = item.income == 0 ? "" : (item.income >= 0?"#c12e2a":"#3e8f3e");
                     var day20Max = new BigDecimal(item.day20Max + "");
                     var day20Min = new BigDecimal(item.day20Min + "");
+                    var day10Min = new BigDecimal(item.day10Min + "");
                     var now = new BigDecimal(item.now + "");
-                    var donchianChennel = "最高:" + day20Max + "；最低：" + day20Min + "；";
+                    var donchianChennel = "20最高:" + day20Max + "；20最低：" + day20Min + "；10最低：" + day10Min + "；";
                     var donchianChennelColor = "";
                     if (now.compareTo(day20Max) > 0) {
                         donchianChennel += "破20高";
                         donchianChennelColor = "#c12e2a";
                     } else if(now.compareTo(day20Min) < 0) {
                         donchianChennel += "破20低";
+                        donchianChennelColor = "#3e8f3e";
+                    } else if(now.compareTo(day10Min) < 0) {
+                        donchianChennel = "破10低";
                         donchianChennelColor = "#3e8f3e";
                     } else {
                         donchianChennel += "监控中";
@@ -280,7 +284,7 @@
                 ,{field: 'dayIncome', title: '当日盈利', width: 120, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.dayInComeColor + '">'+ d.dayIncome +'</span>'}}
                 ,{field: 'max', title: '最高价', width:100}
                 ,{field: 'min', title: '最低价', width: 100}
-                ,{field: 'donchianChennel', title: '唐安奇通道', width: 100, templet: function(d){return '<span style="color: ' + d.donchianChennelColor + '">'+ d.donchianChennel +'</span>'}}
+                ,{field: 'donchianChennel', title: '唐安奇通道', width: 200, templet: function(d){return '<span style="color: ' + d.donchianChennelColor + '">'+ d.donchianChennel +'</span>'}}
                 ,{field: 'now', title: '当前价', width: 100}
                 ,{field: 'costPrise', title: '成本价', width: 100}
                 ,{field: 'bonds', title: '持仓', width: 100, sort: true}

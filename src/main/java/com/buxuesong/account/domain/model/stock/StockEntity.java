@@ -55,6 +55,8 @@ public class StockEntity {
     private String day20Max;
     private String day20Min;
 
+    private String day10Min;
+
     public StockEntity() {
     }
 
@@ -223,6 +225,14 @@ public class StockEntity {
         this.day20Min = day20Min;
     }
 
+    public String getDay10Min() {
+        return day10Min;
+    }
+
+    public void setDay10Min(String day10Min) {
+        this.day10Min = day10Min;
+    }
+
     public List<BuyOrSellStockPO> getBuyOrSellStockRequestList() {
         return buyOrSellStockRequestList;
     }
@@ -351,15 +361,19 @@ public class StockEntity {
                     }
                 }
                 // 增加20日最高最低价格
-                List<StockDayHistoryResponse> stockDayHistory = cacheService.getStockDayHistory(code, "20");
-                log.info("Stock day history is {}", stockDayHistory);
-                StockDayHistoryResponse maxStockDay20 = stockDayHistory.stream().max((s1, s2) -> Double.compare(s1.getHigh(), s2.getHigh()))
+                List<StockDayHistoryResponse> stockDayHistory20 = cacheService.getStockDayHistory(code, "20");
+                log.info("Stock day history is {}", stockDayHistory20);
+                List<StockDayHistoryResponse> stockDayHistory10 = stockDayHistory20.subList(10, 20);
+                StockDayHistoryResponse maxStockDay = stockDayHistory20.stream().max((s1, s2) -> Double.compare(s1.getHigh(), s2.getHigh()))
                     .get();
-                StockDayHistoryResponse minStockDay20 = stockDayHistory.stream().min((s1, s2) -> Double.compare(s1.getLow(), s2.getLow()))
+                StockDayHistoryResponse minStockDay20 = stockDayHistory20.stream().min((s1, s2) -> Double.compare(s1.getLow(), s2.getLow()))
                     .get();
-                log.info("Stock day history max is {}, low is {}", maxStockDay20, minStockDay20);
-                bean.setDay20Max(maxStockDay20.getHigh() + "");
+                StockDayHistoryResponse minStockDay10 = stockDayHistory10.stream().min((s1, s2) -> Double.compare(s1.getLow(), s2.getLow()))
+                    .get();
+                log.info("Stock day history max is {}, 20 day low is {}, 10 day low is {}", maxStockDay, minStockDay20, minStockDay10);
+                bean.setDay20Max(maxStockDay.getHigh() + "");
                 bean.setDay20Min(minStockDay20.getLow() + "");
+                bean.setDay10Min(minStockDay10.getLow() + "");
                 stocks.add(bean);
             }
         } catch (Exception e) {

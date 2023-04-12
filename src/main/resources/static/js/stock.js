@@ -127,6 +127,7 @@ function getTableHtml(result){
 
         var day20Max = new BigDecimal(result[k].day20Max + "");
         var day20Min = new BigDecimal(result[k].day20Min + "");
+        var day10Min = new BigDecimal(result[k].day10Min + "");
         var now = new BigDecimal(result[k].now + "");
         var donchianChennel = "";
         var donchianChennelStyle = "";
@@ -135,6 +136,9 @@ function getTableHtml(result){
             donchianChennelStyle = "style=\"color:#c12e2a\"";
         } else if(now.compareTo(day20Min) < 0) {
             donchianChennel = "破20低";
+            donchianChennelStyle = "style=\"color:#3e8f3e\"";
+        } else if(now.compareTo(day10Min) < 0) {
+            donchianChennel = "破10低";
             donchianChennelStyle = "style=\"color:#3e8f3e\"";
         } else {
             donchianChennel = "监控中";
@@ -148,7 +152,7 @@ function getTableHtml(result){
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
             + "</td><td>" + result[k].max
             + "</td><td>" + result[k].min
-            + "</td><td " + donchianChennelStyle + ">" + "最高:" + day20Max + "；最低：" + day20Min + "；" + donchianChennel
+            + "</td><td " + donchianChennelStyle + ">" + "20最高:" + day20Max + "；20最低：" + day20Min + "；10最低：" + day10Min + "；" + donchianChennel
             + "</td><td>" + result[k].now
             + "</td><td>" + result[k].costPrise
             + "</td><td>" + result[k].bonds

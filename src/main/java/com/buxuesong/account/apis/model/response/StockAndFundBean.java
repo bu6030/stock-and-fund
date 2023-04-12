@@ -40,5 +40,6 @@ public class StockAndFundBean {
     // 唐安奇通道法，最近20个交易日最高价格以及最低价格
     private String day20Max;
     private String day20Min;
+    private String day10Min;
 
 }
