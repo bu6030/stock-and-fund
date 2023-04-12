@@ -79,6 +79,8 @@
 56. 为chrome插件提供接口 Xuesong.Bu 2023/2/27, 22:50
 57. 防止统计数据偶尔抽风没跑 Xuesong.Bu 2023/3/15, 23:06
 58. 获取20天最高最低价格，增加唐安奇通道法监控程序 bu6030 2023/4/3 00:26
+59. 增加月度/年度收益汇总 Xuesong.Bu 2023/4/10, 21:24
+60. 增加唐安奇通道法计算股票历史数据，增加分红转股赠股 Xuesong.Bu 2023/4/10 22:44
 # UI页面
 ![image](https://user-images.githubusercontent.com/11482988/191644817-b8fd3dcf-e8aa-4582-84b0-afb2927d156d.png) 
 股票页面Bootstrap风格  
