@@ -1,5 +1,13 @@
 # 股基神器
-## 功能
+
+[功能](#jump1)  
+[功能描述](#jump2)  
+[修改历史](#jump3)  
+[UI页面](#jump4)  
+[部署](#jump5)  
+[初始化表结构](#jump6)  
+
+## <span id="jump1">功能</span>
 1. 可以模拟炒股哦
 2. 手动添加股票基金
 3. 查看股票基金实时价格
@@ -8,7 +16,7 @@
 6. 查看每日收益汇总，每月收益汇总，每年收益汇总
 7. 唐安奇通道法数据监控股票
 
-## 功能描述
+## <span id="jump2">功能描述</span>
 自己研究写的一个股票基金SpringBoot小项目，我给它命名股基神器，可以模拟炒股哦！  
 我自己有多个APP购买股票基金的情况，每次还要到多个APP查看，很费劲  
 因此自己写了个汇总的，只支持中国股票基金，录入基金股票编码，购买成本，持仓数量来添加股票基金，便可以实时查看价格以及盈亏
@@ -22,7 +30,7 @@
 多个页面UI，Bootstrap以及Layui样式  
 具体内容们可以查看我的帖子：<https://zhuanlan.zhihu.com/p/557316975>  
 
-## 修改历史
+## <span id="jump3">修改历史</span>
 1. 增加30s自动刷新 By bu6030 2022/8/1 15:57  
 2. 修改为开盘时间自动刷新，非交易时间不自动刷新 By bu6030 2022/8/3 17:36  
 3. 对基金股票按照code正序排序 By bu6030 2022/8/4 00:27  
@@ -84,7 +92,7 @@
 59. 增加月度/年度收益汇总 Xuesong.Bu 2023/4/10, 21:24
 60. 增加唐安奇通道法计算股票历史数据，增加分红转股赠股 Xuesong.Bu 2023/4/10 22:44
 
-# UI页面
+# <span id="jump4">UI页面</span>
 ![image](https://user-images.githubusercontent.com/11482988/191644817-b8fd3dcf-e8aa-4582-84b0-afb2927d156d.png)  
 股票页面Bootstrap风格  
 
@@ -124,7 +132,7 @@
 ![image](https://user-images.githubusercontent.com/11482988/189321234-e7416c96-5cb4-4b1a-af9d-a593dc0c0b6d.png)  
 添加/修改字典数据  
 
-## 部署
+## <span id="jump5">部署</span>
 ### 1. 本机Docker环境一键部署
 1. 本地package出jar包
 2. 修改localDeployment.sh文件中的本地sqllite文件绝对路径位置，也就是项目中的stock-and-fund.db文件的绝对路径
@@ -147,7 +155,7 @@ java -jar -Dsqllite.db.file=你的项目路径/stock-and-fund.db stock-and-fund-
 ```
 4. 本机访问http://localhost:8080
 
-## 6. 初始化表结构
+## <span id="jump6">初始化表结构</span>
 ### 盈利汇总数据
 ```
 CREATE TABLE DEPOSIT (
