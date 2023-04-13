@@ -8,6 +8,7 @@
 6. 查看每日收益汇总，每月收益汇总，每年收益汇总
 7. 唐安奇通道法数据监控股票
 
+## 功能描述
 自己研究写的一个股票基金SpringBoot小项目，我给它命名股基神器，可以模拟炒股哦！  
 我自己有多个APP购买股票基金的情况，每次还要到多个APP查看，很费劲  
 因此自己写了个汇总的，只支持中国股票基金，录入基金股票编码，购买成本，持仓数量来添加股票基金，便可以实时查看价格以及盈亏
@@ -20,7 +21,8 @@
 手动添加股票基金APP，例如东方财富，支付宝，微信等  
 多个页面UI，Bootstrap以及Layui样式  
 具体内容们可以查看我的帖子：<https://zhuanlan.zhihu.com/p/557316975>  
-# 修改历史
+
+## 修改历史
 1. 增加30s自动刷新 By bu6030 2022/8/1 15:57  
 2. 修改为开盘时间自动刷新，非交易时间不自动刷新 By bu6030 2022/8/3 17:36  
 3. 对基金股票按照code正序排序 By bu6030 2022/8/4 00:27  
@@ -81,14 +83,15 @@
 58. 获取20天最高最低价格，增加唐安奇通道法监控程序 bu6030 2023/4/3 00:26
 59. 增加月度/年度收益汇总 Xuesong.Bu 2023/4/10, 21:24
 60. 增加唐安奇通道法计算股票历史数据，增加分红转股赠股 Xuesong.Bu 2023/4/10 22:44
+
 # UI页面
-![image](https://user-images.githubusercontent.com/11482988/191644817-b8fd3dcf-e8aa-4582-84b0-afb2927d156d.png) 
+![image](https://user-images.githubusercontent.com/11482988/191644817-b8fd3dcf-e8aa-4582-84b0-afb2927d156d.png)  
 股票页面Bootstrap风格  
 
-![image](https://user-images.githubusercontent.com/11482988/191644906-f475dd4c-2a19-4bfb-a597-2d0805f07a18.png)
+![image](https://user-images.githubusercontent.com/11482988/191644906-f475dd4c-2a19-4bfb-a597-2d0805f07a18.png)  
 股票页面Layui风格  
 
-![image](https://user-images.githubusercontent.com/11482988/191645032-f6877706-45c7-4dba-8dd2-95a76e9c6d1b.png)
+![image](https://user-images.githubusercontent.com/11482988/191645032-f6877706-45c7-4dba-8dd2-95a76e9c6d1b.png)  
 买入/卖出股票页面  
 
 ![image](https://user-images.githubusercontent.com/11482988/189321022-9f6b4889-4730-4b29-aed0-a63692496693.png)  
@@ -103,7 +106,7 @@
 ![image](https://user-images.githubusercontent.com/11482988/187102586-7532e589-0548-4158-aa55-3ff5e91f678e.png)  
 股票基金汇总Bootstrap风格  
 
-![image](https://user-images.githubusercontent.com/11482988/187102599-fc19736d-808e-4ac6-8f3d-044c7b846e27.png)
+![image](https://user-images.githubusercontent.com/11482988/187102599-fc19736d-808e-4ac6-8f3d-044c7b846e27.png)  
 股票基金汇总Layui风格  
 
 ![image](https://user-images.githubusercontent.com/11482988/187102638-8cbf30d5-a500-4c76-8bce-6313a7b916df.png)  
@@ -121,22 +124,31 @@
 ![image](https://user-images.githubusercontent.com/11482988/189321234-e7416c96-5cb4-4b1a-af9d-a593dc0c0b6d.png)  
 添加/修改字典数据  
 
-# 部署
-## 本机Docker环境一键部署
+## 部署
+### 1. 本机Docker环境一键部署
 1. 本地package出jar包
 2. 修改localDeployment.sh文件中的本地sqllite文件绝对路径位置，也就是项目中的stock-and-fund.db文件的绝对路径
 执行项目根目录下localDeployment.sh
 ./localDeployment.sh
 3. 本机访问http://localhost:8080
 
-## 本机Idea启动
+### 2. 本机Idea启动
 1. 修改Run/Debug Configurations->Spring Boot中增加环境变量，sqllite文件绝对路径位置，也就是项目中的stock-and-fund.db文件的绝对路径
-sqllite.db.file=/XXXX/XXXX/stock-and-fund.db
+sqllite.db.file=你的项目路径/stock-and-fund.db
 2. 本机通过SpringBoot start类直接run main方法启动
 3. 本机访问http://localhost:8080
 
-# 初始化表结构
-## 盈利汇总数据
+### 3. 下载release jar包
+1. 打开链接 https://github.com/bu6030/stock-and-fund/releases
+2. 下载最新Release中的jar包以及db文件，例如stock-and-fund-1.6.0-SNAPSHOT.jar和stock-and-fund.db
+3. 本机执行以下命令
+```
+java -jar -Dsqllite.db.file=你的项目路径/stock-and-fund.db stock-and-fund-1.6.0-SNAPSHOT.jar
+```
+4. 本机访问http://localhost:8080
+
+## 6. 初始化表结构
+### 盈利汇总数据
 ```
 CREATE TABLE DEPOSIT (
   DATE TEXT(10) PRIMARY KEY NOT NULL,
@@ -148,7 +160,7 @@ CREATE TABLE DEPOSIT (
   TOTAL_MARKET_VALUE CHAR(20) NOT NULL
 );
 ```
-## 基金数据
+### 基金数据
 ```
 CREATE TABLE FUND (
   CODE TEXT(10) PRIMARY KEY NOT NULL,
@@ -158,7 +170,7 @@ CREATE TABLE FUND (
   HIDE INTEGER
 );
 ```
-## 股票数据
+### 股票数据
 ```
 CREATE TABLE STOCK (
   CODE TEXT(10) PRIMARY KEY NOT NULL,
@@ -168,7 +180,7 @@ CREATE TABLE STOCK (
   HIDE INTEGER
 );
 ```
-## 字典数据
+### 字典数据
 ```
 CREATE TABLE PARAM (
   TYPE TEXT(10) NOT NULL,
@@ -178,7 +190,7 @@ CREATE TABLE PARAM (
 );
 CREATE INDEX IDX_PARAM_TYPE ON PARAM(TYPE);
 ```
-## 买卖数据
+### 买卖数据
 ```
 CREATE TABLE BUY_OR_SELL (
   DATE TEXT(10) NOT NULL,
