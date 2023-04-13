@@ -27,7 +27,7 @@ jobs:
 
     - name: Get Branch Name
       id: get_branch_name
-      run: echo "::set-output branch_name=123"
+      run: echo "::set-output name=branch_name::$(echo ${GITHUB_REF#refs/heads/})"
 
 #     - name: Build with Maven
 #       run: mvn -B package --file pom.xml
