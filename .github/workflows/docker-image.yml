@@ -21,7 +21,7 @@ jobs:
 
     - name: Get Branch Name
       id: get_branch_name
-      run: echo "::set-output branch_name=::$0" |grep 'SNAPSHOT' pom.xml | awk '{split($0,a,"-"); print a[1]}'| awk '{split($0,a,">"); print a[2]}'
+      run: echo "##[set-output branch_name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
 
     - name: Set up JDK 17
       uses: actions/setup-java@v3
