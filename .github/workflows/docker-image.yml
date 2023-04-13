@@ -24,7 +24,11 @@ jobs:
       with:
         java-version: '17'
         distribution: 'adopt'
-        
+
+    - name: Get Branch Name
+      id: get_branch_name
+      run: grep 'SNAPSHOT' pom.xml | awk '{split($0,a,"-"); print a[1]}'| awk '{split($0,a,">"); echo "::set-output branch_name=a[2]"}'
+
 #     - name: Build with Maven
 #       run: mvn -B package --file pom.xml
 
@@ -34,8 +38,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref#refs/heads/ }}${{ steps.date.outputs.date }}
-        release_name: Release ${{ github.ref#refs/heads/ }${{ steps.date.outputs.date }}
+        tag_name: ${{ github.ref }}${{ steps.date.outputs.date }}${{ steps.get_branch_name.outputs.branch_name }}
+        release_name: Release ${{ github.ref }${{ steps.date.outputs.date }}${{ steps.get_branch_name.outputs.branch_name }}
         draft: false
         prerelease: false
         
