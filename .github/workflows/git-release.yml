@@ -65,5 +65,6 @@ jobs:
         asset_name: stock-and-fund.db
         asset_content_type: application/gzip
 
+
 #     - name: Build the Docker image
 #       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
