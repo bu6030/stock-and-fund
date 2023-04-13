@@ -27,7 +27,7 @@ jobs:
 
     - name: Get Branch Name
       id: get_branch_name
-      run: grep 'SNAPSHOT' pom.xml | awk '{split($0,a,"-"); print a[1]}'| awk '{split($0,a,">"); echo "::set-output branch_name=a[2]"}'
+      run: echo "::set-output branch_name=123"
 
 #     - name: Build with Maven
 #       run: mvn -B package --file pom.xml
