@@ -327,17 +327,17 @@ public class StockEntity {
                 String dataStr = line.substring(line.indexOf("=") + 2, line.length() - 2);
                 String[] values = dataStr.split("~");
                 StockEntity bean = new StockEntity(code, codeMap);
+                BigDecimal now = new BigDecimal(values[3]).setScale(2, RoundingMode.HALF_UP);
                 bean.setName(values[1]);
-                bean.setNow(values[3]);
-                bean.setChange(values[31]);
+                bean.setNow(now + "");
+                bean.setChange(new BigDecimal(values[31]).setScale(2, RoundingMode.HALF_UP) + "");
                 bean.setChangePercent(values[32]);
                 bean.setTime(values[30]);
-                bean.setMax(values[33]);// 33
-                bean.setMin(values[34]);// 34
+                bean.setMax(new BigDecimal(values[33]).setScale(2, RoundingMode.HALF_UP) + "");// 33
+                bean.setMin(new BigDecimal(values[34]).setScale(2, RoundingMode.HALF_UP) + "");// 34
                 bean.setBuyOrSellStockRequestList(buyOrSellStockPOs.stream().filter(s -> s.getCode().equals(code))
                     .collect(Collectors.toList()));
 
-                BigDecimal now = new BigDecimal(values[3]);
                 String costPriceStr = bean.getCostPrise();
                 if (StringUtils.isNotEmpty(costPriceStr)) {
                     BigDecimal costPriceDec = new BigDecimal(costPriceStr);
