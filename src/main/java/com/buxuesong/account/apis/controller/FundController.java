@@ -36,8 +36,10 @@ public class FundController {
     }
 
     @GetMapping(value = "/fundHis")
-    public Response getFundHisList(@RequestParam(value = "app", required = false) String app) throws Exception {
-        List<FundHisPO> fundHisList = fundEntity.getFundHisList(app);
+    public Response getFundHisList(@RequestParam(value = "app", required = false) String app,
+        @RequestParam(value = "beginDate", required = false) String beginDate,
+        @RequestParam(value = "endDate", required = false) String endDate) throws Exception {
+        List<FundHisPO> fundHisList = fundEntity.getFundHisList(app, beginDate, endDate);
         return Response.builder().code("00000000").value(fundHisList).build();
     }
 
