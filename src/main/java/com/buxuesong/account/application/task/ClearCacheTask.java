@@ -18,9 +18,11 @@ public class ClearCacheTask {
     // 每周一至周五9点清理缓存
     @Scheduled(cron = "0 0 9 ? * MON-FRI")
     public void clearCache() {
+
         log.info("======= ClearCacheTask started =======");
         execute();
         log.info("======= ClearCacheTask finished =======");
+
     }
 
     private void execute() {
