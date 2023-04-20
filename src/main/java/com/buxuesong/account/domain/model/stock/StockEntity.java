@@ -403,6 +403,7 @@ public class StockEntity {
             String dataStr = result.substring(result.indexOf("=") + 2, result.length() - 2);
             String[] values = dataStr.split("~");
             log.info("添加股票名称 {}", values[1]);
+            stockRequest.setName(values[1]);
         } catch (Exception e) {
             log.info("获取股票信息异常 {}", e.getMessage());
             return false;
@@ -410,10 +411,12 @@ public class StockEntity {
         StockPO stockPOFromTable = stockMapper.findStockByCode(stockRequest.getCode());
         if (stockPOFromTable != null) {
             stockHisMapper.saveFromStock(stockRequest.getCode());
-            stockMapper.updateStock(StockPO.builder().app(stockRequest.getApp()).bonds(stockRequest.getBonds()).code(stockRequest.getCode())
+            stockMapper.updateStock(StockPO.builder().name(stockRequest.getName()).app(stockRequest.getApp()).bonds(stockRequest.getBonds())
+                .code(stockRequest.getCode())
                 .costPrise(stockRequest.getCostPrise()).hide(stockRequest.getHide()).build());
         } else {
-            stockMapper.save(StockPO.builder().app(stockRequest.getApp()).bonds(stockRequest.getBonds()).code(stockRequest.getCode())
+            stockMapper.save(StockPO.builder().name(stockRequest.getName()).app(stockRequest.getApp()).bonds(stockRequest.getBonds())
+                .code(stockRequest.getCode())
                 .costPrise(stockRequest.getCostPrise()).hide(stockRequest.getHide()).build());
         }
         return true;

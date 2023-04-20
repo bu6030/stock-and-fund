@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 public class StockRequest {
     private String code;
+    private String name;
     private BigDecimal costPrise;
     private int bonds;
     private String app;
@@ -50,10 +51,23 @@ public class StockRequest {
         this.hide = hide;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isHide() {
+        return hide;
+    }
+
     @Override
     public String toString() {
-        return "SaveStockRequest{" +
+        return "StockRequest{" +
             "code='" + code + '\'' +
+            ", name='" + name + '\'' +
             ", costPrise=" + costPrise +
             ", bonds=" + bonds +
             ", app='" + app + '\'' +

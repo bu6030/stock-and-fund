@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface FundMapper {
 
-    @Update("INSERT INTO FUND (CODE, COST_PRICE, BONDS, APP) values (#{fund.code},#{fund.costPrise},#{fund.bonds},#{fund.app}) ")
+    @Update("INSERT INTO FUND (CODE, NAME, COST_PRICE, BONDS, APP) values (#{fund.code},#{fund.name},#{fund.costPrise},#{fund.bonds},#{fund.app}) ")
     int save(@Param("fund") FundPO fundPO);
 
     @Select({

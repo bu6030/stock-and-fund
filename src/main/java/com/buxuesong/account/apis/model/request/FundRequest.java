@@ -3,6 +3,7 @@ package com.buxuesong.account.apis.model.request;
 import java.math.BigDecimal;
 
 public class FundRequest {
+    private String name;
     private String code;
     private BigDecimal costPrise;
     private String bonds;
@@ -50,14 +51,23 @@ public class FundRequest {
         this.hide = hide;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public String toString() {
-        return "SaveFundRequest{" +
-            "code='" + code + '\'' +
-            ", costPrise='" + costPrise + '\'' +
+        return "FundRequest{" +
+            "name='" + name + '\'' +
+            ", code='" + code + '\'' +
+            ", costPrise=" + costPrise +
             ", bonds='" + bonds + '\'' +
             ", app='" + app + '\'' +
-            ", hide='" + hide + '\'' +
+            ", hide=" + hide +
             '}';
     }
 }

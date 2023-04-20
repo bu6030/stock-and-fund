@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface StockMapper {
 
-    @Update("INSERT INTO STOCK (CODE, COST_PRICE, BONDS, APP, HIDE) values (#{stock.code},#{stock.costPrise},#{stock.bonds},#{stock.app},#{stock.hide}) ")
+    @Update("INSERT INTO STOCK (CODE, NAME, COST_PRICE, BONDS, APP, HIDE) values (#{stock.code},#{stock.name},#{stock.costPrise},#{stock.bonds},#{stock.app},#{stock.hide}) ")
     int save(@Param("stock") StockPO StockPO);
 
     @Select({

@@ -366,15 +366,17 @@ public class FundEntity {
     public boolean saveFund(FundRequest fundRequest) {
         try {
             String result = tiantianFundRestClient.getFundInfo(fundRequest.getCode());
+            FundEntity bean = null;
             if (result != null && !result.equals("jsonpgz")) {
                 String json = result.substring(8, result.length() - 2);
                 log.info("天天基金结果： {}", json);
-                FundEntity bean = gson.fromJson(json, FundEntity.class);
+                bean = gson.fromJson(json, FundEntity.class);
             } else {
                 result = sinaRestClient.getFundInfo(fundRequest.getCode());
                 log.info("sina基金结果： {}", result);
-                FundEntity bean = FundEntity.loadFundFromSina(fundRequest.getCode(), result);
+                bean = FundEntity.loadFundFromSina(fundRequest.getCode(), result);
             }
+            fundRequest.setName(bean.getFundName());
         } catch (Exception e) {
             log.info("获取基金信息异常 {}", e.getMessage());
             return false;
@@ -382,10 +384,12 @@ public class FundEntity {
         FundPO fundPOFromTable = fundMapper.findFundByCode(fundRequest.getCode());
         if (fundPOFromTable != null) {
             fundHisMapper.saveFromFund(fundRequest.getCode());
-            fundMapper.updateFund(FundPO.builder().app(fundRequest.getApp()).bonds(fundRequest.getBonds()).code(fundRequest.getCode())
+            fundMapper.updateFund(FundPO.builder().name(fundRequest.getName()).app(fundRequest.getApp()).bonds(fundRequest.getBonds())
+                .code(fundRequest.getCode())
                 .costPrise(fundRequest.getCostPrise()).hide(fundRequest.isHide()).build());
         } else {
-            fundMapper.save(FundPO.builder().app(fundRequest.getApp()).bonds(fundRequest.getBonds()).code(fundRequest.getCode())
+            fundMapper.save(FundPO.builder().name(fundRequest.getName()).app(fundRequest.getApp()).bonds(fundRequest.getBonds())
+                .code(fundRequest.getCode())
                 .costPrise(fundRequest.getCostPrise()).hide(fundRequest.isHide()).build());
         }
         return true;

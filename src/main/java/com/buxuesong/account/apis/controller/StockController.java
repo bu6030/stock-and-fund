@@ -30,6 +30,7 @@ public class StockController {
 
     /**
      * 获取 Stock His 历史数据
+     * 
      * @param app
      * @return
      * @throws Exception

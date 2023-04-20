@@ -14,8 +14,7 @@ public interface StockHisMapper {
     int saveFromStock(@Param("code") String code);
 
     @Select({
-            "<script> select CODE, NAME, COST_PRICE costPrise, BONDS, APP, HIDE, CREATE_DATE createDate from STOCK_HIS WHERE 1=1" +
-                    " <if test=\"app!=null and app!=''\"> and APP = #{app} </if> order by APP ASC, substr(code,3,6) ASC </script>" })
+        "<script> select CODE, NAME, COST_PRICE costPrise, BONDS, APP, HIDE, CREATE_DATE createDate from STOCK_HIS WHERE 1=1" +
+            " <if test=\"app!=null and app!=''\"> and APP = #{app} </if> order by APP ASC, substr(code,3,6) ASC </script>" })
     List<StockHisPO> findAllStockHis(@Param("app") String app);
 }
-
