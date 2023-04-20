@@ -5,6 +5,7 @@ import com.buxuesong.account.apis.model.response.Response;
 import com.buxuesong.account.domain.model.fund.FundEntity;
 import com.buxuesong.account.apis.model.response.StockAndFundBean;
 import com.buxuesong.account.domain.model.stock.StockEntity;
+import com.buxuesong.account.infrastructure.persistent.po.FundHisPO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,8 +31,14 @@ public class FundController {
      */
     @GetMapping(value = "/fund")
     public Response getFundList(@RequestParam(value = "app", required = false) String app) throws Exception {
-        List<String> fundListFromRedis = fundEntity.getFundList(app);
-        return Response.builder().code("00000000").value(fundEntity.getFundDetails(fundListFromRedis)).build();
+        List<String> fundList = fundEntity.getFundList(app);
+        return Response.builder().code("00000000").value(fundEntity.getFundDetails(fundList)).build();
+    }
+
+    @GetMapping(value = "/fundHis")
+    public Response getFundHisList(@RequestParam(value = "app", required = false) String app) throws Exception {
+        List<FundHisPO> fundHisList = fundEntity.getFundHisList(app);
+        return Response.builder().code("00000000").value(fundHisList).build();
     }
 
     /**

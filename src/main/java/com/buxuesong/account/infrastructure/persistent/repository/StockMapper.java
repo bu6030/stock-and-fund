@@ -26,7 +26,3 @@ public interface StockMapper {
     @Delete("delete from STOCK where CODE = #{stock.code} ")
     int deleteStock(@Param("stock") StockPO stockPO);
 }
-/**
- * CREATE TABLE STOCK ( CODE TEXT(10) PRIMARY KEY NOT NULL, COST_PRICE CHAR(20)
- * NOT NULL, BOUNDS INT NOT NULL, APP CHAR(10) NOT NULL );
- */

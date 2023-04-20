@@ -11,11 +11,12 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FundPO {
+public class StockHisPO {
     private String code;
     private String name;
     private BigDecimal costPrise;
-    private String bonds;
+    private int bonds;
     private String app;
     private boolean hide;
+    private String createDate;
 }

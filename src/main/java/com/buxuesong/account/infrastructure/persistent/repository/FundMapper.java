@@ -26,7 +26,3 @@ public interface FundMapper {
     @Delete("delete from FUND where CODE = #{fund.code} ")
     int deleteFund(@Param("fund") FundPO fundPO);
 }
-/**
- * CREATE TABLE FUND ( CODE TEXT(10) PRIMARY KEY NOT NULL, COST_PRICE CHAR(20)
- * NOT NULL, BOUNDS CHAR(30) NOT NULL, APP CHAR(10) NOT NULL );
- */

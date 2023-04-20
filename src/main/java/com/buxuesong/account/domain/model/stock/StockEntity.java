@@ -9,8 +9,10 @@ import com.buxuesong.account.infrastructure.adapter.rest.response.ShareBonusResp
 import com.buxuesong.account.infrastructure.adapter.rest.response.StockDayHistoryResponse;
 import com.buxuesong.account.infrastructure.general.utils.DateTimeUtils;
 import com.buxuesong.account.infrastructure.persistent.po.BuyOrSellStockPO;
+import com.buxuesong.account.infrastructure.persistent.po.StockHisPO;
 import com.buxuesong.account.infrastructure.persistent.po.StockPO;
 import com.buxuesong.account.infrastructure.persistent.repository.BuyOrSellMapper;
+import com.buxuesong.account.infrastructure.persistent.repository.StockHisMapper;
 import com.buxuesong.account.infrastructure.persistent.repository.StockMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -281,6 +283,9 @@ public class StockEntity {
     private StockMapper stockMapper;
 
     @Autowired
+    private StockHisMapper stockHisMapper;
+
+    @Autowired
     private BuyOrSellMapper buyOrSellMapper;
 
     @Autowired
@@ -404,6 +409,7 @@ public class StockEntity {
         }
         StockPO stockPOFromTable = stockMapper.findStockByCode(stockRequest.getCode());
         if (stockPOFromTable != null) {
+            stockHisMapper.saveFromStock(stockRequest.getCode());
             stockMapper.updateStock(StockPO.builder().app(stockRequest.getApp()).bonds(stockRequest.getBonds()).code(stockRequest.getCode())
                 .costPrise(stockRequest.getCostPrise()).hide(stockRequest.getHide()).build());
         } else {
@@ -414,6 +420,7 @@ public class StockEntity {
     }
 
     public void deleteStock(StockRequest stockRequest) {
+        stockHisMapper.saveFromStock(stockRequest.getCode());
         stockMapper.deleteStock(StockPO.builder().app(stockRequest.getApp()).bonds(stockRequest.getBonds()).code(stockRequest.getCode())
             .costPrise(stockRequest.getCostPrise()).hide(stockRequest.getHide()).build());
     }
@@ -431,6 +438,12 @@ public class StockEntity {
             list.add(stockArr);
         }
         return list;
+    }
+
+    public List<StockHisPO> getStockHisList(String app) {
+        List<StockHisPO> stockHis = stockHisMapper.findAllStockHis(app);
+        log.info("APP: {} ,数据库中的股票历史为：{}", app, stockHis);
+        return stockHis;
     }
 
     public void buyOrSellStock(BuyOrSellStockRequest buyOrSellStockRequest) {
@@ -491,6 +504,7 @@ public class StockEntity {
             stockPO.setBonds(restBound);
             stockPO.setCostPrise(newCostPrice);
         }
+        stockHisMapper.saveFromStock(stockPO.getCode());
         log.info("买卖后的stockPO： {}", stockPO);
         stockMapper.updateStock(stockPO);
     }

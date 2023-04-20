@@ -5,7 +5,9 @@ import com.buxuesong.account.domain.service.CacheService;
 import com.buxuesong.account.infrastructure.adapter.rest.SinaRestClient;
 import com.buxuesong.account.infrastructure.adapter.rest.TiantianFundRestClient;
 import com.buxuesong.account.infrastructure.general.utils.DateTimeUtils;
+import com.buxuesong.account.infrastructure.persistent.po.FundHisPO;
 import com.buxuesong.account.infrastructure.persistent.po.FundPO;
+import com.buxuesong.account.infrastructure.persistent.repository.FundHisMapper;
 import com.buxuesong.account.infrastructure.persistent.repository.FundMapper;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
@@ -253,6 +255,8 @@ public class FundEntity {
     @Autowired
     private FundMapper fundMapper;
     @Autowired
+    private FundHisMapper fundHisMapper;
+    @Autowired
     private CacheService cacheService;
 
     public List<FundEntity> getFundDetails(List<String> codes) {
@@ -377,6 +381,7 @@ public class FundEntity {
         }
         FundPO fundPOFromTable = fundMapper.findFundByCode(fundRequest.getCode());
         if (fundPOFromTable != null) {
+            fundHisMapper.saveFromFund(fundRequest.getCode());
             fundMapper.updateFund(FundPO.builder().app(fundRequest.getApp()).bonds(fundRequest.getBonds()).code(fundRequest.getCode())
                 .costPrise(fundRequest.getCostPrise()).hide(fundRequest.isHide()).build());
         } else {
@@ -387,6 +392,7 @@ public class FundEntity {
     }
 
     public void deleteFund(FundRequest fundRequest) {
+        fundHisMapper.saveFromFund(fundRequest.getCode());
         fundMapper.deleteFund(FundPO.builder().app(fundRequest.getApp()).bonds(fundRequest.getBonds()).code(fundRequest.getCode())
             .costPrise(fundRequest.getCostPrise()).hide(fundRequest.isHide()).build());
     }
@@ -404,5 +410,11 @@ public class FundEntity {
             list.add(fundArr);
         }
         return list;
+    }
+
+    public List<FundHisPO> getFundHisList(String app) {
+        List<FundHisPO> fundHis = fundHisMapper.findAllFundHis(app);
+        log.info("APP: {} ,数据库中的基金历史为：{}", app, fundHis);
+        return fundHis;
     }
 }

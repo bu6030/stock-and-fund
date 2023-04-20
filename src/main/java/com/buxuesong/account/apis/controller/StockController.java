@@ -4,6 +4,7 @@ import com.buxuesong.account.apis.model.response.Response;
 import com.buxuesong.account.apis.model.request.BuyOrSellStockRequest;
 import com.buxuesong.account.apis.model.request.StockRequest;
 import com.buxuesong.account.domain.model.stock.StockEntity;
+import com.buxuesong.account.infrastructure.persistent.po.StockHisPO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +24,20 @@ public class StockController {
      */
     @GetMapping(value = "/stock")
     public Response getStockList(@RequestParam(value = "app", required = false) String app) throws Exception {
-        List<String> stockListFromRedis = stockEntity.getStockList(app);
-        return Response.builder().code("00000000").value(stockEntity.getStockDetails(stockListFromRedis)).build();
+        List<String> stockList = stockEntity.getStockList(app);
+        return Response.builder().code("00000000").value(stockEntity.getStockDetails(stockList)).build();
+    }
+
+    /**
+     * 获取 Stock His 历史数据
+     * @param app
+     * @return
+     * @throws Exception
+     */
+    @GetMapping(value = "/stockHis")
+    public Response getStockHisList(@RequestParam(value = "app", required = false) String app) throws Exception {
+        List<StockHisPO> stockHisList = stockEntity.getStockHisList(app);
+        return Response.builder().code("00000000").value(stockHisList).build();
     }
 
     /**
