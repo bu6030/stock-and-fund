@@ -367,7 +367,7 @@ public class FundEntity {
         try {
             String result = tiantianFundRestClient.getFundInfo(fundRequest.getCode());
             FundEntity bean = null;
-            if (result != null && !result.equals("jsonpgz")) {
+            if (result != null && !result.equals("jsonpgz();")) {
                 String json = result.substring(8, result.length() - 2);
                 log.info("天天基金结果： {}", json);
                 bean = gson.fromJson(json, FundEntity.class);
