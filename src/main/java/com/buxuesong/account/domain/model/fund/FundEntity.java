@@ -416,8 +416,8 @@ public class FundEntity {
         return list;
     }
 
-    public List<FundHisPO> getFundHisList(String app, String beginDate, String endDate) {
-        List<FundHisPO> fundHis = fundHisMapper.findAllFundHis(app, beginDate, endDate);
+    public List<FundHisPO> getFundHisList(String app, String code, String beginDate, String endDate) {
+        List<FundHisPO> fundHis = fundHisMapper.findAllFundHis(app, code, beginDate, endDate);
         log.info("APP: {} ,数据库中的基金历史为：{}", app, fundHis);
         return fundHis;
     }

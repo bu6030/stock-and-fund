@@ -19,8 +19,10 @@ public interface FundHisMapper {
 
     @Select({
         "<script> select CODE, NAME, COST_PRICE costPrise, BONDS, APP, HIDE, CREATE_DATE createDate from FUND_HIS WHERE 1=1" +
+            " <if test=\"code!=null and code!=''\"> and code = #{code} </if> " +
             " <if test=\"beginDate!=null and beginDate!=''\"> and CREATE_DATE &gt;= #{beginDate} </if> " +
             " <if test=\"endDate!=null and endDate!=''\"> and CREATE_DATE &lt;= #{endDate} </if> " +
             " <if test=\"app!=null and app!=''\"> and APP = #{app} </if> order by APP ASC, substr(code,3,6) ASC </script>" })
-    List<FundHisPO> findAllFundHis(@Param("app") String app, @Param("beginDate") String beginDate, @Param("endDate") String endDate);
+    List<FundHisPO> findAllFundHis(@Param("app") String app, @Param("code") String code, @Param("beginDate") String beginDate,
+        @Param("endDate") String endDate);
 }

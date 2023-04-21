@@ -37,9 +37,10 @@ public class StockController {
      */
     @GetMapping(value = "/stockHis")
     public Response getStockHisList(@RequestParam(value = "app", required = false) String app,
+        @RequestParam(value = "code", required = false) String code,
         @RequestParam(value = "beginDate", required = false) String beginDate,
         @RequestParam(value = "endDate", required = false) String endDate) throws Exception {
-        List<StockHisPO> stockHisList = stockEntity.getStockHisList(app, beginDate, endDate);
+        List<StockHisPO> stockHisList = stockEntity.getStockHisList(app, code, beginDate, endDate);
         return Response.builder().code("00000000").value(stockHisList).build();
     }
 

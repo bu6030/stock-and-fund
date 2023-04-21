@@ -443,8 +443,8 @@ public class StockEntity {
         return list;
     }
 
-    public List<StockHisPO> getStockHisList(String app, String beginDate, String endDate) {
-        List<StockHisPO> stockHis = stockHisMapper.findAllStockHis(app, beginDate, endDate);
+    public List<StockHisPO> getStockHisList(String app, String code, String beginDate, String endDate) {
+        List<StockHisPO> stockHis = stockHisMapper.findAllStockHis(app, code, beginDate, endDate);
         log.info("APP: {} ,数据库中的股票历史为：{}", app, stockHis);
         return stockHis;
     }
