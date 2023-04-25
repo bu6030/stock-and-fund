@@ -368,7 +368,7 @@ public class StockEntity {
                 // 增加20日最高最低价格
                 List<StockDayHistoryResponse> stockDayHistory20 = cacheService.getStockDayHistory(code, "20");
                 log.info("Stock day history is {}", stockDayHistory20);
-                if (stockDayHistory20 != null) {
+                if (stockDayHistory20 != null && stockDayHistory20.size() >= 20) {
                     List<StockDayHistoryResponse> stockDayHistory10 = stockDayHistory20.subList(10, 20);
                     StockDayHistoryResponse maxStockDay = stockDayHistory20.stream()
                         .max((s1, s2) -> Double.compare(s1.getHigh(), s2.getHigh()))
