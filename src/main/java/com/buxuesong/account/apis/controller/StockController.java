@@ -4,6 +4,7 @@ import com.buxuesong.account.apis.model.response.Response;
 import com.buxuesong.account.apis.model.request.BuyOrSellStockRequest;
 import com.buxuesong.account.apis.model.request.StockRequest;
 import com.buxuesong.account.domain.model.stock.StockEntity;
+import com.buxuesong.account.infrastructure.persistent.po.BuyOrSellStockPO;
 import com.buxuesong.account.infrastructure.persistent.po.StockHisPO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,19 @@ public class StockController {
         @RequestParam(value = "endDate", required = false) String endDate) throws Exception {
         List<StockHisPO> stockHisList = stockEntity.getStockHisList(app, code, beginDate, endDate);
         return Response.builder().code("00000000").value(stockHisList).build();
+    }
+
+    /**
+     * 买卖股票历史接口
+     *
+     * @return
+     */
+    @GetMapping(value = "/buyOrSellStock")
+    public Response buyOrSellStock(@RequestParam(value = "code", required = false) String code,
+        @RequestParam(value = "beginDate", required = false) String beginDate,
+        @RequestParam(value = "endDate", required = false) String endDate) throws Exception {
+        List<BuyOrSellStockPO> buyOrSellStockPOS = stockEntity.getBuyOrSellStocks(code, beginDate, endDate);
+        return Response.builder().value(buyOrSellStockPOS).code("00000000").build();
     }
 
     /**

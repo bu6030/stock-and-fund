@@ -325,7 +325,7 @@ public class StockEntity {
 
             log.info("获取股票信息 {}", result);
             String[] lines = result.split("\n");
-            List<BuyOrSellStockPO> buyOrSellStockPOs = buyOrSellMapper.findAllBuyOrSellStocks(LocalDate.now().toString());
+            List<BuyOrSellStockPO> buyOrSellStockPOs = buyOrSellMapper.findAllBuyOrSellStocksByDate(LocalDate.now().toString());
             log.info("当日买卖的股票信息 {}", buyOrSellStockPOs);
             for (String line : lines) {
                 String code = line.substring(line.indexOf("_") + 1, line.indexOf("="));
@@ -447,6 +447,12 @@ public class StockEntity {
         List<StockHisPO> stockHis = stockHisMapper.findAllStockHis(app, code, beginDate, endDate);
         log.info("APP: {} ,数据库中的股票历史为：{}", app, stockHis);
         return stockHis;
+    }
+
+    public List<BuyOrSellStockPO> getBuyOrSellStocks(String code, String beginDate, String endDate) {
+        List<BuyOrSellStockPO> buyOrSellStockPOS = buyOrSellMapper.findAllBuyOrSellStocks(code, beginDate, endDate);
+        log.info("数据库中的买卖历史为：{}", buyOrSellStockPOS);
+        return buyOrSellStockPOS;
     }
 
     public void buyOrSellStock(BuyOrSellStockRequest buyOrSellStockRequest) {
