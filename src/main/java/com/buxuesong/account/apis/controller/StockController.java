@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -24,8 +25,12 @@ public class StockController {
      * @return
      */
     @GetMapping(value = "/stock")
-    public Response getStockList(@RequestParam(value = "app", required = false) String app) throws Exception {
+    public Response getStockList(@RequestParam(value = "app", required = false) String app,
+        @RequestParam(value = "code", required = false) String code) throws Exception {
         List<String> stockList = stockEntity.getStockList(app);
+        if (code != null && !"".equals(code)) {
+            stockList = stockList.stream().filter(s -> s.contains(code)).collect(Collectors.toList());
+        }
         return Response.builder().code("00000000").value(stockEntity.getStockDetails(stockList)).build();
     }
 

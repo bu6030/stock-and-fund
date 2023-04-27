@@ -30,8 +30,12 @@ public class FundController {
      * @return
      */
     @GetMapping(value = "/fund")
-    public Response getFundList(@RequestParam(value = "app", required = false) String app) throws Exception {
+    public Response getFundList(@RequestParam(value = "app", required = false) String app,
+        @RequestParam(value = "code", required = false) String code) throws Exception {
         List<String> fundList = fundEntity.getFundList(app);
+        if (code != null && !"".equals(code)) {
+            fundList = fundList.stream().filter(s -> s.contains(code)).collect(Collectors.toList());
+        }
         return Response.builder().code("00000000").value(fundEntity.getFundDetails(fundList)).build();
     }
 
