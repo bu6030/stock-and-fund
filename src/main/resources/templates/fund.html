@@ -7,6 +7,7 @@
     <link rel="stylesheet" th:href="@{/css/main.amazeui.min.css}" type="text/css" media="all"/>
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css" media="all"/>
     <script th:src="@{/js/fund.js}"></script>
+    <script th:src="@{/js/stockLargeMarket.js}"></script>
     <script th:src="@{/js/jquery.min.js}"></script>
     <script th:src="@{/js/sidebar.js}"></script>
     <script th:src="@{/js/BigDecimal.js}"></script>
@@ -16,7 +17,7 @@
     <!-- 自动刷新 -->
     <script th:src="@{/js/trading-time-refresh.js}"></script>
 </head>
-<body onload="sidebar();getData()">
+<body onload="sidebar();getData();getLargeMarketData();">
 
 <header class="menu">
     <div th:replace="header.html"></div>
@@ -84,7 +85,7 @@
         </div>
     </div>
     <div class=" admin-content">
-        <div class="daohang"></div>
+        <div class="daohang"><div id="stockLargeMarket"></div></div>
         <div class="admin-biaogelist">
             <div class="listbiaoti am-cf">
                 <ul class="am-icon-users"> 基金明细

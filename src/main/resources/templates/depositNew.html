@@ -16,6 +16,7 @@
 <header class="menu">
     <div th:replace="headerNew.html"></div>
 </header>
+<blockquote class="layui-elem-quote"><div height="60px" id="stockLargeMarket"></div></blockquote>
 <blockquote class="layui-elem-quote">收益汇总：您可在此页面查看股票基金每日收益汇总。<a href="mailto:buxuesong@foxmail.com">有任何问题点击这里联系作者: buxuesong@foxmail.com</a></blockquote>
 
 <blockquote class="layui-elem-quote">
@@ -33,6 +34,7 @@
 <table class="layui-hide" id="demo" lay-filter="test"></table>
 <script th:src="@{/js/BigDecimal.js}"></script>
 <script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/stockLargeMarket.js}"></script>
 <script src="https://cdn.staticfile.org/layui/2.7.6/layui.js"></script>
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
@@ -46,6 +48,7 @@
 </script>
 <script>
     var depositTable;
+    getLargeMarketData();
     layui.use(function(){
         // 得到需要的内置组件
         var layer = layui.layer; //弹层

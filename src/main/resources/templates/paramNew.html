@@ -16,6 +16,7 @@
 <header class="menu">
     <div th:replace="headerNew.html"></div>
 </header>
+<blockquote class="layui-elem-quote"><div height="60px" id="stockLargeMarket"></div></blockquote>
 <blockquote class="layui-elem-quote">APP维护：您可在此页面查看APP数据，以及添加修改APP数据。<a href="mailto:buxuesong@foxmail.com">有任何问题点击这里联系作者: buxuesong@foxmail.com</a></blockquote>
 <div class="checkbox">
     <input id="enableAutoRefresh" type="checkbox" checked="checked" name="enableAutoRefresh"> 定时刷新
@@ -71,6 +72,7 @@
 </script>
 <script th:src="@{/js/BigDecimal.js}"></script>
 <script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/stockLargeMarket.js}"></script>
 <script src="https://cdn.staticfile.org/layui/2.7.6/layui.js"></script>
 
 <script>
@@ -83,7 +85,7 @@
 
         // 向世界问个好
         layer.msg('字典数据：您可在此页面查看字典数据，以及添加修改字典数据（目前只有APP类型）。');
-
+        getLargeMarketData();
         // 执行一个 table 实例
         table.render({
             elem: '#demo'

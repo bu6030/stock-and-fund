@@ -4,5 +4,6 @@ function autoRefresh () {
         || (date.toLocaleTimeString() >= "13:00:00" && date.toLocaleTimeString() <= "15:00:00");
     if ($("#enableAutoRefresh").is(":checked") && isTradingTime) {
         initData();
+        getLargeMarketData();
     }
 }

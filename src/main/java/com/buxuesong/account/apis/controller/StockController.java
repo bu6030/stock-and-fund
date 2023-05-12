@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +32,21 @@ public class StockController {
         if (code != null && !"".equals(code)) {
             stockList = stockList.stream().filter(s -> s.contains(code)).collect(Collectors.toList());
         }
+        return Response.builder().code("00000000").value(stockEntity.getStockDetails(stockList)).build();
+    }
+
+    /**
+     * 获取大盘指数，上证，深成指，创业板指
+     * 
+     * @return
+     * @throws Exception
+     */
+    @GetMapping(value = "/stockLargeMarket")
+    public Response getStockLargeMarketList() throws Exception {
+        List<String> stockList = new ArrayList<>();
+        stockList.add("sh000001,0,0,,0");
+        stockList.add("sz399001,0,0,,0");
+        stockList.add("sz399006,0,0,,0");
         return Response.builder().code("00000000").value(stockEntity.getStockDetails(stockList)).build();
     }
 
