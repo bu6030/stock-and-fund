@@ -19,11 +19,12 @@ function getLargeMarketData() {
     });
 }
 
-function getLargeMarketTableHtml(result){
+function getLargeMarketTableHtml(result) {
     var str = "";
     for(var k in result) {
-        var style = result[k].change == 0 ? "style=\"font-size: 14px;\"" : (result[k].change >= 0?"style=\"color:#c12e2a;font-size: 14px;\"":"style=\"color:#3e8f3e;font-size: 14px;\"");
-        str += "<a " + style + ">" + result[k].name + "  " + result[k].changePercent +"%   </a>";
+        var style = "style=\"font-size: 16px;font-weight:600;"
+            + (result[k].change == 0 ? "" : (result[k].change >= 0?"color:#c12e2a;\"":"color:#3e8f3e;\""));
+        str += "<a " + style + ">" + result[k].name + " " + result[k].now + "（" + result[k].change + "&nbsp;&nbsp;" + result[k].changePercent +"%）   </a>";
     }
     console.log(str);
     return str;
