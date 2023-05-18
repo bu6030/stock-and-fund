@@ -178,7 +178,7 @@ function getStockTableHtml(result, totalMarketValueResult){
         }
 
         str += "<tr><td>"
-            + "<a onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
+            + "<a href='#' onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
             + "</td><td>" +result[k].name
             + "</td><td " + dayIncomeStyle + ">" + result[k].change
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
@@ -232,7 +232,7 @@ function getFundTableHtml(result, totalMarketValueResult){
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
 
         str += "<tr><td>"
-            + "<a onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
+            + "<a href='#' onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
             + "</td><td colspan=\"2\">" +result[k].fundName
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
             + "</td><td " + dayIncomeStyle + " colspan='2'>" +result[k].gszzl + "%"
