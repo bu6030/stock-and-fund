@@ -26,6 +26,30 @@
 <div class="am-cf admin-main">
 
     <div th:replace="sidebar.html"></div>
+    <!-- 分时图模态框 -->
+    <div class="modal fade" id="time-image-modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- 模态框头部 -->
+                <div class="modal-header">
+                    <h4 class="modal-title">分时图</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- 模态框主体 -->
+                <div class="modal-body">
+                    <div id="time-image" ></div>
+                </div>
+
+                <!-- 模态框底部 -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
     <div class=" admin-content">
         <div class="daohang"><div class="daohang-margin" id="stockLargeMarket"></div></div>
@@ -61,6 +85,7 @@
 
                         <!--<th class="table-id">ID</th>-->
                         <th class="table-author am-hide-sm-only">APP</th>
+                        <th class="table-author am-hide-sm-only">分时图</th>
                         <th class="table-type">股票名称</th>
                         <th class="table-author am-hide-sm-only">涨跌</th>
                         <th class="table-author am-hide-sm-only">当日盈利</th>
@@ -85,6 +110,7 @@
 
                         <!--<th class="table-id">ID</th>-->
                         <th class="table-author am-hide-sm-only">APP</th>
+                        <th class="table-author am-hide-sm-only">分时图</th>
                         <th class="table-type" colspan="2">基金名称</th>
                         <th class="table-author am-hide-sm-only">估算当日盈利</th>
                         <th class="table-author am-hide-sm-only" colspan="2">估算涨跌幅</th>
