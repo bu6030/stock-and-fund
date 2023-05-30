@@ -21,6 +21,33 @@
 <div class="checkbox">
     <input id="enableAutoRefresh" type="checkbox" checked="checked" name="enableAutoRefresh"> 定时刷新
 </div>
+
+<div>
+    <div id="time-image-modal" style="display: none;">
+        <div class="modal-dialog modal-lg" style="padding-top: 10px;padding-bottom: 10px;padding-left: 10px;padding-right: 10px">
+            <div class="modal-content">
+
+                <input type="hidden" id="time-image-code"/>
+                <input type="hidden" id="time-image-type"/>
+
+                <!-- 模态框主体 -->
+                <div class="modal-body">
+                    <div id="time-image" ></div>
+                </div>
+
+                <div class="layui-btn-group">
+                    <button type="button" class="layui-btn" id="time-image-minute-button" onclick="showTimeImage()">分时</button>
+                    <button type="button" class="layui-btn" id="time-image-day-button" onclick="showDayImage()">日线</button>
+                    <button type="button" class="layui-btn" id="time-image-week-button" onclick="showWeekImage()">周线</button>
+                    <button type="button" class="layui-btn" id="time-image-month-button" onclick="showMonthImage()">月线</button>
+                    <button type="button" class="layui-btn" onclick="layer.closeAll();">关闭</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 <table class="layui-hide" id="demo" lay-filter="test"></table>
 
 <script th:src="@{/js/BigDecimal.js}"></script>
@@ -183,6 +210,7 @@
             ,cols: [ [ //表头
                 {field: 'appNew', title: 'APP', width: 90, sort: true, templet: function(d){return '<a style="color: #0000FF" onclick="filterApp(\'' + d.app + '\')">'+ d.appNew +'</a>'}}
                 ,{field: 'typeNew', title: '基金/股票', width: 110, sort: true,totalRow: '合计：'}
+                ,{field: '', title: '分时图', width: 80, sort: true, templet: function(d){return '<a style="color: #0000FF" onclick="showTimeImageModal(\'' + d.code + '\',\'' + d.type + '\')">分时图</a>'}}
                 ,{field: 'name', title: '股票/基金名称', width: 220}
                 ,{field: 'change', title: '涨跌', width: 80,templet: function(d){return '<span style="color: ' + d.dayInComeColor + '">'+ d.change +'</span>'}}
                 ,{field: 'dayIncome', title: '当日盈利', width: 110, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.dayInComeColor + '">'+ d.dayIncome +'</span>'}}
@@ -200,7 +228,24 @@
             ] ]
         });
         //定时刷新
-        var time = setInterval('autoRefresh()', 30000)
+        var time = setInterval('autoRefresh()', 30000);
+        active = {
+            timeImage: function () {
+                layer.open({
+                    type: 1
+                    ,title: '走势图'
+                    , id: 'layerDemo' //防止重复弹出
+                    , content: $('#time-image-modal')
+                    // ,btn: '关闭全部'
+                    , area: ['800px', '600px']//定义宽和高
+                    , btnAlign: 'c' //按钮居中
+                    , shade: 0 //不显示遮罩
+                    , yes: function () {
+                        layer.closeAll();
+                    }
+                });
+            }
+        };
 
     });
 
@@ -214,6 +259,74 @@
         stockAndFundTable.reload({
             url: '/stockAndFund'
         });
+    }
+
+    //展示分时图
+    function showTimeImageModal(code, type) {
+        console.log("分时图", code, "==", type);
+        $("#time-image-code").val(code);
+        $("#time-image-type").val(type);
+        let path = "";
+        if (type == "FUND") {
+            path = "http://j4.dfcfw.com/charts/pic7/" + code + ".png";
+            $("#time-image-day-button")[0].style.display  = 'none';
+            $("#time-image-week-button")[0].style.display  = 'none';
+            $("#time-image-month-button")[0].style.display  = 'none';
+        } else {
+            path = "http://image.sinajs.cn/newchart/min/n/" + code + ".gif";
+            $("#time-image-day-button")[0].style.display  = 'inline';
+            $("#time-image-week-button")[0].style.display  = 'inline';
+            $("#time-image-month-button")[0].style.display  = 'inline';
+        }
+        active.timeImage();
+        $("#time-image").html('<img src="' + path + '" width="100%" length="100%" />');
+    }
+
+    //展示分时图
+    function showTimeImage() {
+        let code = $("#time-image-code").val();
+        let type = $("#time-image-type").val();
+        console.log("分时图", code, "==", type);
+        showTimeImageModal(code, type);
+    }
+
+    function showDayImage() {
+        let code = $("#time-image-code").val();
+        let type = $("#time-image-type").val();
+        console.log("日线图", code, "==", type);
+        let path = "";
+        if (type == "FUND") {
+            path = "http://j4.dfcfw.com/charts/pic7/" + code + ".png";
+        } else {
+            path = "http://image.sinajs.cn/newchart/daily/n/" + code + ".gif";
+        }
+        $("#time-image").html('<img src="' + path + '" width="100%" length="100%" />');
+    }
+
+    function showWeekImage() {
+        let code = $("#time-image-code").val();
+        let type = $("#time-image-type").val();
+        console.log("周线图", code, "==", type);
+        let path = "";
+        if (type == "FUND") {
+            path = "http://j4.dfcfw.com/charts/pic7/" + code + ".png";
+        } else {
+            path = "http://image.sinajs.cn/newchart/weekly/n/" + code + ".gif";
+        }
+        $("#time-image").html('<img src="' + path + '" width="100%" length="100%" />');
+    }
+
+    function showMonthImage() {
+        let code = $("#time-image-code").val();
+        let type = $("#time-image-type").val();
+        console.log("月线图", code, "==", type);
+        let path = "";
+        if (type == "FUND") {
+            path = "http://j4.dfcfw.com/charts/pic7/" + code + ".png";
+        } else {
+            path = "http://image.sinajs.cn/newchart/monthly/n/" + code + ".gif";
+        }
+        $("#time-image").html('<img src="' + path + '" width="100%" length="100%" />');
     }
 </script>
 </body>
