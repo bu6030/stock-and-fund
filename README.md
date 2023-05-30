@@ -101,6 +101,7 @@
 68. 增加通过code查询股票基金api Xuesong.Bu 2023/4/27, 14:46
 69. 将上证指数，深成指数，创业板指数增加到头部展示 Xuesong.Bu 2023/5/12, 16:38
 70. 优化头部展示的大盘指数展示效果 bu6030 2023/5/13, 00:01
+71. 增加分时图（股票基金），日线图（股票），月线图（股票），周线图（股票） Xuesong.Bu 2023/5/28, 00:34
 
 # <span id="jump4">UI页面</span>
 ![image](https://user-images.githubusercontent.com/11482988/191644817-b8fd3dcf-e8aa-4582-84b0-afb2927d156d.png)  

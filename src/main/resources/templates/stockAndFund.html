@@ -30,7 +30,8 @@
     <div class="modal fade" id="time-image-modal">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-
+                <input type="hidden" id="time-image-code"/>
+                <input type="hidden" id="time-image-type"/>
                 <!-- 模态框头部 -->
                 <div class="modal-header">
                     <h4 class="modal-title">分时图</h4>
@@ -44,6 +45,10 @@
 
                 <!-- 模态框底部 -->
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="time-image-minute-button" onclick="showTimeImage()">分时线</button>
+                    <button type="button" class="btn btn-primary" id="time-image-day-button" onclick="showDayImage()">日线</button>
+                    <button type="button" class="btn btn-primary" id="time-image-week-button" onclick="showWeekImage()">周线</button>
+                    <button type="button" class="btn btn-primary" id="time-image-month-button" onclick="showMonthImage()">月线</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
                 </div>
 

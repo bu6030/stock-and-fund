@@ -179,7 +179,7 @@ function getStockTableHtml(result, totalMarketValueResult){
 
         str += "<tr><td>"
             + "<a href='#' onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
-            + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"分时图\" onclick=\"showTimeImage('" + result[k].code + "','STOCK')\"><span class=\"am-icon-clock-o\"></span></button>"
+            + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"分时图\" onclick=\"showTimeImageModal('" + result[k].code + "','STOCK')\"><span class=\"am-icon-clock-o\"></span></button>"
             + "</td><td>" +result[k].name
             + "</td><td " + dayIncomeStyle + ">" + result[k].change
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
@@ -234,7 +234,7 @@ function getFundTableHtml(result, totalMarketValueResult){
 
         str += "<tr><td>"
             + "<a href='#' onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
-            + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"分时图\" onclick=\"showTimeImage('" + result[k].fundCode + "','FUND')\"><span class=\"am-icon-clock-o\"></span></button>"
+            + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"分时图\" onclick=\"showTimeImageModal('" + result[k].fundCode + "','FUND')\"><span class=\"am-icon-clock-o\"></span></button>"
             + "</td><td colspan=\"2\">" +result[k].fundName
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
             + "</td><td " + dayIncomeStyle + " colspan='2'>" +result[k].gszzl + "%"
@@ -298,14 +298,72 @@ function enableFilterHideChanged() {
 }
 
 //展示分时图
-function showTimeImage(code, type) {
-    console.log("分时图", code)
+function showTimeImageModal(code, type) {
+    console.log("分时图", code, "==", type);
+    $("#time-image-code").val(code);
+    $("#time-image-type").val(type);
+    let path = "";
+    if (type == "FUND") {
+        path = "http://j4.dfcfw.com/charts/pic7/" + code + ".png";
+        $("#time-image-day-button")[0].style.display  = 'none';
+        $("#time-image-week-button")[0].style.display  = 'none';
+        $("#time-image-month-button")[0].style.display  = 'none';
+    } else {
+        path = "http://image.sinajs.cn/newchart/min/n/" + code + ".gif";
+        $("#time-image-day-button")[0].style.display  = 'block';
+        $("#time-image-week-button")[0].style.display  = 'block';
+        $("#time-image-month-button")[0].style.display  = 'block';
+    }
+    $("#time-image-modal").modal();
+    $("#time-image").html('<img src="' + path + '" width="100%" length="100%" />');
+}
+
+//展示分时图
+function showTimeImage() {
+    let code = $("#time-image-code").val();
+    let type = $("#time-image-type").val();
+    console.log("分时图", code, "==", type);
+    showTimeImageModal(code, type);
+}
+
+function showDayImage() {
+    let code = $("#time-image-code").val();
+    let type = $("#time-image-type").val();
+    console.log("日线图", code, "==", type);
     let path = "";
     if (type == "FUND") {
         path = "http://j4.dfcfw.com/charts/pic7/" + code + ".png";
     } else {
-        path = "http://image.sinajs.cn/newchart/min/n/" + code + ".gif";
+        path = "http://image.sinajs.cn/newchart/daily/n/" + code + ".gif";
     }
     $("#time-image-modal").modal();
+    $("#time-image").html('<img src="' + path + '" width="100%" length="100%" />');
+}
+
+function showWeekImage() {
+    let code = $("#time-image-code").val();
+    let type = $("#time-image-type").val();
+    console.log("周线图", code, "==", type);
+    let path = "";
+    if (type == "FUND") {
+        path = "http://j4.dfcfw.com/charts/pic7/" + code + ".png";
+    } else {
+        path = "http://image.sinajs.cn/newchart/weekly/n/" + code + ".gif";
+    }
+    // $("#time-image-modal").modal();
+    $("#time-image").html('<img src="' + path + '" width="100%" length="100%" />');
+}
+
+function showMonthImage() {
+    let code = $("#time-image-code").val();
+    let type = $("#time-image-type").val();
+    console.log("月线图", code, "==", type);
+    let path = "";
+    if (type == "FUND") {
+        path = "http://j4.dfcfw.com/charts/pic7/" + code + ".png";
+    } else {
+        path = "http://image.sinajs.cn/newchart/monthly/n/" + code + ".gif";
+    }
+    // $("#time-image-modal").modal();
     $("#time-image").html('<img src="' + path + '" width="100%" length="100%" />');
 }
