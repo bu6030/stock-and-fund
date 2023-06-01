@@ -335,11 +335,16 @@ public class StockEntity {
                 BigDecimal now = new BigDecimal(values[3]).setScale(2, RoundingMode.HALF_UP);
                 bean.setName(values[1]);
                 bean.setNow(now + "");
-                bean.setChange(new BigDecimal(values[31]).setScale(2, RoundingMode.HALF_UP) + "");
+                bean.setChange(new BigDecimal(values[31]).setScale(3, RoundingMode.HALF_UP) + "");
                 bean.setChangePercent(values[32]);
                 bean.setTime(values[30]);
-                bean.setMax(new BigDecimal(values[33]).setScale(2, RoundingMode.HALF_UP) + "");// 33
-                bean.setMin(new BigDecimal(values[34]).setScale(2, RoundingMode.HALF_UP) + "");// 34
+                if (values[1].contains("ETF")) {
+                    bean.setMax(new BigDecimal(values[33]).setScale(3, RoundingMode.HALF_UP) + "");// 33
+                    bean.setMin(new BigDecimal(values[34]).setScale(3, RoundingMode.HALF_UP) + "");// 34
+                } else {
+                    bean.setMax(new BigDecimal(values[33]).setScale(2, RoundingMode.HALF_UP) + "");// 33
+                    bean.setMin(new BigDecimal(values[34]).setScale(2, RoundingMode.HALF_UP) + "");// 34
+                }
                 bean.setBuyOrSellStockRequestList(buyOrSellStockPOs.stream().filter(s -> s.getCode().equals(code))
                     .collect(Collectors.toList()));
 

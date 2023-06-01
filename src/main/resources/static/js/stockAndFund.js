@@ -149,7 +149,7 @@ function getStockTableHtml(result, totalMarketValueResult){
         }
         console.log(result[k].name+"计算当日买卖前："+ dayIncome);
         console.log(result[k].name+"计算："+ dayIncome.add(todayBuyIncom).add(todaySellIncom));
-        dayIncome = dayIncome.add(todayBuyIncom).add(todaySellIncom);
+        dayIncome = dayIncome.add(todayBuyIncom).add(todaySellIncom).setScale(2);
         console.log(result[k].name+"计算当日买卖后："+ dayIncome);
         marketValue = (new BigDecimal(result[k].now)).multiply(new BigDecimal(result[k].bonds));
         if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
