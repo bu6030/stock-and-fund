@@ -243,7 +243,7 @@
                     console.log(item.name+"计算当日买卖后："+ dayIncome);
                     var marketValue = new BigDecimal("0");
                     marketValue = (new BigDecimal(item.now)).multiply(new BigDecimal(item.bonds));
-                    item.marketValue = marketValue +'';
+                    item.marketValue = marketValue.setScale(2) +'';
                     if (totalMarketValue.compareTo(new BigDecimal("0")) != 0) {
                         item.marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValue) + "";
                     }

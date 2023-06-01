@@ -332,7 +332,7 @@ public class StockEntity {
                 String dataStr = line.substring(line.indexOf("=") + 2, line.length() - 2);
                 String[] values = dataStr.split("~");
                 StockEntity bean = new StockEntity(code, codeMap);
-                BigDecimal now = new BigDecimal(values[3]).setScale(2, RoundingMode.HALF_UP);
+                BigDecimal now = new BigDecimal(values[3]).setScale(3, RoundingMode.HALF_UP);
                 bean.setName(values[1]);
                 bean.setNow(now + "");
                 bean.setChange(new BigDecimal(values[31]).setScale(3, RoundingMode.HALF_UP) + "");

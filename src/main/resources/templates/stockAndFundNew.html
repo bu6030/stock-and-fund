@@ -149,7 +149,7 @@
                         console.log(item.name+"计算当日买卖后："+ dayIncome);
                         var marketValue = new BigDecimal("0");
                         marketValue = (new BigDecimal(item.now)).multiply(new BigDecimal(item.bonds));
-                        item.marketValue = marketValue +'';
+                        item.marketValue = marketValue.setScale(2) +'';
                         item.changePercentAndGszzl = item.changePercent;
                         item.nowAndGsz = item.now;
                         item.dwjzNew = 'N/A';

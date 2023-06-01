@@ -151,7 +151,7 @@ function getStockTableHtml(result, totalMarketValueResult){
         console.log(result[k].name+"计算："+ dayIncome.add(todayBuyIncom).add(todaySellIncom));
         dayIncome = dayIncome.add(todayBuyIncom).add(todaySellIncom).setScale(2);
         console.log(result[k].name+"计算当日买卖后："+ dayIncome);
-        marketValue = (new BigDecimal(result[k].now)).multiply(new BigDecimal(result[k].bonds));
+        marketValue = (new BigDecimal(result[k].now)).multiply(new BigDecimal(result[k].bonds)).setScale(2);
         if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
             marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult);
         }
@@ -273,7 +273,7 @@ function getFundTableHtml(result, totalMarketValueResult){
     var allDayIncomePercentStyle = allDayIncome == 0 ? "" : (allDayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
     var allTotalIncomePercentStyle = allTotalIncome == 0 ? "" : (allTotalIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
 
-    str += "<tr><td>股票基金汇总合计</td><td colspan='3'></td><td " + allDayIncomePercentStyle + ">" + allDayIncome + "</td><td colspan='2' " + allDayIncomePercentStyle + ">" + allDayIncomePercent + "%</td><td colspan='5'></td><td colspan='2'>" + totalMarketValueResult + "</td><td " + allTotalIncomePercentStyle + ">" + allTotalIncomePercent + "%</td><td " + allTotalIncomePercentStyle + ">" + allTotalIncome
+    str += "<tr><td>股票基金汇总合计</td><td colspan='3'></td><td " + allDayIncomePercentStyle + ">" + allDayIncome + "</td><td colspan='2' " + allDayIncomePercentStyle + ">" + allDayIncomePercent + "%</td><td colspan='5'></td><td colspan='2'>" + totalMarketValueResult.setScale(2) + "</td><td " + allTotalIncomePercentStyle + ">" + allTotalIncomePercent + "%</td><td " + allTotalIncomePercentStyle + ">" + allTotalIncome
         +"</td></tr>";
 
     return str;

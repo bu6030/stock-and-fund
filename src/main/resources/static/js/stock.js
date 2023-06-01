@@ -116,7 +116,7 @@ function getTableHtml(result){
         console.log(result[k].name+"计算："+ dayIncome.add(todayBuyIncom).add(todaySellIncom));
         dayIncome = dayIncome.add(todayBuyIncom).add(todaySellIncom).setScale(2);
         console.log(result[k].name+"计算当日买卖后："+ dayIncome);
-        marketValue = (new BigDecimal(result[k].now)).multiply(new BigDecimal(result[k].bonds));
+        marketValue = (new BigDecimal(result[k].now)).multiply(new BigDecimal(result[k].bonds)).setScale(2);
         totalDayIncome = totalDayIncome.add(dayIncome);
         // totalmarketValue = totalmarketValue.add(marketValue);
         if (totalmarketValue.compareTo(new BigDecimal("0")) != 0) {
@@ -177,7 +177,7 @@ function getTableHtml(result){
     }
     var totalDayIncomePercentStyle = totalDayIncome == 0 ? "" : (totalDayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
     var totalIncomePercentStyle = totalIncome == 0 ? "" : (totalIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
-    str += "<tr><td>合计</td><td colspan='2'></td><td " + totalDayIncomePercentStyle + ">" + totalDayIncomePercent + "%</td><td " + totalDayIncomePercentStyle + ">" + totalDayIncome + "</td><td colspan='6'></td><td colspan='2'>" + totalmarketValue + "</td></td><td " + totalIncomePercentStyle + ">" + totalIncomePercent + "%</td><td " + totalIncomePercentStyle + ">" + totalIncome
+    str += "<tr><td>合计</td><td colspan='2'></td><td " + totalDayIncomePercentStyle + ">" + totalDayIncomePercent + "%</td><td " + totalDayIncomePercentStyle + ">" + totalDayIncome + "</td><td colspan='6'></td><td colspan='2'>" + totalmarketValue.setScale(2) + "</td></td><td " + totalIncomePercentStyle + ">" + totalIncomePercent + "%</td><td " + totalIncomePercentStyle + ">" + totalIncome
         +"</td><td></td></tr>";
     return str;
 }
