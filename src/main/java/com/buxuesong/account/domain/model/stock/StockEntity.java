@@ -494,14 +494,14 @@ public class StockEntity {
                 restBound = buyOrSellStockRequest.getBonds();
                 newCostPrice = buyOrSellStockRequest.getPrice().multiply(new BigDecimal(buyOrSellStockRequest.getBonds()))
                     .add(buyOrSellStockRequest.getCost())
-                    .divide(new BigDecimal(restBound), 3, BigDecimal.ROUND_HALF_UP);
+                    .divide(new BigDecimal(restBound), 3, BigDecimal.ROUND_DOWN);
                 // 说明持有该股票再次买入
             } else {
                 restBound = stockPO.getBonds() + buyOrSellStockRequest.getBonds();
                 BigDecimal newBuyTotalFee = buyOrSellStockRequest.getPrice().multiply(new BigDecimal(buyOrSellStockRequest.getBonds()))
                     .add(buyOrSellStockRequest.getCost());
                 newCostPrice = stockPO.getCostPrise().multiply(new BigDecimal(stockPO.getBonds())).add(newBuyTotalFee)
-                    .divide(new BigDecimal(restBound), 3, BigDecimal.ROUND_HALF_UP);
+                    .divide(new BigDecimal(restBound), 3, BigDecimal.ROUND_DOWN);
             }
             stockPO.setBonds(restBound);
             stockPO.setCostPrise(newCostPrice);
@@ -513,7 +513,7 @@ public class StockEntity {
             BigDecimal newCostPrice = new BigDecimal("0");
             if (restBound != 0) {
                 newCostPrice = stockPO.getCostPrise().multiply(new BigDecimal(stockPO.getBonds()))
-                    .subtract(newSellTotalFee).divide(new BigDecimal(restBound), 3, BigDecimal.ROUND_HALF_UP);
+                    .subtract(newSellTotalFee).divide(new BigDecimal(restBound), 3, BigDecimal.ROUND_DOWN);
             }
             stockPO.setBonds(restBound);
             stockPO.setCostPrise(newCostPrice);
