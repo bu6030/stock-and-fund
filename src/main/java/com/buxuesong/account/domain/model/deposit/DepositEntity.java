@@ -177,7 +177,6 @@ public class DepositEntity {
         }
         log.info("股票总市值: {}", stockTotalMarketValue);
         return stockTotalMarketValue;
-
     }
 
     private boolean isTradingDate(String date) {
