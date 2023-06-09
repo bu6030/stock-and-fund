@@ -50,8 +50,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: target/stock-and-fund-1.6.0-SNAPSHOT.jar
-        asset_name: stock-and-fund-1.6.0-SNAPSHOT.jar
+        asset_path: target/stock-and-fund-${{ steps.get_branch_name.outputs.branch_name }}-SNAPSHOT.jar
+        asset_name: stock-and-fund-${{ steps.get_branch_name.outputs.branch_name }}-SNAPSHOT.jar
         asset_content_type: application/gzip
         
     - name: Upload Release Asset DB
