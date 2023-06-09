@@ -2,9 +2,9 @@ name: Git Release CI
 
 on:
   push:
-    branches: [ "release/1.6.0" ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ "release/1.6.0" ]
+    branches: [ "master" ]
 
 jobs:
 
