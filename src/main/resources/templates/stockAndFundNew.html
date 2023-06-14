@@ -328,6 +328,17 @@
         }
         $("#time-image").html('<img src="' + path + '" width="100%" length="100%" />');
     }
+
+    function largeMarketClick(timeImageCode) {
+        $("#time-image-code").val(timeImageCode);
+        $("#time-image-type").val("STOCK");
+        let path = "http://image.sinajs.cn/newchart/min/n/" + timeImageCode + ".gif";
+        $("#time-image-day-button")[0].style.display  = 'inline';
+        $("#time-image-week-button")[0].style.display  = 'inline';
+        $("#time-image-month-button")[0].style.display  = 'inline';
+        active.timeImage();
+        $("#time-image").html('<img src="'+path+'" width="100%" length="100%" />');
+    }
 </script>
 </body>
 </html>

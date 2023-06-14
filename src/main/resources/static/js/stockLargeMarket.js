@@ -24,7 +24,7 @@ function getLargeMarketTableHtml(result) {
     for(var k in result) {
         var style = "style=\"font-size: 16px;font-weight:600;"
             + (result[k].change == 0 ? "" : (result[k].change >= 0?"color:#c12e2a;\"":"color:#3e8f3e;\""));
-        str += "<a " + style + ">" + result[k].name + " " + result[k].now + "（" + result[k].change + "&nbsp;&nbsp;" + result[k].changePercent +"%）   </a>";
+        str += "<a " + style + " onclick=\"largeMarketClick('" + result[k].code + "')\">" + result[k].name + " " + result[k].now + "（" + result[k].change + "&nbsp;&nbsp;" + result[k].changePercent +"%）   </a>";
     }
     console.log(str);
     return str;
