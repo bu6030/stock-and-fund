@@ -64,6 +64,7 @@ function getTableHtml(result){
     var marketValue = new BigDecimal("0");
     var totalmarketValue = new BigDecimal("0");
     var marketValuePercent = new BigDecimal("0");
+    var stockTotalCostValue = new BigDecimal("0");
     for(var k in result) {
         if (filteredApp != "ALL" && result[k].app != filteredApp) {
             continue;
@@ -143,6 +144,10 @@ function getTableHtml(result){
         } else {
             donchianChennel = "监控中";
         }
+        // 计算股票总成本
+        var costPrice = new BigDecimal(result[k].costPrise+"");
+        var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(result[k].bonds))).toFixed(2));
+        stockTotalCostValue = stockTotalCostValue.add(costPriceValue);
 
         str += "<tr><td>"
             + "<a href='#' onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
@@ -158,6 +163,7 @@ function getTableHtml(result){
             + "</td><td>" + result[k].bonds
             + "</td><td>" + marketValue
             + "</td><td>" + marketValuePercent + "%"
+            + "</td><td>" + costPriceValue
             + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent +"%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].income
             + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"修改\" onclick=\"updateStock('" + result[k].code + "','" + result[k].costPrise + "','" + result[k].bonds + "','" + result[k].app + "','" + result[k].hide + "','" + result[k].name + "')\">"
@@ -177,7 +183,7 @@ function getTableHtml(result){
     }
     var totalDayIncomePercentStyle = totalDayIncome == 0 ? "" : (totalDayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
     var totalIncomePercentStyle = totalIncome == 0 ? "" : (totalIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
-    str += "<tr><td>合计</td><td colspan='2'></td><td " + totalDayIncomePercentStyle + ">" + totalDayIncomePercent + "%</td><td " + totalDayIncomePercentStyle + ">" + totalDayIncome + "</td><td colspan='6'></td><td colspan='2'>" + totalmarketValue.setScale(2) + "</td></td><td " + totalIncomePercentStyle + ">" + totalIncomePercent + "%</td><td " + totalIncomePercentStyle + ">" + totalIncome
+    str += "<tr><td>合计</td><td colspan='2'></td><td " + totalDayIncomePercentStyle + ">" + totalDayIncomePercent + "%</td><td " + totalDayIncomePercentStyle + ">" + totalDayIncome + "</td><td colspan='6'></td><td colspan='2'>" + totalmarketValue.setScale(2) + "</td><td>"+stockTotalCostValue+"</td><td " + totalIncomePercentStyle + ">" + totalIncomePercent + "%</td><td " + totalIncomePercentStyle + ">" + totalIncome
         +"</td><td></td></tr>";
     return str;
 }

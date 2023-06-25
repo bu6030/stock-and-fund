@@ -65,6 +65,7 @@ function getTableHtml(result){
     var marketValue = new BigDecimal("0");
     var totalmarketValue = new BigDecimal("0");
     var marketValuePercent = new BigDecimal("0");
+    var fundTotalCostValue = new BigDecimal("0");
     for(var k in result) {
         if (filteredApp != "ALL" && result[k].app != filteredApp) {
             continue;
@@ -89,6 +90,11 @@ function getTableHtml(result){
         var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
 
+        // 计算基金总成本
+        var costPrice = new BigDecimal(result[k].costPrise+"");
+        var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(result[k].bonds))).toFixed(2));
+        fundTotalCostValue = fundTotalCostValue.add(costPriceValue);
+
         str += "<tr><td>"
             + "<a href='#' onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
             + "</td><td>" + result[k].fundName
@@ -100,6 +106,7 @@ function getTableHtml(result){
             + "</td><td>" + result[k].bonds
             + "</td><td>" + marketValue
             + "</td><td>" + marketValuePercent + "%"
+            + "</td><td>" + costPriceValue
             + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent + "%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].income
             + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"修改\" onclick=\"updateFund('" + result[k].fundCode + "','" + result[k].costPrise + "','" + result[k].bonds + "','" + result[k].app + "','" + result[k].fundName + "')\">"
@@ -112,12 +119,12 @@ function getTableHtml(result){
     var totalDayIncomePercent = new BigDecimal("0");
     var totalIncomePercent = new BigDecimal("0");
     if (totalmarketValue != 0) {
-        totalDayIncomePercent = totalDayIncome.multiply(new BigDecimal("100")).divide(totalmarketValue);
-        totalIncomePercent = totalIncome.multiply(new BigDecimal("100")).divide(totalmarketValue);
+        totalDayIncomePercent = totalDayIncome.multiply(new BigDecimal("100")).divide(totalmarketValue.subtract(totalDayIncome));
+        totalIncomePercent = totalIncome.multiply(new BigDecimal("100")).divide(fundTotalCostValue);
     }
     var totalDayIncomePercentStyle = totalDayIncome == 0 ? "" : (totalDayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
     var totalIncomePercentStyle = totalIncome == 0 ? "" : (totalIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
-    str += "<tr><td>合计</td><td></td><td " + totalDayIncomePercentStyle + ">" + totalDayIncomePercent + "%</td><td " + totalDayIncomePercentStyle + ">" + totalDayIncome + "</td><td colspan='4'></td><td colspan='2'>" + totalmarketValue + "</td><td " + totalIncomePercentStyle + ">" + totalIncomePercent + "%</td><td " + totalIncomePercentStyle + ">" + totalIncome
+    str += "<tr><td>合计</td><td></td><td " + totalDayIncomePercentStyle + ">" + totalDayIncomePercent + "%</td><td " + totalDayIncomePercentStyle + ">" + totalDayIncome + "</td><td colspan='4'></td><td colspan='2'>" + totalmarketValue + "</td><td>"+fundTotalCostValue+"</td><td " + totalIncomePercentStyle + ">" + totalIncomePercent + "%</td><td " + totalIncomePercentStyle + ">" + totalIncome
         +"</td><td></td></tr>";
     return str;
 }
