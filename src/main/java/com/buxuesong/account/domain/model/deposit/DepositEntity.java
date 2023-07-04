@@ -1,6 +1,5 @@
 package com.buxuesong.account.domain.model.deposit;
 
-import com.buxuesong.account.apis.model.request.BuyOrSellStockRequest;
 import com.buxuesong.account.domain.service.CacheService;
 import com.buxuesong.account.infrastructure.adapter.rest.SzseRestClient;
 import com.buxuesong.account.domain.model.fund.FundEntity;
@@ -8,14 +7,21 @@ import com.buxuesong.account.domain.model.stock.StockEntity;
 import com.buxuesong.account.infrastructure.adapter.rest.response.TradingDateResponse;
 import com.buxuesong.account.infrastructure.persistent.po.BuyOrSellStockPO;
 import com.buxuesong.account.infrastructure.persistent.po.DepositPO;
+import com.buxuesong.account.infrastructure.persistent.po.OpenPersistentMonthPO;
 import com.buxuesong.account.infrastructure.persistent.repository.DepositMapper;
+import com.buxuesong.account.infrastructure.persistent.repository.OpenPersistentMonthMapper;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -30,6 +36,10 @@ public class DepositEntity {
     private StockEntity stockEntity;
     @Autowired
     private CacheService cacheService;
+    @Autowired
+    private OpenPersistentMonthMapper openPersistentMonthMapper;
+
+    private static Gson gson = new Gson();
 
     public DepositPO getDepositByDate(String date) {
         return depositMapper.findDepositByDate(date);
@@ -180,7 +190,20 @@ public class DepositEntity {
     }
 
     private boolean isTradingDate(String date) {
-        List<TradingDateResponse.TradingDate> tradingDates = szseRestClient.getTradingDate().getData();
+        Optional<OpenPersistentMonthPO> opt = openPersistentMonthMapper.findByMonth(date.substring(0,7));
+        List<TradingDateResponse.TradingDate> tradingDates;
+        if (!opt.isPresent()) {
+            tradingDates = szseRestClient.getTradingDate().getData();
+            OpenPersistentMonthPO openPersistentMonthPO = new OpenPersistentMonthPO();
+            openPersistentMonthPO.setData(gson.toJson(tradingDates));
+            openPersistentMonthPO.setMonth(date.substring(0,7));
+            openPersistentMonthMapper.save(openPersistentMonthPO);
+        } else {
+            OpenPersistentMonthPO openPersistentMonthPO = opt.get();
+            Type listType = new TypeToken<ArrayList<TradingDateResponse.TradingDate>>() {}.getType();
+            tradingDates = gson.fromJson(openPersistentMonthPO.getData(), listType);
+        }
+
         TradingDateResponse.TradingDate tradingDate = tradingDates.stream()
             .filter(s -> date.equals(s.getJyrq()))
             .findFirst().get();
