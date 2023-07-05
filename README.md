@@ -15,6 +15,7 @@
 5. 定时统计每日收益
 6. 查看每日收益汇总，每月收益汇总，每年收益汇总
 7. 唐安奇通道法数据监控股票
+8. 支持多用户登录
 
 ## <span id="jump2">功能描述</span>
 自己研究写的一个股票基金SpringBoot小项目，我给它命名股基神器，可以模拟炒股哦！  
@@ -28,6 +29,7 @@
 周一至周五下午3点30自动统计当日盈亏  
 手动添加股票基金APP，例如东方财富，支付宝，微信等  
 多个页面UI，Bootstrap以及Layui样式  
+支持多用户登录，需要在 users 表和 authorities 表中增加账号密码数据就可以登录了，密码可以使用com.buxuesong.account.infrastructure.general.utils.PasswordUtils来生成密码  
 具体内容们可以查看我的帖子：<https://zhuanlan.zhihu.com/p/557316975>  
 
 ## <span id="jump3">修改历史</span>
