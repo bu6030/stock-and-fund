@@ -23,7 +23,7 @@ public class DepositTask {
     }
 
     private void execute() {
-        depositEntity.deposit();
+        depositEntity.depositAllUsers();
     }
 
 }

@@ -8,8 +8,10 @@ import com.buxuesong.account.infrastructure.adapter.rest.response.TradingDateRes
 import com.buxuesong.account.infrastructure.persistent.po.BuyOrSellStockPO;
 import com.buxuesong.account.infrastructure.persistent.po.DepositPO;
 import com.buxuesong.account.infrastructure.persistent.po.OpenPersistentMonthPO;
+import com.buxuesong.account.infrastructure.persistent.po.UserPO;
 import com.buxuesong.account.infrastructure.persistent.repository.DepositMapper;
 import com.buxuesong.account.infrastructure.persistent.repository.OpenPersistentMonthMapper;
+import com.buxuesong.account.infrastructure.persistent.repository.UserMapper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +42,8 @@ public class DepositEntity {
     private CacheService cacheService;
     @Autowired
     private OpenPersistentMonthMapper openPersistentMonthMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     private static Gson gson = new Gson();
 
@@ -48,8 +52,26 @@ public class DepositEntity {
         return depositMapper.findDepositByDate(date, username);
     }
 
+    /**
+     * 定时程序统计所有用户盈亏
+     */
+    public void depositAllUsers() {
+        List<UserPO> users = userMapper.findAllUsers();
+        users.forEach(user -> deposit(user.getUsername()));
+    }
+
+    /**
+     * 用户手动点击计算盈亏
+     */
     public void deposit() {
         String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        deposit(username);
+    }
+
+    /**
+     * 支持用户手动点击计算盈亏以及定时程序统计所有用户盈亏具体执行方法
+     */
+    private void deposit(String username) {
         cacheService.removeAllCache();
         LocalDate date = LocalDate.now();
         if (!isTradingDate(date.toString())) {
