@@ -105,6 +105,10 @@
 72. 股票列表支持添加场内ETF Xuesong.Bu 2023/6/1, 23:45
 73. 场内ETF买卖计算成本四舍五入修改 bu6030 2023/6/8, 22:58
 74. 增加年度月度收益汇总图表 Xuesong.Bu 2023/6/12, 23:17
+75. 大盘指数点击显示走势图 Xuesong.Bu 2023/6/14, 11:34
+76. 增加成本，重新精确计算收益率，涨跌幅 Xuesong.Bu 2023/6/25, 16:00
+77. 增加交易日数据入库，每月只需要调用一次即可 Xuesong.Bu 2023/7/4, 17:03
+78. 增加用户登录 Xuesong.Bu 2023/7/5, 13:50
 
 # <span id="jump4">UI页面</span>
 ![image](https://user-images.githubusercontent.com/11482988/191644817-b8fd3dcf-e8aa-4582-84b0-afb2927d156d.png)  

@@ -1,5 +1,6 @@
 package com.buxuesong.account.infrastructure.general.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,10 +40,13 @@ public class SecurityConfig {
                 // 和 Controller 中的 @PreAuthorize("hasAuthority('ADMIN')")注解配置效果一样
                 // 这两种方式用哪一种都可以
                 .authorizeHttpRequests((authorize) ->
-                        authorize.requestMatchers("/chrome/**").permitAll())
+                        authorize.requestMatchers("/chrome/**", "/login.html", "/login", "/css/**", "/js/**").permitAll())
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers("/**").hasAuthority(ACCOUNT_CLIENT_AUTHORITY))
-                .httpBasic(withDefaults())
+//                .httpBasic(withDefaults())
+                .formLogin(withDefaults())
+                .logout(withDefaults())
+                .csrf().disable()
                 .build();
     }
 }
