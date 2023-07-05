@@ -41,8 +41,11 @@ public class SecurityConfig {
             // 和 Controller 中的 @PreAuthorize("hasAuthority('ADMIN')")注解配置效果一样
             // 这两种方式用哪一种都可以
             .authorizeHttpRequests(
-                (authorize) -> authorize.requestMatchers("/chrome/**", "/login.html", "/login", "/css/**", "/js/**").permitAll())
-            .authorizeHttpRequests((authorize) -> authorize.requestMatchers("/**").hasAuthority(ACCOUNT_CLIENT_AUTHORITY))
+                (authorize) -> authorize
+                    .requestMatchers("/resources/**", "/chrome/**", "/login.html", "/login", "/css/**", "/js/**", "/fonts/**", "/i/**",
+                        "/images/**")
+                    .permitAll()
+                    .anyRequest().hasAuthority(ACCOUNT_CLIENT_AUTHORITY))
 //                .httpBasic(withDefaults())
             .formLogin(withDefaults())
             .logout(withDefaults())
