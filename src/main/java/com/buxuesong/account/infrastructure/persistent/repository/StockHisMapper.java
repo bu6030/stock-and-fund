@@ -14,7 +14,8 @@ public interface StockHisMapper {
     int saveFromStock(@Param("code") String code, @Param("username") String username);
 
     @Select({
-        "<script> select CODE, NAME, COST_PRICE costPrise, BONDS, APP, HIDE, CREATE_DATE createDate from STOCK_HIS WHERE 1=1 AND USERNAME = #{username} " +
+        "<script> select CODE, NAME, COST_PRICE costPrise, BONDS, APP, HIDE, CREATE_DATE createDate from STOCK_HIS WHERE 1=1 AND USERNAME = #{username} "
+            +
             " <if test=\"code!=null and code!=''\"> and code = #{code} </if> " +
             " <if test=\"beginDate!=null and beginDate!=''\"> and CREATE_DATE &gt;= #{beginDate} </if> " +
             " <if test=\"endDate!=null and endDate!=''\"> and CREATE_DATE &lt;= #{endDate} </if> " +

@@ -45,6 +45,7 @@ public class ParamEntity {
     public void deleteParam(ParamRequest paramRequest) {
         String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         paramMapper
-            .delete(ParamPO.builder().code(paramRequest.getCode()).name(paramRequest.getName()).type(paramRequest.getType()).build(), username);
+            .delete(ParamPO.builder().code(paramRequest.getCode()).name(paramRequest.getName()).type(paramRequest.getType()).build(),
+                username);
     }
 }

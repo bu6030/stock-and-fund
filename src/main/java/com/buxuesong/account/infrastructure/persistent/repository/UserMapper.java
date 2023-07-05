@@ -10,6 +10,6 @@ import java.util.List;
 @Mapper
 @Repository
 public interface UserMapper {
-    @Select({"select USERNAME from USERS" })
+    @Select({ "select USERNAME from USERS" })
     List<UserPO> findAllUsers();
 }
