@@ -407,6 +407,10 @@ public class FundEntity {
 
     public List<String> getFundList(String app) {
         String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        return getFundList(app, username);
+    }
+
+    public List<String> getFundList(String app, String username) {
         List<FundPO> fund = fundMapper.findAllFund(app, username);
         log.info("APP: {} ,数据库中的基金为：{}", app, fund);
         if (fund == null || fund.isEmpty()) {

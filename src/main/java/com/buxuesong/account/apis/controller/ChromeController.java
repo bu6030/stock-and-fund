@@ -42,15 +42,15 @@ public class ChromeController {
 
     /**
      * 获取数据导入格式json
-     *
+     * 自己 chrome 插件使用，因此 username 参数默认写了 buxuesong
      * @return
      */
     @GetMapping(value = "/chrome/stockAndFund")
     public Response getStockAndFundList()
         throws Exception {
-        List<String> fundListFromRedis = fundEntity.getFundList(null);
-        List<String> stockListFromRedis = stockEntity.getStockList(null);
+        List<String> fundListFromRedis = fundEntity.getFundList(null, "buxuesong");
+        List<String> stockListFromRedis = stockEntity.getStockList(null, "buxuesong");
         return Response.builder().code("00000000").value(ChromeStockAndFund.builder().funds(fundEntity.getFundDetails(fundListFromRedis))
-            .stocks(stockEntity.getStockDetails(stockListFromRedis)).build()).build();
+            .stocks(stockEntity.getStockDetails(stockListFromRedis, "buxuesong")).build()).build();
     }
 }

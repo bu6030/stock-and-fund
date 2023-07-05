@@ -301,6 +301,11 @@ public class StockEntity {
     private SinaRestClient sinaRestClient;
 
     public List<StockEntity> getStockDetails(List<String> codes) {
+        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        return getStockDetails(codes, username);
+    }
+
+    public List<StockEntity> getStockDetails(List<String> codes, String username) {
         List<StockEntity> stocks = new ArrayList<>();
         List<String> codeList = new ArrayList<>();
         HashMap<String, String[]> codeMap = new HashMap<>();
@@ -328,7 +333,6 @@ public class StockEntity {
 
             log.info("获取股票信息 {}", result);
             String[] lines = result.split("\n");
-            String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
             List<BuyOrSellStockPO> buyOrSellStockPOs = buyOrSellMapper.findAllBuyOrSellStocksByDate(LocalDate.now().toString(), username);
             log.info("当日买卖的股票信息 {}", buyOrSellStockPOs);
             for (String line : lines) {
@@ -441,6 +445,9 @@ public class StockEntity {
 
     public List<String> getStockList(String app) {
         String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        return getStockList(app, username);
+    }
+    public List<String> getStockList(String app, String username) {
         List<StockPO> stock = stockMapper.findAllStock(app, username);
         log.info("APP: {} ,数据库中的股票为：{}", app, stock);
         if (stock == null || stock.isEmpty()) {
