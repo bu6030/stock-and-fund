@@ -14,6 +14,8 @@ import com.google.gson.annotations.SerializedName;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -364,6 +366,7 @@ public class FundEntity {
     }
 
     public boolean saveFund(FundRequest fundRequest) {
+        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         try {
             String result = tiantianFundRestClient.getFundInfo(fundRequest.getCode());
             FundEntity bean = null;
@@ -381,28 +384,30 @@ public class FundEntity {
             log.info("获取基金信息异常 {}", e.getMessage());
             return false;
         }
-        FundPO fundPOFromTable = fundMapper.findFundByCode(fundRequest.getCode());
+        FundPO fundPOFromTable = fundMapper.findFundByCode(fundRequest.getCode(), username);
         if (fundPOFromTable != null) {
-            fundHisMapper.saveFromFund(fundRequest.getCode());
+            fundHisMapper.saveFromFund(fundRequest.getCode(), username);
             fundMapper.updateFund(FundPO.builder().name(fundRequest.getName()).app(fundRequest.getApp()).bonds(fundRequest.getBonds())
                 .code(fundRequest.getCode())
-                .costPrise(fundRequest.getCostPrise()).hide(fundRequest.isHide()).build());
+                .costPrise(fundRequest.getCostPrise()).hide(fundRequest.isHide()).build(), username);
         } else {
             fundMapper.save(FundPO.builder().name(fundRequest.getName()).app(fundRequest.getApp()).bonds(fundRequest.getBonds())
                 .code(fundRequest.getCode())
-                .costPrise(fundRequest.getCostPrise()).hide(fundRequest.isHide()).build());
+                .costPrise(fundRequest.getCostPrise()).hide(fundRequest.isHide()).build(), username);
         }
         return true;
     }
 
     public void deleteFund(FundRequest fundRequest) {
-        fundHisMapper.saveFromFund(fundRequest.getCode());
+        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        fundHisMapper.saveFromFund(fundRequest.getCode(), username);
         fundMapper.deleteFund(FundPO.builder().app(fundRequest.getApp()).bonds(fundRequest.getBonds()).code(fundRequest.getCode())
-            .costPrise(fundRequest.getCostPrise()).hide(fundRequest.isHide()).build());
+            .costPrise(fundRequest.getCostPrise()).hide(fundRequest.isHide()).build(), username);
     }
 
     public List<String> getFundList(String app) {
-        List<FundPO> fund = fundMapper.findAllFund(app);
+        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        List<FundPO> fund = fundMapper.findAllFund(app, username);
         log.info("APP: {} ,数据库中的基金为：{}", app, fund);
         if (fund == null || fund.isEmpty()) {
             return new ArrayList<>();
@@ -417,7 +422,8 @@ public class FundEntity {
     }
 
     public List<FundHisPO> getFundHisList(String app, String code, String beginDate, String endDate) {
-        List<FundHisPO> fundHis = fundHisMapper.findAllFundHis(app, code, beginDate, endDate);
+        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        List<FundHisPO> fundHis = fundHisMapper.findAllFundHis(app, code, beginDate, endDate, username);
         log.info("APP: {} ,数据库中的基金历史为：{}", app, fundHis);
         return fundHis;
     }

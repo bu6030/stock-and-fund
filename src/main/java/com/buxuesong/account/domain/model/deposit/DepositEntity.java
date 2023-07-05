@@ -14,6 +14,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
@@ -42,10 +44,12 @@ public class DepositEntity {
     private static Gson gson = new Gson();
 
     public DepositPO getDepositByDate(String date) {
-        return depositMapper.findDepositByDate(date);
+        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        return depositMapper.findDepositByDate(date, username);
     }
 
     public void deposit() {
+        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         cacheService.removeAllCache();
         LocalDate date = LocalDate.now();
         if (!isTradingDate(date.toString())) {
@@ -53,7 +57,7 @@ public class DepositEntity {
             return;
         }
 
-        DepositPO deposit = depositMapper.findDepositByDate(date.toString());
+        DepositPO deposit = depositMapper.findDepositByDate(date.toString(), username);
         if (deposit != null) {
             log.info("已经存在当日盈利汇总： {}", deposit);
             return;
@@ -76,29 +80,33 @@ public class DepositEntity {
             .fundMarketValue(fundTotalMarketValue)
             .stockMarketValue(stockTotalMarketValue)
             .totalMarketValue(totalMarketValue)
-            .build());
+            .build(), username);
     }
 
     public void deleteDeposit() {
         LocalDate date = LocalDate.now();
+        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         log.info("Delete deposit date : {}", date);
-        depositMapper.deleteDeposit(date.toString());
+        depositMapper.deleteDeposit(date.toString(), username);
     }
 
     public List<DepositPO> getDepositList(String beginDate, String endDate) {
-        List<DepositPO> list = depositMapper.getDepositList(beginDate, endDate);
+        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        List<DepositPO> list = depositMapper.getDepositList(beginDate, endDate, username);
         log.info("Get deposit list between {} and {} : {}", beginDate, endDate, list);
         return list;
     }
 
     public List<DepositPO> getDepositYearSummitList(String beginDate, String endDate) {
-        List<DepositPO> list = depositMapper.getDepositYearSummitList(beginDate, endDate);
+        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        List<DepositPO> list = depositMapper.getDepositYearSummitList(beginDate, endDate, username);
         log.info("Get deposit year summit list between {} and {} : {}", beginDate, endDate, list);
         return list;
     }
 
     public List<DepositPO> getDepositMonthSummitList(String beginDate, String endDate) {
-        List<DepositPO> list = depositMapper.getDepositMonthSummitList(beginDate, endDate);
+        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        List<DepositPO> list = depositMapper.getDepositMonthSummitList(beginDate, endDate, username);
         log.info("Get deposit month summit list between {} and {} : {}", beginDate, endDate, list);
         return list;
     }
@@ -190,13 +198,13 @@ public class DepositEntity {
     }
 
     private boolean isTradingDate(String date) {
-        Optional<OpenPersistentMonthPO> opt = openPersistentMonthMapper.findByMonth(date.substring(0,7));
+        Optional<OpenPersistentMonthPO> opt = openPersistentMonthMapper.findByMonth(date.substring(0, 7));
         List<TradingDateResponse.TradingDate> tradingDates;
         if (!opt.isPresent()) {
             tradingDates = szseRestClient.getTradingDate().getData();
             OpenPersistentMonthPO openPersistentMonthPO = new OpenPersistentMonthPO();
             openPersistentMonthPO.setData(gson.toJson(tradingDates));
-            openPersistentMonthPO.setMonth(date.substring(0,7));
+            openPersistentMonthPO.setMonth(date.substring(0, 7));
             openPersistentMonthMapper.save(openPersistentMonthPO);
         } else {
             OpenPersistentMonthPO openPersistentMonthPO = opt.get();

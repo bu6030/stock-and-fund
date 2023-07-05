@@ -5,6 +5,8 @@ import com.buxuesong.account.infrastructure.persistent.po.ParamPO;
 import com.buxuesong.account.infrastructure.persistent.repository.ParamMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,29 +18,33 @@ public class ParamEntity {
     private ParamMapper paramMapper;
 
     public List<ParamPO> getParamList() {
-        List<ParamPO> list = paramMapper.findAllParam();
+        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        List<ParamPO> list = paramMapper.findAllParam(username);
         log.info("Get Parameter list : {}", list);
         return list;
     }
 
     public List<ParamPO> getParamList(String type) {
-        List<ParamPO> list = paramMapper.findParamByType(type);
+        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        List<ParamPO> list = paramMapper.findParamByType(type, username);
         log.info("Get paramEntity list : {}", list);
         return list;
     }
 
     public void saveParam(ParamRequest paramRequest) {
+        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         ParamPO paramPO = ParamPO.builder().code(paramRequest.getCode()).name(paramRequest.getName()).type(paramRequest.getType()).build();
-        ParamPO paramPOOld = paramMapper.findParamByTypeAndCode(paramPO);
+        ParamPO paramPOOld = paramMapper.findParamByTypeAndCode(paramPO, username);
         if (paramPOOld != null) {
-            paramMapper.update(paramPO);
+            paramMapper.update(paramPO, username);
         } else {
-            paramMapper.save(paramPO);
+            paramMapper.save(paramPO, username);
         }
     }
 
     public void deleteParam(ParamRequest paramRequest) {
+        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         paramMapper
-            .delete(ParamPO.builder().code(paramRequest.getCode()).name(paramRequest.getName()).type(paramRequest.getType()).build());
+            .delete(ParamPO.builder().code(paramRequest.getCode()).name(paramRequest.getName()).type(paramRequest.getType()).build(), username);
     }
 }

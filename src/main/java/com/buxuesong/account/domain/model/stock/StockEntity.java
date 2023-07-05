@@ -17,6 +17,9 @@ import com.buxuesong.account.infrastructure.persistent.repository.StockMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -325,7 +328,8 @@ public class StockEntity {
 
             log.info("获取股票信息 {}", result);
             String[] lines = result.split("\n");
-            List<BuyOrSellStockPO> buyOrSellStockPOs = buyOrSellMapper.findAllBuyOrSellStocksByDate(LocalDate.now().toString());
+            String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+            List<BuyOrSellStockPO> buyOrSellStockPOs = buyOrSellMapper.findAllBuyOrSellStocksByDate(LocalDate.now().toString(), username);
             log.info("当日买卖的股票信息 {}", buyOrSellStockPOs);
             for (String line : lines) {
                 String code = line.substring(line.indexOf("_") + 1, line.indexOf("="));
@@ -402,6 +406,7 @@ public class StockEntity {
     }
 
     public boolean saveStock(StockRequest stockRequest) {
+        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         try {
             String result = gTimgRestClient.getStockInfo(stockRequest.getCode());
             String code = result.substring(result.indexOf("_") + 1, result.indexOf("="));
@@ -413,28 +418,30 @@ public class StockEntity {
             log.info("获取股票信息异常 {}", e.getMessage());
             return false;
         }
-        StockPO stockPOFromTable = stockMapper.findStockByCode(stockRequest.getCode());
+        StockPO stockPOFromTable = stockMapper.findStockByCode(stockRequest.getCode(), username);
         if (stockPOFromTable != null) {
-            stockHisMapper.saveFromStock(stockRequest.getCode());
+            stockHisMapper.saveFromStock(stockRequest.getCode(), username);
             stockMapper.updateStock(StockPO.builder().name(stockRequest.getName()).app(stockRequest.getApp()).bonds(stockRequest.getBonds())
                 .code(stockRequest.getCode())
-                .costPrise(stockRequest.getCostPrise()).hide(stockRequest.getHide()).build());
+                .costPrise(stockRequest.getCostPrise()).hide(stockRequest.getHide()).build(), username);
         } else {
             stockMapper.save(StockPO.builder().name(stockRequest.getName()).app(stockRequest.getApp()).bonds(stockRequest.getBonds())
                 .code(stockRequest.getCode())
-                .costPrise(stockRequest.getCostPrise()).hide(stockRequest.getHide()).build());
+                .costPrise(stockRequest.getCostPrise()).hide(stockRequest.getHide()).build(), username);
         }
         return true;
     }
 
     public void deleteStock(StockRequest stockRequest) {
-        stockHisMapper.saveFromStock(stockRequest.getCode());
+        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        stockHisMapper.saveFromStock(stockRequest.getCode(), username);
         stockMapper.deleteStock(StockPO.builder().app(stockRequest.getApp()).bonds(stockRequest.getBonds()).code(stockRequest.getCode())
-            .costPrise(stockRequest.getCostPrise()).hide(stockRequest.getHide()).build());
+            .costPrise(stockRequest.getCostPrise()).hide(stockRequest.getHide()).build(), username);
     }
 
     public List<String> getStockList(String app) {
-        List<StockPO> stock = stockMapper.findAllStock(app);
+        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        List<StockPO> stock = stockMapper.findAllStock(app, username);
         log.info("APP: {} ,数据库中的股票为：{}", app, stock);
         if (stock == null || stock.isEmpty()) {
             return new ArrayList<>();
@@ -449,19 +456,22 @@ public class StockEntity {
     }
 
     public List<StockHisPO> getStockHisList(String app, String code, String beginDate, String endDate) {
-        List<StockHisPO> stockHis = stockHisMapper.findAllStockHis(app, code, beginDate, endDate);
+        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        List<StockHisPO> stockHis = stockHisMapper.findAllStockHis(app, code, beginDate, endDate, username);
         log.info("APP: {} ,数据库中的股票历史为：{}", app, stockHis);
         return stockHis;
     }
 
     public List<BuyOrSellStockPO> getBuyOrSellStocks(String code, String beginDate, String endDate) {
-        List<BuyOrSellStockPO> buyOrSellStockPOS = buyOrSellMapper.findAllBuyOrSellStocks(code, beginDate, endDate);
+        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        List<BuyOrSellStockPO> buyOrSellStockPOS = buyOrSellMapper.findAllBuyOrSellStocks(code, beginDate, endDate, username);
         log.info("数据库中的买卖历史为：{}", buyOrSellStockPOS);
         return buyOrSellStockPOS;
     }
 
     public void buyOrSellStock(BuyOrSellStockRequest buyOrSellStockRequest) {
-        StockPO stockPO = stockMapper.findStockByCode(buyOrSellStockRequest.getCode());
+        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        StockPO stockPO = stockMapper.findStockByCode(buyOrSellStockRequest.getCode(), username);
         List<String> list = new ArrayList<>();
         list.add(stockPO.getCode() + "," + stockPO.getCostPrise() + "," + stockPO.getBonds() + ","
             + stockPO.getApp() + "," + stockPO.isHide());
@@ -484,7 +494,7 @@ public class StockEntity {
             .date(buyOrSellStockRequest.getDate()).price(buyOrSellStockRequest.getPrice())
             .bonds(buyOrSellStockRequest.getBonds()).app(buyOrSellStockRequest.getApp())
             .income(buyOrSellStockRequest.getIncome()).openPrice(buyOrSellStockRequest.getOpenPrice())
-            .build());
+            .build(), username);
         // 购买
         if ("1".equals(buyOrSellStockRequest.getType())) {
             int restBound = 0;
@@ -518,9 +528,9 @@ public class StockEntity {
             stockPO.setBonds(restBound);
             stockPO.setCostPrise(newCostPrice);
         }
-        stockHisMapper.saveFromStock(stockPO.getCode());
+        stockHisMapper.saveFromStock(stockPO.getCode(), username);
         log.info("买卖后的stockPO： {}", stockPO);
-        stockMapper.updateStock(stockPO);
+        stockMapper.updateStock(stockPO, username);
     }
 
     public String computeStock(String code, String dataLen) {

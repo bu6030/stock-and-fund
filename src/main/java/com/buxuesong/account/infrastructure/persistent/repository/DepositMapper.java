@@ -10,47 +10,47 @@ import java.util.List;
 @Repository
 public interface DepositMapper {
 
-    @Select("select DATE, FUND_DAY_INCOME fundDayIncome, STOCK_DAY_INCOME stockDayIncome, DAY_INCOME totalDayIncome, FUND_MARKET_VALUE fundMarketValue, STOCK_MARKET_VALUE stockMarketValue, TOTAL_MARKET_VALUE totalMarketValue from DEPOSIT where DATE = #{date} ")
-    DepositPO findDepositByDate(@Param("date") String date);
+    @Select("select DATE, FUND_DAY_INCOME fundDayIncome, STOCK_DAY_INCOME stockDayIncome, DAY_INCOME totalDayIncome, FUND_MARKET_VALUE fundMarketValue, STOCK_MARKET_VALUE stockMarketValue, TOTAL_MARKET_VALUE totalMarketValue from DEPOSIT where DATE = #{date} AND USERNAME = #{username} ")
+    DepositPO findDepositByDate(@Param("date") String date, @Param("username") String username);
 
-    @Update("INSERT INTO DEPOSIT (DATE, FUND_DAY_INCOME, STOCK_DAY_INCOME, DAY_INCOME, FUND_MARKET_VALUE, STOCK_MARKET_VALUE, TOTAL_MARKET_VALUE) values (#{deposit.date},#{deposit.fundDayIncome},#{deposit.stockDayIncome},#{deposit.totalDayIncome},#{deposit.fundMarketValue},#{deposit.stockMarketValue},#{deposit.totalMarketValue}) ")
-    int save(@Param("deposit") DepositPO deposit);
+    @Update("INSERT INTO DEPOSIT (DATE, FUND_DAY_INCOME, STOCK_DAY_INCOME, DAY_INCOME, FUND_MARKET_VALUE, STOCK_MARKET_VALUE, TOTAL_MARKET_VALUE, USERNAME) values (#{deposit.date},#{deposit.fundDayIncome},#{deposit.stockDayIncome},#{deposit.totalDayIncome},#{deposit.fundMarketValue},#{deposit.stockMarketValue},#{deposit.totalMarketValue},#{username}) ")
+    int save(@Param("deposit") DepositPO deposit, @Param("username") String username);
 
-    @Select("select DATE, FUND_DAY_INCOME fundDayIncome, STOCK_DAY_INCOME stockDayIncome, DAY_INCOME totalDayIncome, FUND_MARKET_VALUE fundMarketValue, STOCK_MARKET_VALUE stockMarketValue, TOTAL_MARKET_VALUE totalMarketValue from DEPOSIT order by DATE ASC")
-    List<DepositPO> findAllDeposit();
+    @Select("select DATE, FUND_DAY_INCOME fundDayIncome, STOCK_DAY_INCOME stockDayIncome, DAY_INCOME totalDayIncome, FUND_MARKET_VALUE fundMarketValue, STOCK_MARKET_VALUE stockMarketValue, TOTAL_MARKET_VALUE totalMarketValue from DEPOSIT WHERE USERNAME = #{username} order by DATE ASC")
+    List<DepositPO> findAllDeposit(@Param("username") String username);
 
     @Select({ "<script> select DATE, FUND_DAY_INCOME fundDayIncome, STOCK_DAY_INCOME stockDayIncome, DAY_INCOME totalDayIncome, " +
         " FUND_MARKET_VALUE fundMarketValue, STOCK_MARKET_VALUE stockMarketValue, TOTAL_MARKET_VALUE totalMarketValue " +
         " from DEPOSIT " +
-        " where 1=1 " +
+        " where 1=1 AND USERNAME = #{username}" +
         " <if test=\"beginDate!=null and beginDate!=''\"> and DATE &gt;= #{beginDate} </if> " +
         " <if test=\"endDate!=null and endDate!=''\"> and DATE &lt;= #{endDate} </if> " +
         " order by DATE DESC</script>" })
-    List<DepositPO> getDepositList(@Param("beginDate") String beginDate, @Param("endDate") String endDate);
+    List<DepositPO> getDepositList(@Param("beginDate") String beginDate, @Param("endDate") String endDate, @Param("username") String username);
 
     @Select({
         "<script> select substr(DATE, 0, 5) date, sum(FUND_DAY_INCOME) fundDayIncome, sum(STOCK_DAY_INCOME) stockDayIncome, sum(DAY_INCOME) totalDayIncome "
             +
             " from DEPOSIT " +
-            " where 1=1 " +
+            " where 1=1 AND USERNAME = #{username}" +
             " <if test=\"beginDate!=null and beginDate!=''\"> and DATE &gt;= #{beginDate} </if> " +
             " <if test=\"endDate!=null and endDate!=''\"> and DATE &lt;= #{endDate} </if> " +
             " group by substr(DATE, 0, 5) " +
             " order by substr(DATE, 0, 5) DESC</script>" })
-    List<DepositPO> getDepositYearSummitList(@Param("beginDate") String beginDate, @Param("endDate") String endDate);
+    List<DepositPO> getDepositYearSummitList(@Param("beginDate") String beginDate, @Param("endDate") String endDate, @Param("username") String username);
 
     @Select({
         "<script> select substr(DATE, 0, 8) date, sum(FUND_DAY_INCOME) fundDayIncome, sum(STOCK_DAY_INCOME) stockDayIncome, sum(DAY_INCOME) totalDayIncome "
             +
             " from DEPOSIT " +
-            " where 1=1 " +
+            " where 1=1 AND USERNAME = #{username} " +
             " <if test=\"beginDate!=null and beginDate!=''\"> and DATE &gt;= #{beginDate} </if> " +
             " <if test=\"endDate!=null and endDate!=''\"> and DATE &lt;= #{endDate} </if> " +
             " group by substr(DATE, 0, 8) " +
             " order by substr(DATE, 0, 8) DESC</script>" })
-    List<DepositPO> getDepositMonthSummitList(@Param("beginDate") String beginDate, @Param("endDate") String endDate);
+    List<DepositPO> getDepositMonthSummitList(@Param("beginDate") String beginDate, @Param("endDate") String endDate, @Param("username") String username);
 
-    @Delete("delete from DEPOSIT where DATE = #{date} ")
-    int deleteDeposit(@Param("date") String date);
+    @Delete("delete from DEPOSIT where DATE = #{date} AND USERNAME = #{username} ")
+    int deleteDeposit(@Param("date") String date, @Param("username") String username);
 
 }
