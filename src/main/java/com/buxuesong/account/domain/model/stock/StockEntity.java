@@ -447,6 +447,7 @@ public class StockEntity {
         String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         return getStockList(app, username);
     }
+
     public List<String> getStockList(String app, String username) {
         List<StockPO> stock = stockMapper.findAllStock(app, username);
         log.info("APP: {} ,数据库中的股票为：{}", app, stock);
