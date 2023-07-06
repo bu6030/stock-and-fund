@@ -16,6 +16,6 @@ public interface OpenPersistentMonthMapper {
     int save(@Param("openPersistentMonthPO") OpenPersistentMonthPO openPersistentMonthPO);
 
     @Select("select MONTH, DATA from OPEN_PERSISTENT_MONTH where MONTH = #{month} ")
-    Optional<OpenPersistentMonthPO> findByMonth(@Param("month") String month);
+    OpenPersistentMonthPO findByMonth(@Param("month") String month);
 
 }

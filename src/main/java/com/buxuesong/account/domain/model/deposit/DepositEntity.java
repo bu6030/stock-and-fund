@@ -93,6 +93,11 @@ public class DepositEntity {
         BigDecimal stockTotalMarketValue = depositStockMarketValue(username);
         BigDecimal totalMarketValue = stockTotalMarketValue.add(fundTotalMarketValue);
         log.info("用户：{}, 当日盈利: {}, 总市值: {}", username, totalDayIncome, totalMarketValue);
+        if (fundTotalMarketValue.compareTo(BigDecimal.ZERO) == 0 && stockTotalMarketValue.compareTo(BigDecimal.ZERO) == 0
+                && totalMarketValue.compareTo(BigDecimal.ZERO) == 0) {
+            log.info("用户：{} 没有持股，不统计", username);
+            return;
+        }
         depositMapper.save(DepositPO
             .builder()
             .date(LocalDate.now().toString())
@@ -149,7 +154,7 @@ public class DepositEntity {
 
     private BigDecimal depositStockDayIncome(String username) {
         List<String> stockListFrom = stockEntity.getStockList(null, username);
-        List<StockEntity> stocks = stockEntity.getStockDetails(stockListFrom);
+        List<StockEntity> stocks = stockEntity.getStockDetails(stockListFrom, username);
         BigDecimal stockTotalDayIncome = new BigDecimal("0");
         for (StockEntity stock : stocks) {
             int maxBuyOrSellBonds = 0;
@@ -220,18 +225,17 @@ public class DepositEntity {
     }
 
     private boolean isTradingDate(String date) {
-        Optional<OpenPersistentMonthPO> opt = openPersistentMonthMapper.findByMonth(date.substring(0, 7));
+        OpenPersistentMonthPO opt = openPersistentMonthMapper.findByMonth(date.substring(0, 7));
         List<TradingDateResponse.TradingDate> tradingDates;
-        if (!opt.isPresent()) {
+        if (opt == null) {
             tradingDates = szseRestClient.getTradingDate().getData();
             OpenPersistentMonthPO openPersistentMonthPO = new OpenPersistentMonthPO();
             openPersistentMonthPO.setData(gson.toJson(tradingDates));
             openPersistentMonthPO.setMonth(date.substring(0, 7));
             openPersistentMonthMapper.save(openPersistentMonthPO);
         } else {
-            OpenPersistentMonthPO openPersistentMonthPO = opt.get();
             Type listType = new TypeToken<ArrayList<TradingDateResponse.TradingDate>>() {}.getType();
-            tradingDates = gson.fromJson(openPersistentMonthPO.getData(), listType);
+            tradingDates = gson.fromJson(opt.getData(), listType);
         }
 
         TradingDateResponse.TradingDate tradingDate = tradingDates.stream()
