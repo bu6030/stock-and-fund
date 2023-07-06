@@ -89,8 +89,8 @@ public class DepositEntity {
         BigDecimal stockTotalDayIncome = depositStockDayIncome(username);
         BigDecimal totalDayIncome = stockTotalDayIncome.add(fundTotalDayIncome);
 
-        BigDecimal fundTotalMarketValue = depositFundMarketValue();
-        BigDecimal stockTotalMarketValue = depositStockMarketValue();
+        BigDecimal fundTotalMarketValue = depositFundMarketValue(username);
+        BigDecimal stockTotalMarketValue = depositStockMarketValue(username);
         BigDecimal totalMarketValue = stockTotalMarketValue.add(fundTotalMarketValue);
         log.info("用户：{}, 当日盈利: {}, 总市值: {}", username, totalDayIncome, totalMarketValue);
         depositMapper.save(DepositPO
@@ -193,8 +193,8 @@ public class DepositEntity {
 
     }
 
-    private BigDecimal depositFundMarketValue() {
-        List<String> fundListFrom = fundEntity.getFundList(null);
+    private BigDecimal depositFundMarketValue(String username) {
+        List<String> fundListFrom = fundEntity.getFundList(null, username);
         List<FundEntity> funds = fundEntity.getFundDetails(fundListFrom);
         BigDecimal fundTotalMarketValue = new BigDecimal("0");
         for (FundEntity fund : funds) {
@@ -206,9 +206,9 @@ public class DepositEntity {
         return fundTotalMarketValue;
     }
 
-    private BigDecimal depositStockMarketValue() {
-        List<String> stockListFrom = stockEntity.getStockList(null);
-        List<StockEntity> stocks = stockEntity.getStockDetails(stockListFrom);
+    private BigDecimal depositStockMarketValue(String username) {
+        List<String> stockListFrom = stockEntity.getStockList(null, username);
+        List<StockEntity> stocks = stockEntity.getStockDetails(stockListFrom, username);
         BigDecimal stockTotalMarketValue = new BigDecimal("0");
         for (StockEntity stock : stocks) {
             BigDecimal marketValue = (new BigDecimal(stock.getNow()).multiply(new BigDecimal(stock.getBonds()))).setScale(2,
