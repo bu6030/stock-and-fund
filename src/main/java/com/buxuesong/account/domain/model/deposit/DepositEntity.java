@@ -81,18 +81,18 @@ public class DepositEntity {
 
         DepositPO deposit = depositMapper.findDepositByDate(date.toString(), username);
         if (deposit != null) {
-            log.info("已经存在当日盈利汇总： {}", deposit);
+            log.info("用户：{}, 已经存在当日盈利汇总： {}", username, deposit);
             return;
         }
 
-        BigDecimal fundTotalDayIncome = depositFundDayIncome();
-        BigDecimal stockTotalDayIncome = depositStockDayIncome();
+        BigDecimal fundTotalDayIncome = depositFundDayIncome(username);
+        BigDecimal stockTotalDayIncome = depositStockDayIncome(username);
         BigDecimal totalDayIncome = stockTotalDayIncome.add(fundTotalDayIncome);
 
         BigDecimal fundTotalMarketValue = depositFundMarketValue();
         BigDecimal stockTotalMarketValue = depositStockMarketValue();
         BigDecimal totalMarketValue = stockTotalMarketValue.add(fundTotalMarketValue);
-        log.info("当日盈利: {}, 总市值: {}", totalDayIncome, totalMarketValue);
+        log.info("用户：{}, 当日盈利: {}, 总市值: {}", username, totalDayIncome, totalMarketValue);
         depositMapper.save(DepositPO
             .builder()
             .date(LocalDate.now().toString())
@@ -108,33 +108,33 @@ public class DepositEntity {
     public void deleteDeposit() {
         LocalDate date = LocalDate.now();
         String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        log.info("Delete deposit date : {}", date);
+        log.info("User : {} delete deposit date : {}", username, date);
         depositMapper.deleteDeposit(date.toString(), username);
     }
 
     public List<DepositPO> getDepositList(String beginDate, String endDate) {
         String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         List<DepositPO> list = depositMapper.getDepositList(beginDate, endDate, username);
-        log.info("Get deposit list between {} and {} : {}", beginDate, endDate, list);
+        log.info("User : {} get deposit list between {} and {} : {}", username, beginDate, endDate, list);
         return list;
     }
 
     public List<DepositPO> getDepositYearSummitList(String beginDate, String endDate) {
         String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         List<DepositPO> list = depositMapper.getDepositYearSummitList(beginDate, endDate, username);
-        log.info("Get deposit year summit list between {} and {} : {}", beginDate, endDate, list);
+        log.info("User : {} get deposit year summit list between {} and {} : {}", username, beginDate, endDate, list);
         return list;
     }
 
     public List<DepositPO> getDepositMonthSummitList(String beginDate, String endDate) {
         String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         List<DepositPO> list = depositMapper.getDepositMonthSummitList(beginDate, endDate, username);
-        log.info("Get deposit month summit list between {} and {} : {}", beginDate, endDate, list);
+        log.info("User : {} get deposit month summit list between {} and {} : {}", username, beginDate, endDate, list);
         return list;
     }
 
-    private BigDecimal depositFundDayIncome() {
-        List<String> fundListFrom = fundEntity.getFundList(null);
+    private BigDecimal depositFundDayIncome(String username) {
+        List<String> fundListFrom = fundEntity.getFundList(null, username);
         List<FundEntity> funds = fundEntity.getFundDetails(fundListFrom);
         BigDecimal fundTotalDayIncome = new BigDecimal("0");
         for (FundEntity fund : funds) {
@@ -147,8 +147,8 @@ public class DepositEntity {
         return fundTotalDayIncome;
     }
 
-    private BigDecimal depositStockDayIncome() {
-        List<String> stockListFrom = stockEntity.getStockList(null);
+    private BigDecimal depositStockDayIncome(String username) {
+        List<String> stockListFrom = stockEntity.getStockList(null, username);
         List<StockEntity> stocks = stockEntity.getStockDetails(stockListFrom);
         BigDecimal stockTotalDayIncome = new BigDecimal("0");
         for (StockEntity stock : stocks) {
