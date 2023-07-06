@@ -18,7 +18,7 @@ public interface StockMapper {
     List<StockPO> findAllStock(@Param("app") String app, @Param("username") String username);
 
     @Select("select CODE, COST_PRICE costPrise, BONDS, APP, HIDE from STOCK where code = #{code} AND USERNAME = #{username} ")
-    StockPO findStockByCode(String code, @Param("username") String username);
+    StockPO findStockByCode(@Param("code") String code, @Param("username") String username);
 
     @Update("update STOCK set COST_PRICE = #{stock.costPrise}, BONDS = #{stock.bonds}, APP = #{stock.app}, HIDE = #{stock.hide} where CODE = #{stock.code} AND USERNAME = #{username} ")
     int updateStock(@Param("stock") StockPO stockPO, @Param("username") String username);

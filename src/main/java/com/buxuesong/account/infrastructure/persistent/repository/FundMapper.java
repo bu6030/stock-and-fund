@@ -18,7 +18,7 @@ public interface FundMapper {
     List<FundPO> findAllFund(@Param("app") String app, @Param("username") String username);
 
     @Select("select CODE, COST_PRICE costPrise, BONDS, APP from FUND where code = #{code} AND USERNAME = #{username}")
-    FundPO findFundByCode(String code, @Param("username") String username);
+    FundPO findFundByCode(@Param("code") String code, @Param("username") String username);
 
     @Update("update FUND set COST_PRICE = #{fund.costPrise}, BONDS = #{fund.bonds}, APP = #{fund.app} where CODE = #{fund.code} AND USERNAME = #{username} ")
     int updateFund(@Param("fund") FundPO fundPO, @Param("username") String username);
