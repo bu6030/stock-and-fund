@@ -94,7 +94,7 @@ public class DepositEntity {
         BigDecimal totalMarketValue = stockTotalMarketValue.add(fundTotalMarketValue);
         log.info("用户：{}, 当日盈利: {}, 总市值: {}", username, totalDayIncome, totalMarketValue);
         if (fundTotalMarketValue.compareTo(BigDecimal.ZERO) == 0 && stockTotalMarketValue.compareTo(BigDecimal.ZERO) == 0
-                && totalMarketValue.compareTo(BigDecimal.ZERO) == 0) {
+            && totalMarketValue.compareTo(BigDecimal.ZERO) == 0) {
             log.info("用户：{} 没有持股，不统计", username);
             return;
         }
