@@ -14,7 +14,7 @@ public interface BuyOrSellMapper {
         " COST, BONDS, INCOME, OPENPRICE, USERNAME) " +
         " values " +
         " (#{buyOrSellStock.date},#{buyOrSellStock.code},#{buyOrSellStock.type},#{buyOrSellStock.price}," +
-        " #{buyOrSellStock.cost},#{buyOrSellStock.bonds},#{buyOrSellStock.income},#{buyOrSellStock.openPrice}) ")
+        " #{buyOrSellStock.cost},#{buyOrSellStock.bonds},#{buyOrSellStock.income},#{buyOrSellStock.openPrice}, #{username}) ")
     int save(@Param("buyOrSellStock") BuyOrSellStockPO buyOrSellStockPO, @Param("username") String username);
 
     @Select("select DATE, CODE, TYPE, PRICE, COST, BONDS, INCOME, OPENPRICE from BUY_OR_SELL t where t.date = #{date} AND t.USERNAME = #{username}")
