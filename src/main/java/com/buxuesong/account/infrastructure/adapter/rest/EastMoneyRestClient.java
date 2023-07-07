@@ -20,7 +20,7 @@ public class EastMoneyRestClient {
         ResponseEntity<String> response = null;
         try {
             response = restTemplate.exchange(
-                    GET_FUND_CODE_BY_NAME_URL, HttpMethod.GET, null, String.class);
+                GET_FUND_CODE_BY_NAME_URL, HttpMethod.GET, null, String.class);
         } catch (Exception e) {
             log.info("通过东方财富接口获取基金接口异常: {]", e);
             return null;

@@ -36,7 +36,7 @@ public class GTimgRestClient {
         ResponseEntity<String> response = null;
         try {
             response = restTemplate.exchange(
-                    GET_STOCK_CODE_BY_NAME_FROM_GTIMG + name, HttpMethod.GET, null, String.class);
+                GET_STOCK_CODE_BY_NAME_FROM_GTIMG + name, HttpMethod.GET, null, String.class);
         } catch (Exception e) {
             log.info("通过腾讯股票接口搜索股票名称异常: {]", e);
             return null;

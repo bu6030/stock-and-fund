@@ -31,7 +31,6 @@ public class CacheService {
     @Autowired
     private EastMoneyRestClient eastMoneyRestClient;
 
-
     @Cacheable(key = "'fund_sina_'+#code")
     public String getFundInfoFromSina(String code) {
         log.info("通过新浪基金缓存接口获取基金，编码：{}", code);
@@ -67,7 +66,5 @@ public class CacheService {
         log.info("removeAllCache，让缓存失效");
         return 0;
     }
-
-
 
 }

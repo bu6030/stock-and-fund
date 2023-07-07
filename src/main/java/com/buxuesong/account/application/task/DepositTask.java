@@ -14,8 +14,8 @@ public class DepositTask {
     @Autowired
     private DepositEntity depositEntity;
 
-    // 每周一至周五15/16/17/18点30分统计当日盈亏，防止偶尔抽风没跑
-    @Scheduled(cron = "0 10 16,17,18,19,20,21 ? * MON-FRI")
+    // 每周一至周五16/17/18/19/20/21点30分统计当日盈亏，防止偶尔抽风没跑
+    @Scheduled(cron = "0 30 16,17,18,19,20,21 ? * MON-FRI")
     public void deposit() {
         log.info("======= DepositTask started =======");
         execute();
