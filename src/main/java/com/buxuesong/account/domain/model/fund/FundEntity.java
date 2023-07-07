@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.buxuesong.account.apis.model.request.FundRequest;
 import com.buxuesong.account.apis.model.response.SearchFundResult;
 import com.buxuesong.account.domain.service.CacheService;
-import com.buxuesong.account.infrastructure.adapter.rest.EastMoneyRestClient;
 import com.buxuesong.account.infrastructure.adapter.rest.SinaRestClient;
 import com.buxuesong.account.infrastructure.adapter.rest.TiantianFundRestClient;
 import com.buxuesong.account.infrastructure.general.utils.DateTimeUtils;
@@ -256,9 +255,6 @@ public class FundEntity {
     @Autowired
     private TiantianFundRestClient tiantianFundRestClient;
 
-    @Autowired
-    private EastMoneyRestClient eastMoneyRestClient;
-
     private static Gson gson = new Gson();
     @Autowired
     private FundMapper fundMapper;
@@ -441,7 +437,7 @@ public class FundEntity {
     public List<SearchFundResult> searchFundByName(String name) {
         List<SearchFundResult> result = new ArrayList<>();
         String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        String funds = eastMoneyRestClient.searchAllFundsFromEastMoney();
+        String funds = cacheService.searchAllFundsFromEastMoney();
         funds = funds.replace("var r = ","").replace(";", "");
         JSONArray jsonArray = JSONArray.parseArray(funds);
 

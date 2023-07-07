@@ -1,5 +1,6 @@
 package com.buxuesong.account.domain.service;
 
+import com.buxuesong.account.infrastructure.adapter.rest.EastMoneyRestClient;
 import com.buxuesong.account.infrastructure.adapter.rest.GTimgRestClient;
 import com.buxuesong.account.infrastructure.adapter.rest.SinaRestClient;
 import com.buxuesong.account.infrastructure.adapter.rest.TiantianFundRestClient;
@@ -27,6 +28,10 @@ public class CacheService {
     @Autowired
     private TiantianFundRestClient tiantianFundRestClient;
 
+    @Autowired
+    private EastMoneyRestClient eastMoneyRestClient;
+
+
     @Cacheable(key = "'fund_sina_'+#code")
     public String getFundInfoFromSina(String code) {
         log.info("通过新浪基金缓存接口获取基金，编码：{}", code);
@@ -51,10 +56,18 @@ public class CacheService {
         return sinaRestClient.getStockDayHistory(param, dataLen);
     }
 
+    @Cacheable(key = "'all_funds_from_eastmoney_'")
+    public String searchAllFundsFromEastMoney() {
+        log.info("通过东方财富接口获取基金");
+        return eastMoneyRestClient.searchAllFundsFromEastMoney();
+    }
+
     @CacheEvict(cacheNames = "cache", allEntries = true)
     public int removeAllCache() {
         log.info("removeAllCache，让缓存失效");
         return 0;
     }
+
+
 
 }
