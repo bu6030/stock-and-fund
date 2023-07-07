@@ -6,6 +6,7 @@
     <link rel="stylesheet" th:href="@{/css/main.admin.css}" type="text/css" media="all"/>
     <link rel="stylesheet" th:href="@{/css/main.amazeui.min.css}" type="text/css" media="all"/>
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css" media="all"/>
+    <script th:src="@{/js/common.js}"></script>
     <script th:src="@{/js/fund.js}"></script>
     <script th:src="@{/js/stockLargeMarket.js}"></script>
     <script th:src="@{/js/jquery.min.js}"></script>
@@ -84,6 +85,24 @@
             </div>
         </div>
     </div>
+
+    <!-- 搜索基金模态框 -->
+    <div class="modal fade" id="search-fund-modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- 模态框主体 -->
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="search-fund-select">选择您添加的基金</label>
+                        <select multiple size="10" class="form-control" id="search-fund-select" onclick="searchFundSelectClick()"></select>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <div class=" admin-content">
         <div class="daohang"><div class="daohang-margin" id="stockLargeMarket"></div></div>
         <div class="admin-biaogelist">
@@ -103,6 +122,14 @@
                 <dl>
                     <div class="checkbox">
                         <input id="enableAutoRefresh" type="checkbox" checked="checked" name="enableAutoRefresh"> 定时刷新
+                    </div>
+                </dl>
+                <dl>
+                    <div class="input-group my-input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="stock-fund-name-search-button" onclick="searchFund()">搜索基金</span>
+                        </div>
+                        <input type="text" aria-label="Last name" class="form-control my-form-input" id="input-fund-name-search" placeholder="请输入基金名称">
                     </div>
                 </dl>
             </div>

@@ -188,15 +188,6 @@ function getTableHtml(result){
     return str;
 }
 
-function getAppName(app){
-    for(var k in appList) {
-        if(app == appList[k].code){
-            return appList[k].name;
-        }
-    }
-    return app;
-}
-
 function filterApp(app) {
     filteredApp = app;
     getData();
@@ -254,7 +245,7 @@ function submitStockAndFund(){
     var costPrise =$("#costPrise").val();
     var bonds =$("#bonds").val();
     var app = $("#app").val();
-        var hide = $("#hide").val();
+    var hide = $("#hide").val();
     var req = {
         "code": code,
         "costPrise": costPrise,
@@ -353,4 +344,74 @@ function buyOrSellChanged() {
 
 function enableFilterHideChanged() {
     initData();
+}
+
+function searchStock() {
+    $("#search-stock-select").find("option").remove();
+    let stockName = $("#input-stock-name-search").val();
+    if (stockName != "" && stockName != null) {
+        var stocksArr = searchStockByName(stockName);
+        for (var k in stocksArr) {
+            var values = stocksArr[k].split("~");
+            var market = "";
+            if (values[0] == 'sh') {
+                market = "沪A"
+            } else if (values[0] == 'sz') {
+                market = "深A"
+            } else if (values[0] == 'hk') {
+                market = "港股"
+            } else {
+                market = "其他"
+            }
+            var option = $("<option></option>").val(values[0] + values[1]).text(A2U(values[2]) + " " + values[0] + values[1] + " （" + market + "）");
+            $("#search-stock-select").append(option);
+        }
+        $("#input-stock-name-search").val("");
+        if (stocksArr.length > 0) {
+            $("#search-stock-modal").modal();
+        }
+    }
+}
+
+function searchStockByName(name) {
+    var stocksArr;
+    $.ajax({
+        url: "/stock/search?name=" + name,
+        type: "get",
+        data: {},
+        async: false,
+        dataType:'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            var data1 = data.value;
+            if (data1.indexOf("v_hint=\"N\";") != -1) {
+                alert("不存在该股票");
+                $("#stock-name").val("");
+                return;
+            }
+            if (data1.indexOf("v_cate_hint") != -1) {
+                data1 = data1.substring(data1.indexOf("\n")+1);
+            }
+            data1 = data1.replace("v_hint=\"", "").replace(" ", "");
+            stocksArr = data1.split("^");
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+    return stocksArr;
+}
+
+function A2U(str) {
+    return unescape(str.replace(/\\u/gi, '%u'));
+}
+
+function clickSearchStockSelect() {
+    let stockCode = $("#search-stock-select").val();
+    $("#code").val(stockCode);
+    $("#costPrise").val(0);
+    $("#bonds").val(0);
+    submitStockAndFund();
 }

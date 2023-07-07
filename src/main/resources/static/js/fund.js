@@ -129,15 +129,6 @@ function getTableHtml(result){
     return str;
 }
 
-function getAppName(app){
-    for(var k in appList) {
-        if(app == appList[k].code){
-            return appList[k].name;
-        }
-    }
-    return app;
-}
-
 function filterApp(app) {
     filteredApp = app;
     getData();
@@ -244,4 +235,51 @@ function submitStockAndFund(){
             console.log(textStatus);
         }
     });
+}
+
+function searchFund() {
+    $("#search-fund-select").find("option").remove();
+    let fundName = $("#input-fund-name-search").val();
+    if (fundName != "" && fundName != null) {
+        var fundsArr = searchFundByName(fundName);
+        for (var k in fundsArr) {
+            var option = $("<option></option>").val(fundsArr[k].fundCode).text(fundsArr[k].fundName + " " + fundsArr[k].fundCode);
+            $("#search-fund-select").append(option);
+        }
+        $("#input-fund-name-search").val("");
+        if (fundsArr.length > 0) {
+            $("#search-fund-modal").modal();
+        }
+    }
+}
+
+function searchFundByName(name) {
+    var fundsArrs = [];
+    $.ajax({
+        url: "/fund/search?name=" + name,
+        type: "get",
+        data: {},
+        async: false,
+        dataType:'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            let value = data.value;
+            fundsArrs = value;
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+    return fundsArrs;
+}
+
+function searchFundSelectClick() {
+    let fundCode = $("#search-fund-select").val();
+    $("#fund-code").val(fundCode);
+    $("#code").val(fundCode);
+    $("#costPrise").val(0);
+    $("#bonds").val(0);
+    submitStockAndFund();
 }

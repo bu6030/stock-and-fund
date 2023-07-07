@@ -303,15 +303,6 @@ function getTotalTableHtml(totalMarketValueResult) {
     return str;
 }
 
-function getAppName(app){
-    for(var k in appList) {
-        if(app == appList[k].code){
-            return appList[k].name;
-        }
-    }
-    return app;
-}
-
 function filterApp(app) {
     filteredApp = app;
     getData();

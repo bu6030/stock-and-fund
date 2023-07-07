@@ -36,6 +36,16 @@ public class StockController {
     }
 
     /**
+     * 通过名称搜索股票接口
+     *
+     * @return
+     */
+    @GetMapping(value = "/stock/search")
+    public Response searchStockByName(@RequestParam(value = "name", required = false) String name) throws Exception {
+        return Response.builder().code("00000000").value(stockEntity.searchStockByName(name)).build();
+    }
+
+    /**
      * 获取大盘指数，上证，深成指，创业板指
      * 
      * @return

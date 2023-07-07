@@ -6,6 +6,7 @@
     <link rel="stylesheet" th:href="@{/css/main.admin.css}" type="text/css" media="all"/>
     <link rel="stylesheet" th:href="@{/css/main.amazeui.min.css}" type="text/css" media="all"/>
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css" media="all"/>
+    <script th:src="@{/js/common.js}"></script>
     <script th:src="@{/js/stock.js}"></script>
     <script th:src="@{/js/stockLargeMarket.js}"></script>
     <script th:src="@{/js/jquery.min.js}"></script>
@@ -153,6 +154,23 @@
         </div>
     </div>
 
+    <!-- 搜索股票模态框 -->
+    <div class="modal fade" id="search-stock-modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- 模态框主体 -->
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="search-stock-select">选择您添加的股票</label>
+                        <select multiple size="10" class="form-control" id="search-stock-select" onclick="clickSearchStockSelect()"></select>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <div class=" admin-content">
         <div class="daohang"><div class="daohang-margin" id="stockLargeMarket"></div></div>
         <div class="admin-biaogelist">
@@ -176,6 +194,14 @@
                 <dl>
                     <div class="checkbox">
                         <input id="enableFilterHide" onchange="enableFilterHideChanged()" type="checkbox" checked="checked" name="enableFilterHide"> 不展示隐藏股票
+                    </div>
+                </dl>
+                <dl>
+                    <div class="input-group my-input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="stock-fund-name-search-button" onclick="searchStock()">搜索股票</span>
+                        </div>
+                        <input type="text" aria-label="First name" class="form-control my-form-input" id="input-stock-name-search" placeholder="请输入股票名称">
                     </div>
                 </dl>
             </div>

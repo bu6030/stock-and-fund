@@ -81,6 +81,7 @@
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delete">删除</a>
 <!--    <a class="layui-btn layui-btn-xs" lay-event="more">更多 <i class="layui-icon layui-icon-down"></i></a>-->
 </script>
+<script th:src="@{/js/common.js}"></script>
 <script th:src="@{/js/BigDecimal.js}"></script>
 <script th:src="@{/js/jquery.min.js}"></script>
 <script th:src="@{/js/stockLargeMarket.js}"></script>
@@ -143,11 +144,7 @@
                 }
                 for(var i=0;i<res.value.length;i++){
                     var item = res.value[i];
-                    for(var k in appList) {
-                        if(item.app == appList[k].code){
-                            item.appNew = appList[k].name;
-                        }
-                    }
+                    item.appNew = getAppName(item.app);
                     item.dayIncome = new BigDecimal(parseFloat((new BigDecimal(item.gszzl))
                         .multiply((new BigDecimal(item.dwjz))).multiply(new BigDecimal(item.bonds))
                         .divide(new BigDecimal("100"))).toFixed(2)) +'';

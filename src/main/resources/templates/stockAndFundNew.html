@@ -49,7 +49,7 @@
 </div>
 
 <table class="layui-hide" id="demo" lay-filter="test"></table>
-
+<script th:src="@{/js/common.js}"></script>
 <script th:src="@{/js/BigDecimal.js}"></script>
 <script th:src="@{/js/jquery.min.js}"></script>
 <script th:src="@{/js/stockLargeMarket.js}"></script>
@@ -105,11 +105,7 @@
 
                 for(var i=0;i<res.value.length;i++){
                     var item = res.value[i];
-                    for(var k in appList) {
-                        if(item.app == appList[k].code){
-                            item.appNew = appList[k].name;
-                        }
-                    }
+                    item.appNew = getAppName(item.app);
                     if(item.type == 'STOCK'){
                         item.typeNew = '股票';
                         var buyOrSells = item.buyOrSellStockRequestList;

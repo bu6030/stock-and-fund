@@ -48,6 +48,11 @@ public class FundController {
         return Response.builder().code("00000000").value(fundHisList).build();
     }
 
+    @GetMapping(value = "/fund/search")
+    public Response searchFundByName(@RequestParam(value = "name", required = false) String name) throws Exception {
+        return Response.builder().code("00000000").value(fundEntity.searchFundByName(name)).build();
+    }
+
     /**
      * 保存/修改基金接口
      *

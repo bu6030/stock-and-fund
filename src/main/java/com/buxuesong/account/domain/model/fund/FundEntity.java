@@ -1,7 +1,10 @@
 package com.buxuesong.account.domain.model.fund;
 
+import com.alibaba.fastjson.JSONArray;
 import com.buxuesong.account.apis.model.request.FundRequest;
+import com.buxuesong.account.apis.model.response.SearchFundResult;
 import com.buxuesong.account.domain.service.CacheService;
+import com.buxuesong.account.infrastructure.adapter.rest.EastMoneyRestClient;
 import com.buxuesong.account.infrastructure.adapter.rest.SinaRestClient;
 import com.buxuesong.account.infrastructure.adapter.rest.TiantianFundRestClient;
 import com.buxuesong.account.infrastructure.general.utils.DateTimeUtils;
@@ -253,6 +256,9 @@ public class FundEntity {
     @Autowired
     private TiantianFundRestClient tiantianFundRestClient;
 
+    @Autowired
+    private EastMoneyRestClient eastMoneyRestClient;
+
     private static Gson gson = new Gson();
     @Autowired
     private FundMapper fundMapper;
@@ -431,4 +437,27 @@ public class FundEntity {
         log.info("APP: {} ,数据库中的基金历史为：{}", app, fundHis);
         return fundHis;
     }
+
+    public List<SearchFundResult> searchFundByName(String name) {
+        List<SearchFundResult> result = new ArrayList<>();
+        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        String funds = eastMoneyRestClient.searchAllFundsFromEastMoney();
+        funds = funds.replace("var r = ","").replace(";", "");
+        JSONArray jsonArray = JSONArray.parseArray(funds);
+
+        // 遍历 JSONArray
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JSONArray innerArray = jsonArray.getJSONArray(i);
+            // 判断内部数组的第三个元素是否包含搜索名称
+            if (innerArray.getString(2).contains(name)) {
+                SearchFundResult searchFundResult = new SearchFundResult();
+                searchFundResult.setFundCode(innerArray.getString(0));
+                searchFundResult.setFundName(innerArray.getString(2));
+                result.add(searchFundResult);
+            }
+        }
+        log.info("通过基金名称: {} 搜索到的结果为：{}", name, result);
+        return result;
+    }
+
 }

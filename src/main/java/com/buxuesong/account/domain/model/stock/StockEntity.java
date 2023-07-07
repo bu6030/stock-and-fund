@@ -448,6 +448,11 @@ public class StockEntity {
         return getStockList(app, username);
     }
 
+    public String searchStockByName(String name) {
+        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        return gTimgRestClient.getGetStockCodeByName(name);
+    }
+
     public List<String> getStockList(String app, String username) {
         List<StockPO> stock = stockMapper.findAllStock(app, username);
         log.info("APP: {} ,数据库中的股票为：{}", app, stock);
