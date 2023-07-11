@@ -6,8 +6,7 @@ import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 /**
- * 增加定时 config
- * 如果多个定时同时触发，不配置线程池会导致单线程阻塞所有定时
+ * 增加定时 config，如果多个定时同时触发，不配置线程池会导致单线程阻塞所有定时
  */
 @Configuration
 public class ScheduledConfig {

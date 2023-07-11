@@ -62,7 +62,7 @@ public class SecurityConfig implements WebMvcConfigurer {
             .authorizeHttpRequests(
                 (authorize) -> authorize.requestMatchers("/chrome/**", "/login.html", "/login", "/css/**", "/js/**").permitAll())
             .authorizeHttpRequests(
-                    (authorize) -> authorize.requestMatchers("/**").hasAuthority(ACCOUNT_CLIENT_AUTHORITY))
+                (authorize) -> authorize.requestMatchers("/**").hasAuthority(ACCOUNT_CLIENT_AUTHORITY))
 //                .httpBasic(withDefaults())
             .formLogin(withDefaults())
             .logout(withDefaults())
