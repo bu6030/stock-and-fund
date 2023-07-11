@@ -61,11 +61,13 @@ public class SecurityConfig implements WebMvcConfigurer {
             // 这两种方式用哪一种都可以
             .authorizeHttpRequests(
                 (authorize) -> authorize.requestMatchers("/chrome/**", "/login.html", "/login", "/css/**", "/js/**").permitAll())
-            .authorizeHttpRequests(
-                (authorize) -> authorize.requestMatchers("/**").hasAuthority(ACCOUNT_CLIENT_AUTHORITY))
+            .authorizeHttpRequests((authorize) -> authorize.requestMatchers("/**").hasAuthority(ACCOUNT_CLIENT_AUTHORITY))
 //                .httpBasic(withDefaults())
             .formLogin(withDefaults())
             .logout(withDefaults())
+            .csrf().disable()
+            .requestCache(withDefaults())
+            .headers().cacheControl(withDefaults()).and()
             .build();
     }
 
