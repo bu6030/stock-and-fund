@@ -1,13 +1,17 @@
 package com.buxuesong.account.infrastructure.general.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.CacheControl;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -20,23 +24,58 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
+public class SecurityConfig implements WebMvcConfigurer {
 
     @Autowired
     DataSource dataSource;
     private final static String ACCOUNT_CLIENT_AUTHORITY = "ADMIN";
 
-    @Override
-    @Autowired
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication().dataSource(dataSource);
+    // 配置basicauth账号密码
+    @Bean
+    UserDetailsService userDetailsService() {
+//        InMemoryUserDetailsManager users = new InMemoryUserDetailsManager();
+//        users.createUser(User.withUsername("aaa")
+//                .password(PasswordEncoderFactories.createDelegatingPasswordEncoder().encode("bbb"))
+//                .authorities(ACCOUNT_CLIENT_AUTHORITY).build());
+        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
+        return jdbcUserDetailsManager;
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers("/css/**", "/js/**", "/fonts/**", "/images/**",
+            "/i/**", "/resources/**");
+    }
+
+    @Bean
+    public RequestCache requestCache() {
+        return new HttpSessionRequestCache();
+    }
+
+    // 配置不同接口访问权限
+    @Bean
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        return http
+            // 下面配置对/helloWorld1接口需要验证 ADMIN 的 authoritie
+            // 和 Controller 中的 @PreAuthorize("hasAuthority('ADMIN')")注解配置效果一样
+            // 这两种方式用哪一种都可以
+            .authorizeHttpRequests(
+                (authorize) -> authorize.requestMatchers("/chrome/**", "/login.html", "/login", "/css/**", "/js/**").permitAll())
+            .authorizeHttpRequests((authorize) -> authorize.requestMatchers("/**").hasAuthority(ACCOUNT_CLIENT_AUTHORITY))
+//                .httpBasic(withDefaults())
+            .formLogin(withDefaults())
+            .logout(withDefaults())
+            .csrf().disable()
+            .requestCache(withDefaults())
+            .headers().cacheControl(withDefaults()).and()
+            .build();
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
-        // ignore
-        web.ignoring().antMatchers("/css/**", "/js/**", "/fonts/**", "/images/**",
-            "/i/**", "/resources/**");
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/static/**")
+            .addResourceLocations("classpath:/static/")
+            .setCacheControl(CacheControl.maxAge(Duration.ofDays(100))); // 设置缓存时间为 1 小时
     }
 
     @Override
@@ -46,35 +85,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
             .allowedMethods("*")
             .maxAge(1800)
             .allowedOrigins("*");
-    }
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**")
-            .addResourceLocations("classpath:/static/")
-            .setCacheControl(CacheControl.maxAge(Duration.ofDays(1))); // 设置缓存时间为 1 小时
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-            .authorizeRequests()
-            .antMatchers("/login", "/chrome/**", "/css/**", "/js/**")
-            .permitAll()
-            .and()
-            .authorizeRequests()
-            .anyRequest()
-            .hasAuthority(ACCOUNT_CLIENT_AUTHORITY)
-            .and()
-            .csrf()
-            .disable()
-            .sessionManagement()
-            .disable()
-            .cors()
-            .and()
-            .headers().cacheControl()
-            .and()
-            .contentTypeOptions();
-        http.formLogin(withDefaults());
     }
 }
