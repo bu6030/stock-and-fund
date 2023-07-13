@@ -3,22 +3,18 @@ package com.buxuesong.account.infrastructure.general.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.CacheControl;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.sql.DataSource;
-
-import java.time.Duration;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -37,8 +33,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 //        users.createUser(User.withUsername("aaa")
 //                .password(PasswordEncoderFactories.createDelegatingPasswordEncoder().encode("bbb"))
 //                .authorities(ACCOUNT_CLIENT_AUTHORITY).build());
-        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
-        return jdbcUserDetailsManager;
+        return new JdbcUserDetailsManager(dataSource);
     }
 
     @Bean
@@ -63,27 +58,11 @@ public class SecurityConfig implements WebMvcConfigurer {
                 (authorize) -> authorize.requestMatchers("/chrome/**", "/login.html", "/login", "/css/**", "/js/**").permitAll())
             .authorizeHttpRequests((authorize) -> authorize.requestMatchers("/**").hasAuthority(ACCOUNT_CLIENT_AUTHORITY))
 //                .httpBasic(withDefaults())
-            .formLogin(withDefaults())
+            .formLogin((formLogin) -> formLogin.loginProcessingUrl("/"))
             .logout(withDefaults())
-            .csrf().disable()
+            .csrf(AbstractHttpConfigurer::disable)
             .requestCache(withDefaults())
-            .headers().cacheControl(withDefaults()).and()
+            .headers(headers -> headers.cacheControl(withDefaults()))
             .build();
-    }
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**")
-            .addResourceLocations("classpath:/static/")
-            .setCacheControl(CacheControl.maxAge(Duration.ofDays(100))); // 设置缓存时间为 1 小时
-    }
-
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-            .allowedHeaders("*")
-            .allowedMethods("*")
-            .maxAge(1800)
-            .allowedOrigins("*");
     }
 }
