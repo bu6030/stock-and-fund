@@ -3,6 +3,7 @@ package com.buxuesong.account.infrastructure.general.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -22,8 +23,12 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class SecurityConfig implements WebMvcConfigurer {
 
-    @Autowired
     DataSource dataSource;
+
+    public SecurityConfig (DataSource dataSource){
+        this.dataSource = dataSource;
+    }
+
     private final static String ACCOUNT_CLIENT_AUTHORITY = "ADMIN";
 
     // 配置basicauth账号密码
@@ -37,14 +42,13 @@ public class SecurityConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/css/**", "/js/**", "/fonts/**", "/images/**",
-            "/i/**", "/resources/**");
-    }
-
-    @Bean
-    public RequestCache requestCache() {
-        return new HttpSessionRequestCache();
+    @Order(0)
+    SecurityFilterChain staticEndpoints(HttpSecurity http) throws Exception {
+        http
+            .securityMatcher("/css/**", "/js/**", "/fonts/**", "/images/**", "/i/**", "/resources/**")
+            .headers((headers) -> headers.cacheControl((cache) -> cache.disable()))
+            .authorizeHttpRequests((authorize) -> authorize.anyRequest().permitAll());
+        return http.build();
     }
 
     // 配置不同接口访问权限
@@ -54,11 +58,10 @@ public class SecurityConfig implements WebMvcConfigurer {
             // 下面配置对/helloWorld1接口需要验证 ADMIN 的 authoritie
             // 和 Controller 中的 @PreAuthorize("hasAuthority('ADMIN')")注解配置效果一样
             // 这两种方式用哪一种都可以
-            .authorizeHttpRequests(
-                (authorize) -> authorize.requestMatchers("/chrome/**", "/login.html", "/login", "/css/**", "/js/**").permitAll())
-            .authorizeHttpRequests((authorize) -> authorize.requestMatchers("/**").hasAuthority(ACCOUNT_CLIENT_AUTHORITY))
-//                .httpBasic(withDefaults())
-            .formLogin((formLogin) -> formLogin.loginProcessingUrl("/"))
+            .authorizeHttpRequests((authorize) -> authorize
+                .requestMatchers("/login", "/chrome/**").permitAll()
+                .anyRequest().hasAuthority(ACCOUNT_CLIENT_AUTHORITY))
+            .formLogin((formLogin) -> formLogin.successForwardUrl("/"))
             .logout(withDefaults())
             .csrf(AbstractHttpConfigurer::disable)
             .requestCache(withDefaults())
