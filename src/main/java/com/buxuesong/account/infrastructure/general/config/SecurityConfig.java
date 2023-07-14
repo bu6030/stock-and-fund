@@ -25,7 +25,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 
     DataSource dataSource;
 
-    public SecurityConfig (DataSource dataSource){
+    public SecurityConfig(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
@@ -61,7 +61,7 @@ public class SecurityConfig implements WebMvcConfigurer {
             .authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers("/login", "/chrome/**").permitAll()
                 .anyRequest().hasAuthority(ACCOUNT_CLIENT_AUTHORITY))
-            .formLogin((formLogin) -> formLogin.successForwardUrl("/"))
+            .formLogin((formLogin) -> formLogin.loginProcessingUrl("/").defaultSuccessUrl("/main.html"))
             .logout(withDefaults())
             .csrf(AbstractHttpConfigurer::disable)
             .requestCache(withDefaults())
