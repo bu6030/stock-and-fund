@@ -10,6 +10,12 @@ import org.springframework.web.servlet.ModelAndView;
 public class UrlController {
 
     // 老版本页面，BootStrap版本
+    @GetMapping(value = "/login.html")
+    public ModelAndView loginInit() {
+        ModelAndView m = new ModelAndView();
+        m.setViewName("login");
+        return m;
+    }
 
     /**
      * 基金页面初始化
