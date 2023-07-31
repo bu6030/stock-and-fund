@@ -24,7 +24,7 @@ public interface BuyOrSellMapper {
         " <if test=\"code!=null and code!=''\"> and code = #{code} </if> " +
         " <if test=\"beginDate!=null and beginDate!=''\"> and DATE &gt;= #{beginDate} </if> " +
         " <if test=\"endDate!=null and endDate!=''\"> and DATE &lt;= #{endDate} </if> " +
-        " order by DATE ASC </script>")
+        " order by DATE DESC </script>")
     List<BuyOrSellStockPO> findAllBuyOrSellStocks(@Param("code") String code, @Param("beginDate") String beginDate,
         @Param("endDate") String endDate, @Param("username") String username);
 }
