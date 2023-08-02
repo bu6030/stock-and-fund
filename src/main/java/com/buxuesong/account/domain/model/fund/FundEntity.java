@@ -444,8 +444,8 @@ public class FundEntity {
         // 遍历 JSONArray
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONArray innerArray = jsonArray.getJSONArray(i);
-            // 判断内部数组的第三个元素是否包含搜索名称
-            if (innerArray.getString(2).contains(name)) {
+            // 判断内部数组的第三个元素是否包含搜索名称，或者第一个元素是否包括基金编码
+            if (innerArray.getString(2).contains(name) || innerArray.getString(0).contains(name)) {
                 SearchFundResult searchFundResult = new SearchFundResult();
                 searchFundResult.setFundCode(innerArray.getString(0));
                 searchFundResult.setFundName(innerArray.getString(2));

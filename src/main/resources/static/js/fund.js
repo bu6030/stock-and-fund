@@ -264,6 +264,9 @@ function searchFundByName(name) {
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
             let value = data.value;
+            if (value.length == 0) {
+                alert("没有搜索到该基金");
+            }
             fundsArrs = value;
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
