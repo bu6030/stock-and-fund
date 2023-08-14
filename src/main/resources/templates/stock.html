@@ -171,6 +171,83 @@
         </div>
     </div>
 
+    <!-- 股票基金历史模态框 -->
+    <div class="modal fade" id="history-modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!-- 模态框头部 -->
+                <div class="modal-header">
+                    <h4 class="modal-title">历史记录</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- 模态框主体 -->
+                <div class="modal-body">
+                    <table width="100%" class="am-table am-table-bordered am-table-radius am-table-striped">
+                        <thead>
+                        <tr class="am-success">
+                            <th class="table-type">股票/基金名称</th>
+                            <th class="table-author am-hide-sm-only">成本价/持仓成本（修改前）</th>
+                            <th class="table-author am-hide-sm-only">持仓/持有份额（修改前）</th>
+                            <th class="table-author am-hide-sm-only">市值/金额（修改前）</th>
+                            <th class="table-author am-hide-sm-only">修改时间</th>
+                        </tr>
+                        </thead>
+                        <tbody id="history-nr">
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 模态框底部 -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="show-buy-or-sell-button" onclick="showBuyOrSell()">买卖历史</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 股票买卖历史模态框 -->
+    <div class="modal fade" id="buy-or-sell-modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <input type="hidden" id="buy-or-sell-stock-code">
+                <input type="hidden" id="buy-or-sell-stock-name">
+                <!-- 模态框头部 -->
+                <div class="modal-header">
+                    <h4 class="modal-title">买/卖历史记录</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- 模态框主体 -->
+                <div class="modal-body">
+                    <table width="100%" class="am-table am-table-bordered am-table-radius am-table-striped">
+                        <thead>
+                        <tr class="am-success">
+                            <th class="table-type">股票名称</th>
+                            <th class="table-author am-hide-sm-only">买/卖</th>
+                            <th class="table-author am-hide-sm-only">成交价格</th>
+                            <th class="table-author am-hide-sm-only">手续费</th>
+                            <th class="table-author am-hide-sm-only">买/卖数量</th>
+                            <th class="table-author am-hide-sm-only">总金额</th>
+                            <th class="table-author am-hide-sm-only">操作时间</th>
+                        </tr>
+                        </thead>
+                        <tbody id="buy-or-sell-nr">
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 模态框底部 -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <div class=" admin-content">
         <div class="daohang"><div class="daohang-margin" id="stockLargeMarket"></div></div>
         <div class="admin-biaogelist">

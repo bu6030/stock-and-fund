@@ -97,7 +97,7 @@ function getTableHtml(result){
 
         str += "<tr><td>"
             + "<a href='#' onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
-            + "</td><td>" + result[k].fundName
+            + "</td><td onclick=\"getFundHistory('" + result[k].fundCode + "')\">" + result[k].fundName
             + "</td><td " + dayIncomeStyle + ">" +result[k].gszzl + "%"
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
             + "</td><td>" + result[k].dwjz + "(" + result[k].jzrq + ")"
@@ -285,4 +285,37 @@ function searchFundSelectClick() {
     $("#costPrise").val(0);
     $("#bonds").val(0);
     submitStockAndFund();
+}
+
+function getFundHistory(code){
+    $("#show-buy-or-sell-button")[0].style.display  = 'none';
+    $.ajax({
+        url:"/fundHis?code=" + code,
+        type:"get",
+        data :{},
+        dataType:'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data){
+            var result = data.value;
+            var str = "";
+            for(var k in result) {
+                var costPrise = new BigDecimal(result[k].costPrise + "");
+                var bonds = new BigDecimal(result[k].bonds + "");
+                var marketValue = parseFloat(costPrise.multiply(bonds)).toFixed(2);
+                str += "<tr><td>" + result[k].name
+                    + "</td><td>" + costPrise
+                    + "</td><td>" + bonds
+                    + "</td><td>" + marketValue
+                    + "</td><td>" + result[k].createDate
+                    +"</td></tr>";
+            }
+            $("#history-nr").html(str);
+            $("#history-modal").modal();
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
 }

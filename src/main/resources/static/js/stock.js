@@ -151,7 +151,7 @@ function getTableHtml(result){
 
         str += "<tr><td>"
             + "<a href='#' onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
-            + "</td><td>" +result[k].name
+            + "</td><td onclick=\"getStockHistory('" + result[k].code + "')\">" +result[k].name
             + "</td><td " + dayIncomeStyle + ">" + result[k].change
             + "</td><td " + dayIncomeStyle + ">" + result[k].changePercent +"%"
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
@@ -414,4 +414,78 @@ function clickSearchStockSelect() {
     $("#costPrise").val(0);
     $("#bonds").val(0);
     submitStockAndFund();
+}
+
+function getStockHistory(code) {
+    $("#show-buy-or-sell-button")[0].style.display  = 'block';
+    $("#buy-or-sell-stock-code").val(code);
+    $.ajax({
+        url:"/stockHis?code=" + code,
+        type:"get",
+        data :{},
+        dataType:'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data){
+            var result = data.value;
+            var str = "";
+            for(var k in result) {
+                $("#buy-or-sell-stock-name").val(result[k].name);
+                var costPrise = new BigDecimal(result[k].costPrise + "");
+                var bonds = new BigDecimal(result[k].bonds + "");
+                var marketValue = parseFloat(costPrise.multiply(bonds)).toFixed(2);
+                str += "<tr><td>" + result[k].name
+                    + "</td><td>" + costPrise
+                    + "</td><td>" + bonds
+                    + "</td><td>" + marketValue
+                    + "</td><td>" + result[k].createDate
+                    +"</td></tr>";
+            }
+            $("#history-nr").html(str);
+            $("#history-modal").modal();
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+}
+
+function showBuyOrSell() {
+    let code = $("#buy-or-sell-stock-code").val();
+    let name = $("#buy-or-sell-stock-name").val();
+    $.ajax({
+        url:"/buyOrSellStock?code=" + code,
+        type:"get",
+        data :{},
+        dataType:'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data){
+            var result = data.value;
+            var str = "";
+            for(var k in result) {
+                let type = result[k].type == "1" ? "买" : "卖";
+                var cost = new BigDecimal(result[k].cost + "");
+                var bonds = new BigDecimal(result[k].bonds + "");
+                var price = new BigDecimal(result[k].price + "");
+                var totalPrice = parseFloat(price.multiply(bonds).subtract(cost)).toFixed(2);
+                str += "<tr><td>" + name
+                    + "</td><td>" + type
+                    + "</td><td>" + price
+                    + "</td><td>" + cost
+                    + "</td><td>" + bonds
+                    + "</td><td>" + totalPrice
+                    + "</td><td>" + result[k].date
+                    +"</td></tr>";
+            }
+            $("#buy-or-sell-nr").html(str);
+            $("#history-modal").modal('hide')
+            $("#buy-or-sell-modal").modal();
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
 }
