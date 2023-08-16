@@ -320,14 +320,8 @@ function showTimeImageModal(code, type) {
     let path = "";
     if (type == "FUND") {
         path = "http://j4.dfcfw.com/charts/pic7/" + code + ".png";
-        $("#time-image-day-button")[0].style.display  = 'none';
-        $("#time-image-week-button")[0].style.display  = 'none';
-        $("#time-image-month-button")[0].style.display  = 'none';
     } else {
         path = "http://image.sinajs.cn/newchart/min/n/" + code + ".gif";
-        $("#time-image-day-button")[0].style.display  = 'block';
-        $("#time-image-week-button")[0].style.display  = 'block';
-        $("#time-image-month-button")[0].style.display  = 'block';
     }
     $("#time-image-modal").modal();
     $("#time-image").html('<img src="' + path + '" width="100%" length="100%" />');
@@ -347,7 +341,8 @@ function showDayImage() {
     console.log("日线图", code, "==", type);
     let path = "";
     if (type == "FUND") {
-        path = "http://j4.dfcfw.com/charts/pic7/" + code + ".png";
+        let timestamp = (Date.now() + "").substring(0, 10);
+        path = "http://webquoteklinepic.eastmoney.com/GetPic.aspx?nid=0." + code + "&type=&unitWidth=-6&ef=&formula=RSI&AT=1&imageType=KXL&timespan=" + timestamp;
     } else {
         path = "http://image.sinajs.cn/newchart/daily/n/" + code + ".gif";
     }
@@ -361,7 +356,8 @@ function showWeekImage() {
     console.log("周线图", code, "==", type);
     let path = "";
     if (type == "FUND") {
-        path = "http://j4.dfcfw.com/charts/pic7/" + code + ".png";
+        let timestamp = (Date.now() + "").substring(0, 10);
+        path = "http://webquoteklinepic.eastmoney.com/GetPic.aspx?nid=0." + code + "&type=W&unitWidth=-6&ef=&formula=RSI&AT=1&imageType=KXL&timespan=" + timestamp;
     } else {
         path = "http://image.sinajs.cn/newchart/weekly/n/" + code + ".gif";
     }
@@ -375,7 +371,8 @@ function showMonthImage() {
     console.log("月线图", code, "==", type);
     let path = "";
     if (type == "FUND") {
-        path = "http://j4.dfcfw.com/charts/pic7/" + code + ".png";
+        let timestamp = (Date.now() + "").substring(0, 10);
+        path = "http://webquoteklinepic.eastmoney.com/GetPic.aspx?nid=0." + code + "&type=M&unitWidth=-6&ef=&formula=RSI&AT=1&imageType=KXL&timespan=" + timestamp;
     } else {
         path = "http://image.sinajs.cn/newchart/monthly/n/" + code + ".gif";
     }
