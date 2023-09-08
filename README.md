@@ -191,6 +191,25 @@ java -jar -Dsqllite.db.file=你的项目路径/stock-and-fund.db stock-and-fund-
 ```
 4. 本机访问http://localhost:8080
 
+### 4. 设定登录账号密码
+1. 代码中的PasswordUtils.java类，修改System.out.println这一行代码中的 12345 ，修改你想要的密码
+```
+    public static void main(String[] args) {
+    //下面的 12345 为密码，你也可以修改为别的
+        System.out.println(generatePassword("12345"));
+    }
+//运行后，输出密码为
+{bcrypt}$2a$10$ImeqoAbgCx3HdADX9Or08eTBqAM6SMnEEn8K/6a0bsZiGg.VzYxBu
+```
+2. 把输出的内容复制下来，接下按照下面的样子来拼接成 SQL 语句，插入用户和权限两个表，其中 users 的 password 字段的值就是上面复制下来的，下面的语句表示账号 test，密码 12345
+```
+INSERT INTO users (username,password,enabled) VALUES
+	 ('test','{bcrypt}$2a$10$ImeqoAbgCx3HdADX9Or08eTBqAM6SMnEEn8K/6a0bsZiGg.VzYxBu',1);
+INSERT INTO authorities (username,authority) VALUES
+	 ('test','ADMIN');
+```
+3. 后面启动 SpringBoot 后，登录窗口输入账号 test，密码 12345 即可，注意密码为上面PasswordUtils.java中修改的后的密码
+
 ## <span id="jump6">初始化表结构</span>
 ### 盈利汇总数据
 ```
