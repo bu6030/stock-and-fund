@@ -1,6 +1,7 @@
 package com.buxuesong.account.infrastructure.general.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -13,6 +14,7 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.sql.DataSource;
@@ -23,6 +25,8 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class SecurityConfig implements WebMvcConfigurer {
 
+    @Value("${my.image.path}")
+    private String myImagePath;
     DataSource dataSource;
 
     public SecurityConfig(DataSource dataSource) {
@@ -45,7 +49,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Order(0)
     SecurityFilterChain staticEndpoints(HttpSecurity http) throws Exception {
         http
-            .securityMatcher("/css/**", "/js/**", "/fonts/**", "/images/**", "/i/**", "/resources/**")
+            .securityMatcher("/css/**", "/js/**", "/fonts/**", "/images/**", "/i/**", "/resources/**", "/my-image/**")
             .headers((headers) -> headers.cacheControl((cache) -> cache.disable()))
             .authorizeHttpRequests((authorize) -> authorize.anyRequest().permitAll());
         return http.build();
@@ -67,5 +71,12 @@ public class SecurityConfig implements WebMvcConfigurer {
             .requestCache(withDefaults())
             .headers(headers -> headers.cacheControl(withDefaults()))
             .build();
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // 增加映射静态资源
+        registry.addResourceHandler("/my-image/**")
+            .addResourceLocations(myImagePath);
     }
 }
