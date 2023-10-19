@@ -32,3 +32,5 @@ APP_HOME_LOG*/*
 docker/*
 
 .idea/*
+
+.DS_Store
