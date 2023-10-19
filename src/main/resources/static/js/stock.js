@@ -285,9 +285,9 @@ function submitStockAndFund(){
 function buyOrSell(code, name) {
     $("#code").val(code);
     $("#nameBuyOrSell").val(name);
+    showBuyOrSellCost(code);
     $("#buyOrSellModal").modal();
 }
-
 
 function submitBuyOrSell(){
     var code =$("#code").val();
@@ -481,6 +481,33 @@ function showBuyOrSell() {
             $("#buy-or-sell-nr").html(str);
             $("#history-modal").modal('hide')
             $("#buy-or-sell-modal").modal();
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+}
+
+function showBuyOrSellCost(code) {
+    $.ajax({
+        url:"/buyOrSellStock?code=" + code,
+        type:"get",
+        data :{},
+        dataType:'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            var result = data.value;
+            var str = "";
+            if (result.length == 0) {
+                return;
+            }
+            var cost = result[0].cost;
+            var bonds = result[0].bonds;
+            $("#cost").val(cost);
+            $("#handleBonds").val(bonds);
+            $("#buyOrSellModal").modal();
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
             console.log(XMLHttpRequest.status);
