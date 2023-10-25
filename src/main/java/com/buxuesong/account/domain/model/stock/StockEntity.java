@@ -343,6 +343,9 @@ public class StockEntity {
                 StockEntity bean = new StockEntity(code, codeMap);
                 BigDecimal now = new BigDecimal(values[3]).setScale(3, RoundingMode.HALF_UP);
                 bean.setName(values[1]);
+                if (now.compareTo(BigDecimal.ZERO) == 0 && values[1].contains("发债") || values[1].contains("转债")) {
+                    now = new BigDecimal("100");
+                }
                 bean.setNow(now + "");
                 bean.setChange(new BigDecimal(values[31]).setScale(3, RoundingMode.HALF_UP) + "");
                 bean.setChangePercent(values[32]);
@@ -398,9 +401,9 @@ public class StockEntity {
                     bean.setDay20Min(minStockDay20.getLow() + "");
                     bean.setDay10Min(minStockDay10.getLow() + "");
                 } else {
-                    bean.setDay20Max(values[3]);
-                    bean.setDay20Min(values[3]);
-                    bean.setDay10Min(values[3]);
+                    bean.setDay20Max(now + "");
+                    bean.setDay20Min(now + "");
+                    bean.setDay10Min(now + "");
                 }
                 stocks.add(bean);
             }
