@@ -459,12 +459,12 @@ public class StockEntity {
             if (!debtResult.contains("v_pv_none_match=\"1\";")) {
                 result = result + "sh~" + name + "~" + debtResult.split("~")[1];
             }
-            debtResult = gTimgRestClient.getStockInfo("sz"+name);
+            debtResult = gTimgRestClient.getStockInfo("sz" + name);
             if (!debtResult.contains("v_pv_none_match=\"1\";")) {
                 if (result.equals("v_hint=\"")) {
                     result = result + "sz~" + name + "~" + debtResult.split("~")[1];
                 } else {
-                    result = result  + "^" + "sz~" + name + "~" + debtResult.split("~")[1];
+                    result = result + "^" + "sz~" + name + "~" + debtResult.split("~")[1];
                 }
             }
         }
