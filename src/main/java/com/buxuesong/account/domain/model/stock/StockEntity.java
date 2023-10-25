@@ -8,6 +8,7 @@ import com.buxuesong.account.infrastructure.adapter.rest.SinaRestClient;
 import com.buxuesong.account.infrastructure.adapter.rest.response.ShareBonusResponse;
 import com.buxuesong.account.infrastructure.adapter.rest.response.StockDayHistoryResponse;
 import com.buxuesong.account.infrastructure.general.utils.DateTimeUtils;
+import com.buxuesong.account.infrastructure.general.utils.NumberUtils;
 import com.buxuesong.account.infrastructure.persistent.po.BuyOrSellStockPO;
 import com.buxuesong.account.infrastructure.persistent.po.StockHisPO;
 import com.buxuesong.account.infrastructure.persistent.po.StockPO;
@@ -450,7 +451,24 @@ public class StockEntity {
 
     public String searchStockByName(String name) {
         String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        return gTimgRestClient.getGetStockCodeByName(name);
+        String result = gTimgRestClient.getGetStockCodeByName(name);
+        // 如果都是数字说明可能是可转债
+        if ("v_hint=\"N\";".equals(result) && NumberUtils.isNumeric(name)) {
+            result = "v_hint=\"";
+            String debtResult = gTimgRestClient.getStockInfo("sh" + name);
+            if (!debtResult.contains("v_pv_none_match=\"1\";")) {
+                result = result + "sh~" + name + "~" + debtResult.split("~")[1];
+            }
+            debtResult = gTimgRestClient.getStockInfo("sz"+name);
+            if (!debtResult.contains("v_pv_none_match=\"1\";")) {
+                if (result.equals("v_hint=\"")) {
+                    result = result + "sz~" + name + "~" + debtResult.split("~")[1];
+                } else {
+                    result = result  + "^" + "sz~" + name + "~" + debtResult.split("~")[1];
+                }
+            }
+        }
+        return result;
     }
 
     public List<String> getStockList(String app, String username) {
