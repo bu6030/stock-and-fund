@@ -23,9 +23,11 @@ public class FileUploadController {
         }
 
         try {
+            // Rename the file to "WechatIMG274.jpeg"
             String fileName = "WechatIMG274.jpeg";
             Path uploadPath = Paths.get(UPLOAD_DIR);
             Path filePath = uploadPath.resolve(fileName);
+
             // Save the file to the specified directory
             file.transferTo(filePath.toFile());
 
