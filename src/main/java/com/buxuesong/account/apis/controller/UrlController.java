@@ -167,4 +167,16 @@ public class UrlController {
         m.setViewName("paramNew");
         return m;
     }
+
+    /**
+     * 上传文件
+     *
+     * @return
+     */
+    @GetMapping(value = "/upload.html")
+    public ModelAndView uploadInit() {
+        ModelAndView m = new ModelAndView();
+        m.setViewName("upload");
+        return m;
+    }
 }

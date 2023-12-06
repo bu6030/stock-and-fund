@@ -49,7 +49,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Order(0)
     SecurityFilterChain staticEndpoints(HttpSecurity http) throws Exception {
         http
-            .securityMatcher("/css/**", "/js/**", "/fonts/**", "/images/**", "/i/**", "/resources/**", "/my-image/**")
+            .securityMatcher("/css/**", "/js/**", "/fonts/**", "/images/**", "/i/**", "/resources/**", "/my-image/**", "/upload.html")
             .headers((headers) -> headers.cacheControl((cache) -> cache.disable()))
             .authorizeHttpRequests((authorize) -> authorize.anyRequest().permitAll());
         return http.build();
@@ -63,7 +63,7 @@ public class SecurityConfig implements WebMvcConfigurer {
             // 和 Controller 中的 @PreAuthorize("hasAuthority('ADMIN')")注解配置效果一样
             // 这两种方式用哪一种都可以
             .authorizeHttpRequests((authorize) -> authorize
-                .requestMatchers("/login", "/chrome/**", "/login.html").permitAll()
+                .requestMatchers("/login", "/chrome/**", "/login.html", "/upload.html").permitAll()
                 .anyRequest().hasAuthority(ACCOUNT_CLIENT_AUTHORITY))
             .formLogin((formLogin) -> formLogin.loginPage("/login.html").loginProcessingUrl("/").defaultSuccessUrl("/main.html"))
             .logout(withDefaults())
