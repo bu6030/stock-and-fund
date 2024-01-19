@@ -98,6 +98,13 @@ public class DepositEntity {
             log.info("用户：{} 没有持股，不统计", username);
             return;
         }
+        // 获取大盘涨跌数据
+        List<String> bigMarketList = new ArrayList<>();
+        bigMarketList.add("sh000001,0,0,,0");
+        List<StockEntity> list = stockEntity.getStockDetails(bigMarketList, username);
+        StockEntity bigMarket = list.get(0);
+        String bigMarketChangePercent = bigMarket.getChangePercent();
+
         depositMapper.save(DepositPO
             .builder()
             .date(LocalDate.now().toString())
@@ -107,6 +114,7 @@ public class DepositEntity {
             .fundMarketValue(fundTotalMarketValue)
             .stockMarketValue(stockTotalMarketValue)
             .totalMarketValue(totalMarketValue)
+            .bigMarketChangePercent(bigMarketChangePercent)
             .build(), username);
     }
 

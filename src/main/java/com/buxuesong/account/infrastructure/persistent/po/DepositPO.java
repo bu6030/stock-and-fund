@@ -19,4 +19,5 @@ public class DepositPO {
     private BigDecimal fundMarketValue;
     private BigDecimal stockMarketValue;
     private BigDecimal totalMarketValue;
+    private String bigMarketChangePercent;
 }

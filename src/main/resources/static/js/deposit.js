@@ -48,12 +48,13 @@ function getTableHtml(result){
         totalStockDayIncome = totalStockDayIncome + parseFloat(result[k].stockDayIncome);
         totalTotalDayIncome = totalTotalDayIncome + parseFloat(result[k].totalDayIncome);
 
-        var fundIncomePercent = parseFloat(result[k].fundDayIncome).toFixed(4) * 100/parseFloat(result[k].fundMarketValue);
-        var stockIncomePercent = parseFloat(result[k].stockDayIncome).toFixed(4) * 100/parseFloat(result[k].stockMarketValue);
-        var totalIncomePercent = parseFloat(result[k].totalDayIncome).toFixed(4) * 100/parseFloat(result[k].totalMarketValue);
+        var fundIncomePercent = parseFloat(result[k].fundDayIncome).toFixed(4) * 100/(parseFloat(result[k].fundMarketValue) - parseFloat(result[k].fundDayIncome));
+        var stockIncomePercent = parseFloat(result[k].stockDayIncome).toFixed(4) * 100/(parseFloat(result[k].stockMarketValue) - parseFloat(result[k].stockDayIncome));
+        var totalIncomePercent = parseFloat(result[k].totalDayIncome).toFixed(4) * 100/(parseFloat(result[k].totalMarketValue) - parseFloat(result[k].totalDayIncome));
         var stockDayIncomeStyle = result[k].stockDayIncome == 0 ? "" : (result[k].stockDayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
         var fundDayIncomeStyle = result[k].fundDayIncome == 0 ? "" : (result[k].fundDayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
         var totalDayIncomeStyle = result[k].totalDayIncome == 0 ? "" : (result[k].totalDayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
+        var bigMarketChangePercentStyle = result[k].bigMarketChangePercent == 0 ? "" : (result[k].bigMarketChangePercent > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
 
         str += "<tr><td>" + result[k].date
             + "</td><td " + fundDayIncomeStyle + ">" + parseFloat(fundIncomePercent).toFixed(2)  + "%"
@@ -64,6 +65,7 @@ function getTableHtml(result){
             + "</td><td " + stockDayIncomeStyle + ">" + parseFloat(result[k].stockDayIncome).toFixed(2)
             + "</td><td>" + parseFloat(result[k].stockMarketValue).toFixed(2)
 
+            + "</td><td " + bigMarketChangePercentStyle + ">" + parseFloat(result[k].bigMarketChangePercent).toFixed(2)  + "%"
             + "</td><td " + totalDayIncomeStyle + ">" + parseFloat(totalIncomePercent).toFixed(2)  + "%"
             + "</td><td " + totalDayIncomeStyle + ">" + parseFloat(result[k].totalDayIncome).toFixed(2)
             + "</td><td>" + parseFloat(result[k].totalMarketValue).toFixed(2)
@@ -78,6 +80,7 @@ function getTableHtml(result){
         + "</td><td>"
         + "</td><td>"
         + "</td><td>" + parseFloat(totalStockDayIncome).toFixed(2)
+        + "</td><td>"
         + "</td><td>"
         + "</td><td>"
         + "</td><td>" + parseFloat(totalTotalDayIncome).toFixed(2)

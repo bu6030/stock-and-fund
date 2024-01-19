@@ -69,18 +69,20 @@
             ,parseData: function(res){ //res 即为原始返回的数据
                 for(var i=0;i<res.value.length;i++) {
                     var item = res.value[i];
-                    item.fundIncomePercent = (parseFloat(item.fundDayIncome).toFixed(4) * 100/parseFloat(item.fundMarketValue)).toFixed(2) + "";
-                    item.stockIncomePercent = (parseFloat(item.stockDayIncome).toFixed(4) * 100/parseFloat(item.stockMarketValue)).toFixed(2) + "";
-                    item.totalIncomePercent = (parseFloat(item.totalDayIncome).toFixed(4) * 100/parseFloat(item.totalMarketValue)).toFixed(2) + "";
+                    item.fundIncomePercent = (parseFloat(item.fundDayIncome).toFixed(4) * 100/(parseFloat(item.fundMarketValue) - parseFloat(item.fundDayIncome))).toFixed(2) + "";
+                    item.stockIncomePercent = (parseFloat(item.stockDayIncome).toFixed(4) * 100/(parseFloat(item.stockMarketValue) - parseFloat(item.stockDayIncome))).toFixed(2) + "";
+                    item.totalIncomePercent = (parseFloat(item.totalDayIncome).toFixed(4) * 100/(parseFloat(item.totalMarketValue) - parseFloat(item.totalDayIncome))).toFixed(2) + "";
                     item.fundDayIncome = parseFloat(item.fundDayIncome).toFixed(2) + '';
                     item.stockDayIncome = parseFloat(item.stockDayIncome).toFixed(2) + '';
                     item.totalDayIncome = parseFloat(item.totalDayIncome).toFixed(2) + '';
                     item.fundMarketValue = parseFloat(item.fundMarketValue).toFixed(2) + '';
                     item.stockMarketValue = parseFloat(item.stockMarketValue).toFixed(2) + '';
                     item.totalMarketValue = parseFloat(item.totalMarketValue).toFixed(2) + '';
+                    item.bigMarketChangePercent = parseFloat(item.bigMarketChangePercent).toFixed(2) + '';
                     item.stockDayIncomeColor = item.stockDayIncome == 0 ? "" : (item.stockDayIncome >= 0?"#c12e2a":"#3e8f3e");
                     item.fundDayIncomeColor = item.fundDayIncome == 0 ? "" : (item.fundDayIncome >= 0?"#c12e2a":"#3e8f3e");
                     item.totalDayIncomeColor = item.totalDayIncome == 0 ? "" : (item.totalDayIncome >= 0?"#c12e2a":"#3e8f3e");
+                    item.bigMarketChangePercentColor = item.bigMarketChangePercent == 0 ? "" : (item.bigMarketChangePercent > 0?"#c12e2a":"#3e8f3e");
                 }
                 return {
                     "code": res.code, //解析接口状态
@@ -99,6 +101,7 @@
                 ,{field: 'stockDayIncome', title: '股票收益', width:185, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.stockDayIncomeColor + '">'+ d.stockDayIncome +'</span>'}}
                 ,{field: 'stockMarketValue', title: '股票市值', width:185, sort: true}
 
+                ,{field: 'bigMarketChangePercent', title: '上证涨跌幅 %', width:185, sort: true,templet: function(d){return '<span style="color: ' + d.bigMarketChangePercentColor + '">'+ d.bigMarketChangePercent +'</span>'}}
                 ,{field: 'totalIncomePercent', title: '总盈利比率 %', width:185, sort: true,templet: function(d){return '<span style="color: ' + d.totalDayIncomeColor + '">'+ d.totalIncomePercent +'</span>'}}
                 ,{field: 'totalDayIncome', title: '总收益', width:185, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.totalDayIncomeColor + '">'+ d.totalDayIncome +'</span>'}}
                 ,{field: 'totalMarketValue', title: '总市值', width:185, sort: true}
