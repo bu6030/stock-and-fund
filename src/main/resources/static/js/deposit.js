@@ -65,11 +65,13 @@ function getTableHtml(result){
             + "</td><td " + stockDayIncomeStyle + ">" + parseFloat(result[k].stockDayIncome).toFixed(2)
             + "</td><td>" + parseFloat(result[k].stockMarketValue).toFixed(2)
 
-            + "</td><td " + bigMarketChangePercentStyle + ">" + parseFloat(result[k].bigMarketChangePercent).toFixed(2)  + "%"
+
             + "</td><td " + totalDayIncomeStyle + ">" + parseFloat(totalIncomePercent).toFixed(2)  + "%"
             + "</td><td " + totalDayIncomeStyle + ">" + parseFloat(result[k].totalDayIncome).toFixed(2)
             + "</td><td>" + parseFloat(result[k].totalMarketValue).toFixed(2)
 
+            + "</td><td " + bigMarketChangePercentStyle + ">" + parseFloat(result[k].bigMarketChangePercent).toFixed(2)  + "%"
+            + "</td><td " + bigMarketChangePercentStyle + ">" + parseFloat(result[k].bigMarketValue).toFixed(2)
             +"</td></tr>";
 
     }
@@ -82,8 +84,9 @@ function getTableHtml(result){
         + "</td><td>" + parseFloat(totalStockDayIncome).toFixed(2)
         + "</td><td>"
         + "</td><td>"
-        + "</td><td>"
         + "</td><td>" + parseFloat(totalTotalDayIncome).toFixed(2)
+        + "</td><td>"
+        + "</td><td>"
         + "</td><td>"
         + "</td></tr>"
         + str;

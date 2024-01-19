@@ -104,6 +104,7 @@ public class DepositEntity {
         List<StockEntity> list = stockEntity.getStockDetails(bigMarketList, username);
         StockEntity bigMarket = list.get(0);
         String bigMarketChangePercent = bigMarket.getChangePercent();
+        String bigMarketValue = bigMarket.getNow();
 
         depositMapper.save(DepositPO
             .builder()
@@ -115,6 +116,7 @@ public class DepositEntity {
             .stockMarketValue(stockTotalMarketValue)
             .totalMarketValue(totalMarketValue)
             .bigMarketChangePercent(bigMarketChangePercent)
+            .bigMarketValue(bigMarketValue)
             .build(), username);
     }
 

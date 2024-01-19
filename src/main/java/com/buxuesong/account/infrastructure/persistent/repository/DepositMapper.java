@@ -10,17 +10,18 @@ import java.util.List;
 @Repository
 public interface DepositMapper {
 
-    @Select("select DATE, FUND_DAY_INCOME fundDayIncome, STOCK_DAY_INCOME stockDayIncome, DAY_INCOME totalDayIncome, FUND_MARKET_VALUE fundMarketValue, STOCK_MARKET_VALUE stockMarketValue, TOTAL_MARKET_VALUE totalMarketValue, BIG_MARKET_CHANGE_PERCENT bigMarketChangePercent from DEPOSIT where DATE = #{date} AND USERNAME = #{username} ")
+    @Select("select DATE, FUND_DAY_INCOME fundDayIncome, STOCK_DAY_INCOME stockDayIncome, DAY_INCOME totalDayIncome, FUND_MARKET_VALUE fundMarketValue, STOCK_MARKET_VALUE stockMarketValue, TOTAL_MARKET_VALUE totalMarketValue, BIG_MARKET_CHANGE_PERCENT bigMarketChangePercent, BIG_MARKET_VALUE bigMarketValue from DEPOSIT where DATE = #{date} AND USERNAME = #{username} ")
     DepositPO findDepositByDate(@Param("date") String date, @Param("username") String username);
 
-    @Update("INSERT INTO DEPOSIT (DATE, FUND_DAY_INCOME, STOCK_DAY_INCOME, DAY_INCOME, FUND_MARKET_VALUE, STOCK_MARKET_VALUE, TOTAL_MARKET_VALUE, BIG_MARKET_CHANGE_PERCENT, USERNAME) values (#{deposit.date},#{deposit.fundDayIncome},#{deposit.stockDayIncome},#{deposit.totalDayIncome},#{deposit.fundMarketValue},#{deposit.stockMarketValue},#{deposit.totalMarketValue},#{deposit.bigMarketChangePercent},#{username}) ")
+    @Update("INSERT INTO DEPOSIT (DATE, FUND_DAY_INCOME, STOCK_DAY_INCOME, DAY_INCOME, FUND_MARKET_VALUE, STOCK_MARKET_VALUE, TOTAL_MARKET_VALUE, BIG_MARKET_CHANGE_PERCENT, BIG_MARKET_VALUE, USERNAME) values (#{deposit.date},#{deposit.fundDayIncome},#{deposit.stockDayIncome},#{deposit.totalDayIncome},#{deposit.fundMarketValue},#{deposit.stockMarketValue},#{deposit.totalMarketValue},#{deposit.bigMarketChangePercent},#{deposit.bigMarketValue},#{username}) ")
     int save(@Param("deposit") DepositPO deposit, @Param("username") String username);
 
-    @Select("select DATE, FUND_DAY_INCOME fundDayIncome, STOCK_DAY_INCOME stockDayIncome, DAY_INCOME totalDayIncome, FUND_MARKET_VALUE fundMarketValue, STOCK_MARKET_VALUE stockMarketValue, TOTAL_MARKET_VALUE totalMarketValue, BIG_MARKET_CHANGE_PERCENT bigMarketChangePercent from DEPOSIT WHERE USERNAME = #{username} order by DATE ASC")
+    @Select("select DATE, FUND_DAY_INCOME fundDayIncome, STOCK_DAY_INCOME stockDayIncome, DAY_INCOME totalDayIncome, FUND_MARKET_VALUE fundMarketValue, STOCK_MARKET_VALUE stockMarketValue, TOTAL_MARKET_VALUE totalMarketValue, BIG_MARKET_CHANGE_PERCENT bigMarketChangePercent, BIG_MARKET_VALUE bigMarketValue from DEPOSIT WHERE USERNAME = #{username} order by DATE ASC")
     List<DepositPO> findAllDeposit(@Param("username") String username);
 
     @Select({ "<script> select DATE, FUND_DAY_INCOME fundDayIncome, STOCK_DAY_INCOME stockDayIncome, DAY_INCOME totalDayIncome, " +
-        " FUND_MARKET_VALUE fundMarketValue, STOCK_MARKET_VALUE stockMarketValue, TOTAL_MARKET_VALUE totalMarketValue, BIG_MARKET_CHANGE_PERCENT bigMarketChangePercent " +
+        " FUND_MARKET_VALUE fundMarketValue, STOCK_MARKET_VALUE stockMarketValue, TOTAL_MARKET_VALUE totalMarketValue, BIG_MARKET_CHANGE_PERCENT bigMarketChangePercent, " +
+        " BIG_MARKET_VALUE bigMarketValue " +
         " from DEPOSIT " +
         " where 1=1 AND USERNAME = #{username}" +
         " <if test=\"beginDate!=null and beginDate!=''\"> and DATE &gt;= #{beginDate} </if> " +

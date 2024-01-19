@@ -101,10 +101,11 @@
                 ,{field: 'stockDayIncome', title: '股票收益', width:185, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.stockDayIncomeColor + '">'+ d.stockDayIncome +'</span>'}}
                 ,{field: 'stockMarketValue', title: '股票市值', width:185, sort: true}
 
-                ,{field: 'bigMarketChangePercent', title: '上证涨跌幅 %', width:185, sort: true,templet: function(d){return '<span style="color: ' + d.bigMarketChangePercentColor + '">'+ d.bigMarketChangePercent +'</span>'}}
                 ,{field: 'totalIncomePercent', title: '总盈利比率 %', width:185, sort: true,templet: function(d){return '<span style="color: ' + d.totalDayIncomeColor + '">'+ d.totalIncomePercent +'</span>'}}
-                ,{field: 'totalDayIncome', title: '总收益', width:185, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.totalDayIncomeColor + '">'+ d.totalDayIncome +'</span>'}}
-                ,{field: 'totalMarketValue', title: '总市值', width:185, sort: true}
+                ,{field: 'totalDayIncome', title: '总收益', width:150, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.totalDayIncomeColor + '">'+ d.totalDayIncome +'</span>'}}
+                ,{field: 'totalMarketValue', title: '总市值', width:150, sort: true}
+                ,{field: 'bigMarketChangePercent', title: '上证涨跌幅 %', width:150, sort: true,templet: function(d){return '<span style="color: ' + d.bigMarketChangePercentColor + '">'+ d.bigMarketChangePercent +'</span>'}}
+                ,{field: 'bigMarketValue', title: '上证指数', width:120, sort: true,templet: function(d){return '<span style="color: ' + d.bigMarketChangePercentColor + '">'+ d.bigMarketValue +'</span>'}}
             ] ]
         });
         // 头工具栏事件
