@@ -19,8 +19,9 @@ public interface DepositMapper {
     @Select("select DATE, FUND_DAY_INCOME fundDayIncome, STOCK_DAY_INCOME stockDayIncome, DAY_INCOME totalDayIncome, FUND_MARKET_VALUE fundMarketValue, STOCK_MARKET_VALUE stockMarketValue, TOTAL_MARKET_VALUE totalMarketValue, BIG_MARKET_CHANGE_PERCENT bigMarketChangePercent from DEPOSIT WHERE USERNAME = #{username} order by DATE ASC")
     List<DepositPO> findAllDeposit(@Param("username") String username);
 
-    @Select({ "<script> select DATE, FUND_DAY_INCOME fundDayIncome, STOCK_DAY_INCOME stockDayIncome, DAY_INCOME totalDayIncome, " +
-        " FUND_MARKET_VALUE fundMarketValue, STOCK_MARKET_VALUE stockMarketValue, TOTAL_MARKET_VALUE totalMarketValue, BIG_MARKET_CHANGE_PERCENT bigMarketChangePercent " +
+    @Select({ "<script> select DATE, FUND_DAY_INCOME fundDayIncome, STOCK_DAY_INCOME stockDayIncome, " +
+        " DAY_INCOME totalDayIncome, FUND_MARKET_VALUE fundMarketValue, STOCK_MARKET_VALUE stockMarketValue, " +
+        " TOTAL_MARKET_VALUE totalMarketValue, BIG_MARKET_CHANGE_PERCENT bigMarketChangePercent " +
         " from DEPOSIT " +
         " where 1=1 AND USERNAME = #{username}" +
         " <if test=\"beginDate!=null and beginDate!=''\"> and DATE &gt;= #{beginDate} </if> " +
@@ -30,8 +31,8 @@ public interface DepositMapper {
         @Param("username") String username);
 
     @Select({
-        "<script> select substr(DATE, 0, 5) date, sum(FUND_DAY_INCOME) fundDayIncome, sum(STOCK_DAY_INCOME) stockDayIncome, sum(DAY_INCOME) totalDayIncome "
-            +
+        "<script> select substr(DATE, 0, 5) date, sum(FUND_DAY_INCOME) fundDayIncome, sum(STOCK_DAY_INCOME) stockDayIncome, " +
+            " sum(DAY_INCOME) totalDayIncome " +
             " from DEPOSIT " +
             " where 1=1 AND USERNAME = #{username}" +
             " <if test=\"beginDate!=null and beginDate!=''\"> and DATE &gt;= #{beginDate} </if> " +
@@ -42,8 +43,8 @@ public interface DepositMapper {
         @Param("username") String username);
 
     @Select({
-        "<script> select substr(DATE, 0, 8) date, sum(FUND_DAY_INCOME) fundDayIncome, sum(STOCK_DAY_INCOME) stockDayIncome, sum(DAY_INCOME) totalDayIncome "
-            +
+        "<script> select substr(DATE, 0, 8) date, sum(FUND_DAY_INCOME) fundDayIncome, sum(STOCK_DAY_INCOME) stockDayIncome, " +
+            " sum(DAY_INCOME) totalDayIncome " +
             " from DEPOSIT " +
             " where 1=1 AND USERNAME = #{username} " +
             " <if test=\"beginDate!=null and beginDate!=''\"> and DATE &gt;= #{beginDate} </if> " +
