@@ -25,7 +25,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Slf4j
 @Service
@@ -57,7 +58,18 @@ public class DepositEntity {
      */
     public void depositAllUsers() {
         List<UserPO> users = userMapper.findAllUsers();
-        users.forEach(user -> deposit(user.getUsername()));
+        // JAVA 旧版本线程池写法
+//        ExecutorService executor = Executors.newFixedThreadPool(10);
+        // JAVA 21 新的虚拟线程写法，如果这个报错，修改为上面的
+        ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
+        users.forEach(user -> {
+            executor.submit(() -> {
+                log.info("任务" + Thread.currentThread().getName() + "开始执行");
+                deposit(user.getUsername());
+                log.info("任务" + Thread.currentThread().getName() + "执行完成");
+            });
+        });
+        executor.shutdown();
     }
 
     /**
@@ -75,7 +87,7 @@ public class DepositEntity {
         cacheService.removeAllCache();
         LocalDate date = LocalDate.now();
         if (!isTradingDate(date.toString())) {
-            log.info("非交易日期，不统计");
+            log.info("非交易日期，不统计 {}", username);
             return;
         }
 
