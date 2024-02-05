@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
@@ -49,7 +50,8 @@ public class DepositEntity {
     private static Gson gson = new Gson();
 
     public DepositPO getDepositByDate(String date) {
-        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+//        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        String username =  ((OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAttribute("preferred_username");
         return depositMapper.findDepositByDate(date, username);
     }
 
@@ -59,9 +61,9 @@ public class DepositEntity {
     public void depositAllUsers() {
         List<UserPO> users = userMapper.findAllUsers();
         // JAVA 旧版本线程池写法
-//        ExecutorService executor = Executors.newFixedThreadPool(10);
+        ExecutorService executor = Executors.newFixedThreadPool(10);
         // JAVA 21 新的虚拟线程写法，如果这个报错，修改为上面的
-        ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
+//        ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
         users.forEach(user -> {
             executor.submit(() -> {
                 log.info("任务" + Thread.currentThread().getName() + "开始执行");
@@ -76,7 +78,8 @@ public class DepositEntity {
      * 用户手动点击计算盈亏
      */
     public void deposit() {
-        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+//        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        String username =  ((OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAttribute("preferred_username");
         deposit(username);
     }
 
@@ -134,27 +137,31 @@ public class DepositEntity {
 
     public void deleteDeposit() {
         LocalDate date = LocalDate.now();
-        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+//        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        String username =  ((OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAttribute("preferred_username");
         log.info("User : {} delete deposit date : {}", username, date);
         depositMapper.deleteDeposit(date.toString(), username);
     }
 
     public List<DepositPO> getDepositList(String beginDate, String endDate) {
-        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+//        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        String username =  ((OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAttribute("preferred_username");
         List<DepositPO> list = depositMapper.getDepositList(beginDate, endDate, username);
         log.info("User : {} get deposit list between {} and {} : {}", username, beginDate, endDate, list);
         return list;
     }
 
     public List<DepositPO> getDepositYearSummitList(String beginDate, String endDate) {
-        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+//        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        String username =  ((OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAttribute("preferred_username");
         List<DepositPO> list = depositMapper.getDepositYearSummitList(beginDate, endDate, username);
         log.info("User : {} get deposit year summit list between {} and {} : {}", username, beginDate, endDate, list);
         return list;
     }
 
     public List<DepositPO> getDepositMonthSummitList(String beginDate, String endDate) {
-        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+//        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        String username =  ((OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAttribute("preferred_username");
         List<DepositPO> list = depositMapper.getDepositMonthSummitList(beginDate, endDate, username);
         log.info("User : {} get deposit month summit list between {} and {} : {}", username, beginDate, endDate, list);
         return list;

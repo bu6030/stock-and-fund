@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -302,7 +303,8 @@ public class StockEntity {
     private SinaRestClient sinaRestClient;
 
     public List<StockEntity> getStockDetails(List<String> codes) {
-        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+//        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        String username =  ((OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAttribute("preferred_username");
         return getStockDetails(codes, username);
     }
 
@@ -414,7 +416,8 @@ public class StockEntity {
     }
 
     public boolean saveStock(StockRequest stockRequest) {
-        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+//        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        String username =  ((OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAttribute("preferred_username");
         try {
             String result = gTimgRestClient.getStockInfo(stockRequest.getCode());
             String code = result.substring(result.indexOf("_") + 1, result.indexOf("="));
@@ -441,19 +444,22 @@ public class StockEntity {
     }
 
     public void deleteStock(StockRequest stockRequest) {
-        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+//        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        String username =  ((OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAttribute("preferred_username");
         stockHisMapper.saveFromStock(stockRequest.getCode(), username);
         stockMapper.deleteStock(StockPO.builder().app(stockRequest.getApp()).bonds(stockRequest.getBonds()).code(stockRequest.getCode())
             .costPrise(stockRequest.getCostPrise()).hide(stockRequest.getHide()).build(), username);
     }
 
     public List<String> getStockList(String app) {
-        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+//        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        String username =  ((OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAttribute("preferred_username");
         return getStockList(app, username);
     }
 
     public String searchStockByName(String name) {
-        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+//        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        String username =  ((OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAttribute("preferred_username");
         String result = gTimgRestClient.getGetStockCodeByName(name);
         // 如果都是数字说明可能是可转债
         if ("v_hint=\"N\";".equals(result) && NumberUtils.isNumeric(name)) {
@@ -490,21 +496,24 @@ public class StockEntity {
     }
 
     public List<StockHisPO> getStockHisList(String app, String code, String beginDate, String endDate) {
-        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+//        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        String username =  ((OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAttribute("preferred_username");
         List<StockHisPO> stockHis = stockHisMapper.findAllStockHis(app, code, beginDate, endDate, username);
         log.info("APP: {} ,数据库中的股票历史为：{}", app, stockHis);
         return stockHis;
     }
 
     public List<BuyOrSellStockPO> getBuyOrSellStocks(String code, String beginDate, String endDate) {
-        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+//        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        String username =  ((OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAttribute("preferred_username");
         List<BuyOrSellStockPO> buyOrSellStockPOS = buyOrSellMapper.findAllBuyOrSellStocks(code, beginDate, endDate, username);
         log.info("数据库中的买卖历史为：{}", buyOrSellStockPOS);
         return buyOrSellStockPOS;
     }
 
     public void buyOrSellStock(BuyOrSellStockRequest buyOrSellStockRequest) {
-        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+//        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        String username =  ((OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAttribute("preferred_username");
         StockPO stockPO = stockMapper.findStockByCode(buyOrSellStockRequest.getCode(), username);
         List<String> list = new ArrayList<>();
         list.add(stockPO.getCode() + "," + stockPO.getCostPrise() + "," + stockPO.getBonds() + ","
