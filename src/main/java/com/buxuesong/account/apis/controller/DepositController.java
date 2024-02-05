@@ -35,6 +35,12 @@ public class DepositController {
         return Response.builder().code("00000000").build();
     }
 
+    @GetMapping(value = "/depositAllUsers")
+    public Response depositAllUsers() throws Exception {
+        depositEntity.depositAllUsers();
+        return Response.builder().code("00000000").build();
+    }
+
     /**
      * 删除当日盈利接口
      *
