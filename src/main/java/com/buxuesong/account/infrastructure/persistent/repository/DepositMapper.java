@@ -20,7 +20,8 @@ public interface DepositMapper {
     List<DepositPO> findAllDeposit(@Param("username") String username);
 
     @Select({ "<script> select DATE, FUND_DAY_INCOME fundDayIncome, STOCK_DAY_INCOME stockDayIncome, DAY_INCOME totalDayIncome, " +
-        " FUND_MARKET_VALUE fundMarketValue, STOCK_MARKET_VALUE stockMarketValue, TOTAL_MARKET_VALUE totalMarketValue, BIG_MARKET_CHANGE_PERCENT bigMarketChangePercent, " +
+        " FUND_MARKET_VALUE fundMarketValue, STOCK_MARKET_VALUE stockMarketValue, TOTAL_MARKET_VALUE totalMarketValue, BIG_MARKET_CHANGE_PERCENT bigMarketChangePercent, "
+        +
         " BIG_MARKET_VALUE bigMarketValue " +
         " from DEPOSIT " +
         " where 1=1 AND USERNAME = #{username}" +
