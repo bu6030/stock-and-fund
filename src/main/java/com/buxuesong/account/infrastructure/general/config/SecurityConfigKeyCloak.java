@@ -1,5 +1,6 @@
 package com.buxuesong.account.infrastructure.general.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -20,7 +21,11 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfigKeyCloak {
 
-    private static final String LOGOUT_URL = "http://localhost:8080/realms/myrealm/protocol/openid-connect/logout?redirect_uri=http://localhost:8081/";
+    @Value("${key-cloak-server-address}")
+    private String keyCloakServerAddress;
+
+    @Value("${local-address}")
+    private String localAddress;
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
@@ -33,7 +38,7 @@ public class SecurityConfigKeyCloak {
             .authorizeHttpRequests(
                 (authorizeHttpRequests) -> authorizeHttpRequests.requestMatchers("/unauthenticated", "/oauth2/**", "/login/**", "/login.html").permitAll()
                     .anyRequest().hasAnyAuthority("OIDC_USER", "ADMIN"))
-            .logout((logout) -> logout.logoutSuccessUrl(LOGOUT_URL));
+            .logout((logout) -> logout.logoutSuccessUrl(keyCloakServerAddress + "/realms/myrealm/protocol/openid-connect/logout?redirect_uri=" + localAddress));
         return http.build();
     }
 }
