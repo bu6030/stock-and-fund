@@ -126,7 +126,6 @@ function submitParam(){
                 // window.opener.getData();
                 location.reload();
             }
-            window.close();
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
             console.log(XMLHttpRequest.status);
