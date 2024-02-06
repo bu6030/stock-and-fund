@@ -7,6 +7,7 @@ import com.buxuesong.account.domain.service.CacheService;
 import com.buxuesong.account.infrastructure.adapter.rest.SinaRestClient;
 import com.buxuesong.account.infrastructure.adapter.rest.TiantianFundRestClient;
 import com.buxuesong.account.infrastructure.general.utils.DateTimeUtils;
+import com.buxuesong.account.infrastructure.general.utils.UserUtils;
 import com.buxuesong.account.infrastructure.persistent.po.FundHisPO;
 import com.buxuesong.account.infrastructure.persistent.po.FundPO;
 import com.buxuesong.account.infrastructure.persistent.repository.FundHisMapper;
@@ -370,8 +371,7 @@ public class FundEntity {
 
     public boolean saveFund(FundRequest fundRequest) {
 //        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        String username = ((OAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-            .getAttribute("preferred_username");
+        String username = UserUtils.getUsername();
         try {
             String result = tiantianFundRestClient.getFundInfo(fundRequest.getCode());
             FundEntity bean = null;
@@ -405,8 +405,7 @@ public class FundEntity {
 
     public void deleteFund(FundRequest fundRequest) {
 //        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        String username = ((OAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-            .getAttribute("preferred_username");
+        String username = UserUtils.getUsername();
         fundHisMapper.saveFromFund(fundRequest.getCode(), username);
         fundMapper.deleteFund(FundPO.builder().app(fundRequest.getApp()).bonds(fundRequest.getBonds()).code(fundRequest.getCode())
             .costPrise(fundRequest.getCostPrise()).hide(fundRequest.isHide()).build(), username);
@@ -414,8 +413,7 @@ public class FundEntity {
 
     public List<String> getFundList(String app) {
 //        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        String username = ((OAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-            .getAttribute("preferred_username");
+        String username = UserUtils.getUsername();
         return getFundList(app, username);
     }
 
@@ -436,8 +434,7 @@ public class FundEntity {
 
     public List<FundHisPO> getFundHisList(String app, String code, String beginDate, String endDate) {
 //        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        String username = ((OAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-            .getAttribute("preferred_username");
+        String username = UserUtils.getUsername();
         List<FundHisPO> fundHis = fundHisMapper.findAllFundHis(app, code, beginDate, endDate, username);
         log.info("APP: {} ,数据库中的基金历史为：{}", app, fundHis);
         return fundHis;
@@ -446,8 +443,7 @@ public class FundEntity {
     public List<SearchFundResult> searchFundByName(String name) {
         List<SearchFundResult> result = new ArrayList<>();
 //        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        String username = ((OAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-            .getAttribute("preferred_username");
+        String username = UserUtils.getUsername();
         String funds = cacheService.searchAllFundsFromEastMoney();
         funds = funds.replace("var r = ", "").replace(";", "");
         JSONArray jsonArray = JSONArray.parseArray(funds);

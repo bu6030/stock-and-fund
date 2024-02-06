@@ -5,6 +5,7 @@ import com.buxuesong.account.infrastructure.adapter.rest.SzseRestClient;
 import com.buxuesong.account.domain.model.fund.FundEntity;
 import com.buxuesong.account.domain.model.stock.StockEntity;
 import com.buxuesong.account.infrastructure.adapter.rest.response.TradingDateResponse;
+import com.buxuesong.account.infrastructure.general.utils.UserUtils;
 import com.buxuesong.account.infrastructure.persistent.po.BuyOrSellStockPO;
 import com.buxuesong.account.infrastructure.persistent.po.DepositPO;
 import com.buxuesong.account.infrastructure.persistent.po.OpenPersistentMonthPO;
@@ -51,8 +52,7 @@ public class DepositEntity {
 
     public DepositPO getDepositByDate(String date) {
 //        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        String username = ((OAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-            .getAttribute("preferred_username");
+        String username = UserUtils.getUsername();
         return depositMapper.findDepositByDate(date, username);
     }
 
@@ -80,8 +80,7 @@ public class DepositEntity {
      */
     public void deposit() {
 //        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        String username = ((OAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-            .getAttribute("preferred_username");
+        String username = UserUtils.getUsername();
         deposit(username);
     }
 
@@ -140,16 +139,14 @@ public class DepositEntity {
     public void deleteDeposit() {
         LocalDate date = LocalDate.now();
 //        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        String username = ((OAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-            .getAttribute("preferred_username");
+        String username = UserUtils.getUsername();
         log.info("User : {} delete deposit date : {}", username, date);
         depositMapper.deleteDeposit(date.toString(), username);
     }
 
     public List<DepositPO> getDepositList(String beginDate, String endDate) {
 //        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        String username = ((OAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-            .getAttribute("preferred_username");
+        String username = UserUtils.getUsername();
         List<DepositPO> list = depositMapper.getDepositList(beginDate, endDate, username);
         log.info("User : {} get deposit list between {} and {} : {}", username, beginDate, endDate, list);
         return list;
@@ -157,8 +154,7 @@ public class DepositEntity {
 
     public List<DepositPO> getDepositYearSummitList(String beginDate, String endDate) {
 //        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        String username = ((OAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-            .getAttribute("preferred_username");
+        String username = UserUtils.getUsername();
         List<DepositPO> list = depositMapper.getDepositYearSummitList(beginDate, endDate, username);
         log.info("User : {} get deposit year summit list between {} and {} : {}", username, beginDate, endDate, list);
         return list;
@@ -166,8 +162,7 @@ public class DepositEntity {
 
     public List<DepositPO> getDepositMonthSummitList(String beginDate, String endDate) {
 //        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        String username = ((OAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-            .getAttribute("preferred_username");
+        String username = UserUtils.getUsername();
         List<DepositPO> list = depositMapper.getDepositMonthSummitList(beginDate, endDate, username);
         log.info("User : {} get deposit month summit list between {} and {} : {}", username, beginDate, endDate, list);
         return list;
