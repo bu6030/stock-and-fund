@@ -17,6 +17,8 @@ docker build -t stock-and-fund/$CURRENT_V .
 echo ========开始部署新版本$NEW_V========
 docker run -d -p 8080:8080  \
 --env sqllite.db.file=/stock-and-fund.db \
+--env key-cloak-server-address=YOUR_KEYCLOAK_SERVER_ADDRESS \
+--env local-address=http://localhost:8080 \
 -v /Users/XuesongBu/Documents/git_code/stock-and-fund/stock-and-fund.db:/stock-and-fund.db \
 -v /Users/XuesongBu/Documents/git_code/bu6030.github.io/qr_code/:/qr_code \
 --name stock-and-fund-$CURRENT_V -v /etc/localtime:/etc/localtime stock-and-fund/$CURRENT_V
