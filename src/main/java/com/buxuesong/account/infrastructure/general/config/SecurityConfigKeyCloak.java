@@ -32,9 +32,9 @@ public class SecurityConfigKeyCloak implements WebMvcConfigurer {
     @Order(0)
     SecurityFilterChain staticEndpoints(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/css/**", "/js/**", "/fonts/**", "/images/**", "/i/**", "/resources/**", "/my-image/**")
-                .headers((headers) -> headers.cacheControl((cache) -> cache.disable()))
-                .authorizeHttpRequests((authorize) -> authorize.anyRequest().permitAll());
+            .securityMatcher("/css/**", "/js/**", "/fonts/**", "/images/**", "/i/**", "/resources/**", "/my-image/**")
+            .headers((headers) -> headers.cacheControl((cache) -> cache.disable()))
+            .authorizeHttpRequests((authorize) -> authorize.anyRequest().permitAll());
         return http.build();
     }
 
