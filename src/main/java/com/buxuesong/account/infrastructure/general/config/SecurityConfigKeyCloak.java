@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -19,13 +20,23 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
-public class SecurityConfigKeyCloak {
+public class SecurityConfigKeyCloak implements WebMvcConfigurer {
 
     @Value("${key-cloak-server-address}")
     private String keyCloakServerAddress;
 
     @Value("${local-address}")
     private String localAddress;
+
+    @Bean
+    @Order(0)
+    SecurityFilterChain staticEndpoints(HttpSecurity http) throws Exception {
+        http
+                .securityMatcher("/css/**", "/js/**", "/fonts/**", "/images/**", "/i/**", "/resources/**", "/my-image/**")
+                .headers((headers) -> headers.cacheControl((cache) -> cache.disable()))
+                .authorizeHttpRequests((authorize) -> authorize.anyRequest().permitAll());
+        return http.build();
+    }
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
