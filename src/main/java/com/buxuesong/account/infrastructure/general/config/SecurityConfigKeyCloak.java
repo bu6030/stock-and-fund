@@ -36,9 +36,11 @@ public class SecurityConfigKeyCloak {
             .sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
             .csrf((csrf) -> csrf.disable())
             .authorizeHttpRequests(
-                (authorizeHttpRequests) -> authorizeHttpRequests.requestMatchers("/unauthenticated", "/oauth2/**", "/login/**", "/login.html").permitAll()
+                (authorizeHttpRequests) -> authorizeHttpRequests
+                    .requestMatchers("/unauthenticated", "/oauth2/**", "/login/**", "/login.html").permitAll()
                     .anyRequest().hasAnyAuthority("OIDC_USER", "ADMIN"))
-            .logout((logout) -> logout.logoutSuccessUrl(keyCloakServerAddress + "/realms/myrealm/protocol/openid-connect/logout?redirect_uri=" + localAddress));
+            .logout((logout) -> logout
+                .logoutSuccessUrl(keyCloakServerAddress + "/realms/myrealm/protocol/openid-connect/logout?redirect_uri=" + localAddress));
         return http.build();
     }
 }
