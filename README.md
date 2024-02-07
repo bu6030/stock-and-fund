@@ -16,6 +16,7 @@
 6. 查看每日收益汇总，每月收益汇总，每年收益汇总
 7. 唐安奇通道法数据监控股票
 8. 支持多用户登录
+9. 支持Keycloak登陆
 
 ## <span id="jump2">功能描述</span>
 自己研究写的一个股票基金SpringBoot小项目，我给它命名股基神器，可以模拟炒股哦！  
@@ -127,6 +128,18 @@
 92. 增加股票买卖记录以及股票/基金历史 2023/7/30, 00:31
 93. 增加通过名称搜索股票基金 2023/8/1, 23:50
 94. 增加基金日线/周线/月线图 2023/8/16, 22:43
+95. 买卖股票时，自动设定上次购买的手续费以及操作股数 2023/10/19, 17:50
+96. 股票搜索增加可转债 2023/10/25, 16:43
+97. 修改表结构 2023/11/16, 16:56
+98. 修改日志输出文件名称 2023/11/27, 15:29
+99. 修改登录页面中文 2024/1/15, 16:07
+100. 每日统计增加上证涨跌幅 2024/1/19, 22:11
+101. 升级SpringBoot版本 2024/2/4, 09:52
+102. 格式化SQL 2024/2/4, 10:50
+103. 增加JAVA21虚拟线程 2024/2/5, 09:15
+104. 增加Keycloak单点登录 2024/2/5, 23:21
+105. 配置静态文件忽略 bu6030 2024/2/6, 22:55
+106. 多用户共同添加同个股票报错 bu6030 2024/2/6, 23:25
 
 # <span id="jump4">UI页面</span>
 ![image](https://user-images.githubusercontent.com/11482988/191644817-b8fd3dcf-e8aa-4582-84b0-afb2927d156d.png)  
@@ -191,8 +204,18 @@ java -jar -Dsqllite.db.file=你的项目路径/stock-and-fund.db stock-and-fund-
 ```
 4. 本机访问http://localhost:8080
 
-### 4. 设定登录账号密码
-1. 代码中的PasswordUtils.java类，修改System.out.println这一行代码中的 12345 ，修改你想要的密码
+### 4. keycloak配置
+1. 需要配置keycloak服务地址
+```properties
+key-cloak-server-address=你的keycloak服务器地址
+local-address=http://localhost:8080
+```
+2. 在keycloak服务中增加登陆用户配置
+
+
+### 5. 本地设定登录账号密码
+1. 由于新增keycloak配置，如果要用本地账号密码，需要将SecurityConfigKeyCloak的代码注释掉，并将SecurityConfig的代码解除注释
+2. 代码中的PasswordUtils.java类，修改System.out.println这一行代码中的 12345 ，修改你想要的密码
 ```
     public static void main(String[] args) {
     //下面的 12345 为密码，你也可以修改为别的
