@@ -2,11 +2,13 @@ package com.buxuesong.account.apis.controller;
 
 import com.buxuesong.account.apis.model.response.ChromeStockAndFund;
 import com.buxuesong.account.apis.model.response.Response;
+import com.buxuesong.account.domain.model.advice.AdviceEntity;
 import com.buxuesong.account.domain.model.fund.FundEntity;
 import com.buxuesong.account.domain.model.stock.StockEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +24,9 @@ public class ChromeController {
 
     @Autowired
     private StockEntity stockEntity;
+
+    @Autowired
+    private AdviceEntity adviceEntity;
 
     /**
      * 获取单个基金信息接口
@@ -53,4 +58,11 @@ public class ChromeController {
         return Response.builder().code("00000000").value(ChromeStockAndFund.builder().funds(fundEntity.getFundDetails(fundListFromRedis))
             .stocks(stockEntity.getStockDetails(stockListFromRedis, "buxuesong")).build()).build();
     }
+
+    @PostMapping(value = "/chrome/advice")
+    public Response saveAdvice(@RequestParam(value = "adviceContent", required = false) String adviceContent) throws Exception {
+        log.info("adviceContent: {}", adviceContent);
+        return Response.builder().code("0").value(adviceEntity.saveAdvice(adviceContent)).build();
+    }
+
 }
