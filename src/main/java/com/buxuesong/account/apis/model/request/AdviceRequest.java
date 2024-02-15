@@ -41,10 +41,10 @@ public class AdviceRequest {
     @Override
     public String toString() {
         return "AdviceRequest{" +
-                "id=" + id +
-                ", adviceContent='" + adviceContent + '\'' +
-                ", date='" + date + '\'' +
-                ", adviceDevelopVersion='" + adviceDevelopVersion + '\'' +
-                '}';
+            "id=" + id +
+            ", adviceContent='" + adviceContent + '\'' +
+            ", date='" + date + '\'' +
+            ", adviceDevelopVersion='" + adviceDevelopVersion + '\'' +
+            '}';
     }
 }

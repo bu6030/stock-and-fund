@@ -48,8 +48,8 @@ public class AdviceEntity {
      */
     public boolean updateAdvice(AdviceRequest request) {
         adviceMapper.update(AdvicePO.builder().id(request.getId())
-                        .adviceDevelopVersion(request.getAdviceDevelopVersion())
-                .build());
+            .adviceDevelopVersion(request.getAdviceDevelopVersion())
+            .build());
         return true;
     }
 
@@ -61,7 +61,7 @@ public class AdviceEntity {
      */
     public boolean deleteAdvice(AdviceRequest request) {
         adviceMapper.delete(AdvicePO.builder().id(request.getId())
-                .build());
+            .build());
         return true;
     }
 }
