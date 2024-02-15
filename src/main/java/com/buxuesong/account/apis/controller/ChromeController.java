@@ -1,5 +1,6 @@
 package com.buxuesong.account.apis.controller;
 
+import com.buxuesong.account.apis.model.request.AdviceRequest;
 import com.buxuesong.account.apis.model.response.ChromeStockAndFund;
 import com.buxuesong.account.apis.model.response.Response;
 import com.buxuesong.account.domain.model.advice.AdviceEntity;
@@ -8,10 +9,7 @@ import com.buxuesong.account.domain.model.stock.StockEntity;
 import com.buxuesong.account.infrastructure.persistent.po.AdvicePO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,9 +59,9 @@ public class ChromeController {
     }
 
     @PostMapping(value = "/chrome/advice")
-    public Response saveAdvice(@RequestParam(value = "adviceContent", required = false) String adviceContent) throws Exception {
-        log.info("adviceContent: {}", adviceContent);
-        return Response.builder().code("00000000").value(adviceEntity.saveAdvice(adviceContent)).build();
+    public Response saveAdvice(@RequestBody AdviceRequest adviceRequest) throws Exception {
+        log.info("saveAdvice: {}", adviceRequest);
+        return Response.builder().code("00000000").value(adviceEntity.saveAdvice(adviceRequest)).build();
     }
 
     @GetMapping(value = "/chrome/advice")
@@ -73,4 +71,15 @@ public class ChromeController {
         return Response.builder().code("00000000").value(advicePOList).build();
     }
 
+    @PutMapping(value = "/chrome/advice")
+    public Response updateAdvice(@RequestBody AdviceRequest adviceRequest) throws Exception {
+        log.info("updateAdvice: {}", adviceRequest);
+        return Response.builder().code("00000000").value(adviceEntity.updateAdvice(adviceRequest)).build();
+    }
+
+    @DeleteMapping(value = "/chrome/advice")
+    public Response deleteAdvice(@RequestBody AdviceRequest adviceRequest) throws Exception {
+        log.info("deleteAdvice: {}", adviceRequest);
+        return Response.builder().code("00000000").value(adviceEntity.deleteAdvice(adviceRequest)).build();
+    }
 }

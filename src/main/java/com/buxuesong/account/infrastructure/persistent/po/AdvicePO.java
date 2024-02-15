@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AdvicePO {
+    private Long id;
     private String date;
     private String adviceContent;
     private String adviceDevelopVersion;

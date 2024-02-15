@@ -12,9 +12,15 @@ import java.util.List;
 @Mapper
 @Repository
 public interface AdviceMapper {
-    @Update(" INSERT INTO ADVICE (DATE, ADVICE_CONTENT) values (#{advicePO.date},#{advicePO.adviceContent}) ")
+    @Update(" INSERT INTO ADVICE (DATE, ADVICE_CONTENT, ENABLED) values (#{advicePO.date},#{advicePO.adviceContent}, true) ")
     int save(@Param("advicePO") AdvicePO advicePO);
 
-    @Select("select DATE, ADVICE_CONTENT adviceContent, ADVICE_DEVELOP_VERSION adviceDevelopVersion from ADVICE t limit 10")
+    @Update(" UPDATE ADVICE SET ADVICE_DEVELOP_VERSION = #{advicePO.adviceDevelopVersion} where ID = #{advicePO.id} ")
+    int update(@Param("advicePO") AdvicePO advicePO);
+
+    @Update(" UPDATE ADVICE SET ENABLED = false where ID = #{advicePO.id} ")
+    int delete(@Param("advicePO") AdvicePO advicePO);
+
+    @Select("select ID, DATE, ADVICE_CONTENT adviceContent, ADVICE_DEVELOP_VERSION adviceDevelopVersion from ADVICE t where t.ENABLED = true limit 10")
     List<AdvicePO> getAdvice();
 }
