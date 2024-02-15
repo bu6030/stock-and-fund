@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class AdvicePO {
     private String date;
     private String adviceContent;
+    private String adviceDevelopVersion;
 }

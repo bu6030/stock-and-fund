@@ -5,6 +5,7 @@ import com.buxuesong.account.apis.model.response.Response;
 import com.buxuesong.account.domain.model.advice.AdviceEntity;
 import com.buxuesong.account.domain.model.fund.FundEntity;
 import com.buxuesong.account.domain.model.stock.StockEntity;
+import com.buxuesong.account.infrastructure.persistent.po.AdvicePO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,7 +63,14 @@ public class ChromeController {
     @PostMapping(value = "/chrome/advice")
     public Response saveAdvice(@RequestParam(value = "adviceContent", required = false) String adviceContent) throws Exception {
         log.info("adviceContent: {}", adviceContent);
-        return Response.builder().code("0").value(adviceEntity.saveAdvice(adviceContent)).build();
+        return Response.builder().code("00000000").value(adviceEntity.saveAdvice(adviceContent)).build();
+    }
+
+    @GetMapping(value = "/chrome/advice")
+    public Response getAdvice() throws Exception {
+        List<AdvicePO> advicePOList = adviceEntity.getAdvice();
+        log.info("getAdvice ");
+        return Response.builder().code("00000000").value(advicePOList).build();
     }
 
 }
