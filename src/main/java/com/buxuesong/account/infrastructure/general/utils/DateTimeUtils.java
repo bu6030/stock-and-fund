@@ -1,9 +1,12 @@
 package com.buxuesong.account.infrastructure.general.utils;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 public class DateTimeUtils {
+
+    public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     public static boolean isTradingTime() {
         LocalDateTime currentDateTime = LocalDateTime.now();
@@ -13,5 +16,9 @@ public class DateTimeUtils {
             return true;
         }
         return false;
+    }
+
+    public static String getLocalDateTime() {
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)).toString();
     }
 }
