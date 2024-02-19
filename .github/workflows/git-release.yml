@@ -69,7 +69,7 @@ jobs:
       run: |
         eval "$(ssh-agent -s)"
         mkdir -p ~/.ssh
-        echo "$PRIVATE_KEY" > ~/.ssh/id_rsa.key
+        echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/id_rsa.key
         chmod 600 ~/.ssh/id_rsa.key
         ssh-add ~/.ssh/id_rsa.key
         echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
