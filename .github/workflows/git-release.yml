@@ -72,12 +72,12 @@ jobs:
         echo "$PRIVATE_KEY" > ~/.ssh/id_rsa.key
         chmod 600 ~/.ssh/id_rsa.key
         cat ~/.ssh/id_rsa.key | more
-        ssh-add ~/.ssh/id_rsa.key
-        echo "$KNOWN_HOSTS" > ~/.ssh/known_hosts
-        chmod 600 ~/.ssh/known_hosts
-    - name: Upload file via SSH
-      run: |
-        scp target/stock-and-fund-${{ steps.get_branch_name.outputs.branch_name }}-SNAPSHOT.jar root@1.117.221.208:/opt/stock-and-fund/
+#        ssh-add ~/.ssh/id_rsa.key
+#        echo "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+#        chmod 600 ~/.ssh/known_hosts
+#    - name: Upload file via SSH
+#      run: |
+#        scp target/stock-and-fund-${{ steps.get_branch_name.outputs.branch_name }}-SNAPSHOT.jar root@1.117.221.208:/opt/stock-and-fund/
 
 #        ssh root@$SERVER_IP '/opt/stock-and-fund/deployment.sh'
 #     - name: Build the Docker image
