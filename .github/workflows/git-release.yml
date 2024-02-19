@@ -68,8 +68,8 @@ jobs:
     - name: Install ssh-agent
       run: |
         eval $(ssh-agent -s)
-        echo "$SSH_PRIVATE_KEY"
-        ssh-add <(echo "$SSH_PRIVATE_KEY")
+        echo "$PRIVATE_KEY"
+        ssh-add <(echo "$PRIVATE_KEY")
         mkdir -p ~/.ssh
         echo "$KNOWN_HOSTS"
         echo "$KNOWN_HOSTS" > ~/.ssh/known_hosts
