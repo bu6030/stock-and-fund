@@ -69,12 +69,12 @@ jobs:
       run: |
         eval "$(ssh-agent -s)"
         mkdir -p ~/.ssh
-        echo ${{ secrets.SECRET_NAME }} > ~/.ssh/id_rsa.key
+        echo '${{ secrets.SECRET_NAME }}' > ~/.ssh/id_rsa.key
         chmod 600 ~/.ssh/id_rsa.key
-#        more ~/.ssh/id_rsa.key
+        ssh-add -K ~/.ssh/id_rsa.key
     - name: Print SSH private key
       run: cat ~/.ssh/id_rsa.key
-#        ssh-add ~/.ssh/id_rsa.key
+#
 #        echo "$KNOWN_HOSTS" > ~/.ssh/known_hosts
 #        chmod 600 ~/.ssh/known_hosts
 #    - name: Upload file via SSH
