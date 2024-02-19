@@ -72,6 +72,8 @@ jobs:
         echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/id_rsa.key
         chmod 600 ~/.ssh/id_rsa.key
         ssh-add ~/.ssh/id_rsa.key
+        echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+        chmod 600 ~/.ssh/known_hosts
 #    - name: Print SSH private key
 #      run: cat ~/.ssh/id_rsa.key
 #
