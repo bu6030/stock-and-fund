@@ -71,7 +71,7 @@ jobs:
         mkdir -p ~/.ssh
         echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/id_rsa.key
         chmod 600 ~/.ssh/id_rsa.key
-        ssh-add -K ~/.ssh/id_rsa.key
+        ssh-add ~/.ssh/id_rsa.key
     - name: Print SSH private key
       run: cat ~/.ssh/id_rsa.key
 #
