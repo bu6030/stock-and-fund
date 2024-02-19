@@ -70,6 +70,7 @@ jobs:
         eval "$(ssh-agent -s)"
         mkdir -p ~/.ssh
         echo "$PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 644 ~/.ssh/id_rsa
         ssh-add ~/.ssh/id_rsa
         echo "$KNOWN_HOSTS" > ~/.ssh/known_hosts
         chmod 644 ~/.ssh/known_hosts
