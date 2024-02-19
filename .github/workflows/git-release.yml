@@ -72,7 +72,10 @@ jobs:
         mkdir -p ~/.ssh
         echo "$KNOWN_HOSTS" > ~/.ssh/known_hosts
         chmod 644 ~/.ssh/known_hosts
+    - name: Upload file via SSH
+      run: |
         scp target/stock-and-fund-${{ steps.get_branch_name.outputs.branch_name }}-SNAPSHOT.jar root@1.117.221.208:/opt/stock-and-fund/
+
 #        ssh root@$SERVER_IP '/opt/stock-and-fund/deployment.sh'
 #     - name: Build the Docker image
 #       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
