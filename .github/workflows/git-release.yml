@@ -32,44 +32,46 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ steps.get_branch_name.outputs.branch_name }}-${{ steps.date.outputs.date }}
-        release_name: Release ${{ steps.get_branch_name.outputs.branch_name }}-${{ steps.date.outputs.date }}
-        draft: false
-        prerelease: false
-        
-    - name: Upload Release Asset Jar
-      id: upload-release-asset-jar
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: target/stock-and-fund-${{ steps.get_branch_name.outputs.branch_name }}-SNAPSHOT.jar
-        asset_name: stock-and-fund-${{ steps.get_branch_name.outputs.branch_name }}-SNAPSHOT.jar
-        asset_content_type: application/gzip
-        
-    - name: Upload Release Asset DB
-      id: upload-release-asset-db
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: stock-and-fund.db
-        asset_name: stock-and-fund.db
-        asset_content_type: application/gzip
+#    - name: Create Release
+#      id: create_release
+#      uses: actions/create-release@v1
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      with:
+#        tag_name: ${{ steps.get_branch_name.outputs.branch_name }}-${{ steps.date.outputs.date }}
+#        release_name: Release ${{ steps.get_branch_name.outputs.branch_name }}-${{ steps.date.outputs.date }}
+#        draft: false
+#        prerelease: false
+#
+#    - name: Upload Release Asset Jar
+#      id: upload-release-asset-jar
+#      uses: actions/upload-release-asset@v1
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      with:
+#        upload_url: ${{ steps.create_release.outputs.upload_url }}
+#        asset_path: target/stock-and-fund-${{ steps.get_branch_name.outputs.branch_name }}-SNAPSHOT.jar
+#        asset_name: stock-and-fund-${{ steps.get_branch_name.outputs.branch_name }}-SNAPSHOT.jar
+#        asset_content_type: application/gzip
+#
+#    - name: Upload Release Asset DB
+#      id: upload-release-asset-db
+#      uses: actions/upload-release-asset@v1
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      with:
+#        upload_url: ${{ steps.create_release.outputs.upload_url }}
+#        asset_path: stock-and-fund.db
+#        asset_name: stock-and-fund.db
+#        asset_content_type: application/gzip
 
     - name: Install ssh-agent
       run: |
         eval $(ssh-agent -s)
+        echo "$SSH_PRIVATE_KEY"
         ssh-add <(echo "$SSH_PRIVATE_KEY")
         mkdir -p ~/.ssh
+        echo "$KNOWN_HOSTS"
         echo "$KNOWN_HOSTS" > ~/.ssh/known_hosts
         chmod 644 ~/.ssh/known_hosts
     - name: Upload file via SSH
