@@ -29,8 +29,8 @@ jobs:
       id: get_branch_name
       run: echo "::set-output name=branch_name::$(echo $line | grep 'SNAPSHOT' pom.xml | awk '{split($0,a,"-"); print a[1]}'| awk '{split($0,a,">"); print a[2]}')"
 
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
+#    - name: Build with Maven
+#      run: mvn -B package --file pom.xml
 
 #    - name: Create Release
 #      id: create_release
@@ -69,9 +69,9 @@ jobs:
       run: |
         eval "$(ssh-agent -s)"
         mkdir -p ~/.ssh
-        echo "$PRIVATE_KEY" > ~/.ssh/id_my
-        chmod 600 ~/.ssh/id_my
-        ssh-add ~/.ssh/id_my
+        echo "$PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-add -k ~/.ssh/id_rsa
         echo "$KNOWN_HOSTS" > ~/.ssh/known_hosts
         chmod 644 ~/.ssh/known_hosts
     - name: Upload file via SSH
