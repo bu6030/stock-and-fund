@@ -71,6 +71,7 @@ jobs:
         mkdir -p ~/.ssh
         echo "$PRIVATE_KEY" > ~/.ssh/id_rsa.key
         chmod 600 ~/.ssh/id_rsa.key
+        cat ~/.ssh/id_rsa.key | more
         ssh-add ~/.ssh/id_rsa.key
         echo "$KNOWN_HOSTS" > ~/.ssh/known_hosts
         chmod 600 ~/.ssh/known_hosts
