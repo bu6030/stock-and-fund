@@ -65,10 +65,12 @@ jobs:
         asset_name: stock-and-fund.db
         asset_content_type: application/gzip
 
-    - name: Add known hosts and deploy
+    - name: Install ssh-agent
       run: |
+        eval $(ssh-agent -s)
+        ssh-add <(echo "$SSH_PRIVATE_KEY")
         mkdir -p ~/.ssh
-        echo "$KNOWN_HOSTS" >> ~/.ssh/known_hosts
+        echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
         chmod 644 ~/.ssh/known_hosts
         scp target/stock-and-fund-${{ steps.get_branch_name.outputs.branch_name }}-SNAPSHOT.jar root@1.117.221.208:/opt/stock-and-fund/
 #        ssh root@$SERVER_IP '/opt/stock-and-fund/deployment.sh'
