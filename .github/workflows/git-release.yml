@@ -103,7 +103,7 @@ jobs:
       with:
         command: |
           cd /opt/stock-and-fund/build
-          wget -T 30000 https://github.com/bu6030/stock-and-fund/archive/refs/tags/${{ steps.get_branch_name.outputs.branch_name }}-${{ steps.date.outputs.date }}/stock-and-fund-${{ steps.get_branch_name.outputs.branch_name }}-SNAPSHOT.jar --no-check-certificate
+          wget -–timeout 3000 https://github.com/bu6030/stock-and-fund/archive/refs/tags/${{ steps.get_branch_name.outputs.branch_name }}-${{ steps.date.outputs.date }}/stock-and-fund-${{ steps.get_branch_name.outputs.branch_name }}-SNAPSHOT.jar --no-check-certificate
 #          ./deployment.sh
         host: ${{ secrets.SERVER_IP }}
         username: root
