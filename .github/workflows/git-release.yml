@@ -90,7 +90,7 @@ jobs:
         host: ${{ secrets.SERVER_IP }}
         username: root
         port: 22
-        password: ${{ secrets.PRIVATE_KEY}}
+        privateKey: ${{ secrets.PRIVATE_KEY}}
 
 #        ssh root@$SERVER_IP '/opt/stock-and-fund/deployment.sh'
 #     - name: Build the Docker image
