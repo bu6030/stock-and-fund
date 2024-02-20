@@ -88,7 +88,7 @@ jobs:
       with:
         host: ${{ secrets.SERVER_IP }}
         username: root
-        privateKey: ${{ secrets.PRIVATE_KEY}}
+        password: ${{ secrets.SERVER_PASSWORD }}
         port: 22
         source: 'target/stock-and-fund-${{ steps.get_branch_name.outputs.branch_name }}-SNAPSHOT.jar'
         target: '/opt/stock-and-fund/'
