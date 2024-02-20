@@ -90,4 +90,5 @@ jobs:
         host: ${{ secrets.SERVER_IP }}
         username: root
         port: 22
-        privateKey: ${{ secrets.PRIVATE_KEY}}
+        password: ${{ secrets.SERVER_PASSWORD }}
+#        privateKey: ${{ secrets.PRIVATE_KEY}}
