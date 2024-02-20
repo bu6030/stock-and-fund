@@ -1,37 +1,41 @@
 name: Git Release CI
 
+# 指定在哪个分支，以及什么操作触发
 on:
+  # 在 push 到 master 和 release/1.8.0 的时候触发
   push:
     branches: [ "master", "release/1.8.0" ]
+  # 在对 master 分支实施 pull_request（Merge 其他分支到 master）时触发
   pull_request:
     branches: [ "master" ]
-
+# 具体任务配置
 jobs:
 
   build:
-
+    # 指定运行环境
     runs-on: ubuntu-latest
-
+    # 具体的步骤
     steps:
+      # checkout 代码到 Github Actions 运行容器中
     - uses: actions/checkout@v3
-    
+      # 获取当前时间，后边打包用
     - name: Get Current Date
       id: date
       run: echo "::set-output name=date::$(date +'%y%m%d%H%M')"
-
+      # 向容器安装 Java 21，为 SpringBoot 提供运行环境
     - name: Set up JDK 21
       uses: actions/setup-java@v3
       with:
         java-version: '21'
         distribution: 'adopt'
-
+      # 获取 relase 分支，用于打包
     - name: Get Branch Name
       id: get_branch_name
       run: echo "::set-output name=branch_name::$(echo $line | grep 'SNAPSHOT' pom.xml | awk '{split($0,a,"-"); print a[1]}'| awk '{split($0,a,">"); print a[2]}')"
-
+      # 通过 maven 打包
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-
+      # 向 github 创建 tag 以及 release
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -42,7 +46,7 @@ jobs:
         release_name: Release ${{ steps.get_branch_name.outputs.branch_name }}-${{ steps.date.outputs.date }}
         draft: false
         prerelease: false
-
+      # 向 Github 的 Release 上传 jar 包
     - name: Upload Release Asset Jar
       id: upload-release-asset-jar
       uses: actions/upload-release-asset@v1
@@ -53,7 +57,7 @@ jobs:
         asset_path: target/stock-and-fund-${{ steps.get_branch_name.outputs.branch_name }}-SNAPSHOT.jar
         asset_name: stock-and-fund-${{ steps.get_branch_name.outputs.branch_name }}-SNAPSHOT.jar
         asset_content_type: application/gzip
-
+      # 向 Github 的 Release 上传 database 文件，如果你的项目没有可以删除这部分
     - name: Upload Release Asset DB
       id: upload-release-asset-db
       uses: actions/upload-release-asset@v1
@@ -64,7 +68,7 @@ jobs:
         asset_path: stock-and-fund.db
         asset_name: stock-and-fund.db
         asset_content_type: application/gzip
-
+      # 把 jar 包上传到指定服务器，其中的 secrets.SERVER_IP，secrets.SERVER_PASSWORD，secrets.PRIVATE_KEY 需要在该项目 Github 的 Setting 中配置
     - name: copy file to server
       uses: appleboy/scp-action@v0.1.4
       with:
@@ -74,7 +78,7 @@ jobs:
         port: 22
         source: 'target/stock-and-fund-${{ steps.get_branch_name.outputs.branch_name }}-SNAPSHOT.jar'
         target: '/opt/stock-and-fund/'
-
+      # ssh 到指定服务器，执行部署命令，具体 deployment.sh 的代码可以去看我之前写的 docker 部署
     - name: Deploy stock and fund
       uses: garygrossgarten/github-action-ssh@release
       with:
@@ -87,7 +91,3 @@ jobs:
         username: root
         port: 22
         privateKey: ${{ secrets.PRIVATE_KEY}}
-
-#        ssh root@$SERVER_IP '/opt/stock-and-fund/deployment.sh'
-#     - name: Build the Docker image
-#       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
