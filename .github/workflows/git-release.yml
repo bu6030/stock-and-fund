@@ -19,18 +19,18 @@ jobs:
       id: date
       run: echo "::set-output name=date::$(date +'%y%m%d%H%M')"
 
-#    - name: Set up JDK 21
-#      uses: actions/setup-java@v3
-#      with:
-#        java-version: '21'
-#        distribution: 'adopt'
-#
-#    - name: Get Branch Name
-#      id: get_branch_name
-#      run: echo "::set-output name=branch_name::$(echo $line | grep 'SNAPSHOT' pom.xml | awk '{split($0,a,"-"); print a[1]}'| awk '{split($0,a,">"); print a[2]}')"
-#
-#    - name: Build with Maven
-#      run: mvn -B package --file pom.xml
+    - name: Set up JDK 21
+      uses: actions/setup-java@v3
+      with:
+        java-version: '21'
+        distribution: 'adopt'
+
+    - name: Get Branch Name
+      id: get_branch_name
+      run: echo "::set-output name=branch_name::$(echo $line | grep 'SNAPSHOT' pom.xml | awk '{split($0,a,"-"); print a[1]}'| awk '{split($0,a,">"); print a[2]}')"
+
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
 
 #    - name: Create Release
 #      id: create_release
@@ -83,6 +83,16 @@ jobs:
 #      run: |
 #        ssh root@1.117.221.208
 #        scp target/stock-and-fund-${{ steps.get_branch_name.outputs.branch_name }}-SNAPSHOT.jar root@1.117.221.208:/opt/stock-and-fund/
+    - name: copy file to server
+      uses: appleboy/scp-action@v0.1.4
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: root
+        privateKey: ${{ secrets.PRIVATE_KEY}}
+        port: 22
+        source: 'target/stock-and-fund-${{ steps.get_branch_name.outputs.branch_name }}-SNAPSHOT.jar'
+        target: '/opt/stock-and-fund/'
+
     - name: Deploy stock and fund
       uses: garygrossgarten/github-action-ssh@release
       with:
