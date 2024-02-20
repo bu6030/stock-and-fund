@@ -87,10 +87,10 @@ jobs:
       uses: garygrossgarten/github-action-ssh@release
       with:
         command: /opt/stock-and-fund/deployment.sh
-        host: ${{ secrets.SERVER_ID }}
+        host: ${{ secrets.SERVER_IP }}
         username: root
         port: 22
-        privateKey: ${{ secrets.PRIVATE_KEY}}
+        password: ${{ secrets.SERVER_PASSWORD}}
 
 #        ssh root@$SERVER_IP '/opt/stock-and-fund/deployment.sh'
 #     - name: Build the Docker image
