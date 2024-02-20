@@ -67,7 +67,7 @@ public class ChromeController {
     @GetMapping(value = "/chrome/advice")
     public Response getAdvice() throws Exception {
         List<AdvicePO> advicePOList = adviceEntity.getAdvice();
-        log.info("getAdvice ");
+        log.info("GetAdvice ");
         return Response.builder().code("00000000").value(advicePOList).build();
     }
 

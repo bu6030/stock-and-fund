@@ -438,14 +438,14 @@ public class FundEntity {
         List<FundHisPO> fundHis = fundHisMapper.findAllFundHis(app, code, beginDate, endDate, username);
         FundPO fundPO = fundMapper.findFundByCode(code, username);
         FundHisPO fundHisPO = FundHisPO.builder()
-                .app(fundPO.getApp())
-                .code(fundPO.getCode())
-                .createDate(DateTimeUtils.getLocalDateTime())
-                .bonds(fundPO.getBonds())
-                .costPrise(fundPO.getCostPrise())
-                .hide(fundPO.isHide())
-                .name(fundPO.getName())
-                .build();
+            .app(fundPO.getApp())
+            .code(fundPO.getCode())
+            .createDate(DateTimeUtils.getLocalDateTime())
+            .bonds(fundPO.getBonds())
+            .costPrise(fundPO.getCostPrise())
+            .hide(fundPO.isHide())
+            .name(fundPO.getName())
+            .build();
         fundHis.add(0, fundHisPO);
         log.info("APP: {} ,数据库中的基金历史为：{}", app, fundHis);
         return fundHis;

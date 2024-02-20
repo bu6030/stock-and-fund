@@ -65,38 +65,6 @@ jobs:
         asset_name: stock-and-fund.db
         asset_content_type: application/gzip
 
-#    - name: Install ssh-agent
-#      run: |
-#        eval "$(ssh-agent -s)"
-#        mkdir -p ~/.ssh
-#        echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/id_rsa.key
-#        chmod 600 ~/.ssh/id_rsa.key
-#        ssh-add ~/.ssh/id_rsa.key
-#        echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
-#        chmod 600 ~/.ssh/known_hosts
-#    - name: Print SSH private key
-#      run: cat ~/.ssh/id_rsa.key
-#
-#        echo "$KNOWN_HOSTS" > ~/.ssh/known_hosts
-#        chmod 600 ~/.ssh/known_hosts
-#    - name: Upload file via SSH
-#      run: |
-#        ssh root@1.117.221.208
-#        scp target/stock-and-fund-${{ steps.get_branch_name.outputs.branch_name }}-SNAPSHOT.jar root@1.117.221.208:/opt/stock-and-fund/
-#    - name: copy file to server
-#      uses: cross-the-world/ssh-scp-ssh-pipelines@latest
-#      with:
-#        host: ${{ secrets.SERVER_IP }}
-#        user: root
-#        password: ${{ secrets.SERVER_PASSWORD }}
-#        port: 22
-#        source: 'target/stock-and-fund-${{ steps.get_branch_name.outputs.branch_name }}-SNAPSHOT.jar'
-#        target: '/opt/stock-and-fund/'
-#        scp: |
-#          target/stock-and-fund-${{ steps.get_branch_name.outputs.branch_name }}-SNAPSHOT.jar => /opt/stock-and-fund/
-#        last_ssh: |
-#          cd /opt/stock-and-fund/
-#          ./deployment.sh
     - name: copy file to server
       uses: appleboy/scp-action@v0.1.4
       with:

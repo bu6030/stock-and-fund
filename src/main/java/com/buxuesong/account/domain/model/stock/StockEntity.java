@@ -500,14 +500,14 @@ public class StockEntity {
         List<StockHisPO> stockHis = stockHisMapper.findAllStockHis(app, code, beginDate, endDate, username);
         StockPO stockPO = stockMapper.findStockByCode(code, username);
         StockHisPO stockHisPO = StockHisPO.builder()
-                .app(stockPO.getApp())
-                .code(stockPO.getCode())
-                .createDate(DateTimeUtils.getLocalDateTime())
-                .bonds(stockPO.getBonds())
-                .costPrise(stockPO.getCostPrise())
-                .hide(stockPO.isHide())
-                .name(stockPO.getName())
-                .build();
+            .app(stockPO.getApp())
+            .code(stockPO.getCode())
+            .createDate(DateTimeUtils.getLocalDateTime())
+            .bonds(stockPO.getBonds())
+            .costPrise(stockPO.getCostPrise())
+            .hide(stockPO.isHide())
+            .name(stockPO.getName())
+            .build();
         stockHis.add(0, stockHisPO);
         log.info("APP: {} ,数据库中的股票历史为：{}", app, stockHis);
         return stockHis;
