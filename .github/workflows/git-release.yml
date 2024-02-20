@@ -86,7 +86,9 @@ jobs:
     - name: Deploy stock and fund
       uses: garygrossgarten/github-action-ssh@release
       with:
-        command: /opt/stock-and-fund/deployment.sh
+        command: |
+          cd /opt/stock-and-fund/
+          ./deployment.sh
         host: ${{ secrets.SERVER_IP }}
         username: root
         port: 22
