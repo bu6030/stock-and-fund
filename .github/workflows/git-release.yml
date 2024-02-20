@@ -84,25 +84,30 @@ jobs:
 #        ssh root@1.117.221.208
 #        scp target/stock-and-fund-${{ steps.get_branch_name.outputs.branch_name }}-SNAPSHOT.jar root@1.117.221.208:/opt/stock-and-fund/
     - name: copy file to server
-      uses: appleboy/scp-action@v0.1.4
+      uses: cross-the-world/ssh-scp-ssh-pipelines@latest
       with:
         host: ${{ secrets.SERVER_IP }}
-        username: root
+        user: root
         password: ${{ secrets.SERVER_PASSWORD }}
         port: 22
         source: 'target/stock-and-fund-${{ steps.get_branch_name.outputs.branch_name }}-SNAPSHOT.jar'
         target: '/opt/stock-and-fund/'
-
-    - name: Deploy stock and fund
-      uses: garygrossgarten/github-action-ssh@release
-      with:
-        command: |
+        scp: |
+          target/stock-and-fund-${{ steps.get_branch_name.outputs.branch_name }}-SNAPSHOT.jar => /opt/stock-and-fund/
+        last_ssh: |
           cd /opt/stock-and-fund/
           ./deployment.sh
-        host: ${{ secrets.SERVER_IP }}
-        username: root
-        port: 22
-        privateKey: ${{ secrets.PRIVATE_KEY}}
+
+#    - name: Deploy stock and fund
+#      uses: garygrossgarten/github-action-ssh@release
+#      with:
+#        command: |
+#          cd /opt/stock-and-fund/
+#          ./deployment.sh
+#        host: ${{ secrets.SERVER_IP }}
+#        username: root
+#        port: 22
+#        privateKey: ${{ secrets.PRIVATE_KEY}}
 
 #        ssh root@$SERVER_IP '/opt/stock-and-fund/deployment.sh'
 #     - name: Build the Docker image
