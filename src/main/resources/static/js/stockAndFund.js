@@ -462,6 +462,7 @@ function getStockHistory(code) {
 }
 
 function showBuyOrSell() {
+    $("#history-modal").modal('hide');
     let code = $("#buy-or-sell-stock-code").val();
     let name = $("#buy-or-sell-stock-name").val();
     $.ajax({
@@ -489,7 +490,7 @@ function showBuyOrSell() {
                     +"</td></tr>";
             }
             $("#buy-or-sell-nr").html(str);
-            $("#history-modal").modal('hide')
+
             $("#buy-or-sell-modal").modal();
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
