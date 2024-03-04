@@ -48,7 +48,7 @@ public class SecurityConfigKeyCloak implements WebMvcConfigurer {
             .csrf((csrf) -> csrf.disable())
             .authorizeHttpRequests(
                 (authorizeHttpRequests) -> authorizeHttpRequests
-                    .requestMatchers("/unauthenticated", "/oauth2/**", "/login/**", "/login.html", "/chrome/**").permitAll()
+                    .requestMatchers("/unauthenticated", "/oauth2/**", "/login/**", "/login.html", "/chrome/**", "/upload.html", "/upload").permitAll()
                     .anyRequest().hasAnyAuthority("OIDC_USER", "ADMIN"))
             .logout((logout) -> logout
                 .logoutSuccessUrl(keyCloakServerAddress + "/realms/myrealm/protocol/openid-connect/logout?redirect_uri=" + localAddress));
