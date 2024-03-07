@@ -15,7 +15,7 @@ public interface AdviceMapper {
     @Update(" INSERT INTO ADVICE (DATE, ADVICE_CONTENT, ENABLED) values (#{advicePO.date},#{advicePO.adviceContent}, true) ")
     int save(@Param("advicePO") AdvicePO advicePO);
 
-    @Update(" UPDATE ADVICE SET ADVICE_DEVELOP_VERSION = #{advicePO.adviceDevelopVersion} where ID = #{advicePO.id} ")
+    @Update(" UPDATE ADVICE SET ADVICE_DEVELOP_VERSION = #{advicePO.adviceDevelopVersion}, ADVICE_CONTENT = #{advicePO.adviceContent} where ID = #{advicePO.id} ")
     int update(@Param("advicePO") AdvicePO advicePO);
 
     @Update(" UPDATE ADVICE SET ENABLED = false where ID = #{advicePO.id} ")

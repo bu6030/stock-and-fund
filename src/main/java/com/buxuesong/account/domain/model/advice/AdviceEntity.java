@@ -48,6 +48,7 @@ public class AdviceEntity {
      */
     public boolean updateAdvice(AdviceRequest request) {
         adviceMapper.update(AdvicePO.builder().id(request.getId())
+            .adviceContent(request.getAdviceContent())
             .adviceDevelopVersion(request.getAdviceDevelopVersion())
             .build());
         return true;
