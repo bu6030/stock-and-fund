@@ -101,10 +101,10 @@ public class DepositEntity {
         }
 
         DepositPO deposit = depositMapper.findDepositByDate(date.toString(), username);
-        if (deposit != null) {
-            log.info("用户：{}, 已经存在当日盈利汇总： {}", username, deposit);
-            return;
-        }
+//        if (deposit != null) {
+//            log.info("用户：{}, 已经存在当日盈利汇总： {}", username, deposit);
+//            return;
+//        }
 
         BigDecimal fundTotalDayIncome = depositFundDayIncome(username);
         BigDecimal stockTotalDayIncome = depositStockDayIncome(username);
@@ -126,19 +126,34 @@ public class DepositEntity {
         StockEntity bigMarket = list.get(0);
         String bigMarketChangePercent = bigMarket.getChangePercent();
         String bigMarketValue = bigMarket.getNow();
-
-        depositMapper.save(DepositPO
-            .builder()
-            .date(LocalDate.now().toString())
-            .fundDayIncome(fundTotalDayIncome)
-            .stockDayIncome(stockTotalDayIncome)
-            .totalDayIncome(totalDayIncome)
-            .fundMarketValue(fundTotalMarketValue)
-            .stockMarketValue(stockTotalMarketValue)
-            .totalMarketValue(totalMarketValue)
-            .bigMarketChangePercent(bigMarketChangePercent)
-            .bigMarketValue(bigMarketValue)
-            .build(), username);
+        if (deposit == null) {
+            depositMapper.save(DepositPO
+                    .builder()
+                    .date(LocalDate.now().toString())
+                    .fundDayIncome(fundTotalDayIncome)
+                    .stockDayIncome(stockTotalDayIncome)
+                    .totalDayIncome(totalDayIncome)
+                    .fundMarketValue(fundTotalMarketValue)
+                    .stockMarketValue(stockTotalMarketValue)
+                    .totalMarketValue(totalMarketValue)
+                    .bigMarketChangePercent(bigMarketChangePercent)
+                    .bigMarketValue(bigMarketValue)
+                    .build(), username);
+        } else {
+            depositMapper.update(DepositPO
+                    .builder()
+                    .id(deposit.getId())
+                    .date(LocalDate.now().toString())
+                    .fundDayIncome(fundTotalDayIncome)
+                    .stockDayIncome(stockTotalDayIncome)
+                    .totalDayIncome(totalDayIncome)
+                    .fundMarketValue(fundTotalMarketValue)
+                    .stockMarketValue(stockTotalMarketValue)
+                    .totalMarketValue(totalMarketValue)
+                    .bigMarketChangePercent(bigMarketChangePercent)
+                    .bigMarketValue(bigMarketValue)
+                    .build(), username);
+        }
     }
 
     public void deleteDeposit() {
@@ -254,9 +269,21 @@ public class DepositEntity {
         List<FundEntity> funds = fundEntity.getFundDetails(fundListFrom);
         BigDecimal fundTotalMarketValue = new BigDecimal("0");
         for (FundEntity fund : funds) {
-            BigDecimal marketValue = (new BigDecimal(fund.getGsz())
-                .multiply(new BigDecimal(fund.getBonds())).setScale(2, BigDecimal.ROUND_HALF_UP));
-            fundTotalMarketValue = fundTotalMarketValue.add(marketValue);
+            FundNetDiagramResponse fundNetDiagram = eastMoneyRestClient.getFundNetDiagram(fund.getFundCode());
+            log.info("fundNetDiagram : {}", fundNetDiagram);
+            String currentDayDate = LocalDate.now().toString();
+            Optional<FundNetDiagramResponse.DataItem> optionalCurrentDay = fundNetDiagram.getDatas().stream().filter(dataItem -> dataItem.getFSRQ().equals(currentDayDate)).findFirst();
+            // 当日净值已出
+            if (optionalCurrentDay.isPresent()) {
+                FundNetDiagramResponse.DataItem currentDayItem = optionalCurrentDay.get();
+                BigDecimal marketValue = (new BigDecimal(currentDayItem.getDWJZ())
+                        .multiply(new BigDecimal(fund.getBonds())).setScale(2, BigDecimal.ROUND_HALF_UP));
+                fundTotalMarketValue = fundTotalMarketValue.add(marketValue);
+            } else {
+                BigDecimal marketValue = (new BigDecimal(fund.getGsz())
+                        .multiply(new BigDecimal(fund.getBonds())).setScale(2, BigDecimal.ROUND_HALF_UP));
+                fundTotalMarketValue = fundTotalMarketValue.add(marketValue);
+            }
         }
         log.info("基金总市值: {}", fundTotalMarketValue);
         return fundTotalMarketValue;

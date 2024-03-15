@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DepositPO {
+    private Long id;
     private String date;
     private BigDecimal fundDayIncome;
     private BigDecimal stockDayIncome;
