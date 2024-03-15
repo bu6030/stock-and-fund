@@ -207,11 +207,13 @@ public class DepositEntity {
                         .subtract(new BigDecimal(yesTodayItem.getDWJZ())).multiply(new BigDecimal(fund.getBonds())))
                         .setScale(2, BigDecimal.ROUND_HALF_UP);
                 fundTotalDayIncome = fundTotalDayIncome.add(dayIncome);
+                log.info("按照当日净值计算，基金： {} ,当日盈利： {}", fund.getFundName(), dayIncome.toString());
             } else {
                 BigDecimal dayIncome = (new BigDecimal(fund.getGszzl())
                         .multiply(new BigDecimal(fund.getDwjz())).multiply(new BigDecimal(fund.getBonds()))
                         .divide(new BigDecimal("100"))).setScale(2, BigDecimal.ROUND_HALF_UP);
                 fundTotalDayIncome = fundTotalDayIncome.add(dayIncome);
+                log.info("按照估值计算，基金： {} ,当日盈利： {}", fund.getFundName(), dayIncome.toString());
             }
         }
         log.info("基金当日盈利: {}", fundTotalDayIncome);
