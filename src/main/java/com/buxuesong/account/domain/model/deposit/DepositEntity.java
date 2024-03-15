@@ -1,9 +1,11 @@
 package com.buxuesong.account.domain.model.deposit;
 
 import com.buxuesong.account.domain.service.CacheService;
+import com.buxuesong.account.infrastructure.adapter.rest.EastMoneyRestClient;
 import com.buxuesong.account.infrastructure.adapter.rest.SzseRestClient;
 import com.buxuesong.account.domain.model.fund.FundEntity;
 import com.buxuesong.account.domain.model.stock.StockEntity;
+import com.buxuesong.account.infrastructure.adapter.rest.response.FundNetDiagramResponse;
 import com.buxuesong.account.infrastructure.adapter.rest.response.TradingDateResponse;
 import com.buxuesong.account.infrastructure.general.utils.UserUtils;
 import com.buxuesong.account.infrastructure.persistent.po.BuyOrSellStockPO;
@@ -27,6 +29,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -35,6 +38,8 @@ import java.util.concurrent.Executors;
 public class DepositEntity {
     @Autowired
     private SzseRestClient szseRestClient;
+    @Autowired
+    private EastMoneyRestClient eastMoneyRestClient;
     @Autowired
     private DepositMapper depositMapper;
     @Autowired
@@ -173,10 +178,26 @@ public class DepositEntity {
         List<FundEntity> funds = fundEntity.getFundDetails(fundListFrom);
         BigDecimal fundTotalDayIncome = new BigDecimal("0");
         for (FundEntity fund : funds) {
-            BigDecimal dayIncome = (new BigDecimal(fund.getGszzl())
-                .multiply(new BigDecimal(fund.getDwjz())).multiply(new BigDecimal(fund.getBonds()))
-                .divide(new BigDecimal("100"))).setScale(2, BigDecimal.ROUND_HALF_UP);
-            fundTotalDayIncome = fundTotalDayIncome.add(dayIncome);
+            FundNetDiagramResponse fundNetDiagram = eastMoneyRestClient.getFundNetDiagram(fund.getFundCode());
+            log.info("fundNetDiagram : {}", fundNetDiagram);
+            String currentDayDate = LocalDate.now().toString();
+            String yesTodayDate = LocalDate.now().minusDays(1).toString();
+            Optional<FundNetDiagramResponse.DataItem> optionalCurrentDay = fundNetDiagram.getDatas().stream().filter(dataItem -> dataItem.getFSRQ().equals(currentDayDate)).findFirst();
+            Optional<FundNetDiagramResponse.DataItem> optionalYesToday = fundNetDiagram.getDatas().stream().filter(dataItem -> dataItem.getFSRQ().equals(yesTodayDate)).findFirst();
+            // 当日净值已出
+            if (optionalCurrentDay.isPresent() && optionalYesToday.isPresent()) {
+                FundNetDiagramResponse.DataItem currentDayItem = optionalCurrentDay.get();
+                FundNetDiagramResponse.DataItem yesTodayItem = optionalYesToday.get();
+                BigDecimal dayIncome = (new BigDecimal(currentDayItem.getDWJZ())
+                        .subtract(new BigDecimal(yesTodayItem.getDWJZ())).multiply(new BigDecimal(fund.getBonds())))
+                        .setScale(2, BigDecimal.ROUND_HALF_UP);
+                fundTotalDayIncome = fundTotalDayIncome.add(dayIncome);
+            } else {
+                BigDecimal dayIncome = (new BigDecimal(fund.getGszzl())
+                        .multiply(new BigDecimal(fund.getDwjz())).multiply(new BigDecimal(fund.getBonds()))
+                        .divide(new BigDecimal("100"))).setScale(2, BigDecimal.ROUND_HALF_UP);
+                fundTotalDayIncome = fundTotalDayIncome.add(dayIncome);
+            }
         }
         log.info("基金当日盈利: {}", fundTotalDayIncome);
         return fundTotalDayIncome;
