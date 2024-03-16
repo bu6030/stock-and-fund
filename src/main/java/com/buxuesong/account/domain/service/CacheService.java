@@ -4,6 +4,7 @@ import com.buxuesong.account.infrastructure.adapter.rest.EastMoneyRestClient;
 import com.buxuesong.account.infrastructure.adapter.rest.GTimgRestClient;
 import com.buxuesong.account.infrastructure.adapter.rest.SinaRestClient;
 import com.buxuesong.account.infrastructure.adapter.rest.TiantianFundRestClient;
+import com.buxuesong.account.infrastructure.adapter.rest.response.FundNetDiagramResponse;
 import com.buxuesong.account.infrastructure.adapter.rest.response.StockDayHistoryResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -65,6 +67,16 @@ public class CacheService {
     public int removeAllCache() {
         log.info("removeAllCache，让缓存失效");
         return 0;
+    }
+
+    @Cacheable(key = "'fund_net_diagram_'+#fundCode+'_'+#date", unless = "#result == null")
+    public FundNetDiagramResponse getFundNetDiagram(String fundCode, String date) {
+        FundNetDiagramResponse fundNetDiagram = eastMoneyRestClient.getFundNetDiagram(fundCode);
+        Optional<FundNetDiagramResponse.DataItem> optional = fundNetDiagram.getDatas().stream().filter(dataItem -> dataItem.getFSRQ().equals(date)).findFirst();
+        if (optional.isPresent()) {
+           return fundNetDiagram;
+        }
+        return null;
     }
 
 }

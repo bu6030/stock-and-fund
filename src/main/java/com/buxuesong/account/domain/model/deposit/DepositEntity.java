@@ -193,16 +193,15 @@ public class DepositEntity {
         List<FundEntity> funds = fundEntity.getFundDetails(fundListFrom);
         BigDecimal fundTotalDayIncome = new BigDecimal("0");
         for (FundEntity fund : funds) {
-            FundNetDiagramResponse fundNetDiagram = eastMoneyRestClient.getFundNetDiagram(fund.getFundCode());
-            log.info("fundNetDiagram : {}", fundNetDiagram);
             String currentDayDate = LocalDate.now().toString();
-            String yesTodayDate = LocalDate.now().minusDays(1).toString();
-            Optional<FundNetDiagramResponse.DataItem> optionalCurrentDay = fundNetDiagram.getDatas().stream().filter(dataItem -> dataItem.getFSRQ().equals(currentDayDate)).findFirst();
-            Optional<FundNetDiagramResponse.DataItem> optionalYesToday = fundNetDiagram.getDatas().stream().filter(dataItem -> dataItem.getFSRQ().equals(yesTodayDate)).findFirst();
+            FundNetDiagramResponse fundNetDiagram = cacheService.getFundNetDiagram(fund.getFundCode(), currentDayDate);
+            log.info("fundNetDiagram : {}", fundNetDiagram);
             // 当日净值已出
-            if (optionalCurrentDay.isPresent() && optionalYesToday.isPresent()) {
+            if (fundNetDiagram != null) {
+                Optional<FundNetDiagramResponse.DataItem> optionalCurrentDay = fundNetDiagram.getDatas().stream().filter(dataItem -> dataItem.getFSRQ().equals(currentDayDate)).findFirst();
                 FundNetDiagramResponse.DataItem currentDayItem = optionalCurrentDay.get();
-                FundNetDiagramResponse.DataItem yesTodayItem = optionalYesToday.get();
+                int currentIndex = fundNetDiagram.getDatas().indexOf(currentDayItem);
+                FundNetDiagramResponse.DataItem yesTodayItem = fundNetDiagram.getDatas().get(currentIndex - 1);
                 BigDecimal dayIncome = (new BigDecimal(currentDayItem.getDWJZ())
                         .subtract(new BigDecimal(yesTodayItem.getDWJZ())).multiply(new BigDecimal(fund.getBonds())))
                         .setScale(2, BigDecimal.ROUND_HALF_UP);
@@ -271,12 +270,12 @@ public class DepositEntity {
         List<FundEntity> funds = fundEntity.getFundDetails(fundListFrom);
         BigDecimal fundTotalMarketValue = new BigDecimal("0");
         for (FundEntity fund : funds) {
-            FundNetDiagramResponse fundNetDiagram = eastMoneyRestClient.getFundNetDiagram(fund.getFundCode());
-            log.info("fundNetDiagram : {}", fundNetDiagram);
             String currentDayDate = LocalDate.now().toString();
-            Optional<FundNetDiagramResponse.DataItem> optionalCurrentDay = fundNetDiagram.getDatas().stream().filter(dataItem -> dataItem.getFSRQ().equals(currentDayDate)).findFirst();
+            FundNetDiagramResponse fundNetDiagram = cacheService.getFundNetDiagram(fund.getFundCode(), currentDayDate);
+            log.info("fundNetDiagram : {}", fundNetDiagram);
             // 当日净值已出
-            if (optionalCurrentDay.isPresent()) {
+            if (fundNetDiagram != null) {
+                Optional<FundNetDiagramResponse.DataItem> optionalCurrentDay = fundNetDiagram.getDatas().stream().filter(dataItem -> dataItem.getFSRQ().equals(currentDayDate)).findFirst();
                 FundNetDiagramResponse.DataItem currentDayItem = optionalCurrentDay.get();
                 BigDecimal marketValue = (new BigDecimal(currentDayItem.getDWJZ())
                         .multiply(new BigDecimal(fund.getBonds())).setScale(2, BigDecimal.ROUND_HALF_UP));
