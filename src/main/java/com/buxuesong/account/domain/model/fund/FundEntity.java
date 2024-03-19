@@ -9,8 +9,10 @@ import com.buxuesong.account.infrastructure.adapter.rest.TiantianFundRestClient;
 import com.buxuesong.account.infrastructure.general.utils.DateTimeUtils;
 import com.buxuesong.account.infrastructure.general.utils.UserUtils;
 import com.buxuesong.account.infrastructure.persistent.po.FundHisPO;
+import com.buxuesong.account.infrastructure.persistent.po.FundJZPO;
 import com.buxuesong.account.infrastructure.persistent.po.FundPO;
 import com.buxuesong.account.infrastructure.persistent.repository.FundHisMapper;
+import com.buxuesong.account.infrastructure.persistent.repository.FundJZMapper;
 import com.buxuesong.account.infrastructure.persistent.repository.FundMapper;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
@@ -46,6 +48,8 @@ public class FundEntity {
     private String income;// 收益
 
     private boolean hide;// 是否隐藏
+    private String currentDayJingzhi;// 当日净值（每个交易日晚9点之后有新日期数据）
+    private String previousDayJingzhi;// 前一日净值
 
     public FundEntity() {
     }
@@ -217,6 +221,22 @@ public class FundEntity {
         this.hide = hide;
     }
 
+    public String getCurrentDayJingzhi() {
+        return currentDayJingzhi;
+    }
+
+    public void setCurrentDayJingzhi(String currentDayJingzhi) {
+        this.currentDayJingzhi = currentDayJingzhi;
+    }
+
+    public String getPreviousDayJingzhi() {
+        return previousDayJingzhi;
+    }
+
+    public void setPreviousDayJingzhi(String previousDayJingzhi) {
+        this.previousDayJingzhi = previousDayJingzhi;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -262,6 +282,8 @@ public class FundEntity {
     private FundMapper fundMapper;
     @Autowired
     private FundHisMapper fundHisMapper;
+    @Autowired
+    private FundJZMapper fundJZMapper;
     @Autowired
     private CacheService cacheService;
 
@@ -320,6 +342,17 @@ public class FundEntity {
                                 bean.setIncome(incomeDec.toString());
                             }
                         }
+                        List<FundJZPO> fundJZPOs = fundJZMapper.findResent5FundJZByCode(bean.getFundCode());
+                        Optional<FundJZPO> optional = fundJZPOs.stream().filter(item -> item.getFSRQ().equals(bean.getGztime().substring(0, 10))).findAny();
+                        // 当日净值已出
+                        if (optional.isPresent()) {
+                            FundJZPO currentDayFundJZPO = optional.get();
+                            int currentDayIndex = fundJZPOs.indexOf(currentDayFundJZPO);
+                            int previousDayIndex = currentDayIndex - 1;
+                            FundJZPO previousDayFundJZPO = fundJZPOs.get(previousDayIndex);
+                            bean.setCurrentDayJingzhi(currentDayFundJZPO.getDWJZ());
+                            bean.setPreviousDayJingzhi(previousDayFundJZPO.getDWJZ());
+                        }
                         funds.add(bean);
                         log.info("Fund编码:[" + code + "]信息：{}", bean);
                     } else {
@@ -357,6 +390,17 @@ public class FundEntity {
                                 .setScale(2, RoundingMode.HALF_UP);
                             bean.setIncome(incomeDec.toString());
                         }
+                    }
+                    List<FundJZPO> fundJZPOs = fundJZMapper.findResent5FundJZByCode(bean.getFundCode());
+                    Optional<FundJZPO> optional = fundJZPOs.stream().filter(item -> item.getFSRQ().equals(bean.getGztime().substring(0, 10))).findAny();
+                    // 当日净值已出
+                    if (optional.isPresent()) {
+                        FundJZPO currentDayFundJZPO = optional.get();
+                        int currentDayIndex = fundJZPOs.indexOf(currentDayFundJZPO);
+                        int previousDayIndex = currentDayIndex - 1;
+                        FundJZPO previousDayFundJZPO = fundJZPOs.get(previousDayIndex);
+                        bean.setCurrentDayJingzhi(currentDayFundJZPO.getDWJZ());
+                        bean.setPreviousDayJingzhi(previousDayFundJZPO.getDWJZ());
                     }
                     funds.add(bean);
                     log.info("Fund编码:[" + code + "]信息：{}", bean);
