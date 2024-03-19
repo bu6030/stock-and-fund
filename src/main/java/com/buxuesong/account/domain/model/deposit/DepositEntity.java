@@ -8,20 +8,15 @@ import com.buxuesong.account.domain.model.stock.StockEntity;
 import com.buxuesong.account.infrastructure.adapter.rest.response.FundNetDiagramResponse;
 import com.buxuesong.account.infrastructure.adapter.rest.response.TradingDateResponse;
 import com.buxuesong.account.infrastructure.general.utils.UserUtils;
-import com.buxuesong.account.infrastructure.persistent.po.BuyOrSellStockPO;
-import com.buxuesong.account.infrastructure.persistent.po.DepositPO;
-import com.buxuesong.account.infrastructure.persistent.po.OpenPersistentMonthPO;
-import com.buxuesong.account.infrastructure.persistent.po.UserPO;
+import com.buxuesong.account.infrastructure.persistent.po.*;
 import com.buxuesong.account.infrastructure.persistent.repository.DepositMapper;
+import com.buxuesong.account.infrastructure.persistent.repository.FundJZMapper;
 import com.buxuesong.account.infrastructure.persistent.repository.OpenPersistentMonthMapper;
 import com.buxuesong.account.infrastructure.persistent.repository.UserMapper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
@@ -32,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -42,6 +38,8 @@ public class DepositEntity {
     private EastMoneyRestClient eastMoneyRestClient;
     @Autowired
     private DepositMapper depositMapper;
+    @Autowired
+    private FundJZMapper fundJZMapper;
     @Autowired
     private FundEntity fundEntity;
     @Autowired
@@ -194,7 +192,7 @@ public class DepositEntity {
         BigDecimal fundTotalDayIncome = new BigDecimal("0");
         for (FundEntity fund : funds) {
             String currentDayDate = LocalDate.now().toString();
-            FundNetDiagramResponse fundNetDiagram = cacheService.getFundNetDiagram(fund.getFundCode(), currentDayDate);
+            FundNetDiagramResponse fundNetDiagram = getFundNetDiagramResponse(fund.getFundCode(), currentDayDate);
             log.info("fundNetDiagram : {}", fundNetDiagram);
             // 当日净值已出
             if (fundNetDiagram != null) {
@@ -271,7 +269,7 @@ public class DepositEntity {
         BigDecimal fundTotalMarketValue = new BigDecimal("0");
         for (FundEntity fund : funds) {
             String currentDayDate = LocalDate.now().toString();
-            FundNetDiagramResponse fundNetDiagram = cacheService.getFundNetDiagram(fund.getFundCode(), currentDayDate);
+            FundNetDiagramResponse fundNetDiagram = getFundNetDiagramResponse(fund.getFundCode(), currentDayDate);
             log.info("fundNetDiagram : {}", fundNetDiagram);
             // 当日净值已出
             if (fundNetDiagram != null) {
@@ -327,4 +325,26 @@ public class DepositEntity {
         return false;
     }
 
+    private FundNetDiagramResponse getFundNetDiagramResponse(String fundCode, String currentDayDate){
+        List<FundJZPO> fundJZPOs = fundJZMapper.findResent5FundJZByCode(fundCode);
+        Optional<FundJZPO> optional = fundJZPOs.stream().filter(dataItem -> dataItem.getFSRQ().equals(currentDayDate)).findFirst();
+        FundNetDiagramResponse fundNetDiagram;
+        if (optional.isPresent()) {
+            fundNetDiagram = new FundNetDiagramResponse();
+            List<FundNetDiagramResponse.DataItem> datas = fundJZPOs.stream().map(item -> FundNetDiagramResponse.DataItem.builder().DWJZ(item.getDWJZ()).FSRQ(item.getFSRQ()).build()).collect(Collectors.toList());
+            fundNetDiagram.setDatas(datas);
+        } else {
+            fundNetDiagram = cacheService.getFundNetDiagram(fundCode, currentDayDate);
+            if (fundNetDiagram != null) {
+                fundNetDiagram.getDatas().forEach(item -> {
+                    FundJZPO fundJZPO = fundJZMapper.findFundJZByCodeAndDate(fundCode, item.getFSRQ());
+                    if (fundJZPO == null) {
+                        fundJZPO = FundJZPO.builder().FSRQ(item.getFSRQ()).DWJZ(item.getDWJZ()).code(fundCode).build();
+                        fundJZMapper.save(fundJZPO);
+                    }
+                });
+            }
+        }
+        return fundNetDiagram;
+    }
 }
