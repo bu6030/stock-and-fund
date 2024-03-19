@@ -79,8 +79,14 @@ function getTableHtml(result){
         if (filteredApp != "ALL" && result[k].app != filteredApp) {
             continue;
         }
-        dayIncome = new BigDecimal(parseFloat((new BigDecimal(result[k].gszzl)).multiply((new BigDecimal(result[k].dwjz))).multiply(new BigDecimal(result[k].bonds)).divide(new BigDecimal("100"))).toFixed(2));
-        marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].gsz)).multiply(new BigDecimal(result[k].bonds))).toFixed(2));
+        if (result[k].currentDayJingzhi != null && result[k].currentDayJingzhi != '') {
+            result[k].gsz = result[k].currentDayJingzhi;
+            dayIncome = new BigDecimal(parseFloat(((new BigDecimal(result[k].currentDayJingzhi + "")).subtract(new BigDecimal(result[k].previousDayJingzhi + ""))).multiply(new BigDecimal(result[k].bonds + ""))).toFixed(2));
+            marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].currentDayJingzhi + "")).multiply(new BigDecimal(result[k].bonds + ""))).toFixed(2));
+        } else {
+            dayIncome = new BigDecimal(parseFloat((new BigDecimal(result[k].gszzl)).multiply((new BigDecimal(result[k].dwjz))).multiply(new BigDecimal(result[k].bonds)).divide(new BigDecimal("100"))).toFixed(2));
+            marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].gsz)).multiply(new BigDecimal(result[k].bonds))).toFixed(2));
+        }
         totalDayIncome = totalDayIncome.add(dayIncome);
         // totalmarketValue = totalmarketValue.add(marketValue);
         if (totalmarketValue.compareTo(new BigDecimal("0")) != 0) {
