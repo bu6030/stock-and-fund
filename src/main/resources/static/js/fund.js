@@ -80,7 +80,7 @@ function getTableHtml(result){
             continue;
         }
         if (result[k].currentDayJingzhi != null && result[k].currentDayJingzhi != '') {
-            result[k].gsz = result[k].currentDayJingzhi;
+            result[k].gsz = result[k].currentDayJingzhi + '(当日净值已出)';
             dayIncome = new BigDecimal(parseFloat(((new BigDecimal(result[k].currentDayJingzhi + "")).subtract(new BigDecimal(result[k].previousDayJingzhi + ""))).multiply(new BigDecimal(result[k].bonds + ""))).toFixed(2));
             marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].currentDayJingzhi + "")).multiply(new BigDecimal(result[k].bonds + ""))).toFixed(2));
         } else {

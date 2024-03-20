@@ -177,7 +177,7 @@
                         item.typeNew = '基金';
                         var marketValue = new BigDecimal("0");
                         if (item.currentDayJingzhi != null && item.currentDayJingzhi != '') {
-                            item.gsz = item.currentDayJingzhi;
+                            item.gsz = item.currentDayJingzhi + '(当日净值已出)';
                             item.dayIncome = new BigDecimal(parseFloat(((new BigDecimal(item.currentDayJingzhi + "")).subtract(new BigDecimal(item.previousDayJingzhi + ""))).multiply(new BigDecimal(item.bonds + ""))).toFixed(2));
                             marketValue = new BigDecimal(parseFloat((new BigDecimal(item.currentDayJingzhi + "")).multiply(new BigDecimal(item.bonds + ""))).toFixed(2));
                             item.marketValue = marketValue + '';
