@@ -42,4 +42,7 @@ public class StockAndFundBean {
     private String day20Min;
     private String day10Min;
 
+    private String currentDayJingzhi;// 当日净值（每个交易日晚9点之后有新日期数据）
+    private String previousDayJingzhi;// 前一日净值
+
 }

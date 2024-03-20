@@ -98,6 +98,8 @@ public class FundController {
                 // 基金部分内容
                 .jzrq(s.getJzrq()).dwjz(s.getDwjz()).gsz(s.getGsz())
                 .gszzl(s.getGszzl()).gztime(s.getGztime())
+                .currentDayJingzhi(s.getCurrentDayJingzhi())
+                .previousDayJingzhi(s.getPreviousDayJingzhi())
                 .build())
             .collect(Collectors.toList());
         List<StockAndFundBean> stockAndFundsFromStocks = stocks.stream()
