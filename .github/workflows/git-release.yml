@@ -130,8 +130,6 @@ jobs:
         with:
           command: |
             cd /opt/stock-and-fund/
-#            rm -rf ./stock-and-fund-${{ steps.get_branch_name.outputs.branch_name }}-SNAPSHOT.jar
-#            mv target/stock-and-fund-${{ steps.get_branch_name.outputs.branch_name }}-SNAPSHOT.jar ./
             ./deployment.sh
           host: ${{ secrets.SERVER_IP }}
           username: root
