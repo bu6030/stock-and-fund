@@ -147,7 +147,7 @@
                     item.appNew = getAppName(item.app);
                     var marketValue = new BigDecimal("0");
                     if (item.currentDayJingzhi != null && item.currentDayJingzhi != '') {
-                        item.gsz = item.currentDayJingzhi + '(当日净值已出)';
+                        item.gsz = item.currentDayJingzhi + '(实)';
                         item.dayIncome = new BigDecimal(parseFloat(((new BigDecimal(item.currentDayJingzhi + "")).subtract(new BigDecimal(item.previousDayJingzhi + ""))).multiply(new BigDecimal(item.bonds + ""))).toFixed(2));
                         marketValue = new BigDecimal(parseFloat((new BigDecimal(item.currentDayJingzhi + "")).multiply(new BigDecimal(item.bonds + ""))).toFixed(2));
                         item.marketValue = marketValue + '';
@@ -157,6 +157,7 @@
                             .divide(new BigDecimal("100"))).toFixed(2)) +'';
                         marketValue = new BigDecimal(parseFloat((new BigDecimal(item.gsz)).multiply(new BigDecimal(item.bonds))).toFixed(2));
                         item.marketValue = marketValue + '';
+                        item.gsz = item.gsz + '(估)';
                     }
                     item.dwjzNew = item.dwjz+ '(' + item.jzrq + ')';
                     if (totalMarketValue.compareTo(new BigDecimal("0")) != 0) {

@@ -80,12 +80,13 @@ function getTableHtml(result){
             continue;
         }
         if (result[k].currentDayJingzhi != null && result[k].currentDayJingzhi != '') {
-            result[k].gsz = result[k].currentDayJingzhi + '(当日净值已出)';
+            result[k].gsz = result[k].currentDayJingzhi + '(实)';
             dayIncome = new BigDecimal(parseFloat(((new BigDecimal(result[k].currentDayJingzhi + "")).subtract(new BigDecimal(result[k].previousDayJingzhi + ""))).multiply(new BigDecimal(result[k].bonds + ""))).toFixed(2));
             marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].currentDayJingzhi + "")).multiply(new BigDecimal(result[k].bonds + ""))).toFixed(2));
         } else {
             dayIncome = new BigDecimal(parseFloat((new BigDecimal(result[k].gszzl)).multiply((new BigDecimal(result[k].dwjz))).multiply(new BigDecimal(result[k].bonds)).divide(new BigDecimal("100"))).toFixed(2));
             marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].gsz)).multiply(new BigDecimal(result[k].bonds))).toFixed(2));
+            result[k].gsz = result[k].gsz + '(估)';
         }
         totalDayIncome = totalDayIncome.add(dayIncome);
         // totalmarketValue = totalmarketValue.add(marketValue);
