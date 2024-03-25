@@ -126,31 +126,31 @@ public class DepositEntity {
         String bigMarketValue = bigMarket.getNow();
         if (deposit == null) {
             depositMapper.save(DepositPO
-                    .builder()
-                    .date(LocalDate.now().toString())
-                    .fundDayIncome(fundTotalDayIncome)
-                    .stockDayIncome(stockTotalDayIncome)
-                    .totalDayIncome(totalDayIncome)
-                    .fundMarketValue(fundTotalMarketValue)
-                    .stockMarketValue(stockTotalMarketValue)
-                    .totalMarketValue(totalMarketValue)
-                    .bigMarketChangePercent(bigMarketChangePercent)
-                    .bigMarketValue(bigMarketValue)
-                    .build(), username);
+                .builder()
+                .date(LocalDate.now().toString())
+                .fundDayIncome(fundTotalDayIncome)
+                .stockDayIncome(stockTotalDayIncome)
+                .totalDayIncome(totalDayIncome)
+                .fundMarketValue(fundTotalMarketValue)
+                .stockMarketValue(stockTotalMarketValue)
+                .totalMarketValue(totalMarketValue)
+                .bigMarketChangePercent(bigMarketChangePercent)
+                .bigMarketValue(bigMarketValue)
+                .build(), username);
         } else {
             depositMapper.update(DepositPO
-                    .builder()
-                    .id(deposit.getId())
-                    .date(LocalDate.now().toString())
-                    .fundDayIncome(fundTotalDayIncome)
-                    .stockDayIncome(stockTotalDayIncome)
-                    .totalDayIncome(totalDayIncome)
-                    .fundMarketValue(fundTotalMarketValue)
-                    .stockMarketValue(stockTotalMarketValue)
-                    .totalMarketValue(totalMarketValue)
-                    .bigMarketChangePercent(bigMarketChangePercent)
-                    .bigMarketValue(bigMarketValue)
-                    .build(), username);
+                .builder()
+                .id(deposit.getId())
+                .date(LocalDate.now().toString())
+                .fundDayIncome(fundTotalDayIncome)
+                .stockDayIncome(stockTotalDayIncome)
+                .totalDayIncome(totalDayIncome)
+                .fundMarketValue(fundTotalMarketValue)
+                .stockMarketValue(stockTotalMarketValue)
+                .totalMarketValue(totalMarketValue)
+                .bigMarketChangePercent(bigMarketChangePercent)
+                .bigMarketValue(bigMarketValue)
+                .build(), username);
         }
     }
 
@@ -196,19 +196,20 @@ public class DepositEntity {
             log.info("fundNetDiagram : {}", fundNetDiagram);
             // 当日净值已出
             if (fundNetDiagram != null) {
-                Optional<FundNetDiagramResponse.DataItem> optionalCurrentDay = fundNetDiagram.getDatas().stream().filter(dataItem -> dataItem.getFSRQ().equals(currentDayDate)).findFirst();
+                Optional<FundNetDiagramResponse.DataItem> optionalCurrentDay = fundNetDiagram.getDatas().stream()
+                    .filter(dataItem -> dataItem.getFSRQ().equals(currentDayDate)).findFirst();
                 FundNetDiagramResponse.DataItem currentDayItem = optionalCurrentDay.get();
                 int currentIndex = fundNetDiagram.getDatas().indexOf(currentDayItem);
                 FundNetDiagramResponse.DataItem yesTodayItem = fundNetDiagram.getDatas().get(currentIndex - 1);
                 BigDecimal dayIncome = (new BigDecimal(currentDayItem.getDWJZ())
-                        .subtract(new BigDecimal(yesTodayItem.getDWJZ())).multiply(new BigDecimal(fund.getBonds())))
+                    .subtract(new BigDecimal(yesTodayItem.getDWJZ())).multiply(new BigDecimal(fund.getBonds())))
                         .setScale(2, BigDecimal.ROUND_HALF_UP);
                 fundTotalDayIncome = fundTotalDayIncome.add(dayIncome);
                 log.info("按照当日净值计算，基金： {} ,当日盈利： {}", fund.getFundName(), dayIncome.toString());
             } else {
                 BigDecimal dayIncome = (new BigDecimal(fund.getGszzl())
-                        .multiply(new BigDecimal(fund.getDwjz())).multiply(new BigDecimal(fund.getBonds()))
-                        .divide(new BigDecimal("100"))).setScale(2, BigDecimal.ROUND_HALF_UP);
+                    .multiply(new BigDecimal(fund.getDwjz())).multiply(new BigDecimal(fund.getBonds()))
+                    .divide(new BigDecimal("100"))).setScale(2, BigDecimal.ROUND_HALF_UP);
                 fundTotalDayIncome = fundTotalDayIncome.add(dayIncome);
                 log.info("按照估值计算，基金： {} ,当日盈利： {}", fund.getFundName(), dayIncome.toString());
             }
@@ -273,14 +274,15 @@ public class DepositEntity {
             log.info("fundNetDiagram : {}", fundNetDiagram);
             // 当日净值已出
             if (fundNetDiagram != null) {
-                Optional<FundNetDiagramResponse.DataItem> optionalCurrentDay = fundNetDiagram.getDatas().stream().filter(dataItem -> dataItem.getFSRQ().equals(currentDayDate)).findFirst();
+                Optional<FundNetDiagramResponse.DataItem> optionalCurrentDay = fundNetDiagram.getDatas().stream()
+                    .filter(dataItem -> dataItem.getFSRQ().equals(currentDayDate)).findFirst();
                 FundNetDiagramResponse.DataItem currentDayItem = optionalCurrentDay.get();
                 BigDecimal marketValue = (new BigDecimal(currentDayItem.getDWJZ())
-                        .multiply(new BigDecimal(fund.getBonds())).setScale(2, BigDecimal.ROUND_HALF_UP));
+                    .multiply(new BigDecimal(fund.getBonds())).setScale(2, BigDecimal.ROUND_HALF_UP));
                 fundTotalMarketValue = fundTotalMarketValue.add(marketValue);
             } else {
                 BigDecimal marketValue = (new BigDecimal(fund.getGsz())
-                        .multiply(new BigDecimal(fund.getBonds())).setScale(2, BigDecimal.ROUND_HALF_UP));
+                    .multiply(new BigDecimal(fund.getBonds())).setScale(2, BigDecimal.ROUND_HALF_UP));
                 fundTotalMarketValue = fundTotalMarketValue.add(marketValue);
             }
         }
@@ -325,13 +327,15 @@ public class DepositEntity {
         return false;
     }
 
-    private FundNetDiagramResponse getFundNetDiagramResponse(String fundCode, String currentDayDate){
+    private FundNetDiagramResponse getFundNetDiagramResponse(String fundCode, String currentDayDate) {
         List<FundJZPO> fundJZPOs = fundJZMapper.findResent5FundJZByCode(fundCode);
         Optional<FundJZPO> optional = fundJZPOs.stream().filter(dataItem -> dataItem.getFSRQ().equals(currentDayDate)).findFirst();
         FundNetDiagramResponse fundNetDiagram;
         if (optional.isPresent()) {
             fundNetDiagram = new FundNetDiagramResponse();
-            List<FundNetDiagramResponse.DataItem> datas = fundJZPOs.stream().map(item -> FundNetDiagramResponse.DataItem.builder().DWJZ(item.getDWJZ()).FSRQ(item.getFSRQ()).build()).collect(Collectors.toList());
+            List<FundNetDiagramResponse.DataItem> datas = fundJZPOs.stream()
+                .map(item -> FundNetDiagramResponse.DataItem.builder().DWJZ(item.getDWJZ()).FSRQ(item.getFSRQ()).build())
+                .collect(Collectors.toList());
             fundNetDiagram.setDatas(datas);
         } else {
             fundNetDiagram = cacheService.getFundNetDiagram(fundCode, currentDayDate);

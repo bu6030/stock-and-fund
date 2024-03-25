@@ -72,9 +72,10 @@ public class CacheService {
     @Cacheable(key = "'fund_net_diagram_'+#fundCode+'_'+#date", unless = "#result == null")
     public FundNetDiagramResponse getFundNetDiagram(String fundCode, String date) {
         FundNetDiagramResponse fundNetDiagram = eastMoneyRestClient.getFundNetDiagram(fundCode);
-        Optional<FundNetDiagramResponse.DataItem> optional = fundNetDiagram.getDatas().stream().filter(dataItem -> dataItem.getFSRQ().equals(date)).findFirst();
+        Optional<FundNetDiagramResponse.DataItem> optional = fundNetDiagram.getDatas().stream()
+            .filter(dataItem -> dataItem.getFSRQ().equals(date)).findFirst();
         if (optional.isPresent()) {
-           return fundNetDiagram;
+            return fundNetDiagram;
         }
         return null;
     }

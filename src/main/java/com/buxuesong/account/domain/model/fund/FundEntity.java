@@ -343,7 +343,8 @@ public class FundEntity {
                             }
                         }
                         List<FundJZPO> fundJZPOs = fundJZMapper.findResent5FundJZByCode(bean.getFundCode());
-                        Optional<FundJZPO> optional = fundJZPOs.stream().filter(item -> item.getFSRQ().equals(bean.getGztime().substring(0, 10))).findAny();
+                        Optional<FundJZPO> optional = fundJZPOs.stream()
+                            .filter(item -> item.getFSRQ().equals(bean.getGztime().substring(0, 10))).findAny();
                         // 当日净值已出
                         if (optional.isPresent()) {
                             FundJZPO currentDayFundJZPO = optional.get();
@@ -392,7 +393,8 @@ public class FundEntity {
                         }
                     }
                     List<FundJZPO> fundJZPOs = fundJZMapper.findResent5FundJZByCode(bean.getFundCode());
-                    Optional<FundJZPO> optional = fundJZPOs.stream().filter(item -> item.getFSRQ().equals(bean.getGztime().substring(0, 10))).findAny();
+                    Optional<FundJZPO> optional = fundJZPOs.stream()
+                        .filter(item -> item.getFSRQ().equals(bean.getGztime().substring(0, 10))).findAny();
                     // 当日净值已出
                     if (optional.isPresent()) {
                         FundJZPO currentDayFundJZPO = optional.get();
