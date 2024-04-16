@@ -14,4 +14,5 @@ import java.util.List;
 public class ChromeStockAndFund {
     private List stocks;
     private List funds;
+    private List dayIncomeHistorys;
 }
