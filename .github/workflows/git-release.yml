@@ -102,11 +102,11 @@ jobs:
       # checkout 代码到 Github Actions 运行容器中
       - uses: actions/checkout@v3
         # 向容器安装 Java 21，为 SpringBoot 提供运行环境
-      - name: Set up JDK 21
+      - name: Set up JDK 22
         uses: actions/setup-java@v3
         with:
-          java-version: '21'
-          distribution: 'adopt'
+          java-version: '22'
+#          distribution: 'adopt'
         # 获取 relase 分支，用于打包
       - name: Get Branch Name
         id: get_branch_name
