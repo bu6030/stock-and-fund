@@ -65,9 +65,9 @@ public class DepositEntity {
     public void depositAllUsers() {
         List<UserPO> users = userMapper.findAllUsers();
         // JAVA 旧版本线程池写法
-        ExecutorService executor = Executors.newFixedThreadPool(10);
+//        ExecutorService executor = Executors.newFixedThreadPool(10);
         // JAVA 21 新的虚拟线程写法，如果这个报错，修改为上面的
-//        ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
+        ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
         users.forEach(user -> {
             executor.submit(() -> {
                 log.info("任务" + Thread.currentThread().getName() + "开始执行");
