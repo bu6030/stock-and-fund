@@ -106,7 +106,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '22'
-#          distribution: 'adopt'
+          distribution: 'adopt'
         # 获取 relase 分支，用于打包
       - name: Get Branch Name
         id: get_branch_name
