@@ -4,6 +4,7 @@ import com.buxuesong.account.apis.model.request.AdviceRequest;
 import com.buxuesong.account.apis.model.response.ChromeStockAndFund;
 import com.buxuesong.account.apis.model.response.Response;
 import com.buxuesong.account.domain.model.advice.AdviceEntity;
+import com.buxuesong.account.domain.model.deposit.DepositEntity;
 import com.buxuesong.account.domain.model.fund.FundEntity;
 import com.buxuesong.account.domain.model.stock.StockEntity;
 import com.buxuesong.account.infrastructure.persistent.po.AdvicePO;
@@ -26,6 +27,9 @@ public class ChromeController {
 
     @Autowired
     private AdviceEntity adviceEntity;
+
+    @Autowired
+    private DepositEntity depositEntity;
 
     /**
      * 获取单个基金信息接口
@@ -55,7 +59,9 @@ public class ChromeController {
         List<String> fundListFromRedis = fundEntity.getFundList(null, "buxuesong");
         List<String> stockListFromRedis = stockEntity.getStockList(null, "buxuesong");
         return Response.builder().code("00000000").value(ChromeStockAndFund.builder().funds(fundEntity.getFundDetails(fundListFromRedis))
-            .stocks(stockEntity.getStockDetails(stockListFromRedis, "buxuesong")).build()).build();
+            .stocks(stockEntity.getStockDetails(stockListFromRedis, "buxuesong"))
+            .dayIncomeHistorys(depositEntity.getDepositList(null, null))
+            .build()).build();
     }
 
     @PostMapping(value = "/chrome/advice")
