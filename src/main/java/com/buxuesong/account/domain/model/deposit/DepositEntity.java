@@ -54,7 +54,6 @@ public class DepositEntity {
     private static Gson gson = new Gson();
 
     public DepositPO getDepositByDate(String date) {
-//        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         String username = UserUtils.getUsername();
         return depositMapper.findDepositByDate(date, username);
     }
@@ -82,7 +81,6 @@ public class DepositEntity {
      * 用户手动点击计算盈亏
      */
     public void deposit() {
-//        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         String username = UserUtils.getUsername();
         deposit(username);
     }
@@ -99,11 +97,6 @@ public class DepositEntity {
         }
 
         DepositPO deposit = depositMapper.findDepositByDate(date.toString(), username);
-//        if (deposit != null) {
-//            log.info("用户：{}, 已经存在当日盈利汇总： {}", username, deposit);
-//            return;
-//        }
-
         BigDecimal fundTotalDayIncome = depositFundDayIncome(username);
         BigDecimal stockTotalDayIncome = depositStockDayIncome(username);
         BigDecimal totalDayIncome = stockTotalDayIncome.add(fundTotalDayIncome);
@@ -156,22 +149,23 @@ public class DepositEntity {
 
     public void deleteDeposit() {
         LocalDate date = LocalDate.now();
-//        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         String username = UserUtils.getUsername();
         log.info("User : {} delete deposit date : {}", username, date);
         depositMapper.deleteDeposit(date.toString(), username);
     }
 
     public List<DepositPO> getDepositList(String beginDate, String endDate) {
-//        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         String username = UserUtils.getUsername();
+        return getDepositList(beginDate, endDate, username);
+    }
+
+    public List<DepositPO> getDepositList(String beginDate, String endDate, String username) {
         List<DepositPO> list = depositMapper.getDepositList(beginDate, endDate, username);
         log.info("User : {} get deposit list between {} and {} : {}", username, beginDate, endDate, list);
         return list;
     }
 
     public List<DepositPO> getDepositYearSummitList(String beginDate, String endDate) {
-//        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         String username = UserUtils.getUsername();
         List<DepositPO> list = depositMapper.getDepositYearSummitList(beginDate, endDate, username);
         log.info("User : {} get deposit year summit list between {} and {} : {}", username, beginDate, endDate, list);
@@ -179,7 +173,6 @@ public class DepositEntity {
     }
 
     public List<DepositPO> getDepositMonthSummitList(String beginDate, String endDate) {
-//        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         String username = UserUtils.getUsername();
         List<DepositPO> list = depositMapper.getDepositMonthSummitList(beginDate, endDate, username);
         log.info("User : {} get deposit month summit list between {} and {} : {}", username, beginDate, endDate, list);

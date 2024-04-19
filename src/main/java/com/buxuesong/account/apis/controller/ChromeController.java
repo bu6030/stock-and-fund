@@ -60,7 +60,7 @@ public class ChromeController {
         List<String> stockListFromRedis = stockEntity.getStockList(null, "buxuesong");
         return Response.builder().code("00000000").value(ChromeStockAndFund.builder().funds(fundEntity.getFundDetails(fundListFromRedis))
             .stocks(stockEntity.getStockDetails(stockListFromRedis, "buxuesong"))
-            .dayIncomeHistorys(depositEntity.getDepositList(null, null))
+            .dayIncomeHistorys(depositEntity.getDepositList(null, null, "buxuesong"))
             .build()).build();
     }
 
