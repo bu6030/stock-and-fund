@@ -458,7 +458,6 @@ public class StockEntity {
 
     public String searchStockByName(String name) {
 //        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        String username = UserUtils.getUsername();
         String result = gTimgRestClient.getGetStockCodeByName(name);
         // 如果都是数字说明可能是可转债
         if ("v_hint=\"N\";".equals(result) && NumberUtils.isNumeric(name)) {

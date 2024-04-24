@@ -90,10 +90,20 @@ public class ChromeController {
         return Response.builder().code("00000000").value(adviceEntity.deleteAdvice(adviceRequest)).build();
     }
 
-    @GetMapping(value = "/chrome/stock")
+    @GetMapping(value = "/chrome/stocks")
     public Response getStocks(@RequestParam(value = "stockArr", required = false) String stockArr) throws Exception {
         log.info("getStocks stockArr: {}", stockArr);
         List<String> stocks = Arrays.stream(stockArr.split(";")).toList();
         return Response.builder().code("00000000").value(stockEntity.getStockDetails(stocks, null)).build();
+    }
+
+    /**
+     * 通过名称搜索股票接口
+     *
+     * @return
+     */
+    @GetMapping(value = "/chrome/stock/search")
+    public Response searchStockByName(@RequestParam(value = "name", required = false) String name) throws Exception {
+        return Response.builder().code("00000000").value(stockEntity.searchStockByName(name)).build();
     }
 }
