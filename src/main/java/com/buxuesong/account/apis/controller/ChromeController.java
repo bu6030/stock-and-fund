@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -87,5 +88,12 @@ public class ChromeController {
     public Response deleteAdvice(@RequestBody AdviceRequest adviceRequest) throws Exception {
         log.info("deleteAdvice: {}", adviceRequest);
         return Response.builder().code("00000000").value(adviceEntity.deleteAdvice(adviceRequest)).build();
+    }
+
+    @GetMapping(value = "/chrome/stock")
+    public Response getStocks(@RequestParam(value = "stockArr", required = false) String stockArr) throws Exception {
+        log.info("getStocks stockArr: {}", stockArr);
+        List<String> stocks = Arrays.stream(stockArr.split(";")).toList();
+        return Response.builder().code("00000000").value(stockEntity.getStockDetails(stocks, null)).build();
     }
 }
