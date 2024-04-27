@@ -106,4 +106,14 @@ public class ChromeController {
     public Response searchStockByName(@RequestParam(value = "name", required = false) String name) throws Exception {
         return Response.builder().code("00000000").value(stockEntity.searchStockByName(name)).build();
     }
+
+    /**
+     * 通过名称搜索基金接口
+     *
+     * @return
+     */
+    @GetMapping(value = "/chrome/fund/search")
+    public Response searchFundByName(@RequestParam(value = "name", required = false) String name) throws Exception {
+        return Response.builder().code("00000000").value(fundEntity.searchFundByName(name)).build();
+    }
 }

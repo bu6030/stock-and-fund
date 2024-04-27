@@ -499,8 +499,6 @@ public class FundEntity {
 
     public List<SearchFundResult> searchFundByName(String name) {
         List<SearchFundResult> result = new ArrayList<>();
-//        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        String username = UserUtils.getUsername();
         String funds = cacheService.searchAllFundsFromEastMoney();
         funds = funds.replace("var r = ", "").replace(";", "");
         JSONArray jsonArray = JSONArray.parseArray(funds);
