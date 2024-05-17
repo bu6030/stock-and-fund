@@ -15,7 +15,9 @@ public class FundHisPO {
     private String code;
     private String name;
     private BigDecimal costPrise;
+    private BigDecimal costPriseChange;
     private String bonds;
+    private String bondsChange;
     private String app;
     private boolean hide;
     private String createDate;

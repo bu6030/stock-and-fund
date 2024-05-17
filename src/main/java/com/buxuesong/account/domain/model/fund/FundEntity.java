@@ -19,9 +19,6 @@ import com.google.gson.annotations.SerializedName;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -488,12 +485,25 @@ public class FundEntity {
             .code(fundPO.getCode())
             .createDate(DateTimeUtils.getLocalDateTime())
             .bonds(fundPO.getBonds())
+            .bondsChange("0")
             .costPrise(fundPO.getCostPrise())
+            .costPriseChange(new BigDecimal("0"))
             .hide(fundPO.isHide())
             .name(fundPO.getName())
             .build();
         fundHis.add(0, fundHisPO);
         log.info("APP: {} ,数据库中的基金历史为：{}", app, fundHis);
+        FundHisPO next = null;
+        for (int i = 0; i < fundHis.size(); i++) {
+            FundHisPO current = fundHis.get(i);
+            if (i + 1 < fundHis.size()) {
+                next = fundHis.get(i + 1);
+            }
+            if (next != null) {
+                next.setBondsChange((new BigDecimal(current.getBonds()).subtract(new BigDecimal(next.getBonds()))).toString());
+                next.setCostPriseChange(current.getCostPrise().subtract(next.getCostPrise()));
+            }
+        }
         return fundHis;
     }
 

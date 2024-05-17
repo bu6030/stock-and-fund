@@ -509,6 +509,17 @@ public class StockEntity {
             .build();
         stockHis.add(0, stockHisPO);
         log.info("APP: {} ,数据库中的股票历史为：{}", app, stockHis);
+        StockHisPO next = null;
+        for (int i = 0; i < stockHis.size(); i++) {
+            StockHisPO current = stockHis.get(i);
+            if (i + 1 < stockHis.size()) {
+                next = stockHis.get(i + 1);
+            }
+            if (next != null) {
+                next.setBondsChange(current.getBonds() - next.getBonds());
+                next.setCostPriseChange(current.getCostPrise().subtract(next.getCostPrise()));
+            }
+        }
         return stockHis;
     }
 
