@@ -17,10 +17,6 @@ import com.buxuesong.account.infrastructure.persistent.repository.StockMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -494,7 +490,6 @@ public class StockEntity {
     }
 
     public List<StockHisPO> getStockHisList(String app, String code, String beginDate, String endDate) {
-//        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         String username = UserUtils.getUsername();
         List<StockHisPO> stockHis = stockHisMapper.findAllStockHis(app, code, beginDate, endDate, username);
         StockPO stockPO = stockMapper.findStockByCode(code, username);
@@ -503,7 +498,9 @@ public class StockEntity {
             .code(stockPO.getCode())
             .createDate(DateTimeUtils.getLocalDateTime())
             .bonds(stockPO.getBonds())
+            .bondsChange(0)
             .costPrise(stockPO.getCostPrise())
+            .costPriseChange(new BigDecimal("0"))
             .hide(stockPO.isHide())
             .name(stockPO.getName())
             .build();
@@ -524,7 +521,6 @@ public class StockEntity {
     }
 
     public List<BuyOrSellStockPO> getBuyOrSellStocks(String code, String beginDate, String endDate) {
-//        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         String username = UserUtils.getUsername();
         List<BuyOrSellStockPO> buyOrSellStockPOS = buyOrSellMapper.findAllBuyOrSellStocks(code, beginDate, endDate, username);
         log.info("数据库中的买卖历史为：{}", buyOrSellStockPOS);
@@ -532,7 +528,6 @@ public class StockEntity {
     }
 
     public void buyOrSellStock(BuyOrSellStockRequest buyOrSellStockRequest) {
-//        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         String username = UserUtils.getUsername();
         StockPO stockPO = stockMapper.findStockByCode(buyOrSellStockRequest.getCode(), username);
         List<String> list = new ArrayList<>();
