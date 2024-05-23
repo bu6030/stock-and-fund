@@ -412,8 +412,10 @@ function getFundHistory(code){
             for(var k in result) {
                 var costPrise = new BigDecimal(result[k].costPrise + "");
                 var costPriseChange = new BigDecimal(result[k].costPriseChange + "");
+                costPriseChange = costPriseChange > (new BigDecimal("0"))? "+" + costPriseChange : costPriseChange;
                 var bonds = new BigDecimal(result[k].bonds + "");
                 var bondsChange = new BigDecimal(result[k].bondsChange + "");
+                bondsChange = bondsChange > (new BigDecimal("0")) ? "+" + bondsChange : bondsChange;
                 var marketValue = parseFloat(costPrise.multiply(bonds)).toFixed(2);
                 str += "<tr><td>" + (parseInt(k) + 1)
                     + "</td><td>" + result[k].name
@@ -452,8 +454,10 @@ function getStockHistory(code) {
                 $("#buy-or-sell-stock-name").val(result[k].name);
                 var costPrise = new BigDecimal(result[k].costPrise + "");
                 var costPriseChange = new BigDecimal(result[k].costPriseChange + "");
+                costPriseChange = costPriseChange > (new BigDecimal("0"))? "+" + costPriseChange : costPriseChange;
                 var bonds = new BigDecimal(result[k].bonds + "");
                 var bondsChange = new BigDecimal(result[k].bondsChange + "");
+                bondsChange = bondsChange > (new BigDecimal("0")) ? "+" + bondsChange : bondsChange;
                 var marketValue = parseFloat(costPrise.multiply(bonds)).toFixed(2);
                 str += "<tr><td>" + (parseInt(k) + 1)
                     + "</td><td>" + result[k].name
