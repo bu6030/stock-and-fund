@@ -307,12 +307,16 @@ function getFundHistory(code){
             var str = "";
             for(var k in result) {
                 var costPrise = new BigDecimal(result[k].costPrise + "");
+                var costPriseChange = new BigDecimal(result[k].costPriseChange + "");
                 var bonds = new BigDecimal(result[k].bonds + "");
+                var bondsChange = new BigDecimal(result[k].bondsChange + "");
                 var marketValue = parseFloat(costPrise.multiply(bonds)).toFixed(2);
                 str += "<tr><td>" + (parseInt(k) + 1)
                     + "</td><td>" + result[k].name
                     + "</td><td>" + costPrise
+                    + "</td><td>" + costPriseChange
                     + "</td><td>" + bonds
+                    + "</td><td>" + bondsChange
                     + "</td><td>" + marketValue
                     + "</td><td>" + result[k].createDate
                     +"</td></tr>";
