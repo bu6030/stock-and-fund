@@ -325,7 +325,7 @@ function getFundHistory(code){
                     bondsChangeStyle = "style=\"color:#3e8f3e\"";
                 }
                 var marketValue = parseFloat(costPrise.multiply(bonds)).toFixed(2);
-                str += "<tr><td>" + (parseInt(k) + 1)
+                str += "<tr class='my-history-tr'><td>" + (parseInt(k) + 1)
                     + "</td><td>" + result[k].name
                     + "</td><td>" + costPrise
                     + "</td><td "+ costPriseChangeStyle +">" + costPriseChange

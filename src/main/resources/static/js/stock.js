@@ -449,7 +449,7 @@ function getStockHistory(code) {
                     bondsChangeStyle = "style=\"color:#3e8f3e\"";
                 }
                 var marketValue = parseFloat(costPrise.multiply(bonds)).toFixed(2);
-                str += "<tr><td>" + (parseInt(k) + 1)
+                str += "<tr class='my-history-tr'><td>" + (parseInt(k) + 1)
                     + "</td><td>" + result[k].name
                     + "</td><td>" + costPrise
                     + "</td><td "+ costPriseChangeStyle +">" + costPriseChange
@@ -484,12 +484,20 @@ function showBuyOrSell() {
             var result = data.value;
             var str = "";
             for(var k in result) {
-                let type = result[k].type == "1" ? "买" : "卖";
+                let type = '';
+                let style = '';
+                if (result[k].type == "1") {
+                    type = "买";
+                    style = "class=\"my-buy-tr\"";
+                } else {
+                    type = "卖";
+                    style = "class=\"my-sell-tr\"";
+                }
                 var cost = new BigDecimal(result[k].cost + "");
                 var bonds = new BigDecimal(result[k].bonds + "");
                 var price = new BigDecimal(result[k].price + "");
                 var totalPrice = parseFloat(price.multiply(bonds).subtract(cost)).toFixed(2);
-                str += "<tr><td>" + name
+                str += "<tr " + style + "><td>" + name
                     + "</td><td>" + type
                     + "</td><td>" + price
                     + "</td><td>" + cost

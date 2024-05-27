@@ -315,3 +315,17 @@ form .form-group:last-child{padding-bottom:0;}
 .my-form-input {
   height: 30px;
 }
+
+.my-history-tr {
+    font-size: 12px;
+}
+
+.my-buy-tr {
+    font-size: 12px;
+    color:#c12e2a;
+}
+
+.my-sell-tr {
+    font-size: 12px;
+    color:#3e8f3e;
+}

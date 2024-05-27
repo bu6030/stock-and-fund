@@ -85,7 +85,7 @@ public class StockController {
     public Response buyOrSellStock(@RequestParam(value = "code", required = false) String code,
         @RequestParam(value = "beginDate", required = false) String beginDate,
         @RequestParam(value = "endDate", required = false) String endDate) throws Exception {
-        Thread.sleep(1000);
+        Thread.sleep(500);
         List<BuyOrSellStockPO> buyOrSellStockPOS = stockEntity.getBuyOrSellStocks(code, beginDate, endDate);
         return Response.builder().value(buyOrSellStockPOS).code("00000000").build();
     }
