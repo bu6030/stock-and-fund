@@ -431,12 +431,30 @@ function getStockHistory(code) {
             for(var k in result) {
                 $("#buy-or-sell-stock-name").val(result[k].name);
                 var costPrise = new BigDecimal(result[k].costPrise + "");
+                var costPriseChange = new BigDecimal(result[k].costPriseChange + "");
+                let costPriseChangeStyle = "";
+                if (costPriseChange > (new BigDecimal("0"))) {
+                    costPriseChange = "+" + costPriseChange;
+                    costPriseChangeStyle = "style=\"color:#c12e2a\"";
+                } else if (costPriseChange < (new BigDecimal("0"))) {
+                    costPriseChangeStyle = "style=\"color:#3e8f3e\"";
+                }
                 var bonds = new BigDecimal(result[k].bonds + "");
+                var bondsChange = new BigDecimal(result[k].bondsChange + "");
+                let bondsChangeStyle = "";
+                if (bondsChange > (new BigDecimal("0"))) {
+                    bondsChange = "+" + bondsChange;
+                    bondsChangeStyle = "style=\"color:#c12e2a\"";
+                } else if (bondsChange < (new BigDecimal("0"))) {
+                    bondsChangeStyle = "style=\"color:#3e8f3e\"";
+                }
                 var marketValue = parseFloat(costPrise.multiply(bonds)).toFixed(2);
                 str += "<tr><td>" + (parseInt(k) + 1)
                     + "</td><td>" + result[k].name
                     + "</td><td>" + costPrise
+                    + "</td><td "+ costPriseChangeStyle +">" + costPriseChange
                     + "</td><td>" + bonds
+                    + "</td><td "+ bondsChangeStyle +">" + bondsChange
                     + "</td><td>" + marketValue
                     + "</td><td>" + result[k].createDate
                     +"</td></tr>";
