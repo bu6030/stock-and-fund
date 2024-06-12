@@ -80,6 +80,7 @@ public class MailUtils {
         // Start to send
         Transport.send(message);
     }
+
     /**
      * Send warning email to BFF BE
      *

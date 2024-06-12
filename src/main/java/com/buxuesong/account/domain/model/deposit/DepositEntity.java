@@ -160,30 +160,33 @@ public class DepositEntity {
             DecimalFormat decimalFormat = new DecimalFormat("#.##");
             bigMarketValue = decimalFormat.format(Double.parseDouble(bigMarketValue));
             if (Float.parseFloat(bigMarketChangePercent) >= 0) {
-                bigMarketContent = "<span " + redColorStyle + ">" + bigMarketValue + "(+"+ bigMarketChangePercent + ")</span>";
+                bigMarketContent = "<span " + redColorStyle + ">" + bigMarketValue + "（" + bigMarketChangePercent + "%）</span>";
             } else {
-                bigMarketContent = "<span " + greenColorStyle + ">" + bigMarketValue + "("+ bigMarketChangePercent + ")</span>";
+                bigMarketContent = "<span " + greenColorStyle + ">" + bigMarketValue + "（" + bigMarketChangePercent + "%）</span>";
             }
-            if (fundTotalDayIncome.compareTo(BigDecimal.ZERO) >= 0){
+            if (fundTotalDayIncome.compareTo(BigDecimal.ZERO) >= 0) {
                 fundTotalDayIncomeContent = "<span " + redColorStyle + ">" + fundTotalDayIncome + "</span>";
             } else {
                 fundTotalDayIncomeContent = "<span " + greenColorStyle + ">" + fundTotalDayIncome + "</span>";
             }
-            if (stockTotalDayIncome.compareTo(BigDecimal.ZERO) >= 0){
+            if (stockTotalDayIncome.compareTo(BigDecimal.ZERO) >= 0) {
                 stockTotalDayIncomeContent = "<span " + redColorStyle + ">" + stockTotalDayIncome + "</span>";
             } else {
                 stockTotalDayIncomeContent = "<span " + greenColorStyle + ">" + stockTotalDayIncome + "</span>";
             }
-            if (totalDayIncome.compareTo(BigDecimal.ZERO) >= 0){
+            if (totalDayIncome.compareTo(BigDecimal.ZERO) >= 0) {
                 totalDayIncomeContent = "<span " + redColorStyle + ">" + totalDayIncome + "</span>";
             } else {
                 totalDayIncomeContent = "<span " + greenColorStyle + ">" + totalDayIncome + "</span>";
             }
-            String mailContent = "日期：" + LocalDate.now() + "，用户：" + username + "，"
-                    + "基金收益：" + fundTotalDayIncomeContent + "，股票收益：" + stockTotalDayIncomeContent + "，总收益：" + totalDayIncomeContent
-                    +  "，当日大盘：" + bigMarketContent;
+            String mailContent = "日期：" + LocalDate.now()
+                + "<br/>用户：" + username
+                + "<br/>当日大盘：" + bigMarketContent
+                + "<br/>基金收益：" + fundTotalDayIncomeContent
+                + "<br/>股票收益：" + stockTotalDayIncomeContent
+                + "<br/>总收益：" + totalDayIncomeContent;
             mailUtils.sendMailNoArchieve("当日盈利", mailContent);
-        } catch(Exception e) {
+        } catch (Exception e) {
             log.error("Send deposit mail error, ", e);
         }
     }
