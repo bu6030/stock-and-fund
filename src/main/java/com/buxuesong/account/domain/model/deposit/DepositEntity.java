@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -149,9 +150,14 @@ public class DepositEntity {
                 .build(), username);
         }
         try {
+            if (Float.parseFloat(bigMarketChangePercent) > 0) {
+                bigMarketChangePercent = "+" + bigMarketChangePercent;
+            }
+            DecimalFormat decimalFormat = new DecimalFormat("#.##");
+            bigMarketValue = decimalFormat.format(Double.parseDouble(bigMarketValue));
             String mailContent = "日期：" + LocalDate.now() + " 用户：" + username + "当日盈利统计完毕，"
                     + "基金收益：" + fundTotalDayIncome + "，股票收益：" + stockTotalDayIncome + "，总收益：" + totalDayIncome
-                    +  "，当日大盘：" + bigMarketValue + "(" + bigMarketChangePercent + ")。";
+                    +  "，当日大盘：" + bigMarketValue + "(" + bigMarketChangePercent + "%)。";
             mailUtils.sendMailNoArchieve("当日盈利", mailContent);
         } catch(Exception e) {
             log.error("Send deposit mail error, ", e);
