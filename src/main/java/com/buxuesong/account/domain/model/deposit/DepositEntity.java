@@ -150,14 +150,38 @@ public class DepositEntity {
                 .build(), username);
         }
         try {
-            if (Float.parseFloat(bigMarketChangePercent) > 0) {
-                bigMarketChangePercent = "+" + bigMarketChangePercent;
-            }
+            // 设置红色和绿色的颜色格式
+            String redColorStyle = "style=\"color: red\"";
+            String greenColorStyle = "style=\"color: green\"";
+            String bigMarketContent = "";
+            String fundTotalDayIncomeContent = "";
+            String stockTotalDayIncomeContent = "";
+            String totalDayIncomeContent = "";
             DecimalFormat decimalFormat = new DecimalFormat("#.##");
             bigMarketValue = decimalFormat.format(Double.parseDouble(bigMarketValue));
-            String mailContent = "日期：" + LocalDate.now() + " 用户：" + username + "当日盈利统计完毕，"
-                    + "基金收益：" + fundTotalDayIncome + "，股票收益：" + stockTotalDayIncome + "，总收益：" + totalDayIncome
-                    +  "，当日大盘：" + bigMarketValue + "(" + bigMarketChangePercent + "%)。";
+            if (Float.parseFloat(bigMarketChangePercent) >= 0) {
+                bigMarketContent = "<span " + redColorStyle + ">" + bigMarketValue + "(+"+ bigMarketChangePercent + ")</span>";
+            } else {
+                bigMarketContent = "<span " + greenColorStyle + ">" + bigMarketValue + "("+ bigMarketChangePercent + ")</span>";
+            }
+            if (fundTotalDayIncome.compareTo(BigDecimal.ZERO) >= 0){
+                fundTotalDayIncomeContent = "<span " + redColorStyle + ">" + fundTotalDayIncome + "</span>";
+            } else {
+                fundTotalDayIncomeContent = "<span " + greenColorStyle + ">" + fundTotalDayIncome + "</span>";
+            }
+            if (stockTotalDayIncome.compareTo(BigDecimal.ZERO) >= 0){
+                stockTotalDayIncomeContent = "<span " + redColorStyle + ">" + stockTotalDayIncome + "</span>";
+            } else {
+                stockTotalDayIncomeContent = "<span " + greenColorStyle + ">" + stockTotalDayIncome + "</span>";
+            }
+            if (totalDayIncome.compareTo(BigDecimal.ZERO) >= 0){
+                totalDayIncomeContent = "<span " + redColorStyle + ">" + totalDayIncome + "</span>";
+            } else {
+                totalDayIncomeContent = "<span " + greenColorStyle + ">" + totalDayIncome + "</span>";
+            }
+            String mailContent = "日期：" + LocalDate.now() + "，用户：" + username + "，"
+                    + "基金收益：" + fundTotalDayIncomeContent + "，股票收益：" + stockTotalDayIncomeContent + "，总收益：" + totalDayIncomeContent
+                    +  "，当日大盘：" + bigMarketContent;
             mailUtils.sendMailNoArchieve("当日盈利", mailContent);
         } catch(Exception e) {
             log.error("Send deposit mail error, ", e);
