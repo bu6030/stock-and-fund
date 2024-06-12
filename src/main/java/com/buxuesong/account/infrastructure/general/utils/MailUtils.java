@@ -53,6 +53,34 @@ public class MailUtils {
     }
 
     /**
+     * Common send email
+     *
+     * @param subject
+     * @param content
+     * @throws Exception
+     */
+    public void sendMailNoArchieve(String subject, String content) throws Exception {
+        MimeMessage message = createMail();
+        BodyPart messageBodyPart = new MimeBodyPart();
+        Multipart multipart = new MimeMultipart();
+        // Config the sender
+        InternetAddress form = new InternetAddress(mailConfig.getUsername());
+        message.setFrom(form);
+        // 配置邮件
+        InternetAddress[] iaToList = InternetAddress.parse(mailConfig.getToAddress());
+        message.setRecipients(Message.RecipientType.TO, iaToList);
+        message.setSentDate(new Date());
+        message.setSubject(subject);
+        message.setText(content.toString());
+        // 设置邮件内容为html
+        messageBodyPart.setContent(content.toString(), "text/html;charset=utf-8");
+        multipart.addBodyPart(messageBodyPart);
+
+        message.setContent(multipart);
+        // Start to send
+        Transport.send(message);
+    }
+    /**
      * Send warning email to BFF BE
      *
      * @param subject

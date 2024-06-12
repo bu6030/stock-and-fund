@@ -7,6 +7,7 @@ import com.buxuesong.account.domain.model.fund.FundEntity;
 import com.buxuesong.account.domain.model.stock.StockEntity;
 import com.buxuesong.account.infrastructure.adapter.rest.response.FundNetDiagramResponse;
 import com.buxuesong.account.infrastructure.adapter.rest.response.TradingDateResponse;
+import com.buxuesong.account.infrastructure.general.utils.MailUtils;
 import com.buxuesong.account.infrastructure.general.utils.UserUtils;
 import com.buxuesong.account.infrastructure.persistent.po.*;
 import com.buxuesong.account.infrastructure.persistent.repository.DepositMapper;
@@ -50,6 +51,8 @@ public class DepositEntity {
     private OpenPersistentMonthMapper openPersistentMonthMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private MailUtils mailUtils;
 
     private static Gson gson = new Gson();
 
@@ -144,6 +147,14 @@ public class DepositEntity {
                 .bigMarketChangePercent(bigMarketChangePercent)
                 .bigMarketValue(bigMarketValue)
                 .build(), username);
+        }
+        try {
+            String mailContent = "日期：" + LocalDate.now() + " 用户：" + username + "当日盈利统计完毕，"
+                    + "基金收益：" + fundTotalDayIncome + "，股票收益：" + stockTotalDayIncome + "，总收益：" + totalDayIncome
+                    +  "，当日大盘：" + bigMarketValue + "(" + bigMarketChangePercent + ")。";
+            mailUtils.sendMailNoArchieve("当日盈利", mailContent);
+        } catch(Exception e) {
+            log.error("Send deposit mail error, ", e);
         }
     }
 
