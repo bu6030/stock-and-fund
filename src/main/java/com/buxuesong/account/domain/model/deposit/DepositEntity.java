@@ -202,13 +202,13 @@ public class DepositEntity {
             List<DepositItem> stockDepositItems = stockDepositResult.depositItems;
             for (DepositItem item : stockDepositItems) {
                 String style = item.dayIncome().compareTo(BigDecimal.ZERO) >= 0 ? redColorStyle : greenColorStyle;
-                stockItemContent += String.format("%s<br/>当日盈利:<span %s>  %s</span>, 市值:  %s%n<br/>",
+                stockItemContent += String.format("%s<br/>当日盈利:<span %s>    %s</span>    市值:    %s%n<br/>",
                     item.name(), style, item.dayIncome(), item.marketValue());
             }
             List<DepositItem> fundDepositItems = fundDepositResult.depositItems;
             for (DepositItem item : fundDepositItems) {
                 String style = item.dayIncome().compareTo(BigDecimal.ZERO) >= 0 ? redColorStyle : greenColorStyle;
-                fundItemContent += String.format("%s<br/>当日盈利:<span %s>  %s</span>, 市值:  %s%n<br/>",
+                fundItemContent += String.format("%s<br/>当日盈利:<span %s>    %s</span>    市值:    %s%n<br/>",
                     item.name(), style, item.dayIncome(), item.marketValue());
             }
 
@@ -218,8 +218,8 @@ public class DepositEntity {
                 + "<br/>基金收益：" + fundTotalDayIncomeContent
                 + "<br/>股票收益：" + stockTotalDayIncomeContent
                 + "<br/>总收益：" + totalDayIncomeContent
-                + "<br/>股票明细：<br/><br/>" + stockItemContent
-                + "基金明细：<br/><br/>" + fundItemContent;
+                + "<br/><br/>股票明细：<br/><br/>" + stockItemContent
+                + "<br/>基金明细：<br/><br/>" + fundItemContent;
             mailUtils.sendMailNoArchieve("当日盈利", mailContent);
         } catch (Exception e) {
             log.error("Send deposit mail error, ", e);
