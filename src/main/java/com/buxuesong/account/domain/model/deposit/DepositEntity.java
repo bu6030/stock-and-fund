@@ -22,8 +22,11 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -79,9 +82,9 @@ public class DepositEntity {
         ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
         users.forEach(user -> {
             executor.submit(() -> {
-                log.info("任务" + Thread.currentThread().getName() + "开始执行");
+                log.info("任务 {} 开始执行", Thread.currentThread().getName());
                 deposit(user.getUsername());
-                log.info("任务" + Thread.currentThread().getName() + "执行完成");
+                log.info("任务 {} 执行完成", Thread.currentThread().getName());
             });
         });
         executor.shutdown();
@@ -177,18 +180,18 @@ public class DepositEntity {
             String bigMarketContent = Float.parseFloat(bigMarketChangePercent) >= 0
                     ? String.format("<span style=\"%s\">%s（%s%%）</span>", redColorStyle, bigMarketValueFormatted, bigMarketChangePercent)
                     : String.format("<span style=\"%s\">%s（%s%%）</span>", greenColorStyle, bigMarketValueFormatted, bigMarketChangePercent);
-
+            BigDecimal fundTotalDayIncomePercent = fundTotalDayIncome.divide(fundTotalMarketValue.add(fundTotalDayIncome), RoundingMode.HALF_UP);
             String fundTotalDayIncomeContent = fundTotalDayIncome.compareTo(BigDecimal.ZERO) >= 0
-                    ? String.format("<span style=\"%s\">%s</span>", redColorStyle, fundTotalDayIncome)
-                    : String.format("<span style=\"%s\">%s</span>", greenColorStyle, fundTotalDayIncome);
-
+                    ? String.format("<span style=\"%s\">%s（%s%%）</span>", redColorStyle, fundTotalDayIncome, fundTotalDayIncomePercent)
+                    : String.format("<span style=\"%s\">%s（%s%%）</span>", greenColorStyle, fundTotalDayIncome, fundTotalDayIncomePercent);
+            BigDecimal stockTotalDayIncomePercent = stockTotalDayIncome.divide(stockTotalMarketValue.add(stockTotalDayIncome), RoundingMode.HALF_UP);
             String stockTotalDayIncomeContent = stockTotalDayIncome.compareTo(BigDecimal.ZERO) >= 0
-                    ? String.format("<span style=\"%s\">%s</span>", redColorStyle, stockTotalDayIncome)
-                    : String.format("<span style=\"%s\">%s</span>", greenColorStyle, stockTotalDayIncome);
-
+                    ? String.format("<span style=\"%s\">%s（%s%%）</span>", redColorStyle, stockTotalDayIncome, stockTotalDayIncomePercent)
+                    : String.format("<span style=\"%s\">%s（%s%%）</span>", greenColorStyle, stockTotalDayIncome, stockTotalDayIncomePercent);
+            BigDecimal totalDayIncomePercent = totalDayIncome.divide(totalMarketValue.add(totalDayIncome), RoundingMode.HALF_UP);
             String totalDayIncomeContent = totalDayIncome.compareTo(BigDecimal.ZERO) >= 0
-                    ? String.format("<span style=\"%s\">%s</span>", redColorStyle, totalDayIncome)
-                    : String.format("<span style=\"%s\">%s</span>", greenColorStyle, totalDayIncome);
+                    ? String.format("<span style=\"%s\">%s（%s%%）</span>", redColorStyle, totalDayIncome, totalDayIncomePercent)
+                    : String.format("<span style=\"%s\">%s（%s%%）</span>", greenColorStyle, totalDayIncome, totalDayIncomePercent);
 
             StringBuilder stockItemContent = new StringBuilder();
             List<DepositItem> stockDepositItems = stockDepositResult.depositItems;
@@ -198,6 +201,9 @@ public class DepositEntity {
                         "<tr><td>%s</td><td><span style=\"%s\">%s</span></td><td>%s</td></tr>",
                         item.name(), style, item.dayIncome(), item.marketValue()));
             }
+            stockItemContent.append(String.format(
+                    "<tr><td>%s</td><td><span>%s</span></td><td>%s</td></tr>",
+                    "合计", stockTotalDayIncome, stockTotalMarketValue));
 
             StringBuilder fundItemContent = new StringBuilder();
             List<DepositItem> fundDepositItems = fundDepositResult.depositItems;
@@ -207,6 +213,9 @@ public class DepositEntity {
                         "<tr><td>%s</td><td><span style=\"%s\">%s</span></td><td>%s</td></tr>",
                         item.name(), style, item.dayIncome(), item.marketValue()));
             }
+            fundItemContent.append(String.format(
+                    "<tr><td>%s</td><td><span>%s</span></td><td>%s</td></tr>",
+                    "合计", fundTotalDayIncome, fundTotalMarketValue));
 
             String mailContent = String.format(
                     "<html>" +
@@ -241,7 +250,7 @@ public class DepositEntity {
                     LocalDate.now(), username, bigMarketContent, fundTotalDayIncomeContent,
                     stockTotalDayIncomeContent, totalDayIncomeContent, stockItemContent.toString(), fundItemContent.toString()
             );
-            mailUtils.sendMailNoArchieve("当日盈利", mailContent);
+            mailUtils.sendMailNoArchieve("每日收益报告" + LocalDateTime.now().truncatedTo(ChronoUnit.HOURS), mailContent);
         } catch (Exception e) {
             log.error("Send deposit mail error, ", e);
         }
@@ -326,37 +335,37 @@ public class DepositEntity {
         return new DepositResult(fundTotalDayIncome, fundTotalMarketValue, depositItems);
     }
 
-    private BigDecimal depositFundDayIncome(String username) {
-        List<String> fundListFrom = fundEntity.getFundList(null, username);
-        List<FundEntity> funds = fundEntity.getFundDetails(fundListFrom);
-        BigDecimal fundTotalDayIncome = new BigDecimal("0");
-        for (FundEntity fund : funds) {
-            String currentDayDate = LocalDate.now().toString();
-            FundNetDiagramResponse fundNetDiagram = getFundNetDiagramResponse(fund.getFundCode(), currentDayDate);
-            log.info("fundNetDiagram : {}", fundNetDiagram);
-            // 当日净值已出
-            if (fundNetDiagram != null) {
-                Optional<FundNetDiagramResponse.DataItem> optionalCurrentDay = fundNetDiagram.getDatas().stream()
-                    .filter(dataItem -> dataItem.getFSRQ().equals(currentDayDate)).findFirst();
-                FundNetDiagramResponse.DataItem currentDayItem = optionalCurrentDay.get();
-                int currentIndex = fundNetDiagram.getDatas().indexOf(currentDayItem);
-                FundNetDiagramResponse.DataItem yesTodayItem = fundNetDiagram.getDatas().get(currentIndex - 1);
-                BigDecimal dayIncome = (new BigDecimal(currentDayItem.getDWJZ())
-                    .subtract(new BigDecimal(yesTodayItem.getDWJZ())).multiply(new BigDecimal(fund.getBonds())))
-                        .setScale(2, BigDecimal.ROUND_HALF_UP);
-                fundTotalDayIncome = fundTotalDayIncome.add(dayIncome);
-                log.info("按照当日净值计算，基金： {} ,当日盈利： {}", fund.getFundName(), dayIncome.toString());
-            } else {
-                BigDecimal dayIncome = (new BigDecimal(fund.getGszzl())
-                    .multiply(new BigDecimal(fund.getDwjz())).multiply(new BigDecimal(fund.getBonds()))
-                    .divide(new BigDecimal("100"))).setScale(2, BigDecimal.ROUND_HALF_UP);
-                fundTotalDayIncome = fundTotalDayIncome.add(dayIncome);
-                log.info("按照估值计算，基金： {} ,当日盈利： {}", fund.getFundName(), dayIncome.toString());
-            }
-        }
-        log.info("基金当日盈利: {}", fundTotalDayIncome);
-        return fundTotalDayIncome;
-    }
+//    private BigDecimal depositFundDayIncome(String username) {
+//        List<String> fundListFrom = fundEntity.getFundList(null, username);
+//        List<FundEntity> funds = fundEntity.getFundDetails(fundListFrom);
+//        BigDecimal fundTotalDayIncome = new BigDecimal("0");
+//        for (FundEntity fund : funds) {
+//            String currentDayDate = LocalDate.now().toString();
+//            FundNetDiagramResponse fundNetDiagram = getFundNetDiagramResponse(fund.getFundCode(), currentDayDate);
+//            log.info("fundNetDiagram : {}", fundNetDiagram);
+//            // 当日净值已出
+//            if (fundNetDiagram != null) {
+//                Optional<FundNetDiagramResponse.DataItem> optionalCurrentDay = fundNetDiagram.getDatas().stream()
+//                    .filter(dataItem -> dataItem.getFSRQ().equals(currentDayDate)).findFirst();
+//                FundNetDiagramResponse.DataItem currentDayItem = optionalCurrentDay.get();
+//                int currentIndex = fundNetDiagram.getDatas().indexOf(currentDayItem);
+//                FundNetDiagramResponse.DataItem yesTodayItem = fundNetDiagram.getDatas().get(currentIndex - 1);
+//                BigDecimal dayIncome = (new BigDecimal(currentDayItem.getDWJZ())
+//                    .subtract(new BigDecimal(yesTodayItem.getDWJZ())).multiply(new BigDecimal(fund.getBonds())))
+//                        .setScale(2, BigDecimal.ROUND_HALF_UP);
+//                fundTotalDayIncome = fundTotalDayIncome.add(dayIncome);
+//                log.info("按照当日净值计算，基金： {} ,当日盈利： {}", fund.getFundName(), dayIncome.toString());
+//            } else {
+//                BigDecimal dayIncome = (new BigDecimal(fund.getGszzl())
+//                    .multiply(new BigDecimal(fund.getDwjz())).multiply(new BigDecimal(fund.getBonds()))
+//                    .divide(new BigDecimal("100"))).setScale(2, BigDecimal.ROUND_HALF_UP);
+//                fundTotalDayIncome = fundTotalDayIncome.add(dayIncome);
+//                log.info("按照估值计算，基金： {} ,当日盈利： {}", fund.getFundName(), dayIncome.toString());
+//            }
+//        }
+//        log.info("基金当日盈利: {}", fundTotalDayIncome);
+//        return fundTotalDayIncome;
+//    }
 
     private DepositResult depositStock(String username) {
         List<DepositItem> depositItems = new ArrayList<>();
@@ -411,90 +420,90 @@ public class DepositEntity {
         return new DepositResult(stockTotalDayIncome, stockTotalMarketValue, depositItems);
     }
 
-    private BigDecimal depositStockDayIncome(String username) {
-        List<String> stockListFrom = stockEntity.getStockList(null, username);
-        List<StockEntity> stocks = stockEntity.getStockDetails(stockListFrom, username);
-        BigDecimal stockTotalDayIncome = new BigDecimal("0");
-        for (StockEntity stock : stocks) {
-            int maxBuyOrSellBonds = 0;
-            BigDecimal todayBuyIncome = new BigDecimal("0");
-            BigDecimal todaySellIncom = new BigDecimal("0");
-            BigDecimal dayIncome = new BigDecimal("0");
-            for (BuyOrSellStockPO buyOrSellStockPO : stock.getBuyOrSellStockRequestList()) {
-                // 当天购买过
-                if (buyOrSellStockPO.getType().equals("1")) {
-                    maxBuyOrSellBonds = maxBuyOrSellBonds + buyOrSellStockPO.getBonds();
-                    log.info("买入价格: {}", buyOrSellStockPO.getPrice());
-                    log.info("当前价格: {}", stock.getNow());
-                    BigDecimal buyIncome = (new BigDecimal(stock.getNow()))
-                        .subtract(new BigDecimal(buyOrSellStockPO.getPrice() + ""))
-                        .multiply(new BigDecimal(buyOrSellStockPO.getBonds() + ""));
-                    todayBuyIncome = todayBuyIncome.add(buyIncome);
-                    log.info("买入收益： {}", todayBuyIncome);
-                }
-                // 当天卖出过
-                if (buyOrSellStockPO.getType().equals("2")) {
-                    todaySellIncom = todaySellIncom.add(new BigDecimal(buyOrSellStockPO.getIncome() + ""));
-                    log.info("卖出收益： {}", todaySellIncom);
-                }
-            }
-            log.info("买卖最大数: {}", maxBuyOrSellBonds);
-            if (maxBuyOrSellBonds < Integer.parseInt(stock.getBonds())) {
-                BigDecimal restBonds = (new BigDecimal(stock.getBonds())).subtract(new BigDecimal(maxBuyOrSellBonds + ""));
-                log.info("剩余股数： {}", restBonds);
-                dayIncome = (new BigDecimal(stock.getChange())).multiply(restBonds).setScale(2,
-                    BigDecimal.ROUND_HALF_UP);
-            } else {
-                dayIncome = new BigDecimal("0").setScale(2,
-                    BigDecimal.ROUND_HALF_UP);
-                ;
-            }
-            dayIncome = dayIncome.add(todayBuyIncome).add(todaySellIncom);
-            stockTotalDayIncome = stockTotalDayIncome.add(dayIncome);
-        }
-        log.info("股票当日盈利: {}", stockTotalDayIncome);
-        return stockTotalDayIncome;
-
-    }
-
-    private BigDecimal depositFundMarketValue(String username) {
-        List<String> fundListFrom = fundEntity.getFundList(null, username);
-        List<FundEntity> funds = fundEntity.getFundDetails(fundListFrom);
-        BigDecimal fundTotalMarketValue = new BigDecimal("0");
-        for (FundEntity fund : funds) {
-            String currentDayDate = LocalDate.now().toString();
-            FundNetDiagramResponse fundNetDiagram = getFundNetDiagramResponse(fund.getFundCode(), currentDayDate);
-            log.info("fundNetDiagram : {}", fundNetDiagram);
-            // 当日净值已出
-            if (fundNetDiagram != null) {
-                Optional<FundNetDiagramResponse.DataItem> optionalCurrentDay = fundNetDiagram.getDatas().stream()
-                    .filter(dataItem -> dataItem.getFSRQ().equals(currentDayDate)).findFirst();
-                FundNetDiagramResponse.DataItem currentDayItem = optionalCurrentDay.get();
-                BigDecimal marketValue = (new BigDecimal(currentDayItem.getDWJZ())
-                    .multiply(new BigDecimal(fund.getBonds())).setScale(2, BigDecimal.ROUND_HALF_UP));
-                fundTotalMarketValue = fundTotalMarketValue.add(marketValue);
-            } else {
-                BigDecimal marketValue = (new BigDecimal(fund.getGsz())
-                    .multiply(new BigDecimal(fund.getBonds())).setScale(2, BigDecimal.ROUND_HALF_UP));
-                fundTotalMarketValue = fundTotalMarketValue.add(marketValue);
-            }
-        }
-        log.info("基金总市值: {}", fundTotalMarketValue);
-        return fundTotalMarketValue;
-    }
-
-    private BigDecimal depositStockMarketValue(String username) {
-        List<String> stockListFrom = stockEntity.getStockList(null, username);
-        List<StockEntity> stocks = stockEntity.getStockDetails(stockListFrom, username);
-        BigDecimal stockTotalMarketValue = new BigDecimal("0");
-        for (StockEntity stock : stocks) {
-            BigDecimal marketValue = (new BigDecimal(stock.getNow()).multiply(new BigDecimal(stock.getBonds()))).setScale(2,
-                BigDecimal.ROUND_HALF_UP);
-            stockTotalMarketValue = stockTotalMarketValue.add(marketValue);
-        }
-        log.info("股票总市值: {}", stockTotalMarketValue);
-        return stockTotalMarketValue;
-    }
+//    private BigDecimal depositStockDayIncome(String username) {
+//        List<String> stockListFrom = stockEntity.getStockList(null, username);
+//        List<StockEntity> stocks = stockEntity.getStockDetails(stockListFrom, username);
+//        BigDecimal stockTotalDayIncome = new BigDecimal("0");
+//        for (StockEntity stock : stocks) {
+//            int maxBuyOrSellBonds = 0;
+//            BigDecimal todayBuyIncome = new BigDecimal("0");
+//            BigDecimal todaySellIncom = new BigDecimal("0");
+//            BigDecimal dayIncome = new BigDecimal("0");
+//            for (BuyOrSellStockPO buyOrSellStockPO : stock.getBuyOrSellStockRequestList()) {
+//                // 当天购买过
+//                if (buyOrSellStockPO.getType().equals("1")) {
+//                    maxBuyOrSellBonds = maxBuyOrSellBonds + buyOrSellStockPO.getBonds();
+//                    log.info("买入价格: {}", buyOrSellStockPO.getPrice());
+//                    log.info("当前价格: {}", stock.getNow());
+//                    BigDecimal buyIncome = (new BigDecimal(stock.getNow()))
+//                        .subtract(new BigDecimal(buyOrSellStockPO.getPrice() + ""))
+//                        .multiply(new BigDecimal(buyOrSellStockPO.getBonds() + ""));
+//                    todayBuyIncome = todayBuyIncome.add(buyIncome);
+//                    log.info("买入收益： {}", todayBuyIncome);
+//                }
+//                // 当天卖出过
+//                if (buyOrSellStockPO.getType().equals("2")) {
+//                    todaySellIncom = todaySellIncom.add(new BigDecimal(buyOrSellStockPO.getIncome() + ""));
+//                    log.info("卖出收益： {}", todaySellIncom);
+//                }
+//            }
+//            log.info("买卖最大数: {}", maxBuyOrSellBonds);
+//            if (maxBuyOrSellBonds < Integer.parseInt(stock.getBonds())) {
+//                BigDecimal restBonds = (new BigDecimal(stock.getBonds())).subtract(new BigDecimal(maxBuyOrSellBonds + ""));
+//                log.info("剩余股数： {}", restBonds);
+//                dayIncome = (new BigDecimal(stock.getChange())).multiply(restBonds).setScale(2,
+//                    BigDecimal.ROUND_HALF_UP);
+//            } else {
+//                dayIncome = new BigDecimal("0").setScale(2,
+//                    BigDecimal.ROUND_HALF_UP);
+//                ;
+//            }
+//            dayIncome = dayIncome.add(todayBuyIncome).add(todaySellIncom);
+//            stockTotalDayIncome = stockTotalDayIncome.add(dayIncome);
+//        }
+//        log.info("股票当日盈利: {}", stockTotalDayIncome);
+//        return stockTotalDayIncome;
+//
+//    }
+//
+//    private BigDecimal depositFundMarketValue(String username) {
+//        List<String> fundListFrom = fundEntity.getFundList(null, username);
+//        List<FundEntity> funds = fundEntity.getFundDetails(fundListFrom);
+//        BigDecimal fundTotalMarketValue = new BigDecimal("0");
+//        for (FundEntity fund : funds) {
+//            String currentDayDate = LocalDate.now().toString();
+//            FundNetDiagramResponse fundNetDiagram = getFundNetDiagramResponse(fund.getFundCode(), currentDayDate);
+//            log.info("fundNetDiagram : {}", fundNetDiagram);
+//            // 当日净值已出
+//            if (fundNetDiagram != null) {
+//                Optional<FundNetDiagramResponse.DataItem> optionalCurrentDay = fundNetDiagram.getDatas().stream()
+//                    .filter(dataItem -> dataItem.getFSRQ().equals(currentDayDate)).findFirst();
+//                FundNetDiagramResponse.DataItem currentDayItem = optionalCurrentDay.get();
+//                BigDecimal marketValue = (new BigDecimal(currentDayItem.getDWJZ())
+//                    .multiply(new BigDecimal(fund.getBonds())).setScale(2, BigDecimal.ROUND_HALF_UP));
+//                fundTotalMarketValue = fundTotalMarketValue.add(marketValue);
+//            } else {
+//                BigDecimal marketValue = (new BigDecimal(fund.getGsz())
+//                    .multiply(new BigDecimal(fund.getBonds())).setScale(2, BigDecimal.ROUND_HALF_UP));
+//                fundTotalMarketValue = fundTotalMarketValue.add(marketValue);
+//            }
+//        }
+//        log.info("基金总市值: {}", fundTotalMarketValue);
+//        return fundTotalMarketValue;
+//    }
+//
+//    private BigDecimal depositStockMarketValue(String username) {
+//        List<String> stockListFrom = stockEntity.getStockList(null, username);
+//        List<StockEntity> stocks = stockEntity.getStockDetails(stockListFrom, username);
+//        BigDecimal stockTotalMarketValue = new BigDecimal("0");
+//        for (StockEntity stock : stocks) {
+//            BigDecimal marketValue = (new BigDecimal(stock.getNow()).multiply(new BigDecimal(stock.getBonds()))).setScale(2,
+//                BigDecimal.ROUND_HALF_UP);
+//            stockTotalMarketValue = stockTotalMarketValue.add(marketValue);
+//        }
+//        log.info("股票总市值: {}", stockTotalMarketValue);
+//        return stockTotalMarketValue;
+//    }
 
     private boolean isTradingDate(String date) {
         OpenPersistentMonthPO opt = openPersistentMonthMapper.findByMonth(date.substring(0, 7));
