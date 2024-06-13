@@ -216,7 +216,7 @@ public class DepositEntity {
                 BigDecimal dayIncomePercent = item.dayIncome().multiply(new BigDecimal("100"))
                     .divide(item.marketValue().subtract(item.dayIncome()), RoundingMode.HALF_UP);
                 stockTotalIncomePercent = item.totalIncome().multiply(new BigDecimal("100"))
-                        .divide(item.marketValue().subtract(item.totalIncome()), RoundingMode.HALF_UP);
+                        .divide(item.marketValue().subtract(item.totalIncome()), 3, RoundingMode.HALF_UP);
                 totalIncomeStyle = item.totalIncome().compareTo(BigDecimal.ZERO) >= 0 ? redColorStyle : greenColorStyle;
                 stockItemContent.append(String.format(
                     "<tr><td>%s</td><td><span style=\"%s\">%s（%s%%）</span></td><td>%s</td><td><span style=\"%s\">%s（%s%%）</span></td></tr>",
@@ -224,7 +224,7 @@ public class DepositEntity {
             }
             style = stockTotalDayIncome.compareTo(BigDecimal.ZERO) >= 0 ? redColorStyle : greenColorStyle;
             stockTotalIncomePercent = stockTotalIncome.multiply(new BigDecimal("100"))
-                    .divide(stockTotalMarketValue.subtract(stockTotalIncome), RoundingMode.HALF_UP);
+                    .divide(stockTotalMarketValue.subtract(stockTotalIncome), 3, RoundingMode.HALF_UP);
             totalIncomeStyle = stockTotalIncome.compareTo(BigDecimal.ZERO) >= 0 ? redColorStyle : greenColorStyle;
             stockItemContent.append(String.format(
                 "<tr><td>%s</td><td><span style=\"%s\">%s（%s%%）</span></td><td>%s</td><td><span style=\"%s\">%s（%s%%）</span></td></tr>",
@@ -238,7 +238,7 @@ public class DepositEntity {
                 BigDecimal dayIncomePercent = item.dayIncome().multiply(new BigDecimal("100"))
                     .divide(item.marketValue().subtract(item.dayIncome()), RoundingMode.HALF_UP);
                 fundTotalIncomePercent = item.totalIncome().multiply(new BigDecimal("100"))
-                        .divide(item.marketValue().subtract(item.totalIncome()), RoundingMode.HALF_UP);
+                        .divide(item.marketValue().subtract(item.totalIncome()), 3, RoundingMode.HALF_UP);
                 totalIncomeStyle = item.totalIncome().compareTo(BigDecimal.ZERO) >= 0 ? redColorStyle : greenColorStyle;
                 fundItemContent.append(String.format(
                     "<tr><td>%s</td><td><span style=\"%s\">%s（%s%%）</span></td><td>%s</td><td><span style=\"%s\">%s（%s%%）</span></td></tr>",
@@ -246,7 +246,7 @@ public class DepositEntity {
             }
             style = fundTotalDayIncome.compareTo(BigDecimal.ZERO) >= 0 ? redColorStyle : greenColorStyle;
             fundTotalIncomePercent = fundTotalIncome.multiply(new BigDecimal("100"))
-                    .divide(fundTotalMarketValue.subtract(fundTotalIncome), RoundingMode.HALF_UP);
+                    .divide(fundTotalMarketValue.subtract(fundTotalIncome), 3, RoundingMode.HALF_UP);
             totalIncomeStyle = fundTotalIncome.compareTo(BigDecimal.ZERO) >= 0 ? redColorStyle : greenColorStyle;
             fundItemContent.append(String.format(
                 "<tr><td>%s</td><td><span style=\"%s\">%s（%s%%）</span></td><td>%s</td><td><span style=\"%s\">%s（%s%%）</span></td></tr>",
