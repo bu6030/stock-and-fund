@@ -202,13 +202,13 @@ public class DepositEntity {
             List<DepositItem> stockDepositItems = stockDepositResult.depositItems;
             for (DepositItem item : stockDepositItems) {
                 String style = item.dayIncome().compareTo(BigDecimal.ZERO) >= 0 ? redColorStyle : greenColorStyle;
-                stockItemContent += String.format("%s, 当日盈利:<span %s>  %s</span>, 市值: %s%n<br/>",
+                stockItemContent += String.format("%s<br/>当日盈利:<span %s>%s</span>, 市值: %s%n<br/>",
                     item.name(), style, item.dayIncome(), item.marketValue());
             }
             List<DepositItem> fundDepositItems = fundDepositResult.depositItems;
             for (DepositItem item : fundDepositItems) {
                 String style = item.dayIncome().compareTo(BigDecimal.ZERO) >= 0 ? redColorStyle : greenColorStyle;
-                fundItemContent += String.format("%s, 当日盈利:<span %s>  %s</span>, 市值: %s%n<br/>",
+                fundItemContent += String.format("%s<br/>当日盈利:<span %s>%s</span>, 市值: %s%n<br/>",
                     item.name(), style, item.dayIncome(), item.marketValue());
             }
 
