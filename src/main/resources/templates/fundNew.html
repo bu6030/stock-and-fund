@@ -151,6 +151,10 @@
                         item.dayIncome = new BigDecimal(parseFloat(((new BigDecimal(item.currentDayJingzhi + "")).subtract(new BigDecimal(item.previousDayJingzhi + ""))).multiply(new BigDecimal(item.bonds + ""))).toFixed(2));
                         marketValue = new BigDecimal(parseFloat((new BigDecimal(item.currentDayJingzhi + "")).multiply(new BigDecimal(item.bonds + ""))).toFixed(2));
                         item.marketValue = marketValue + '';
+                        var costPrice = new BigDecimal(item.costPrise+"");
+                        var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(item.bonds))).toFixed(2));
+                        item.income = marketValue.subtract(costPriceValue) + "";
+                        item.incomePercent = marketValue.subtract(costPriceValue).multiply(new BigDecimal("100")).divide(costPriceValue) + "";
                     } else {
                         item.dayIncome = new BigDecimal(parseFloat((new BigDecimal(item.gszzl))
                             .multiply((new BigDecimal(item.dwjz))).multiply(new BigDecimal(item.bonds))

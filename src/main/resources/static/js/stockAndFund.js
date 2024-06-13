@@ -236,10 +236,16 @@ function getFundTableHtml(result, totalMarketValueResult){
         if (filteredApp != "ALL" && result[k].app != filteredApp) {
             continue;
         }
+        // 计算基金总成本
+        var costPrice = new BigDecimal(result[k].costPrise+"");
+        var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(result[k].bonds))).toFixed(2));
+        fundTotalCostValue = fundTotalCostValue.add(costPriceValue);
         if (result[k].currentDayJingzhi != null && result[k].currentDayJingzhi != '') {
             result[k].gsz = result[k].currentDayJingzhi + '(实)';
             dayIncome = new BigDecimal(parseFloat(((new BigDecimal(result[k].currentDayJingzhi + "")).subtract(new BigDecimal(result[k].previousDayJingzhi + ""))).multiply(new BigDecimal(result[k].bonds + ""))).toFixed(2));
             marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].currentDayJingzhi + "")).multiply(new BigDecimal(result[k].bonds + ""))).toFixed(2));
+            result[k].income = marketValue.subtract(costPriceValue) + "";
+            result[k].incomePercent = marketValue.subtract(costPriceValue).multiply(new BigDecimal("100")).divide(costPriceValue) + "";
         } else {
             dayIncome = new BigDecimal(parseFloat((new BigDecimal(result[k].gszzl)).multiply((new BigDecimal(result[k].dwjz))).multiply(new BigDecimal(result[k].bonds)).divide(new BigDecimal("100"))).toFixed(2));
             marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].gsz)).multiply(new BigDecimal(result[k].bonds))).toFixed(2));
@@ -250,11 +256,6 @@ function getFundTableHtml(result, totalMarketValueResult){
         }
         var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
-
-        // 计算基金总成本
-        var costPrice = new BigDecimal(result[k].costPrise+"");
-        var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(result[k].bonds))).toFixed(2));
-        fundTotalCostValue = fundTotalCostValue.add(costPriceValue);
 
         str += "<tr><td>"
             + "<a href='#' onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
