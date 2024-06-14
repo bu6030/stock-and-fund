@@ -178,7 +178,7 @@ public class DepositEntity {
                 .build(), username);
         }
         try {
-            if (deposit != null && deposit.getTotalDayIncome().compareTo(totalMarketValue) == 0) {
+            if (deposit != null && deposit.getTotalDayIncome().compareTo(totalDayIncome) == 0) {
                 log.info("当前统计的和上一次统计结果一致，不发送邮件！");
                 return;
             }
