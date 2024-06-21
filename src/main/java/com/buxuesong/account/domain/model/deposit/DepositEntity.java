@@ -243,7 +243,7 @@ public class DepositEntity {
                 totalIncomeStyle = item.totalIncome().compareTo(BigDecimal.ZERO) >= 0 ? redColorStyle : greenColorStyle;
                 fundItemContent.append(String.format(
                     "<tr><td>%s</td><td><span style=\"%s\">%s（%s%%）(%s)</span></td><td>%s</td><td><span style=\"%s\">%s（%s%%）</span></td></tr>",
-                    item.name(), style, item.dayIncome(), dayIncomePercent, item.marketValue(), item.isCurrentDayNewValue() ? "实" : "估",
+                    item.name(), style, item.dayIncome(), dayIncomePercent, item.isCurrentDayNewValue() ? "实" : "估", item.marketValue(),
                     totalIncomeStyle, item.totalIncome().setScale(2, BigDecimal.ROUND_HALF_UP), fundTotalIncomePercent));
             }
             style = fundTotalDayIncome.compareTo(BigDecimal.ZERO) >= 0 ? redColorStyle : greenColorStyle;
