@@ -53,12 +53,13 @@ public class StockEntity {
 
     private boolean hide;// 是否隐藏
 
-    // 唐安奇通道法，最近20个交易日最高价格以及最低价格
+    // 唐安奇通道法，最近XX个交易日最高价格以及最低价格
+    private String day50Max;
+    private String day50Min;
     private String day20Max;
     private String day20Min;
-
+    private String day10Max;
     private String day10Min;
-
     public StockEntity() {
     }
 
@@ -211,6 +212,22 @@ public class StockEntity {
         this.hide = hide;
     }
 
+    public String getDay50Max() {
+        return day50Max;
+    }
+
+    public void setDay50Max(String day50Max) {
+        this.day50Max = day50Max;
+    }
+
+    public String getDay50Min() {
+        return day50Min;
+    }
+
+    public void setDay50Min(String day50Min) {
+        this.day50Min = day50Min;
+    }
+
     public String getDay20Max() {
         return day20Max;
     }
@@ -225,6 +242,14 @@ public class StockEntity {
 
     public void setDay20Min(String day20Min) {
         this.day20Min = day20Min;
+    }
+
+    public String getDay10Max() {
+        return day10Max;
+    }
+
+    public void setDay10Max(String day10Max) {
+        this.day10Max = day10Max;
     }
 
     public String getDay10Min() {
@@ -260,23 +285,29 @@ public class StockEntity {
 
     @Override
     public String toString() {
-        return "StockBean{" +
-            "code='" + code + '\'' +
-            ", name='" + name + '\'' +
-            ", now='" + now + '\'' +
-            ", change='" + change + '\'' +
-            ", changePercent='" + changePercent + '\'' +
-            ", time='" + time + '\'' +
-            ", max='" + max + '\'' +
-            ", min='" + min + '\'' +
-            ", costPrise='" + costPrise + '\'' +
-            ", bonds='" + bonds + '\'' +
-            ", app='" + app + '\'' +
-            ", incomePercent='" + incomePercent + '\'' +
-            ", income='" + income + '\'' +
-            ", hide='" + hide + '\'' +
-            ", buyOrSellStockRequestList=" + buyOrSellStockRequestList +
-            '}';
+        return "StockEntity{" +
+                "code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", now='" + now + '\'' +
+                ", change='" + change + '\'' +
+                ", changePercent='" + changePercent + '\'' +
+                ", time='" + time + '\'' +
+                ", max='" + max + '\'' +
+                ", min='" + min + '\'' +
+                ", costPrise='" + costPrise + '\'' +
+                ", bonds='" + bonds + '\'' +
+                ", app='" + app + '\'' +
+                ", incomePercent='" + incomePercent + '\'' +
+                ", income='" + income + '\'' +
+                ", buyOrSellStockRequestList=" + buyOrSellStockRequestList +
+                ", hide=" + hide +
+                ", day50Max='" + day50Max + '\'' +
+                ", day50Min='" + day50Min + '\'' +
+                ", day20Max='" + day20Max + '\'' +
+                ", day20Min='" + day20Min + '\'' +
+                ", day10Max='" + day10Max + '\'' +
+                ", day10Min='" + day10Min + '\'' +
+                '}';
     }
 
     @Autowired
@@ -380,26 +411,46 @@ public class StockEntity {
                     }
                 }
                 // 增加20日最高最低价格
-                List<StockDayHistoryResponse> stockDayHistory20 = cacheService.getStockDayHistory(code, "20");
-                log.info("Stock day history is {}", stockDayHistory20);
-                if (stockDayHistory20 != null && stockDayHistory20.size() >= 20) {
-                    List<StockDayHistoryResponse> stockDayHistory10 = stockDayHistory20.subList(10, 20);
-                    StockDayHistoryResponse maxStockDay = stockDayHistory20.stream()
+                List<StockDayHistoryResponse> stockDayHistory50 = cacheService.getStockDayHistory(code, "50");
+                log.info("Stock day history is {}", stockDayHistory50);
+                if (stockDayHistory50 != null && stockDayHistory50.size() >= 20) {
+                    if (stockDayHistory50.size() >= 50) {
+                        StockDayHistoryResponse maxStockDay50 = stockDayHistory50.stream()
+                                .max((s1, s2) -> Double.compare(s1.getHigh(), s2.getHigh()))
+                                .get();
+                        StockDayHistoryResponse minStockDay50 = stockDayHistory50.stream()
+                                .min((s1, s2) -> Double.compare(s1.getLow(), s2.getLow()))
+                                .get();
+                        bean.setDay50Max(maxStockDay50.getHigh() + "");
+                        bean.setDay50Min(minStockDay50.getLow() + "");
+                    } else {
+                        bean.setDay50Max(now + "");
+                        bean.setDay50Min(now + "");
+                    }
+                    List<StockDayHistoryResponse> stockDayHistory10 = stockDayHistory50.subList(stockDayHistory50.size() - 10, stockDayHistory50.size());
+                    List<StockDayHistoryResponse> stockDayHistory20 = stockDayHistory50.subList(stockDayHistory50.size() - 20, stockDayHistory50.size());
+                    StockDayHistoryResponse maxStockDay20 = stockDayHistory20.stream()
                         .max((s1, s2) -> Double.compare(s1.getHigh(), s2.getHigh()))
                         .get();
                     StockDayHistoryResponse minStockDay20 = stockDayHistory20.stream()
                         .min((s1, s2) -> Double.compare(s1.getLow(), s2.getLow()))
                         .get();
+                    StockDayHistoryResponse maxStockDay10 = stockDayHistory10.stream()
+                            .max((s1, s2) -> Double.compare(s1.getHigh(), s2.getHigh()))
+                            .get();
                     StockDayHistoryResponse minStockDay10 = stockDayHistory10.stream()
                         .min((s1, s2) -> Double.compare(s1.getLow(), s2.getLow()))
                         .get();
-                    log.info("Stock day history max is {}, 20 day low is {}, 10 day low is {}", maxStockDay, minStockDay20, minStockDay10);
-                    bean.setDay20Max(maxStockDay.getHigh() + "");
+                    bean.setDay20Max(maxStockDay20.getHigh() + "");
                     bean.setDay20Min(minStockDay20.getLow() + "");
+                    bean.setDay10Max(maxStockDay10.getHigh() + "");
                     bean.setDay10Min(minStockDay10.getLow() + "");
                 } else {
+                    bean.setDay50Max(now + "");
+                    bean.setDay50Min(now + "");
                     bean.setDay20Max(now + "");
                     bean.setDay20Min(now + "");
+                    bean.setDay10Max(now + "");
                     bean.setDay10Min(now + "");
                 }
                 stocks.add(bean);
