@@ -125,24 +125,39 @@ function getTableHtml(result){
         }
         var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
-
+        var day50Max = new BigDecimal(result[k].day50Max + "");
+        var day50Min = new BigDecimal(result[k].day50Min + "");
         var day20Max = new BigDecimal(result[k].day20Max + "");
         var day20Min = new BigDecimal(result[k].day20Min + "");
+        var day10Max = new BigDecimal(result[k].day10Max + "");
         var day10Min = new BigDecimal(result[k].day10Min + "");
         var now = new BigDecimal(result[k].now + "");
         var donchianChennel = "";
         var donchianChennelStyle = "";
+        if (now.compareTo(day50Max) > 0) {
+            donchianChennel += "破50高；";
+            donchianChennelStyle = "style=\"color:#c12e2a\"";
+        } else if(now.compareTo(day50Min) < 0) {
+            donchianChennel += "破50低；";
+            donchianChennelStyle = "style=\"color:#3e8f3e\"";
+        }
         if (now.compareTo(day20Max) > 0) {
-            donchianChennel = "破20高";
+            donchianChennel += "破20高；";
             donchianChennelStyle = "style=\"color:#c12e2a\"";
         } else if(now.compareTo(day20Min) < 0) {
-            donchianChennel = "破20低";
+            donchianChennel += "破20低；";
             donchianChennelStyle = "style=\"color:#3e8f3e\"";
+        }
+        if (now.compareTo(day10Max) > 0) {
+            donchianChennel += "破10高；";
+            donchianChennelStyle = "style=\"color:#c12e2a\"";
         } else if(now.compareTo(day10Min) < 0) {
-            donchianChennel = "破10低";
+            donchianChennel += "破10低；";
             donchianChennelStyle = "style=\"color:#3e8f3e\"";
-        } else {
-            donchianChennel = "监控中";
+        }
+        if (donchianChennel == "") {
+            donchianChennel += "监控中；";
+            donchianChennelColor = "";
         }
         // 计算股票总成本
         var costPrice = new BigDecimal(result[k].costPrise+"");
@@ -157,7 +172,7 @@ function getTableHtml(result){
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
             + "</td><td>" + result[k].max
             + "</td><td>" + result[k].min
-            + "</td><td " + donchianChennelStyle + ">" + "20最高:" + day20Max + "；20最低：" + day20Min + "；10最低：" + day10Min + "；" + donchianChennel
+            + "</td><td " + donchianChennelStyle + ">" + "50最高：" + day50Max + "；50最低：" + day50Min + "；20最高：" + day20Max + "；20最低：" + day20Min + "；10最高：" + day10Max + "；10最低：" + day10Min + "；" + donchianChennel
             + "</td><td>" + result[k].now
             + "</td><td>" + result[k].costPrise
             + "</td><td>" + result[k].bonds

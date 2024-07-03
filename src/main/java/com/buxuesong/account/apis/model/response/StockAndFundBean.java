@@ -37,9 +37,12 @@ public class StockAndFundBean {
     private String min;// 最低价
     private List<BuyOrSellStockPO> buyOrSellStockRequestList;
 
-    // 唐安奇通道法，最近20个交易日最高价格以及最低价格
+    // 唐安奇通道法，最近XX个交易日最高价格以及最低价格
+    private String day50Max;
+    private String day50Min;
     private String day20Max;
     private String day20Min;
+    private String day10Max;
     private String day10Min;
 
     private String currentDayJingzhi;// 当日净值（每个交易日晚9点之后有新日期数据）

@@ -152,24 +152,35 @@
                         if (totalMarketValue.compareTo(new BigDecimal("0")) != 0) {
                             item.marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValue) + "";
                         }
+                        var day50Max = new BigDecimal(item.day50Max + "");
+                        var day50Min = new BigDecimal(item.day50Min + "");
                         var day20Max = new BigDecimal(item.day20Max + "");
                         var day20Min = new BigDecimal(item.day20Min + "");
+                        var day10Max = new BigDecimal(item.day10Max + "");
                         var day10Min = new BigDecimal(item.day10Min + "");
                         var now = new BigDecimal(item.now + "");
-                        var donchianChennel = "20最高:" + day20Max + "；20最低：" + day20Min + "；10最低：" + day10Min + "；";
+                        var donchianChennel = "50最高：" + day50Max + "；50最低：" + day50Min + "；20最高：" + day20Max + "；20最低：" + day20Min + "；10最高：" + day10Max + "；10最低：" + day10Min + "；";
                         var donchianChennelColor = "";
+                        if (now.compareTo(day50Max) > 0) {
+                            donchianChennel += "破50高；";
+                            donchianChennelColor = "#c12e2a";
+                        } else if(now.compareTo(day50Min) < 0) {
+                            donchianChennel += "破50低；";
+                            donchianChennelColor = "#3e8f3e";
+                        }
                         if (now.compareTo(day20Max) > 0) {
-                            donchianChennel += "破20高";
+                            donchianChennel += "破20高；";
                             donchianChennelColor = "#c12e2a";
                         } else if(now.compareTo(day20Min) < 0) {
-                            donchianChennel += "破20低";
+                            donchianChennel += "破20低；";
                             donchianChennelColor = "#3e8f3e";
+                        }
+                        if (now.compareTo(day10Max) > 0) {
+                            donchianChennel += "破10高；";
+                            donchianChennelColor = "#c12e2a";
                         } else if(now.compareTo(day10Min) < 0) {
-                            donchianChennel = "破10低";
+                            donchianChennel += "破10低；";
                             donchianChennelColor = "#3e8f3e";
-                        } else {
-                            donchianChennel += "监控中";
-                            donchianChennelColor = "";
                         }
                         item.donchianChennel = donchianChennel;
                         item.donchianChennelColor = donchianChennelColor;
