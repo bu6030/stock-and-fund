@@ -1,6 +1,7 @@
 package com.buxuesong.account.domain.model.advice;
 
 import com.buxuesong.account.apis.model.request.AdviceRequest;
+import com.buxuesong.account.infrastructure.general.utils.MailUtils;
 import com.buxuesong.account.infrastructure.persistent.po.AdvicePO;
 import com.buxuesong.account.infrastructure.persistent.repository.AdviceMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Slf4j
@@ -17,6 +19,8 @@ public class AdviceEntity {
 
     @Autowired
     private AdviceMapper adviceMapper;
+    @Autowired
+    private MailUtils mailUtils;
 
     /**
      * 保存股票基金神器扩展程序的反馈建议
@@ -28,6 +32,12 @@ public class AdviceEntity {
         adviceMapper.save(AdvicePO.builder().adviceContent(request.getAdviceContent())
             .date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toString())
             .build());
+        try {
+            mailUtils.sendMailNoArchieve("用户建议 " + LocalDateTime.now().truncatedTo(ChronoUnit.DAYS), request.getAdviceContent());
+        } catch(Exception e) {
+            e.printStackTrace();
+            log.error("邮件发送失败", e);
+        }
         return true;
     }
 
