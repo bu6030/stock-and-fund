@@ -184,7 +184,11 @@
                         }
                         item.donchianChennel = donchianChennel;
                         item.donchianChennelColor = donchianChennelColor;
-                    }else if(item.type == 'FUND'){
+                        item.oneYearAgoUpperColor = item.oneYearAgoUpper == 0 ? "" : (item.oneYearAgoUpper >= 0?"#c12e2a":"#3e8f3e");
+                        item.oneSeasonAgoUpperColor = item.oneSeasonAgoUpper == 0 ? "" : (item.oneSeasonAgoUpper >= 0?"#c12e2a":"#3e8f3e");
+                        item.oneMonthAgoUpperColor = item.oneMonthAgoUpper == 0 ? "" : (item.oneMonthAgoUpper >= 0?"#c12e2a":"#3e8f3e");
+                        item.oneWeekAgoUpperColor = item.oneWeekAgoUpper == 0 ? "" : (item.oneWeekAgoUpper >= 0?"#c12e2a":"#3e8f3e");
+                    } else if(item.type == 'FUND') {
                         item.typeNew = '基金';
                         var marketValue = new BigDecimal("0");
                         if (item.currentDayJingzhi != null && item.currentDayJingzhi != '') {
@@ -219,6 +223,10 @@
                         if (totalMarketValue.compareTo(new BigDecimal("0")) != 0) {
                             item.marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValue) + "";
                         }
+                        item.oneYearAgoUpperColor = '';
+                        item.oneSeasonAgoUpperColor = '';
+                        item.oneMonthAgoUpperColor = '';
+                        item.oneWeekAgoUpperColor = '';
                     }
                     item.dayInComeColor = item.dayIncome == 0 ? "" : (item.dayIncome >= 0?"#c12e2a":"#3e8f3e");
                     item.toltalIncomeColor = item.income == 0 ? "" : (item.income >= 0?"#c12e2a":"#3e8f3e");
@@ -241,10 +249,10 @@
                 ,{field: 'max', title: '最高价', width:90}
                 ,{field: 'min', title: '最低价', width: 90}
                 ,{field: 'donchianChennel', title: '唐安奇通道', width: 200, templet: function(d){return '<span style="color: ' + d.donchianChennelColor + '">'+ d.donchianChennel +'</span>'}}
-                ,{field: 'oneYearAgoUpper', title: '近一年 %', width:120, sort: true}
-                ,{field: 'oneSeasonAgoUpper', title: '近一季度 %', width:120, sort: true}
-                ,{field: 'oneMonthAgoUpper', title: '近一月 %', width:120, sort: true}
-                ,{field: 'oneWeekAgoUpper', title: '近一周 %', width:120, sort: true}
+                ,{field: 'oneYearAgoUpper', title: '近一年 %', width:120, sort: true, templet: function(d){return '<span style="color: ' + d.oneYearAgoUpperColor + '">'+ d.oneYearAgoUpper +'</span>'}}
+                ,{field: 'oneSeasonAgoUpper', title: '近一季度 %', width:120, sort: true, templet: function(d){return '<span style="color: ' + d.oneSeasonAgoUpperColor + '">'+ d.oneSeasonAgoUpper +'</span>'}}
+                ,{field: 'oneMonthAgoUpper', title: '近一月 %', width:120, sort: true, templet: function(d){return '<span style="color: ' + d.oneMonthAgoUpperColor + '">'+ d.oneMonthAgoUpper +'</span>'}}
+                ,{field: 'oneWeekAgoUpper', title: '近一周 %', width:120, sort: true, templet: function(d){return '<span style="color: ' + d.oneWeekAgoUpperColor + '">'+ d.oneWeekAgoUpper +'</span>'}}
                 ,{field: 'nowAndGsz', title: '当前价/估算净值', width: 130,}
                 ,{field: 'costPrise', title: '成本价', width: 100}
                 ,{field: 'bonds', title: '持仓', width: 90, sort: true}

@@ -125,6 +125,10 @@ function getTableHtml(result){
         }
         var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
+        var oneYearAgoUpperStyle = result[k].oneYearAgoUpper == 0 ? "" : (result[k].oneYearAgoUpper >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
+        var oneSeasonAgoUpperStyle = result[k].oneSeasonAgoUpper == 0 ? "" : (result[k].oneSeasonAgoUpper >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
+        var oneMonthAgoUpperStyle = result[k].oneMonthAgoUpper == 0 ? "" : (result[k].oneMonthAgoUpper >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
+        var oneWeekAgoUpperStyle = result[k].oneWeekAgoUpper == 0 ? "" : (result[k].oneWeekAgoUpper >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
         var day50Max = new BigDecimal(result[k].day50Max + "");
         var day50Min = new BigDecimal(result[k].day50Min + "");
         var day20Max = new BigDecimal(result[k].day20Max + "");
@@ -173,10 +177,10 @@ function getTableHtml(result){
             + "</td><td>" + result[k].max
             + "</td><td>" + result[k].min
             + "</td><td " + donchianChennelStyle + ">" + "50最高：" + day50Max + "；50最低：" + day50Min + "；20最高：" + day20Max + "；20最低：" + day20Min + "；10最高：" + day10Max + "；10最低：" + day10Min + "；" + donchianChennel
-            + "</td><td>" + result[k].oneYearAgoUpper + "%"
-            + "</td><td>" + result[k].oneSeasonAgoUpper + "%"
-            + "</td><td>" + result[k].oneMonthAgoUpper + "%"
-            + "</td><td>" + result[k].oneWeekAgoUpper + "%"
+            + "</td><td " + oneYearAgoUpperStyle + ">" + result[k].oneYearAgoUpper + "%"
+            + "</td><td " + oneSeasonAgoUpperStyle + ">" + result[k].oneSeasonAgoUpper + "%"
+            + "</td><td " + oneMonthAgoUpperStyle + ">" + result[k].oneMonthAgoUpper + "%"
+            + "</td><td " + oneWeekAgoUpperStyle + ">" + result[k].oneWeekAgoUpper + "%"
             + "</td><td>" + result[k].now
             + "</td><td>" + result[k].costPrise
             + "</td><td>" + result[k].bonds
