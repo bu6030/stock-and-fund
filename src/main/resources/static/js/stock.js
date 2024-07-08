@@ -173,6 +173,10 @@ function getTableHtml(result){
             + "</td><td>" + result[k].max
             + "</td><td>" + result[k].min
             + "</td><td " + donchianChennelStyle + ">" + "50最高：" + day50Max + "；50最低：" + day50Min + "；20最高：" + day20Max + "；20最低：" + day20Min + "；10最高：" + day10Max + "；10最低：" + day10Min + "；" + donchianChennel
+            + "</td><td>" + result[k].oneYearAgoUpper + "%"
+            + "</td><td>" + result[k].oneSeasonAgoUpper + "%"
+            + "</td><td>" + result[k].oneMonthAgoUpper + "%"
+            + "</td><td>" + result[k].oneWeekAgoUpper + "%"
             + "</td><td>" + result[k].now
             + "</td><td>" + result[k].costPrise
             + "</td><td>" + result[k].bonds
@@ -198,7 +202,7 @@ function getTableHtml(result){
     }
     var totalDayIncomePercentStyle = totalDayIncome == 0 ? "" : (totalDayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
     var totalIncomePercentStyle = totalIncome == 0 ? "" : (totalIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
-    str += "<tr><td>合计</td><td colspan='2'></td><td " + totalDayIncomePercentStyle + ">" + totalDayIncomePercent + "%</td><td " + totalDayIncomePercentStyle + ">" + totalDayIncome + "</td><td colspan='6'></td><td colspan='2'>" + totalmarketValue.setScale(2) + "</td><td>"+stockTotalCostValue+"</td><td " + totalIncomePercentStyle + ">" + totalIncomePercent + "%</td><td " + totalIncomePercentStyle + ">" + totalIncome
+    str += "<tr><td>合计</td><td colspan='2'></td><td " + totalDayIncomePercentStyle + ">" + totalDayIncomePercent + "%</td><td " + totalDayIncomePercentStyle + ">" + totalDayIncome + "</td><td colspan='10'></td><td colspan='2'>" + totalmarketValue.setScale(2) + "</td><td>"+stockTotalCostValue+"</td><td " + totalIncomePercentStyle + ">" + totalIncomePercent + "%</td><td " + totalIncomePercentStyle + ">" + totalIncome
         +"</td><td></td></tr>";
     return str;
 }

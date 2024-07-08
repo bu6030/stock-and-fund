@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -60,6 +61,10 @@ public class StockEntity {
     private String day20Min;
     private String day10Max;
     private String day10Min;
+    private String oneYearAgoUpper;
+    private String oneSeasonAgoUpper;
+    private String oneMonthAgoUpper;
+    private String oneWeekAgoUpper;
     public StockEntity() {
     }
 
@@ -268,6 +273,38 @@ public class StockEntity {
         this.buyOrSellStockRequestList = buyOrSellStockRequestList;
     }
 
+    public String getOneYearAgoUpper() {
+        return oneYearAgoUpper;
+    }
+
+    public void setOneYearAgoUpper(String oneYearAgoUpper) {
+        this.oneYearAgoUpper = oneYearAgoUpper;
+    }
+
+    public String getOneSeasonAgoUpper() {
+        return oneSeasonAgoUpper;
+    }
+
+    public void setOneSeasonAgoUpper(String oneSeasonAgoUpper) {
+        this.oneSeasonAgoUpper = oneSeasonAgoUpper;
+    }
+
+    public String getOneMonthAgoUpper() {
+        return oneMonthAgoUpper;
+    }
+
+    public void setOneMonthAgoUpper(String oneMonthAgoUpper) {
+        this.oneMonthAgoUpper = oneMonthAgoUpper;
+    }
+
+    public String getOneWeekAgoUpper() {
+        return oneWeekAgoUpper;
+    }
+
+    public void setOneWeekAgoUpper(String oneWeekAgoUpper) {
+        this.oneWeekAgoUpper = oneWeekAgoUpper;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -307,6 +344,10 @@ public class StockEntity {
                 ", day20Min='" + day20Min + '\'' +
                 ", day10Max='" + day10Max + '\'' +
                 ", day10Min='" + day10Min + '\'' +
+                ", oneYearAgoUpper='" + oneYearAgoUpper + '\'' +
+                ", oneSeasonAgoUpper='" + oneSeasonAgoUpper + '\'' +
+                ", oneMonthAgoUpper='" + oneMonthAgoUpper + '\'' +
+                ", oneWeekAgoUpper='" + oneWeekAgoUpper + '\'' +
                 '}';
     }
 
@@ -411,14 +452,15 @@ public class StockEntity {
                     }
                 }
                 // 增加20日最高最低价格
-                List<StockDayHistoryResponse> stockDayHistory50 = cacheService.getStockDayHistory(code, "50");
-                log.info("Stock day history is {}", stockDayHistory50);
-                if (stockDayHistory50 != null && stockDayHistory50.size() >= 20) {
-                    if (stockDayHistory50.size() >= 50) {
-                        StockDayHistoryResponse maxStockDay50 = stockDayHistory50.stream()
+                List<StockDayHistoryResponse> stockDayHistory300 = cacheService.getStockDayHistory(code, "300");
+                log.info("Stock day history is {}", stockDayHistory300);
+                getRecentDateUpper(stockDayHistory300, bean);
+                if (stockDayHistory300 != null && stockDayHistory300.size() >= 20) {
+                    if (stockDayHistory300.size() >= 50) {
+                        StockDayHistoryResponse maxStockDay50 = stockDayHistory300.stream()
                                 .max((s1, s2) -> Double.compare(s1.getHigh(), s2.getHigh()))
                                 .get();
-                        StockDayHistoryResponse minStockDay50 = stockDayHistory50.stream()
+                        StockDayHistoryResponse minStockDay50 = stockDayHistory300.stream()
                                 .min((s1, s2) -> Double.compare(s1.getLow(), s2.getLow()))
                                 .get();
                         bean.setDay50Max(maxStockDay50.getHigh() + "");
@@ -427,8 +469,8 @@ public class StockEntity {
                         bean.setDay50Max(now + "");
                         bean.setDay50Min(now + "");
                     }
-                    List<StockDayHistoryResponse> stockDayHistory10 = stockDayHistory50.subList(stockDayHistory50.size() - 10, stockDayHistory50.size());
-                    List<StockDayHistoryResponse> stockDayHistory20 = stockDayHistory50.subList(stockDayHistory50.size() - 20, stockDayHistory50.size());
+                    List<StockDayHistoryResponse> stockDayHistory10 = stockDayHistory300.subList(stockDayHistory300.size() - 10, stockDayHistory300.size());
+                    List<StockDayHistoryResponse> stockDayHistory20 = stockDayHistory300.subList(stockDayHistory300.size() - 20, stockDayHistory300.size());
                     StockDayHistoryResponse maxStockDay20 = stockDayHistory20.stream()
                         .max((s1, s2) -> Double.compare(s1.getHigh(), s2.getHigh()))
                         .get();
@@ -726,4 +768,90 @@ public class StockEntity {
             successRate.setScale(2, BigDecimal.ROUND_UP));
     }
 
+    private void getRecentDateUpper(List<StockDayHistoryResponse> stockDayHistory300, StockEntity bean) {
+        if (stockDayHistory300 == null || stockDayHistory300.size() == 0) {
+            bean.setOneYearAgoUpper("0.00");
+            bean.setOneSeasonAgoUpper("0.00");
+            bean.setOneMonthAgoUpper("0.00");
+            bean.setOneWeekAgoUpper("0.00");
+            return;
+        }
+        StockDayHistoryResponse lastDateDayHistory = stockDayHistory300.get(stockDayHistory300.size() - 1);
+        String latestDateStr = lastDateDayHistory.getDay();
+        LocalDate latestDate = LocalDate.parse(latestDateStr, DateTimeFormatter.ISO_LOCAL_DATE);
+        LocalDate oneYearAgoDate = latestDate.minusYears(1);
+        StockDayHistoryResponse oneYearAgoDateDayHistory = new StockDayHistoryResponse();
+        for (int i = stockDayHistory300.size() - 1; i >= 0; i--) {
+            StockDayHistoryResponse current = stockDayHistory300.get(i);
+            LocalDate currentDate = LocalDate.parse(current.getDay(), DateTimeFormatter.ISO_LOCAL_DATE);
+            if (currentDate.compareTo(oneYearAgoDate) <= 0) {
+                oneYearAgoDate = LocalDate.parse(current.getDay(), DateTimeFormatter.ISO_LOCAL_DATE);
+                oneYearAgoDateDayHistory = current;
+                break;
+            }
+        }
+        LocalDate oneSeasonAgoDate = latestDate.minusMonths(3);
+        StockDayHistoryResponse oneSeasonAgoDateDayHistory = new StockDayHistoryResponse();
+        for (int i = stockDayHistory300.size() - 1; i >= 0; i--) {
+            StockDayHistoryResponse current = stockDayHistory300.get(i);
+            LocalDate currentDate = LocalDate.parse(current.getDay(), DateTimeFormatter.ISO_LOCAL_DATE);
+            if (currentDate.compareTo(oneSeasonAgoDate) <= 0) {
+                oneSeasonAgoDate = LocalDate.parse(current.getDay(), DateTimeFormatter.ISO_LOCAL_DATE);
+                oneSeasonAgoDateDayHistory = current;
+                break;
+            }
+        }
+        LocalDate oneMonthAgoDate = latestDate.minusMonths(1);
+        StockDayHistoryResponse oneMonthAgoDateDayHistory = new StockDayHistoryResponse();
+        for (int i = stockDayHistory300.size() - 1; i >= 0; i--) {
+            StockDayHistoryResponse current = stockDayHistory300.get(i);
+            LocalDate currentDate = LocalDate.parse(current.getDay(), DateTimeFormatter.ISO_LOCAL_DATE);
+            if (currentDate.compareTo(oneMonthAgoDate) <= 0) {
+                oneMonthAgoDate = LocalDate.parse(current.getDay(), DateTimeFormatter.ISO_LOCAL_DATE);
+                oneMonthAgoDateDayHistory = current;
+                break;
+            }
+        }
+        LocalDate oneWeekAgoDate = latestDate.minusWeeks(1);
+        StockDayHistoryResponse oneWeekAgoDateDayHistory = new StockDayHistoryResponse();
+        for (int i = stockDayHistory300.size() - 1; i >= 0; i--) {
+            StockDayHistoryResponse current = stockDayHistory300.get(i);
+            LocalDate currentDate = LocalDate.parse(current.getDay(), DateTimeFormatter.ISO_LOCAL_DATE);
+            if (currentDate.compareTo(oneWeekAgoDate) <= 0) {
+                oneWeekAgoDate = LocalDate.parse(current.getDay(), DateTimeFormatter.ISO_LOCAL_DATE);
+                oneWeekAgoDateDayHistory = current;
+                break;
+            }
+        }
+        log.info("oneYearAgoDate is {}, oneSeasonAgoDate is {}, oneMonthAgoDate is {}, oneWeekAgoDate is {}", oneYearAgoDate, oneSeasonAgoDate, oneMonthAgoDate, oneWeekAgoDate);
+        if (oneYearAgoDateDayHistory != null) {
+            BigDecimal oneYearAgoUpper = (new BigDecimal(bean.getNow() + "")).subtract(new BigDecimal(oneYearAgoDateDayHistory.getClose() + "")).multiply(new BigDecimal("100"))
+                    .divide((new BigDecimal(oneYearAgoDateDayHistory.getClose() + "")), 2, BigDecimal.ROUND_UP);
+            bean.setOneYearAgoUpper(oneYearAgoUpper + "");
+        } else {
+            bean.setOneYearAgoUpper("0.00");
+        }
+        if (oneYearAgoDateDayHistory != null) {
+            BigDecimal oneSeasonAgoUpper = (new BigDecimal(bean.getNow() + "")).subtract(new BigDecimal(oneSeasonAgoDateDayHistory.getClose() + "")).multiply(new BigDecimal("100"))
+                    .divide((new BigDecimal(oneSeasonAgoDateDayHistory.getClose() + "")), 2, BigDecimal.ROUND_UP);
+            bean.setOneSeasonAgoUpper(oneSeasonAgoUpper + "");
+        } else {
+            bean.setOneSeasonAgoUpper("0.00");
+        }
+        if (oneYearAgoDateDayHistory != null) {
+            BigDecimal oneMonthAgoUpper = (new BigDecimal(bean.getNow() + "")).subtract(new BigDecimal(oneMonthAgoDateDayHistory.getClose() + "")).multiply(new BigDecimal("100"))
+                    .divide((new BigDecimal(oneMonthAgoDateDayHistory.getClose() + "")), 2, BigDecimal.ROUND_UP);
+            bean.setOneMonthAgoUpper(oneMonthAgoUpper + "");
+        } else {
+            bean.setOneMonthAgoUpper("0.00");
+        }
+        if (oneYearAgoDateDayHistory != null) {
+            BigDecimal oneWeekAgoUpper = (new BigDecimal(bean.getNow() + "")).subtract(new BigDecimal(oneWeekAgoDateDayHistory.getClose() + "")).multiply(new BigDecimal("100"))
+                    .divide((new BigDecimal(oneWeekAgoDateDayHistory.getClose() + "")), 2, BigDecimal.ROUND_UP);
+            bean.setOneWeekAgoUpper(oneWeekAgoUpper + "");
+        } else {
+            bean.setOneWeekAgoUpper("0.00");
+        }
+        log.info("oneYearAgoUpper is {}, oneSeasonAgoUpper is {}, oneMonthAgoUpper is {}, oneWeekAgoUpper is {}", bean.getOneYearAgoUpper(), bean.getOneSeasonAgoUpper(), bean.getOneMonthAgoUpper(), bean.getOneWeekAgoUpper());
+    }
 }

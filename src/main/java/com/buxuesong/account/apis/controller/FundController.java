@@ -113,6 +113,10 @@ public class FundController {
                 .day50Min(s.getDay50Min()).day50Max(s.getDay50Max())
                 .day20Min(s.getDay20Min()).day20Max(s.getDay20Max())
                 .day10Min(s.getDay10Min()).day10Max(s.getDay10Max())
+                .oneYearAgoUpper(s.getOneYearAgoUpper())
+                .oneSeasonAgoUpper(s.getOneSeasonAgoUpper())
+                .oneMonthAgoUpper(s.getOneMonthAgoUpper())
+                .oneWeekAgoUpper(s.getOneWeekAgoUpper())
                 .build())
             .collect(Collectors.toList());
         stockAndFundsFromStocks.addAll(stockAndFundsFromFunds);

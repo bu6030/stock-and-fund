@@ -45,6 +45,11 @@ public class StockAndFundBean {
     private String day10Max;
     private String day10Min;
 
+    private String oneYearAgoUpper;
+    private String oneSeasonAgoUpper;
+    private String oneMonthAgoUpper;
+    private String oneWeekAgoUpper;
+
     private String currentDayJingzhi;// 当日净值（每个交易日晚9点之后有新日期数据）
     private String previousDayJingzhi;// 前一日净值
 

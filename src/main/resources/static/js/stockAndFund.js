@@ -211,6 +211,10 @@ function getStockTableHtml(result, totalMarketValueResult){
             + "</td><td>" +result[k].max
             + "</td><td>" + result[k].min
             + "</td><td " + donchianChennelStyle + ">" + "50最高：" + day50Max + "；50最低：" + day50Min + "；20最高：" + day20Max + "；20最低：" + day20Min + "；10最高：" + day10Max + "；10最低：" + day10Min + "；" + donchianChennel
+            + "</td><td>" + result[k].oneYearAgoUpper + "%"
+            + "</td><td>" + result[k].oneSeasonAgoUpper + "%"
+            + "</td><td>" + result[k].oneMonthAgoUpper + "%"
+            + "</td><td>" + result[k].oneWeekAgoUpper + "%"
             + "</td><td>" + result[k].now
             + "</td><td>" + result[k].costPrise
             + "</td><td>" + result[k].bonds
@@ -232,7 +236,7 @@ function getStockTableHtml(result, totalMarketValueResult){
     }
     var stockDayIncomePercentStyle = stockDayIncome == 0 ? "" : (stockDayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
     var stockTotalIncomePercentStyle = stockTotalIncome == 0 ? "" : (stockTotalIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
-    str += "<tr><td>合计</td><td colspan='3'></td><td " + stockDayIncomePercentStyle + ">" + stockDayIncome + "</td><td " + stockDayIncomePercentStyle + ">" + stockDayIncomePercent + "%</td><td colspan='6'></td><td colspan='2'>" + stockTotalmarketValue + "</td><td>"+stockTotalCostValue.setScale(2)+"</td><td " + stockTotalIncomePercentStyle + ">" + stockTotalIncomePercent + "%</td><td " + stockTotalIncomePercentStyle + ">" + stockTotalIncome
+    str += "<tr><td>合计</td><td colspan='3'></td><td " + stockDayIncomePercentStyle + ">" + stockDayIncome + "</td><td " + stockDayIncomePercentStyle + ">" + stockDayIncomePercent + "%</td><td colspan='10'></td><td colspan='2'>" + stockTotalmarketValue + "</td><td>"+stockTotalCostValue.setScale(2)+"</td><td " + stockTotalIncomePercentStyle + ">" + stockTotalIncomePercent + "%</td><td " + stockTotalIncomePercentStyle + ">" + stockTotalIncome
         +"</td></tr>";
     return str;
 }
@@ -278,6 +282,10 @@ function getFundTableHtml(result, totalMarketValueResult){
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
             + "</td><td " + dayIncomeStyle + " colspan='2'>" +result[k].gszzl + "%"
             + "</td><td colspan='2'>" + result[k].dwjz + "(" + result[k].jzrq + ")"
+            + "</td><td>"
+            + "</td><td>"
+            + "</td><td>"
+            + "</td><td>"
             + "</td><td>" + result[k].gsz
             + "</td><td>" +result[k].costPrise
             + "</td><td>" + result[k].bonds
@@ -299,7 +307,7 @@ function getFundTableHtml(result, totalMarketValueResult){
     }
     var fundDayIncomePercentStyle = fundDayIncome == 0 ? "" : (fundDayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
     var fundTotalIncomePercentStyle = fundTotalIncome == 0 ? "" : (fundTotalIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
-    str += "<tr><td>合计</td><td colspan='3'></td><td " + fundDayIncomePercentStyle + ">" + fundDayIncome + "</td><td colspan='2' " + fundDayIncomePercentStyle + ">" + fundDayIncomePercent + "%</td><td colspan='5'></td><td colspan='2'>" + fundTotalmarketValue + "</td><td>"+fundTotalCostValue+"</td><td " + fundTotalIncomePercentStyle + ">" + fundTotalIncomePercent + "%</td><td " + fundTotalIncomePercentStyle + ">" + fundTotalIncome
+    str += "<tr><td>合计</td><td colspan='3'></td><td " + fundDayIncomePercentStyle + ">" + fundDayIncome + "</td><td colspan='2' " + fundDayIncomePercentStyle + ">" + fundDayIncomePercent + "%</td><td colspan='9'></td><td colspan='2'>" + fundTotalmarketValue + "</td><td>"+fundTotalCostValue+"</td><td " + fundTotalIncomePercentStyle + ">" + fundTotalIncomePercent + "%</td><td " + fundTotalIncomePercentStyle + ">" + fundTotalIncome
         +"</td></tr>";
 
 
@@ -320,7 +328,7 @@ function getTotalTableHtml(totalMarketValueResult) {
     var allDayIncomePercentStyle = allDayIncome == 0 ? "" : (allDayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
     var allTotalIncomePercentStyle = allTotalIncome == 0 ? "" : (allTotalIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
 
-    str += "<tr><td>股票基金汇总合计</td><td colspan='3'></td><td " + allDayIncomePercentStyle + ">" + allDayIncome + "</td><td colspan='2' " + allDayIncomePercentStyle + ">" + allDayIncomePercent + "%</td><td colspan='5'></td><td colspan='2'>" + totalMarketValueResult.setScale(2) + "</td><td>"+totalCostValue+"</td><td " + allTotalIncomePercentStyle + ">" + allTotalIncomePercent + "%</td><td " + allTotalIncomePercentStyle + ">" + allTotalIncome
+    str += "<tr><td>股票基金汇总合计</td><td colspan='3'></td><td " + allDayIncomePercentStyle + ">" + allDayIncome + "</td><td colspan='2' " + allDayIncomePercentStyle + ">" + allDayIncomePercent + "%</td><td colspan='9'></td><td colspan='2'>" + totalMarketValueResult.setScale(2) + "</td><td>"+totalCostValue+"</td><td " + allTotalIncomePercentStyle + ">" + allTotalIncomePercent + "%</td><td " + allTotalIncomePercentStyle + ">" + allTotalIncome
         +"</td></tr>";
     return str;
 }
