@@ -780,7 +780,7 @@ public class StockEntity {
         String latestDateStr = lastDateDayHistory.getDay();
         LocalDate latestDate = LocalDate.parse(latestDateStr, DateTimeFormatter.ISO_LOCAL_DATE);
         LocalDate oneYearAgoDate = latestDate.minusYears(1);
-        StockDayHistoryResponse oneYearAgoDateDayHistory = new StockDayHistoryResponse();
+        StockDayHistoryResponse oneYearAgoDateDayHistory = null;
         for (int i = stockDayHistory300.size() - 1; i >= 0; i--) {
             StockDayHistoryResponse current = stockDayHistory300.get(i);
             LocalDate currentDate = LocalDate.parse(current.getDay(), DateTimeFormatter.ISO_LOCAL_DATE);
@@ -791,7 +791,7 @@ public class StockEntity {
             }
         }
         LocalDate oneSeasonAgoDate = latestDate.minusMonths(3);
-        StockDayHistoryResponse oneSeasonAgoDateDayHistory = new StockDayHistoryResponse();
+        StockDayHistoryResponse oneSeasonAgoDateDayHistory = null;
         for (int i = stockDayHistory300.size() - 1; i >= 0; i--) {
             StockDayHistoryResponse current = stockDayHistory300.get(i);
             LocalDate currentDate = LocalDate.parse(current.getDay(), DateTimeFormatter.ISO_LOCAL_DATE);
@@ -802,7 +802,7 @@ public class StockEntity {
             }
         }
         LocalDate oneMonthAgoDate = latestDate.minusMonths(1);
-        StockDayHistoryResponse oneMonthAgoDateDayHistory = new StockDayHistoryResponse();
+        StockDayHistoryResponse oneMonthAgoDateDayHistory = null;
         for (int i = stockDayHistory300.size() - 1; i >= 0; i--) {
             StockDayHistoryResponse current = stockDayHistory300.get(i);
             LocalDate currentDate = LocalDate.parse(current.getDay(), DateTimeFormatter.ISO_LOCAL_DATE);
@@ -813,7 +813,7 @@ public class StockEntity {
             }
         }
         LocalDate oneWeekAgoDate = latestDate.minusWeeks(1);
-        StockDayHistoryResponse oneWeekAgoDateDayHistory = new StockDayHistoryResponse();
+        StockDayHistoryResponse oneWeekAgoDateDayHistory = null;
         for (int i = stockDayHistory300.size() - 1; i >= 0; i--) {
             StockDayHistoryResponse current = stockDayHistory300.get(i);
             LocalDate currentDate = LocalDate.parse(current.getDay(), DateTimeFormatter.ISO_LOCAL_DATE);

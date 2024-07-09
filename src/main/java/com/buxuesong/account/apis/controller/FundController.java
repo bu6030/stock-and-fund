@@ -100,6 +100,10 @@ public class FundController {
                 .gszzl(s.getGszzl()).gztime(s.getGztime())
                 .currentDayJingzhi(s.getCurrentDayJingzhi())
                 .previousDayJingzhi(s.getPreviousDayJingzhi())
+                .oneYearAgoUpper(s.getOneYearAgoUpper())
+                .oneSeasonAgoUpper(s.getOneSeasonAgoUpper())
+                .oneMonthAgoUpper(s.getOneMonthAgoUpper())
+                .oneWeekAgoUpper(s.getOneWeekAgoUpper())
                 .build())
             .collect(Collectors.toList());
         List<StockAndFundBean> stockAndFundsFromStocks = stocks.stream()

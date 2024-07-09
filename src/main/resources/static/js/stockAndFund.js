@@ -278,6 +278,10 @@ function getFundTableHtml(result, totalMarketValueResult){
         }
         var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
+        var oneYearAgoUpperStyle = result[k].oneYearAgoUpper == 0 ? "" : (result[k].oneYearAgoUpper >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
+        var oneSeasonAgoUpperStyle = result[k].oneSeasonAgoUpper == 0 ? "" : (result[k].oneSeasonAgoUpper >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
+        var oneMonthAgoUpperStyle = result[k].oneMonthAgoUpper == 0 ? "" : (result[k].oneMonthAgoUpper >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
+        var oneWeekAgoUpperStyle = result[k].oneWeekAgoUpper == 0 ? "" : (result[k].oneWeekAgoUpper >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
 
         str += "<tr><td>"
             + "<a href='#' onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
@@ -286,10 +290,10 @@ function getFundTableHtml(result, totalMarketValueResult){
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
             + "</td><td " + dayIncomeStyle + " colspan='2'>" +result[k].gszzl + "%"
             + "</td><td colspan='2'>" + result[k].dwjz + "(" + result[k].jzrq + ")"
-            + "</td><td>"
-            + "</td><td>"
-            + "</td><td>"
-            + "</td><td>"
+            + "</td><td " + oneYearAgoUpperStyle + ">" + result[k].oneYearAgoUpper + "%"
+            + "</td><td " + oneSeasonAgoUpperStyle + ">" + result[k].oneSeasonAgoUpper + "%"
+            + "</td><td " + oneMonthAgoUpperStyle + ">" + result[k].oneMonthAgoUpper + "%"
+            + "</td><td " + oneWeekAgoUpperStyle + ">" + result[k].oneWeekAgoUpper + "%"
             + "</td><td>" + result[k].gsz
             + "</td><td>" +result[k].costPrise
             + "</td><td>" + result[k].bonds

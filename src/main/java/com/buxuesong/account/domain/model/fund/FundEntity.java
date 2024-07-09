@@ -3,9 +3,11 @@ package com.buxuesong.account.domain.model.fund;
 import com.alibaba.fastjson.JSONArray;
 import com.buxuesong.account.apis.model.request.FundRequest;
 import com.buxuesong.account.apis.model.response.SearchFundResult;
+import com.buxuesong.account.domain.model.stock.StockEntity;
 import com.buxuesong.account.domain.service.CacheService;
 import com.buxuesong.account.infrastructure.adapter.rest.SinaRestClient;
 import com.buxuesong.account.infrastructure.adapter.rest.TiantianFundRestClient;
+import com.buxuesong.account.infrastructure.adapter.rest.response.StockDayHistoryResponse;
 import com.buxuesong.account.infrastructure.general.utils.DateTimeUtils;
 import com.buxuesong.account.infrastructure.general.utils.UserUtils;
 import com.buxuesong.account.infrastructure.persistent.po.FundHisPO;
@@ -23,6 +25,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Slf4j
@@ -47,6 +51,10 @@ public class FundEntity {
     private boolean hide;// 是否隐藏
     private String currentDayJingzhi;// 当日净值（每个交易日晚9点之后有新日期数据）
     private String previousDayJingzhi;// 前一日净值
+    private String oneYearAgoUpper;
+    private String oneSeasonAgoUpper;
+    private String oneMonthAgoUpper;
+    private String oneWeekAgoUpper;
 
     public FundEntity() {
     }
@@ -234,6 +242,38 @@ public class FundEntity {
         this.previousDayJingzhi = previousDayJingzhi;
     }
 
+    public String getOneYearAgoUpper() {
+        return oneYearAgoUpper;
+    }
+
+    public void setOneYearAgoUpper(String oneYearAgoUpper) {
+        this.oneYearAgoUpper = oneYearAgoUpper;
+    }
+
+    public String getOneSeasonAgoUpper() {
+        return oneSeasonAgoUpper;
+    }
+
+    public void setOneSeasonAgoUpper(String oneSeasonAgoUpper) {
+        this.oneSeasonAgoUpper = oneSeasonAgoUpper;
+    }
+
+    public String getOneMonthAgoUpper() {
+        return oneMonthAgoUpper;
+    }
+
+    public void setOneMonthAgoUpper(String oneMonthAgoUpper) {
+        this.oneMonthAgoUpper = oneMonthAgoUpper;
+    }
+
+    public String getOneWeekAgoUpper() {
+        return oneWeekAgoUpper;
+    }
+
+    public void setOneWeekAgoUpper(String oneWeekAgoUpper) {
+        this.oneWeekAgoUpper = oneWeekAgoUpper;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -339,7 +379,7 @@ public class FundEntity {
                                 bean.setIncome(incomeDec.toString());
                             }
                         }
-                        List<FundJZPO> fundJZPOs = fundJZMapper.findResent5FundJZByCode(bean.getFundCode());
+                        List<FundJZPO> fundJZPOs = fundJZMapper.findResent380FundJZByCode(bean.getFundCode());
                         Optional<FundJZPO> optional = fundJZPOs.stream()
                             .filter(item -> item.getFSRQ().equals(bean.getGztime().substring(0, 10))).findAny();
                         // 当日净值已出
@@ -351,6 +391,7 @@ public class FundEntity {
                             bean.setCurrentDayJingzhi(currentDayFundJZPO.getDWJZ());
                             bean.setPreviousDayJingzhi(previousDayFundJZPO.getDWJZ());
                         }
+                        getRecentDateUpper(fundJZPOs, bean);
                         funds.add(bean);
                         log.info("Fund编码:[" + code + "]信息：{}", bean);
                     } else {
@@ -389,7 +430,7 @@ public class FundEntity {
                             bean.setIncome(incomeDec.toString());
                         }
                     }
-                    List<FundJZPO> fundJZPOs = fundJZMapper.findResent5FundJZByCode(bean.getFundCode());
+                    List<FundJZPO> fundJZPOs = fundJZMapper.findResent380FundJZByCode(bean.getFundCode());
                     Optional<FundJZPO> optional = fundJZPOs.stream()
                         .filter(item -> item.getFSRQ().equals(bean.getGztime().substring(0, 10))).findAny();
                     // 当日净值已出
@@ -401,6 +442,7 @@ public class FundEntity {
                         bean.setCurrentDayJingzhi(currentDayFundJZPO.getDWJZ());
                         bean.setPreviousDayJingzhi(previousDayFundJZPO.getDWJZ());
                     }
+                    getRecentDateUpper(fundJZPOs, bean);
                     funds.add(bean);
                     log.info("Fund编码:[" + code + "]信息：{}", bean);
                 }
@@ -526,6 +568,93 @@ public class FundEntity {
         }
         log.info("通过基金名称: {} 搜索到的结果为：{}", name, result);
         return result;
+    }
+
+    private void getRecentDateUpper(List<FundJZPO> fundJZPOs, FundEntity bean) {
+        if (fundJZPOs == null || fundJZPOs.size() == 0) {
+            bean.setOneYearAgoUpper("0.00");
+            bean.setOneSeasonAgoUpper("0.00");
+            bean.setOneMonthAgoUpper("0.00");
+            bean.setOneWeekAgoUpper("0.00");
+            return;
+        }
+        FundJZPO lastDateDayHistory = fundJZPOs.get(fundJZPOs.size() - 1);
+        String latestDateStr = lastDateDayHistory.getFSRQ();
+        LocalDate latestDate = LocalDate.parse(latestDateStr, DateTimeFormatter.ISO_LOCAL_DATE);
+        LocalDate oneYearAgoDate = latestDate.minusYears(1);
+        FundJZPO oneYearAgoDateDayHistory = null;
+        for (int i = fundJZPOs.size() - 1; i >= 0; i--) {
+            FundJZPO current = fundJZPOs.get(i);
+            LocalDate currentDate = LocalDate.parse(current.getFSRQ(), DateTimeFormatter.ISO_LOCAL_DATE);
+            if (currentDate.compareTo(oneYearAgoDate) <= 0) {
+                oneYearAgoDate = LocalDate.parse(current.getFSRQ(), DateTimeFormatter.ISO_LOCAL_DATE);
+                oneYearAgoDateDayHistory = current;
+                break;
+            }
+        }
+        LocalDate oneSeasonAgoDate = latestDate.minusMonths(3);
+        FundJZPO oneSeasonAgoDateDayHistory = null;
+        for (int i = fundJZPOs.size() - 1; i >= 0; i--) {
+            FundJZPO current = fundJZPOs.get(i);
+            LocalDate currentDate = LocalDate.parse(current.getFSRQ(), DateTimeFormatter.ISO_LOCAL_DATE);
+            if (currentDate.compareTo(oneSeasonAgoDate) <= 0) {
+                oneSeasonAgoDate = LocalDate.parse(current.getFSRQ(), DateTimeFormatter.ISO_LOCAL_DATE);
+                oneSeasonAgoDateDayHistory = current;
+                break;
+            }
+        }
+        LocalDate oneMonthAgoDate = latestDate.minusMonths(1);
+        FundJZPO oneMonthAgoDateDayHistory = null;
+        for (int i = fundJZPOs.size() - 1; i >= 0; i--) {
+            FundJZPO current = fundJZPOs.get(i);
+            LocalDate currentDate = LocalDate.parse(current.getFSRQ(), DateTimeFormatter.ISO_LOCAL_DATE);
+            if (currentDate.compareTo(oneMonthAgoDate) <= 0) {
+                oneMonthAgoDate = LocalDate.parse(current.getFSRQ(), DateTimeFormatter.ISO_LOCAL_DATE);
+                oneMonthAgoDateDayHistory = current;
+                break;
+            }
+        }
+        LocalDate oneWeekAgoDate = latestDate.minusWeeks(1);
+        FundJZPO oneWeekAgoDateDayHistory = null;
+        for (int i = fundJZPOs.size() - 1; i >= 0; i--) {
+            FundJZPO current = fundJZPOs.get(i);
+            LocalDate currentDate = LocalDate.parse(current.getFSRQ(), DateTimeFormatter.ISO_LOCAL_DATE);
+            if (currentDate.compareTo(oneWeekAgoDate) <= 0) {
+                oneWeekAgoDate = LocalDate.parse(current.getFSRQ(), DateTimeFormatter.ISO_LOCAL_DATE);
+                oneWeekAgoDateDayHistory = current;
+                break;
+            }
+        }
+        log.info("oneYearAgoDate is {}, oneSeasonAgoDate is {}, oneMonthAgoDate is {}, oneWeekAgoDate is {}", oneYearAgoDate, oneSeasonAgoDate, oneMonthAgoDate, oneWeekAgoDate);
+        if (oneYearAgoDateDayHistory != null) {
+            BigDecimal oneYearAgoUpper = (new BigDecimal(bean.getGsz() + "")).subtract(new BigDecimal(oneYearAgoDateDayHistory.getDWJZ() + "")).multiply(new BigDecimal("100"))
+                    .divide((new BigDecimal(oneYearAgoDateDayHistory.getDWJZ() + "")), 2, BigDecimal.ROUND_UP);
+            bean.setOneYearAgoUpper(oneYearAgoUpper + "");
+        } else {
+            bean.setOneYearAgoUpper("0.00");
+        }
+        if (oneYearAgoDateDayHistory != null) {
+            BigDecimal oneSeasonAgoUpper = (new BigDecimal(bean.getGsz() + "")).subtract(new BigDecimal(oneSeasonAgoDateDayHistory.getDWJZ() + "")).multiply(new BigDecimal("100"))
+                    .divide((new BigDecimal(oneSeasonAgoDateDayHistory.getDWJZ() + "")), 2, BigDecimal.ROUND_UP);
+            bean.setOneSeasonAgoUpper(oneSeasonAgoUpper + "");
+        } else {
+            bean.setOneSeasonAgoUpper("0.00");
+        }
+        if (oneYearAgoDateDayHistory != null) {
+            BigDecimal oneMonthAgoUpper = (new BigDecimal(bean.getGsz() + "")).subtract(new BigDecimal(oneMonthAgoDateDayHistory.getDWJZ() + "")).multiply(new BigDecimal("100"))
+                    .divide((new BigDecimal(oneMonthAgoDateDayHistory.getDWJZ() + "")), 2, BigDecimal.ROUND_UP);
+            bean.setOneMonthAgoUpper(oneMonthAgoUpper + "");
+        } else {
+            bean.setOneMonthAgoUpper("0.00");
+        }
+        if (oneYearAgoDateDayHistory != null) {
+            BigDecimal oneWeekAgoUpper = (new BigDecimal(bean.getGsz() + "")).subtract(new BigDecimal(oneWeekAgoDateDayHistory.getDWJZ() + "")).multiply(new BigDecimal("100"))
+                    .divide((new BigDecimal(oneWeekAgoDateDayHistory.getDWJZ() + "")), 2, BigDecimal.ROUND_UP);
+            bean.setOneWeekAgoUpper(oneWeekAgoUpper + "");
+        } else {
+            bean.setOneWeekAgoUpper("0.00");
+        }
+        log.info("oneYearAgoUpper is {}, oneSeasonAgoUpper is {}, oneMonthAgoUpper is {}, oneWeekAgoUpper is {}", bean.getOneYearAgoUpper(), bean.getOneSeasonAgoUpper(), bean.getOneMonthAgoUpper(), bean.getOneWeekAgoUpper());
     }
 
 }

@@ -33,13 +33,13 @@ public class EastMoneyRestClient {
         return response.getBody();
     }
 
-    public FundNetDiagramResponse getFundNetDiagram(String code) {
+    public FundNetDiagramResponse getFundNetDiagram(String code, String range) {
         log.info("通过东方财富接口获取基金单位净值，URL：{}",
-            GET_FUND_NET_DIAGRAM_URL + "?FCODE=" + code + "&RANGE=y&deviceid=Wap&plat=Wap&product=EFund&version=2.0.0&_=");
+            GET_FUND_NET_DIAGRAM_URL + "?FCODE=" + code + "&RANGE=" + range + "&deviceid=Wap&plat=Wap&product=EFund&version=2.0.0&_=");
         ResponseEntity<String> response = null;
         try {
             response = restTemplate.exchange(
-                GET_FUND_NET_DIAGRAM_URL + "?FCODE=" + code + "&RANGE=y&deviceid=Wap&plat=Wap&product=EFund&version=2.0.0&_=",
+                GET_FUND_NET_DIAGRAM_URL + "?FCODE=" + code + "&RANGE=" + range + "&deviceid=Wap&plat=Wap&product=EFund&version=2.0.0&_=",
                 HttpMethod.GET, null, String.class);
         } catch (Exception e) {
             log.info("通过东方财富接口获取基金单位净值接口异常: {}", e);

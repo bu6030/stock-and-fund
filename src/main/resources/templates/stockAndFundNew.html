@@ -184,10 +184,6 @@
                         }
                         item.donchianChennel = donchianChennel;
                         item.donchianChennelColor = donchianChennelColor;
-                        item.oneYearAgoUpperColor = item.oneYearAgoUpper == 0 ? "" : (item.oneYearAgoUpper >= 0?"#c12e2a":"#3e8f3e");
-                        item.oneSeasonAgoUpperColor = item.oneSeasonAgoUpper == 0 ? "" : (item.oneSeasonAgoUpper >= 0?"#c12e2a":"#3e8f3e");
-                        item.oneMonthAgoUpperColor = item.oneMonthAgoUpper == 0 ? "" : (item.oneMonthAgoUpper >= 0?"#c12e2a":"#3e8f3e");
-                        item.oneWeekAgoUpperColor = item.oneWeekAgoUpper == 0 ? "" : (item.oneWeekAgoUpper >= 0?"#c12e2a":"#3e8f3e");
                     } else if(item.type == 'FUND') {
                         item.typeNew = '基金';
                         var marketValue = new BigDecimal("0");
@@ -215,21 +211,17 @@
                         item.max = 'N/A';
                         item.min = 'N/A';
                         item.donchianChennel = 'N/A';
-                        item.oneYearAgoUpper = 'N/A';
-                        item.oneSeasonAgoUpper = 'N/A';
-                        item.oneMonthAgoUpper = 'N/A';
-                        item.oneWeekAgoUpper = 'N/A';
                         item.donchianChennelColor = '';
                         if (totalMarketValue.compareTo(new BigDecimal("0")) != 0) {
                             item.marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValue) + "";
                         }
-                        item.oneYearAgoUpperColor = '';
-                        item.oneSeasonAgoUpperColor = '';
-                        item.oneMonthAgoUpperColor = '';
-                        item.oneWeekAgoUpperColor = '';
                     }
                     item.dayInComeColor = item.dayIncome == 0 ? "" : (item.dayIncome >= 0?"#c12e2a":"#3e8f3e");
                     item.toltalIncomeColor = item.income == 0 ? "" : (item.income >= 0?"#c12e2a":"#3e8f3e");
+                    item.oneYearAgoUpperColor = item.oneYearAgoUpper == 0 ? "" : (item.oneYearAgoUpper >= 0?"#c12e2a":"#3e8f3e");
+                    item.oneSeasonAgoUpperColor = item.oneSeasonAgoUpper == 0 ? "" : (item.oneSeasonAgoUpper >= 0?"#c12e2a":"#3e8f3e");
+                    item.oneMonthAgoUpperColor = item.oneMonthAgoUpper == 0 ? "" : (item.oneMonthAgoUpper >= 0?"#c12e2a":"#3e8f3e");
+                    item.oneWeekAgoUpperColor = item.oneWeekAgoUpper == 0 ? "" : (item.oneWeekAgoUpper >= 0?"#c12e2a":"#3e8f3e");
                 }
                 return {
                     "code": res.code, //解析接口状态

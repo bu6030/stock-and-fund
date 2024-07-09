@@ -69,11 +69,22 @@ public class CacheService {
         return 0;
     }
 
-    @Cacheable(key = "'fund_net_diagram_'+#fundCode+'_'+#date", unless = "#result == null")
-    public FundNetDiagramResponse getFundNetDiagram(String fundCode, String date) {
-        FundNetDiagramResponse fundNetDiagram = eastMoneyRestClient.getFundNetDiagram(fundCode);
+    @Cacheable(key = "'fund_net_diagram_y_'+#fundCode+'_'+#date", unless = "#result == null")
+    public FundNetDiagramResponse getFundNetDiagramY(String fundCode, String date) {
+        FundNetDiagramResponse fundNetDiagram = eastMoneyRestClient.getFundNetDiagram(fundCode, "y");
         Optional<FundNetDiagramResponse.DataItem> optional = fundNetDiagram.getDatas().stream()
             .filter(dataItem -> dataItem.getFSRQ().equals(date)).findFirst();
+        if (optional.isPresent()) {
+            return fundNetDiagram;
+        }
+        return null;
+    }
+
+    @Cacheable(key = "'fund_net_diagram_n_'+#fundCode+'_'+#date", unless = "#result == null")
+    public FundNetDiagramResponse getFundNetDiagram3N(String fundCode, String date) {
+        FundNetDiagramResponse fundNetDiagram = eastMoneyRestClient.getFundNetDiagram(fundCode, "3n");
+        Optional<FundNetDiagramResponse.DataItem> optional = fundNetDiagram.getDatas().stream()
+                .filter(dataItem -> dataItem.getFSRQ().equals(date)).findFirst();
         if (optional.isPresent()) {
             return fundNetDiagram;
         }

@@ -355,7 +355,7 @@ public class DepositEntity {
             BigDecimal marketValue;
             BigDecimal totalIncome;
             boolean isCurrentDayNewValue = false;
-            String currentDayDate = LocalDate.now().toString();
+            String currentDayDate = LocalDate.now().minusDays(1).toString();
             FundNetDiagramResponse fundNetDiagram = getFundNetDiagramResponse(fund.getFundCode(), currentDayDate);
             // 当日净值已出
             if (fundNetDiagram != null) {
@@ -495,7 +495,7 @@ public class DepositEntity {
                 .collect(Collectors.toList());
             fundNetDiagram.setDatas(datas);
         } else {
-            fundNetDiagram = cacheService.getFundNetDiagram(fundCode, currentDayDate);
+            fundNetDiagram = cacheService.getFundNetDiagram3N(fundCode, currentDayDate);
             if (fundNetDiagram != null) {
                 fundNetDiagram.getDatas().forEach(item -> {
                     FundJZPO fundJZPO = fundJZMapper.findFundJZByCodeAndDate(fundCode, item.getFSRQ());
