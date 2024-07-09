@@ -355,7 +355,7 @@ public class DepositEntity {
             BigDecimal marketValue;
             BigDecimal totalIncome;
             boolean isCurrentDayNewValue = false;
-            String currentDayDate = LocalDate.now().minusDays(1).toString();
+            String currentDayDate = LocalDate.now().toString();
             FundNetDiagramResponse fundNetDiagram = getFundNetDiagramResponse(fund.getFundCode(), currentDayDate);
             // 当日净值已出
             if (fundNetDiagram != null) {
