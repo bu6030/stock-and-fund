@@ -329,3 +329,7 @@ form .form-group:last-child{padding-bottom:0;}
     font-size: 12px;
     color:#3e8f3e;
 }
+
+.no-wrap {
+  white-space: nowrap;
+}
