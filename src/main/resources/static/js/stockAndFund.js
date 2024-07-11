@@ -208,7 +208,7 @@ function getStockTableHtml(result, totalMarketValueResult){
         str += "<tr><td>"
             + "<a href='#' onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
             + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"分时图\" onclick=\"showTimeImageModal('" + result[k].code + "','STOCK')\"><span class=\"am-icon-clock-o\"></span></button>"
-            + "</td><td onclick=\"getStockHistory('" + result[k].code + "')\">"  +result[k].name
+            + "</td><td onclick=\"showBuyOrSell('" + result[k].code + "','" + result[k].name + "')\">" +result[k].name
             + "</td><td " + dayIncomeStyle + ">" + result[k].change
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
             + "</td><td " + dayIncomeStyle + ">" + result[k].changePercent +"%"
@@ -430,7 +430,7 @@ function largeMarketClick(timeImageCode) {
 }
 
 function getFundHistory(code){
-    $("#show-buy-or-sell-button")[0].style.display  = 'none';
+//    $("#show-buy-or-sell-button")[0].style.display  = 'none';
     $.ajax({
         url:"/fundHis?code=" + code,
         type:"get",
@@ -482,7 +482,7 @@ function getFundHistory(code){
 }
 
 function getStockHistory(code) {
-    $("#show-buy-or-sell-button")[0].style.display  = 'block';
+//    $("#show-buy-or-sell-button")[0].style.display  = 'block';
     $("#buy-or-sell-stock-code").val(code);
     $.ajax({
         url:"/stockHis?code=" + code,
@@ -535,10 +535,10 @@ function getStockHistory(code) {
     });
 }
 
-function showBuyOrSell() {
-    $("#history-modal").modal('hide');
-    let code = $("#buy-or-sell-stock-code").val();
-    let name = $("#buy-or-sell-stock-name").val();
+function showBuyOrSell(code, name) {
+//    $("#history-modal").modal('hide');
+//    let code = $("#buy-or-sell-stock-code").val();
+//    let name = $("#buy-or-sell-stock-name").val();
     $.ajax({
         url:"/buyOrSellStock?code=" + code,
         type:"get",
