@@ -168,9 +168,9 @@ function getTableHtml(result){
         var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(result[k].bonds))).toFixed(2));
         stockTotalCostValue = stockTotalCostValue.add(costPriceValue);
 
-        str += "<tr><td>"
+        str += "<tr><td class='no-wrap'>"
             + "<a href='#' onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
-            + "</td><td onclick=\"showBuyOrSell('" + result[k].code + "','" + result[k].name + "')\">" +result[k].name
+            + "</td><td class='no-wrap' onclick=\"showBuyOrSell('" + result[k].code + "','" + result[k].name + "')\">" +result[k].name
             + "</td><td " + dayIncomeStyle + ">" + result[k].change
             + "</td><td " + dayIncomeStyle + ">" + result[k].changePercent +"%"
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
@@ -189,7 +189,7 @@ function getTableHtml(result){
             + "</td><td>" + costPriceValue
             + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent +"%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].income
-            + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"修改\" onclick=\"updateStock('" + result[k].code + "','" + result[k].costPrise + "','" + result[k].bonds + "','" + result[k].app + "','" + result[k].hide + "','" + result[k].name + "')\">"
+            + "</td><td class='no-wrap'>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"修改\" onclick=\"updateStock('" + result[k].code + "','" + result[k].costPrise + "','" + result[k].bonds + "','" + result[k].app + "','" + result[k].hide + "','" + result[k].name + "')\">"
             + "<span class=\"am-icon-pencil-square-o\"></span></button>"
             + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"买卖\" onclick=\"buyOrSell('" + result[k].code + "','" + result[k].name + "')\">"
             + "<span class=\"am-icon-shopping-cart\"></span></button>"
