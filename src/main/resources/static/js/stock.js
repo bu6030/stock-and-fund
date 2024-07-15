@@ -139,29 +139,29 @@ function getTableHtml(result){
         var donchianChennel = "";
         var donchianChennelStyle = "";
         if (now.compareTo(day50Max) > 0) {
-            donchianChennel += "破50高；";
+            donchianChennel += "破50高(" + day50Max + ")；";
             donchianChennelStyle = "style=\"color:#c12e2a\"";
         } else if(now.compareTo(day50Min) < 0) {
-            donchianChennel += "破50低；";
+            donchianChennel += "破50低(" + day50Min + ")；";
             donchianChennelStyle = "style=\"color:#3e8f3e\"";
         }
         if (now.compareTo(day20Max) > 0) {
-            donchianChennel += "破20高；";
+            donchianChennel += "破20高(" + day20Max + ")；";
             donchianChennelStyle = "style=\"color:#c12e2a\"";
         } else if(now.compareTo(day20Min) < 0) {
-            donchianChennel += "破20低；";
+            donchianChennel += "破20低(" + day20Min + ")；";
             donchianChennelStyle = "style=\"color:#3e8f3e\"";
         }
         if (now.compareTo(day10Max) > 0) {
-            donchianChennel += "破10高；";
+            donchianChennel += "破10高(" + day10Max + ")；";
             donchianChennelStyle = "style=\"color:#c12e2a\"";
         } else if(now.compareTo(day10Min) < 0) {
-            donchianChennel += "破10低；";
+            donchianChennel += "破10低(" + day10Min + ")；";
             donchianChennelStyle = "style=\"color:#3e8f3e\"";
         }
         if (donchianChennel == "") {
             donchianChennel += "监控中；";
-            donchianChennelColor = "";
+            donchianChennelStyle = "";
         }
         // 计算股票总成本
         var costPrice = new BigDecimal(result[k].costPrise+"");
@@ -176,7 +176,7 @@ function getTableHtml(result){
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
             + "</td><td>" + result[k].max
             + "</td><td>" + result[k].min
-            + "</td><td " + donchianChennelStyle + ">" + "50最高：" + day50Max + "；50最低：" + day50Min + "；20最高：" + day20Max + "；20最低：" + day20Min + "；10最高：" + day10Max + "；10最低：" + day10Min + "；" + donchianChennel
+            + "</td><td " + donchianChennelStyle + " onclick=\"showDonchianChennel('" + day50Max + "','" + day50Min + "','" + day20Max + "','" + day20Min + "','" + day10Max + "','" + day10Min + "')\">" + donchianChennel
             + "</td><td " + oneYearAgoUpperStyle + ">" + result[k].oneYearAgoUpper + "%"
             + "</td><td " + oneSeasonAgoUpperStyle + ">" + result[k].oneSeasonAgoUpper + "%"
             + "</td><td " + oneMonthAgoUpperStyle + ">" + result[k].oneMonthAgoUpper + "%"
@@ -565,4 +565,8 @@ function showBuyOrSellCost(code) {
             console.log(textStatus);
         }
     });
+}
+
+function showDonchianChennel(day50Max, day50Min, day20Max, day20Min, day10Max, day10Min) {
+    alert("50最高：" + day50Max + "；50最低：" + day50Min + "；20最高：" + day20Max + "；20最低：" + day20Min + "；10最高：" + day10Max + "；10最低：" + day10Min + "；");
 }
