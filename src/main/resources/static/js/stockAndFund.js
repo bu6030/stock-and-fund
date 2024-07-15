@@ -214,7 +214,7 @@ function getStockTableHtml(result, totalMarketValueResult){
             + "</td><td " + dayIncomeStyle + ">" + result[k].changePercent +"%"
             + "</td><td>" +result[k].max
             + "</td><td>" + result[k].min
-            + "</td><td " + donchianChennelStyle + " onclick=\"showDonchianChennel('" + day50Max + "','" + day50Min + "','" + day20Max + "','" + day20Min + "','" + day10Max + "','" + day10Min + "')\">" + donchianChennel
+            + "</td><td " + donchianChennelStyle + " onclick=\"showDonchianChennel('" + result[k].name + "','" + day50Max + "','" + day50Min + "','" + day20Max + "','" + day20Min + "','" + day10Max + "','" + day10Min + "')\">" + donchianChennel
             + "</td><td " + oneYearAgoUpperStyle + ">" + result[k].oneYearAgoUpper + "%"
             + "</td><td " + oneSeasonAgoUpperStyle + ">" + result[k].oneSeasonAgoUpper + "%"
             + "</td><td " + oneMonthAgoUpperStyle + ">" + result[k].oneMonthAgoUpper + "%"
@@ -583,6 +583,6 @@ function showBuyOrSell(code, name) {
     });
 }
 
-function showDonchianChennel(day50Max, day50Min, day20Max, day20Min, day10Max, day10Min) {
-    alert("50最高：" + day50Max + "；50最低：" + day50Min + "；20最高：" + day20Max + "；20最低：" + day20Min + "；10最高：" + day10Max + "；10最低：" + day10Min + "；");
+function showDonchianChennel(name, day50Max, day50Min, day20Max, day20Min, day10Max, day10Min) {
+    alert("股票：" + name + "；50最高：" + day50Max + "；50最低：" + day50Min + "；20最高：" + day20Max + "；20最低：" + day20Min + "；10最高：" + day10Max + "；10最低：" + day10Min + "");
 }
