@@ -17,7 +17,8 @@ public class StockDayHistoryResponse {
     private Double close;
 
     public StockDayHistoryResponse clone() {
-        StockDayHistoryResponse clone = new StockDayHistoryResponse(this.getDay(), this.getHigh(), this.getLow(), this.getOpen(), this.getClose());
+        StockDayHistoryResponse clone = new StockDayHistoryResponse(this.getDay(), this.getHigh(), this.getLow(), this.getOpen(),
+            this.getClose());
         return clone;
     }
 }

@@ -37,7 +37,8 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class DepositEntity {
-    record DepositItem(String name, String type, BigDecimal dayIncome, BigDecimal marketValue, BigDecimal totalIncome, boolean isCurrentDayNewValue) {
+    record DepositItem(String name, String type, BigDecimal dayIncome, BigDecimal marketValue, BigDecimal totalIncome,
+        boolean isCurrentDayNewValue) {
     }
 
     record DepositResult(BigDecimal totalDayIncome, BigDecimal totalMarketValue, BigDecimal totalIncome, List<DepositItem> depositItems) {
@@ -367,7 +368,7 @@ public class DepositEntity {
                 // 计算当日盈利
                 dayIncome = (new BigDecimal(currentDayItem.getDWJZ())
                     .subtract(new BigDecimal(yesTodayItem.getDWJZ())).multiply(new BigDecimal(fund.getBonds())))
-                        .setScale(2, BigDecimal.ROUND_HALF_UP);
+                    .setScale(2, BigDecimal.ROUND_HALF_UP);
                 fundTotalDayIncome = fundTotalDayIncome.add(dayIncome);
                 // 计算市值
                 marketValue = (new BigDecimal(currentDayItem.getDWJZ())
@@ -395,7 +396,8 @@ public class DepositEntity {
                 fundTotalIncome = fundTotalIncome.add(totalIncome);
                 log.info("按照估值计算，基金: {} ,当日盈利: {} ，市值: {} ，总收益: {}", fund.getFundName(), dayIncome.toString(), marketValue, totalIncome);
             }
-            DepositItem depositItem = new DepositItem(fund.getFundName(), "FUND", dayIncome, marketValue, totalIncome, isCurrentDayNewValue);
+            DepositItem depositItem = new DepositItem(fund.getFundName(), "FUND", dayIncome, marketValue, totalIncome,
+                isCurrentDayNewValue);
             depositItems.add(depositItem);
         }
         log.info("基金当日盈利: {}，基金当日市值: {}，基金总收益: {}", fundTotalDayIncome, fundTotalMarketValue, fundTotalIncome);

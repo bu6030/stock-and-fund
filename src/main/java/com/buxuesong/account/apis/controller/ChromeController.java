@@ -51,7 +51,7 @@ public class ChromeController {
 
     /**
      * 获取数据导入格式json 自己 chrome 插件使用，因此 username 参数默认写了 buxuesong
-     * 
+     *
      * @return
      */
     @GetMapping(value = "/chrome/stockAndFund")

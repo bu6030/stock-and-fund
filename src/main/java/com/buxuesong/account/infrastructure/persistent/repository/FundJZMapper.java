@@ -17,7 +17,7 @@ public interface FundJZMapper {
     List<FundJZPO> findResent5FundJZByCode(@Param("code") String code);
 
     @Select({
-            "<script>select ID, CODE, FSRQ, DWJZ from FUND_JZ WHERE 1=1 <if test=\"code!=null and code!=''\"> and CODE = #{code} </if> and FSRQ >= date('now', '-380 days') order by FSRQ ASC</script>" })
+        "<script>select ID, CODE, FSRQ, DWJZ from FUND_JZ WHERE 1=1 <if test=\"code!=null and code!=''\"> and CODE = #{code} </if> and FSRQ >= date('now', '-380 days') order by FSRQ ASC</script>" })
     List<FundJZPO> findResent380FundJZByCode(@Param("code") String code);
 
     @Select("select ID, CODE, FSRQ, DWJZ from FUND_JZ where CODE = #{code} AND FSRQ = #{date}")

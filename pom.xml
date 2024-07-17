@@ -19,7 +19,7 @@
 	</parent>
 
 	<properties>
-		<httpclient.version>5.2.1</httpclient.version>
+		<httpclient.version>5.3.1</httpclient.version>
 		<main.basedir>${project.basedir}</main.basedir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -158,13 +158,13 @@
 			<plugin>
 				<groupId>net.revelc.code.formatter</groupId>
 				<artifactId>formatter-maven-plugin</artifactId>
-				<version>2.10.0</version>
+				<version>2.24.1</version>
 				<configuration>
 					<directories>
 						<directory>${project.build.sourceDirectory}</directory>
 						<directory>${project.build.directory}/generated-sources</directory>
 					</directories>
-					<configFile>${main.basedir}/stockAndFund-formatter.xml</configFile>
+					<configFile>${main.basedir}/stock-and-fund-formatter.xml</configFile>
 					<compilerSource>${java.version}</compilerSource>
 					<compilerCompliance>${java.version}</compilerCompliance>
 					<compilerTargetPlatform>${java.version}</compilerTargetPlatform>

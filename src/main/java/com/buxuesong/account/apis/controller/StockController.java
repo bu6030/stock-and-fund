@@ -47,7 +47,7 @@ public class StockController {
 
     /**
      * 获取大盘指数，上证，深成指，创业板指
-     * 
+     *
      * @return
      * @throws Exception
      */
@@ -62,7 +62,7 @@ public class StockController {
 
     /**
      * 获取 Stock His 历史数据
-     * 
+     *
      * @param app
      * @return
      * @throws Exception

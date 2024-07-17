@@ -65,6 +65,7 @@ public class StockEntity {
     private String oneSeasonAgoUpper;
     private String oneMonthAgoUpper;
     private String oneWeekAgoUpper;
+
     public StockEntity() {
     }
 
@@ -323,32 +324,32 @@ public class StockEntity {
     @Override
     public String toString() {
         return "StockEntity{" +
-                "code='" + code + '\'' +
-                ", name='" + name + '\'' +
-                ", now='" + now + '\'' +
-                ", change='" + change + '\'' +
-                ", changePercent='" + changePercent + '\'' +
-                ", time='" + time + '\'' +
-                ", max='" + max + '\'' +
-                ", min='" + min + '\'' +
-                ", costPrise='" + costPrise + '\'' +
-                ", bonds='" + bonds + '\'' +
-                ", app='" + app + '\'' +
-                ", incomePercent='" + incomePercent + '\'' +
-                ", income='" + income + '\'' +
-                ", buyOrSellStockRequestList=" + buyOrSellStockRequestList +
-                ", hide=" + hide +
-                ", day50Max='" + day50Max + '\'' +
-                ", day50Min='" + day50Min + '\'' +
-                ", day20Max='" + day20Max + '\'' +
-                ", day20Min='" + day20Min + '\'' +
-                ", day10Max='" + day10Max + '\'' +
-                ", day10Min='" + day10Min + '\'' +
-                ", oneYearAgoUpper='" + oneYearAgoUpper + '\'' +
-                ", oneSeasonAgoUpper='" + oneSeasonAgoUpper + '\'' +
-                ", oneMonthAgoUpper='" + oneMonthAgoUpper + '\'' +
-                ", oneWeekAgoUpper='" + oneWeekAgoUpper + '\'' +
-                '}';
+            "code='" + code + '\'' +
+            ", name='" + name + '\'' +
+            ", now='" + now + '\'' +
+            ", change='" + change + '\'' +
+            ", changePercent='" + changePercent + '\'' +
+            ", time='" + time + '\'' +
+            ", max='" + max + '\'' +
+            ", min='" + min + '\'' +
+            ", costPrise='" + costPrise + '\'' +
+            ", bonds='" + bonds + '\'' +
+            ", app='" + app + '\'' +
+            ", incomePercent='" + incomePercent + '\'' +
+            ", income='" + income + '\'' +
+            ", buyOrSellStockRequestList=" + buyOrSellStockRequestList +
+            ", hide=" + hide +
+            ", day50Max='" + day50Max + '\'' +
+            ", day50Min='" + day50Min + '\'' +
+            ", day20Max='" + day20Max + '\'' +
+            ", day20Min='" + day20Min + '\'' +
+            ", day10Max='" + day10Max + '\'' +
+            ", day10Min='" + day10Min + '\'' +
+            ", oneYearAgoUpper='" + oneYearAgoUpper + '\'' +
+            ", oneSeasonAgoUpper='" + oneSeasonAgoUpper + '\'' +
+            ", oneMonthAgoUpper='" + oneMonthAgoUpper + '\'' +
+            ", oneWeekAgoUpper='" + oneWeekAgoUpper + '\'' +
+            '}';
     }
 
     @Autowired
@@ -458,19 +459,21 @@ public class StockEntity {
                 if (stockDayHistory300 != null && stockDayHistory300.size() >= 20) {
                     if (stockDayHistory300.size() >= 50) {
                         StockDayHistoryResponse maxStockDay50 = stockDayHistory300.stream()
-                                .max((s1, s2) -> Double.compare(s1.getHigh(), s2.getHigh()))
-                                .get();
+                            .max((s1, s2) -> Double.compare(s1.getHigh(), s2.getHigh()))
+                            .get();
                         StockDayHistoryResponse minStockDay50 = stockDayHistory300.stream()
-                                .min((s1, s2) -> Double.compare(s1.getLow(), s2.getLow()))
-                                .get();
+                            .min((s1, s2) -> Double.compare(s1.getLow(), s2.getLow()))
+                            .get();
                         bean.setDay50Max(maxStockDay50.getHigh() + "");
                         bean.setDay50Min(minStockDay50.getLow() + "");
                     } else {
                         bean.setDay50Max(now + "");
                         bean.setDay50Min(now + "");
                     }
-                    List<StockDayHistoryResponse> stockDayHistory10 = stockDayHistory300.subList(stockDayHistory300.size() - 10, stockDayHistory300.size());
-                    List<StockDayHistoryResponse> stockDayHistory20 = stockDayHistory300.subList(stockDayHistory300.size() - 20, stockDayHistory300.size());
+                    List<StockDayHistoryResponse> stockDayHistory10 = stockDayHistory300.subList(stockDayHistory300.size() - 10,
+                        stockDayHistory300.size());
+                    List<StockDayHistoryResponse> stockDayHistory20 = stockDayHistory300.subList(stockDayHistory300.size() - 20,
+                        stockDayHistory300.size());
                     StockDayHistoryResponse maxStockDay20 = stockDayHistory20.stream()
                         .max((s1, s2) -> Double.compare(s1.getHigh(), s2.getHigh()))
                         .get();
@@ -478,8 +481,8 @@ public class StockEntity {
                         .min((s1, s2) -> Double.compare(s1.getLow(), s2.getLow()))
                         .get();
                     StockDayHistoryResponse maxStockDay10 = stockDayHistory10.stream()
-                            .max((s1, s2) -> Double.compare(s1.getHigh(), s2.getHigh()))
-                            .get();
+                        .max((s1, s2) -> Double.compare(s1.getHigh(), s2.getHigh()))
+                        .get();
                     StockDayHistoryResponse minStockDay10 = stockDayHistory10.stream()
                         .min((s1, s2) -> Double.compare(s1.getLow(), s2.getLow()))
                         .get();
@@ -823,35 +826,41 @@ public class StockEntity {
                 break;
             }
         }
-        log.info("oneYearAgoDate is {}, oneSeasonAgoDate is {}, oneMonthAgoDate is {}, oneWeekAgoDate is {}", oneYearAgoDate, oneSeasonAgoDate, oneMonthAgoDate, oneWeekAgoDate);
+        log.info("oneYearAgoDate is {}, oneSeasonAgoDate is {}, oneMonthAgoDate is {}, oneWeekAgoDate is {}", oneYearAgoDate,
+            oneSeasonAgoDate, oneMonthAgoDate, oneWeekAgoDate);
         if (oneYearAgoDateDayHistory != null) {
-            BigDecimal oneYearAgoUpper = (new BigDecimal(bean.getNow() + "")).subtract(new BigDecimal(oneYearAgoDateDayHistory.getClose() + "")).multiply(new BigDecimal("100"))
-                    .divide((new BigDecimal(oneYearAgoDateDayHistory.getClose() + "")), 2, BigDecimal.ROUND_UP);
+            BigDecimal oneYearAgoUpper = (new BigDecimal(bean.getNow() + ""))
+                .subtract(new BigDecimal(oneYearAgoDateDayHistory.getClose() + "")).multiply(new BigDecimal("100"))
+                .divide((new BigDecimal(oneYearAgoDateDayHistory.getClose() + "")), 2, BigDecimal.ROUND_UP);
             bean.setOneYearAgoUpper(oneYearAgoUpper + "");
         } else {
             bean.setOneYearAgoUpper("0.00");
         }
         if (oneYearAgoDateDayHistory != null) {
-            BigDecimal oneSeasonAgoUpper = (new BigDecimal(bean.getNow() + "")).subtract(new BigDecimal(oneSeasonAgoDateDayHistory.getClose() + "")).multiply(new BigDecimal("100"))
-                    .divide((new BigDecimal(oneSeasonAgoDateDayHistory.getClose() + "")), 2, BigDecimal.ROUND_UP);
+            BigDecimal oneSeasonAgoUpper = (new BigDecimal(bean.getNow() + ""))
+                .subtract(new BigDecimal(oneSeasonAgoDateDayHistory.getClose() + "")).multiply(new BigDecimal("100"))
+                .divide((new BigDecimal(oneSeasonAgoDateDayHistory.getClose() + "")), 2, BigDecimal.ROUND_UP);
             bean.setOneSeasonAgoUpper(oneSeasonAgoUpper + "");
         } else {
             bean.setOneSeasonAgoUpper("0.00");
         }
         if (oneYearAgoDateDayHistory != null) {
-            BigDecimal oneMonthAgoUpper = (new BigDecimal(bean.getNow() + "")).subtract(new BigDecimal(oneMonthAgoDateDayHistory.getClose() + "")).multiply(new BigDecimal("100"))
-                    .divide((new BigDecimal(oneMonthAgoDateDayHistory.getClose() + "")), 2, BigDecimal.ROUND_UP);
+            BigDecimal oneMonthAgoUpper = (new BigDecimal(bean.getNow() + ""))
+                .subtract(new BigDecimal(oneMonthAgoDateDayHistory.getClose() + "")).multiply(new BigDecimal("100"))
+                .divide((new BigDecimal(oneMonthAgoDateDayHistory.getClose() + "")), 2, BigDecimal.ROUND_UP);
             bean.setOneMonthAgoUpper(oneMonthAgoUpper + "");
         } else {
             bean.setOneMonthAgoUpper("0.00");
         }
         if (oneYearAgoDateDayHistory != null) {
-            BigDecimal oneWeekAgoUpper = (new BigDecimal(bean.getNow() + "")).subtract(new BigDecimal(oneWeekAgoDateDayHistory.getClose() + "")).multiply(new BigDecimal("100"))
-                    .divide((new BigDecimal(oneWeekAgoDateDayHistory.getClose() + "")), 2, BigDecimal.ROUND_UP);
+            BigDecimal oneWeekAgoUpper = (new BigDecimal(bean.getNow() + ""))
+                .subtract(new BigDecimal(oneWeekAgoDateDayHistory.getClose() + "")).multiply(new BigDecimal("100"))
+                .divide((new BigDecimal(oneWeekAgoDateDayHistory.getClose() + "")), 2, BigDecimal.ROUND_UP);
             bean.setOneWeekAgoUpper(oneWeekAgoUpper + "");
         } else {
             bean.setOneWeekAgoUpper("0.00");
         }
-        log.info("oneYearAgoUpper is {}, oneSeasonAgoUpper is {}, oneMonthAgoUpper is {}, oneWeekAgoUpper is {}", bean.getOneYearAgoUpper(), bean.getOneSeasonAgoUpper(), bean.getOneMonthAgoUpper(), bean.getOneWeekAgoUpper());
+        log.info("oneYearAgoUpper is {}, oneSeasonAgoUpper is {}, oneMonthAgoUpper is {}, oneWeekAgoUpper is {}", bean.getOneYearAgoUpper(),
+            bean.getOneSeasonAgoUpper(), bean.getOneMonthAgoUpper(), bean.getOneWeekAgoUpper());
     }
 }

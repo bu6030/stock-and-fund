@@ -24,7 +24,7 @@ public class AdviceEntity {
 
     /**
      * 保存股票基金神器扩展程序的反馈建议
-     * 
+     *
      * @param request
      * @return
      */
@@ -34,7 +34,7 @@ public class AdviceEntity {
             .build());
         try {
             mailUtils.sendMailNoArchieve("用户建议 " + LocalDateTime.now().truncatedTo(ChronoUnit.DAYS), request.getAdviceContent());
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             log.error("邮件发送失败", e);
         }
@@ -43,7 +43,7 @@ public class AdviceEntity {
 
     /**
      * 获取股票基金神器扩展程序的反馈建议
-     * 
+     *
      * @return
      */
     public List<AdvicePO> getAdvice() {

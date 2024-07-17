@@ -625,36 +625,42 @@ public class FundEntity {
                 break;
             }
         }
-        log.info("oneYearAgoDate is {}, oneSeasonAgoDate is {}, oneMonthAgoDate is {}, oneWeekAgoDate is {}", oneYearAgoDate, oneSeasonAgoDate, oneMonthAgoDate, oneWeekAgoDate);
+        log.info("oneYearAgoDate is {}, oneSeasonAgoDate is {}, oneMonthAgoDate is {}, oneWeekAgoDate is {}", oneYearAgoDate,
+            oneSeasonAgoDate, oneMonthAgoDate, oneWeekAgoDate);
         if (oneYearAgoDateDayHistory != null) {
-            BigDecimal oneYearAgoUpper = (new BigDecimal(bean.getGsz() + "")).subtract(new BigDecimal(oneYearAgoDateDayHistory.getDWJZ() + "")).multiply(new BigDecimal("100"))
-                    .divide((new BigDecimal(oneYearAgoDateDayHistory.getDWJZ() + "")), 2, BigDecimal.ROUND_UP);
+            BigDecimal oneYearAgoUpper = (new BigDecimal(bean.getGsz() + ""))
+                .subtract(new BigDecimal(oneYearAgoDateDayHistory.getDWJZ() + "")).multiply(new BigDecimal("100"))
+                .divide((new BigDecimal(oneYearAgoDateDayHistory.getDWJZ() + "")), 2, BigDecimal.ROUND_UP);
             bean.setOneYearAgoUpper(oneYearAgoUpper + "");
         } else {
             bean.setOneYearAgoUpper("0.00");
         }
         if (oneYearAgoDateDayHistory != null) {
-            BigDecimal oneSeasonAgoUpper = (new BigDecimal(bean.getGsz() + "")).subtract(new BigDecimal(oneSeasonAgoDateDayHistory.getDWJZ() + "")).multiply(new BigDecimal("100"))
-                    .divide((new BigDecimal(oneSeasonAgoDateDayHistory.getDWJZ() + "")), 2, BigDecimal.ROUND_UP);
+            BigDecimal oneSeasonAgoUpper = (new BigDecimal(bean.getGsz() + ""))
+                .subtract(new BigDecimal(oneSeasonAgoDateDayHistory.getDWJZ() + "")).multiply(new BigDecimal("100"))
+                .divide((new BigDecimal(oneSeasonAgoDateDayHistory.getDWJZ() + "")), 2, BigDecimal.ROUND_UP);
             bean.setOneSeasonAgoUpper(oneSeasonAgoUpper + "");
         } else {
             bean.setOneSeasonAgoUpper("0.00");
         }
         if (oneYearAgoDateDayHistory != null) {
-            BigDecimal oneMonthAgoUpper = (new BigDecimal(bean.getGsz() + "")).subtract(new BigDecimal(oneMonthAgoDateDayHistory.getDWJZ() + "")).multiply(new BigDecimal("100"))
-                    .divide((new BigDecimal(oneMonthAgoDateDayHistory.getDWJZ() + "")), 2, BigDecimal.ROUND_UP);
+            BigDecimal oneMonthAgoUpper = (new BigDecimal(bean.getGsz() + ""))
+                .subtract(new BigDecimal(oneMonthAgoDateDayHistory.getDWJZ() + "")).multiply(new BigDecimal("100"))
+                .divide((new BigDecimal(oneMonthAgoDateDayHistory.getDWJZ() + "")), 2, BigDecimal.ROUND_UP);
             bean.setOneMonthAgoUpper(oneMonthAgoUpper + "");
         } else {
             bean.setOneMonthAgoUpper("0.00");
         }
         if (oneYearAgoDateDayHistory != null) {
-            BigDecimal oneWeekAgoUpper = (new BigDecimal(bean.getGsz() + "")).subtract(new BigDecimal(oneWeekAgoDateDayHistory.getDWJZ() + "")).multiply(new BigDecimal("100"))
-                    .divide((new BigDecimal(oneWeekAgoDateDayHistory.getDWJZ() + "")), 2, BigDecimal.ROUND_UP);
+            BigDecimal oneWeekAgoUpper = (new BigDecimal(bean.getGsz() + ""))
+                .subtract(new BigDecimal(oneWeekAgoDateDayHistory.getDWJZ() + "")).multiply(new BigDecimal("100"))
+                .divide((new BigDecimal(oneWeekAgoDateDayHistory.getDWJZ() + "")), 2, BigDecimal.ROUND_UP);
             bean.setOneWeekAgoUpper(oneWeekAgoUpper + "");
         } else {
             bean.setOneWeekAgoUpper("0.00");
         }
-        log.info("oneYearAgoUpper is {}, oneSeasonAgoUpper is {}, oneMonthAgoUpper is {}, oneWeekAgoUpper is {}", bean.getOneYearAgoUpper(), bean.getOneSeasonAgoUpper(), bean.getOneMonthAgoUpper(), bean.getOneWeekAgoUpper());
+        log.info("oneYearAgoUpper is {}, oneSeasonAgoUpper is {}, oneMonthAgoUpper is {}, oneWeekAgoUpper is {}", bean.getOneYearAgoUpper(),
+            bean.getOneSeasonAgoUpper(), bean.getOneMonthAgoUpper(), bean.getOneWeekAgoUpper());
     }
 
 }

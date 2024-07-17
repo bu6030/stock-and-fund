@@ -84,7 +84,7 @@ public class CacheService {
     public FundNetDiagramResponse getFundNetDiagram3N(String fundCode, String date) {
         FundNetDiagramResponse fundNetDiagram = eastMoneyRestClient.getFundNetDiagram(fundCode, "3n");
         Optional<FundNetDiagramResponse.DataItem> optional = fundNetDiagram.getDatas().stream()
-                .filter(dataItem -> dataItem.getFSRQ().equals(date)).findFirst();
+            .filter(dataItem -> dataItem.getFSRQ().equals(date)).findFirst();
         if (optional.isPresent()) {
             return fundNetDiagram;
         }
