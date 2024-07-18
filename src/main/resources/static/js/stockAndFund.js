@@ -443,29 +443,37 @@ function getFundHistory(code) {
             for(var k in result) {
                 var costPrise = new BigDecimal(result[k].costPrise + "");
                 var costPriseChange = new BigDecimal(result[k].costPriseChange + "");
+                var newCostPrise = costPrise.add(costPriseChange);
                 let costPriseChangeStyle = "";
                 if (costPriseChange > (new BigDecimal("0"))) {
-                    costPriseChange = "+" + costPriseChange;
+                    costPriseChange = "(+" + costPriseChange + ")";
                     costPriseChangeStyle = "style=\"color:#c12e2a\"";
                 } else if (costPriseChange < (new BigDecimal("0"))) {
+                    costPriseChange = "(" + costPriseChange + ")";
                     costPriseChangeStyle = "style=\"color:#3e8f3e\"";
+                } else {
+                    costPriseChange = "(不变)";
                 }
                 var bonds = new BigDecimal(result[k].bonds + "");
                 var bondsChange = new BigDecimal(result[k].bondsChange + "");
+                var newBonds = bonds.add(bondsChange);
                 let bondsChangeStyle = "";
                 if (bondsChange > (new BigDecimal("0"))) {
-                    bondsChange = "+" + bondsChange;
+                    bondsChange = "(+" + bondsChange + ")";
                     bondsChangeStyle = "style=\"color:#c12e2a\"";
                 } else if (bondsChange < (new BigDecimal("0"))) {
+                    bondsChange = "(" + bondsChange + ")";
                     bondsChangeStyle = "style=\"color:#3e8f3e\"";
+                } else {
+                    bondsChange = "(不变)";
                 }
                 var marketValue = parseFloat(costPrise.multiply(bonds)).toFixed(2);
                 str += "<tr class='my-history-tr'><td>" + (parseInt(k) + 1)
                     + "</td><td>" + result[k].name
                     + "</td><td>" + costPrise
-                    + "</td><td "+ costPriseChangeStyle +">" + costPriseChange
+                    + "</td><td "+ costPriseChangeStyle +">" + newCostPrise + costPriseChange
                     + "</td><td>" + bonds
-                    + "</td><td "+ bondsChangeStyle +">" + bondsChange
+                    + "</td><td "+ bondsChangeStyle +">" + newBonds + bondsChange
                     + "</td><td>" + marketValue
                     + "</td><td>" + result[k].createDate
                     +"</td></tr>";
@@ -497,29 +505,37 @@ function getStockHistory(code) {
                 $("#buy-or-sell-stock-name").val(result[k].name);
                 var costPrise = new BigDecimal(result[k].costPrise + "");
                 var costPriseChange = new BigDecimal(result[k].costPriseChange + "");
+                var newCostPrise = costPrise.add(costPriseChange);
                 let costPriseChangeStyle = "";
                 if (costPriseChange > (new BigDecimal("0"))) {
-                    costPriseChange = "+" + costPriseChange;
+                    costPriseChange = "(+" + costPriseChange + ")";
                     costPriseChangeStyle = "style=\"color:#c12e2a\"";
                 } else if (costPriseChange < (new BigDecimal("0"))) {
+                    costPriseChange = "(" + costPriseChange + ")";
                     costPriseChangeStyle = "style=\"color:#3e8f3e\"";
+                } else {
+                    costPriseChange = "(不变)";
                 }
                 var bonds = new BigDecimal(result[k].bonds + "");
                 var bondsChange = new BigDecimal(result[k].bondsChange + "");
+                var newBonds = bonds.add(bondsChange);
                 let bondsChangeStyle = "";
                 if (bondsChange > (new BigDecimal("0"))) {
-                    bondsChange = "+" + bondsChange;
+                    bondsChange = "(+" + bondsChange + ")";
                     bondsChangeStyle = "style=\"color:#c12e2a\"";
                 } else if (bondsChange < (new BigDecimal("0"))) {
+                    bondsChange = "(+" + bondsChange + ")";
                     bondsChangeStyle = "style=\"color:#3e8f3e\"";
+                } else {
+                    bondsChange = "(不变)";
                 }
                 var marketValue = parseFloat(costPrise.multiply(bonds)).toFixed(2);
                 str += "<tr class='my-history-tr'><td>" + (parseInt(k) + 1)
                     + "</td><td>" + result[k].name
                     + "</td><td>" + costPrise
-                    + "</td><td " + costPriseChangeStyle+ ">" + costPriseChange
+                    + "</td><td " + costPriseChangeStyle+ ">" + newCostPrise + costPriseChange
                     + "</td><td>" + bonds
-                    + "</td><td "+ bondsChangeStyle +">" + bondsChange
+                    + "</td><td "+ bondsChangeStyle +">" + newBonds + bondsChange
                     + "</td><td>" + marketValue
                     + "</td><td>" + result[k].createDate
                     +"</td></tr>";
