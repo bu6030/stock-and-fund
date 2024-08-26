@@ -189,20 +189,26 @@ public class DepositEntity {
             BigDecimal fundTotalDayIncomePercent = fundTotalDayIncome.multiply(new BigDecimal("100"))
                 .divide(fundTotalMarketValue.add(fundTotalDayIncome), BigDecimal.ROUND_HALF_UP);
             String fundTotalDayIncomeContent = fundTotalDayIncome.compareTo(BigDecimal.ZERO) >= 0
-                ? String.format("<span style=\"%s\">%s（%s%%）</span>", redColorStyle, fundTotalDayIncome, fundTotalDayIncomePercent)
-                : String.format("<span style=\"%s\">%s（%s%%）</span>", greenColorStyle, fundTotalDayIncome, fundTotalDayIncomePercent);
+                ? String.format("<span style=\"%s\">%s（%s%%）</span>", redColorStyle, fundTotalDayIncome,
+                    fundTotalDayIncomePercent.setScale(2, BigDecimal.ROUND_HALF_UP))
+                : String.format("<span style=\"%s\">%s（%s%%）</span>", greenColorStyle, fundTotalDayIncome,
+                    fundTotalDayIncomePercent.setScale(2, BigDecimal.ROUND_HALF_UP));
 
             BigDecimal stockTotalDayIncomePercent = stockTotalDayIncome.multiply(new BigDecimal("100"))
                 .divide(stockTotalMarketValue.add(stockTotalDayIncome), BigDecimal.ROUND_HALF_UP);
             String stockTotalDayIncomeContent = stockTotalDayIncome.compareTo(BigDecimal.ZERO) >= 0
-                ? String.format("<span style=\"%s\">%s（%s%%）</span>", redColorStyle, stockTotalDayIncome, stockTotalDayIncomePercent)
-                : String.format("<span style=\"%s\">%s（%s%%）</span>", greenColorStyle, stockTotalDayIncome, stockTotalDayIncomePercent);
+                ? String.format("<span style=\"%s\">%s（%s%%）</span>", redColorStyle, stockTotalDayIncome,
+                    stockTotalDayIncomePercent.setScale(2, BigDecimal.ROUND_HALF_UP))
+                : String.format("<span style=\"%s\">%s（%s%%）</span>", greenColorStyle, stockTotalDayIncome,
+                    stockTotalDayIncomePercent.setScale(2, BigDecimal.ROUND_HALF_UP));
 
             BigDecimal totalDayIncomePercent = totalDayIncome.multiply(new BigDecimal("100")).divide(totalMarketValue.add(totalDayIncome),
                 BigDecimal.ROUND_HALF_UP);
             String totalDayIncomeContent = totalDayIncome.compareTo(BigDecimal.ZERO) >= 0
-                ? String.format("<span style=\"%s\">%s（%s%%）</span>", redColorStyle, totalDayIncome, totalDayIncomePercent)
-                : String.format("<span style=\"%s\">%s（%s%%）</span>", greenColorStyle, totalDayIncome, totalDayIncomePercent);
+                ? String.format("<span style=\"%s\">%s（%s%%）</span>", redColorStyle, totalDayIncome,
+                    totalDayIncomePercent.setScale(2, BigDecimal.ROUND_HALF_UP))
+                : String.format("<span style=\"%s\">%s（%s%%）</span>", greenColorStyle, totalDayIncome,
+                    totalDayIncomePercent.setScale(2, BigDecimal.ROUND_HALF_UP));
 
             StringBuilder stockItemContent = new StringBuilder();
             List<DepositItem> stockDepositItems = stockDepositResult.depositItems();
@@ -215,8 +221,10 @@ public class DepositEntity {
                 totalIncomeStyle = item.totalIncome().compareTo(BigDecimal.ZERO) >= 0 ? redColorStyle : greenColorStyle;
                 stockItemContent.append(String.format(
                     "<tr><td>%s</td><td><span style=\"%s\">%s（%s%%）</span></td><td>%s</td><td><span style=\"%s\">%s（%s%%）</span></td></tr>",
-                    item.name(), style, item.dayIncome(), dayIncomePercent, item.marketValue(), totalIncomeStyle,
-                    item.totalIncome().setScale(2, BigDecimal.ROUND_HALF_UP), stockTotalIncomePercent));
+                    item.name(), style, item.dayIncome(), dayIncomePercent.setScale(2, BigDecimal.ROUND_HALF_UP), item.marketValue(),
+                    totalIncomeStyle,
+                    item.totalIncome().setScale(2, BigDecimal.ROUND_HALF_UP),
+                    stockTotalIncomePercent.setScale(2, BigDecimal.ROUND_HALF_UP)));
             }
             style = stockTotalDayIncome.compareTo(BigDecimal.ZERO) >= 0 ? redColorStyle : greenColorStyle;
             BigDecimal stockTotalIncomePercent = stockTotalIncome.multiply(new BigDecimal("100"))
@@ -224,14 +232,15 @@ public class DepositEntity {
             totalIncomeStyle = stockTotalIncome.compareTo(BigDecimal.ZERO) >= 0 ? redColorStyle : greenColorStyle;
             stockItemContent.append(String.format(
                 "<tr><td>%s</td><td><span style=\"%s\">%s（%s%%）</span></td><td>%s</td><td><span style=\"%s\">%s（%s%%）</span></td></tr>",
-                "合计", style, stockTotalDayIncome, stockTotalDayIncomePercent, stockTotalMarketValue, totalIncomeStyle,
-                stockTotalIncome.setScale(2, BigDecimal.ROUND_HALF_UP), stockTotalIncomePercent));
+                "合计", style, stockTotalDayIncome, stockTotalDayIncomePercent.setScale(2, BigDecimal.ROUND_HALF_UP), stockTotalMarketValue,
+                totalIncomeStyle,
+                stockTotalIncome.setScale(2, BigDecimal.ROUND_HALF_UP), stockTotalIncomePercent.setScale(2, BigDecimal.ROUND_HALF_UP)));
             String stockTotalIncomeContent = stockTotalIncome.compareTo(BigDecimal.ZERO) >= 0
                 ? String.format("<span style=\"%s\">%s（%s%%）</span>", redColorStyle, stockTotalIncome.setScale(2, BigDecimal.ROUND_HALF_UP),
-                    stockTotalIncomePercent)
+                    stockTotalIncomePercent.setScale(2, BigDecimal.ROUND_HALF_UP))
                 : String.format("<span style=\"%s\">%s（%s%%）</span>", greenColorStyle,
                     stockTotalIncome.setScale(2, BigDecimal.ROUND_HALF_UP),
-                    stockTotalIncomePercent);
+                    stockTotalIncomePercent.setScale(2, BigDecimal.ROUND_HALF_UP));
 
             StringBuilder fundItemContent = new StringBuilder();
             List<DepositItem> fundDepositItems = fundDepositResult.depositItems();
@@ -244,8 +253,10 @@ public class DepositEntity {
                 totalIncomeStyle = item.totalIncome().compareTo(BigDecimal.ZERO) >= 0 ? redColorStyle : greenColorStyle;
                 fundItemContent.append(String.format(
                     "<tr><td>%s</td><td><span style=\"%s\">%s（%s%%）(%s)</span></td><td>%s</td><td><span style=\"%s\">%s（%s%%）</span></td></tr>",
-                    item.name(), style, item.dayIncome(), dayIncomePercent, item.isCurrentDayNewValue() ? "实" : "估", item.marketValue(),
-                    totalIncomeStyle, item.totalIncome().setScale(2, BigDecimal.ROUND_HALF_UP), fundTotalIncomePercent));
+                    item.name(), style, item.dayIncome(), dayIncomePercent.setScale(2, BigDecimal.ROUND_HALF_UP),
+                    item.isCurrentDayNewValue() ? "实" : "估", item.marketValue(),
+                    totalIncomeStyle, item.totalIncome().setScale(2, BigDecimal.ROUND_HALF_UP),
+                    fundTotalIncomePercent.setScale(2, BigDecimal.ROUND_HALF_UP)));
             }
             style = fundTotalDayIncome.compareTo(BigDecimal.ZERO) >= 0 ? redColorStyle : greenColorStyle;
             BigDecimal fundTotalIncomePercent = fundTotalIncome.multiply(new BigDecimal("100"))
@@ -253,38 +264,39 @@ public class DepositEntity {
             totalIncomeStyle = fundTotalIncome.compareTo(BigDecimal.ZERO) >= 0 ? redColorStyle : greenColorStyle;
             fundItemContent.append(String.format(
                 "<tr><td>%s</td><td><span style=\"%s\">%s（%s%%）</span></td><td>%s</td><td><span style=\"%s\">%s（%s%%）</span></td></tr>",
-                "合计", style, fundTotalDayIncome, fundTotalDayIncomePercent, fundTotalMarketValue, totalIncomeStyle,
-                fundTotalIncome.setScale(2, BigDecimal.ROUND_HALF_UP), fundTotalIncomePercent));
+                "合计", style, fundTotalDayIncome, fundTotalDayIncomePercent.setScale(2, BigDecimal.ROUND_HALF_UP), fundTotalMarketValue,
+                totalIncomeStyle,
+                fundTotalIncome.setScale(2, BigDecimal.ROUND_HALF_UP), fundTotalIncomePercent.setScale(2, BigDecimal.ROUND_HALF_UP)));
             String fundTotalIncomeContent = fundTotalIncome.compareTo(BigDecimal.ZERO) >= 0
                 ? String.format("<span style=\"%s\">%s（%s%%）</span>", redColorStyle, fundTotalIncome.setScale(2, BigDecimal.ROUND_HALF_UP),
-                    fundTotalIncomePercent)
+                    fundTotalIncomePercent.setScale(2, BigDecimal.ROUND_HALF_UP))
                 : String.format("<span style=\"%s\">%s（%s%%）</span>", greenColorStyle,
                     fundTotalIncome.setScale(2, BigDecimal.ROUND_HALF_UP),
-                    fundTotalIncomePercent);
+                    fundTotalIncomePercent.setScale(2, BigDecimal.ROUND_HALF_UP));
             BigDecimal totalIncomePercent = totalIncome.multiply(new BigDecimal("100"))
                 .divide(totalMarketValue.subtract(totalIncome), 3, BigDecimal.ROUND_HALF_UP);
             String totalIncomeContent = totalIncome.compareTo(BigDecimal.ZERO) >= 0
                 ? String.format("<span style=\"%s\">%s（%s%%）</span>", redColorStyle, totalIncome.setScale(2, BigDecimal.ROUND_HALF_UP),
-                    totalIncomePercent)
+                    totalIncomePercent.setScale(2, BigDecimal.ROUND_HALF_UP))
                 : String.format("<span style=\"%s\">%s（%s%%）</span>", greenColorStyle, totalIncome.setScale(2, BigDecimal.ROUND_HALF_UP),
-                    totalIncomePercent);
+                    totalIncomePercent.setScale(2, BigDecimal.ROUND_HALF_UP));
 
             String mailContent = String.format(
                 "<html>" +
                     "<head>" +
                     "<style>" +
-                    "body {font-family: Arial, sans-serif; line-height: 1.6;}" +
-                    "table {width: 600px; border-collapse: collapse; margin: 20px 0;}" +
+                    "body {font-family: Arial, sans-serif; line-height: 1.6; }" +
+                    "table {width: 600px; border-collapse: collapse; margin: 20px 0; white-space: nowrap}" +
                     "th, td {padding: 8px 12px; border: 1px solid #ddd; text-align: left;}" +
                     "th {background-color: #f4f4f4;}" +
-                    "td {font-size: small;}" +
+                    "td {font-size: smaller;}" +
                     "</style>" +
                     "</head>" +
                     "<body>" +
                     "<h2>每日收益报告</h2>" +
                     "<p>日期：%s</p>" +
                     "<p>用户：%s</p>" +
-                    "<p>上政指数：%s</p>" +
+                    "<p>上证指数：%s</p>" +
                     "<p>当日基金收益：%s</p>" +
                     "<p>当日股票收益：%s</p>" +
                     "<p>当日总收益：%s</p>" +
