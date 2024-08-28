@@ -454,7 +454,7 @@ public class StockEntity {
                 }
                 // 增加20日最高最低价格
                 List<StockDayHistoryResponse> stockDayHistory300 = cacheService.getStockDayHistory(code, "300");
-                log.info("Stock day history is {}", stockDayHistory300);
+//                log.info("Stock day history is {}", stockDayHistory300);
                 getRecentDateUpper(stockDayHistory300, bean);
                 if (stockDayHistory300 != null && stockDayHistory300.size() >= 20) {
                     if (stockDayHistory300.size() >= 50) {

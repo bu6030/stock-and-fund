@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -119,6 +120,7 @@ public class FundEntity {
         fundEntity.setDwjz(dwjz.toString());
         fundEntity.setGsz(gsz.toString());
         fundEntity.setGszzl(gszzl.toString());
+        fundEntity.setGztime(LocalDateTime.now().toString());
         return fundEntity;
     }
 
