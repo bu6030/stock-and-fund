@@ -202,7 +202,7 @@ public class DepositEntity {
                 : String.format("<span style=\"%s\">%s（%s%%）</span>", greenColorStyle, stockTotalDayIncome,
                     stockTotalDayIncomePercent.setScale(2, BigDecimal.ROUND_HALF_UP));
 
-            BigDecimal totalDayIncomePercent = totalDayIncome.multiply(new BigDecimal("100")).divide(totalMarketValue.add(totalDayIncome),
+            BigDecimal totalDayIncomePercent = totalDayIncome.multiply(new BigDecimal("100")).divide(totalMarketValue.subtract(totalDayIncome),
                 BigDecimal.ROUND_HALF_UP);
             String totalDayIncomeContent = totalDayIncome.compareTo(BigDecimal.ZERO) >= 0
                 ? String.format("<span style=\"%s\">%s（%s%%）</span>", redColorStyle, totalDayIncome,
