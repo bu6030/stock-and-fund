@@ -187,7 +187,7 @@ public class DepositEntity {
                 : String.format("<span style=\"%s\">%s（%s%%）</span>", greenColorStyle, bigMarketValueFormatted, bigMarketChangePercent);
 
             BigDecimal fundTotalDayIncomePercent = fundTotalDayIncome.multiply(new BigDecimal("100"))
-                .divide(fundTotalMarketValue.add(fundTotalDayIncome), BigDecimal.ROUND_HALF_UP);
+                .divide(fundTotalMarketValue.subtract(fundTotalDayIncome), BigDecimal.ROUND_HALF_UP);
             String fundTotalDayIncomeContent = fundTotalDayIncome.compareTo(BigDecimal.ZERO) >= 0
                 ? String.format("<span style=\"%s\">%s（%s%%）</span>", redColorStyle, fundTotalDayIncome,
                     fundTotalDayIncomePercent.setScale(2, BigDecimal.ROUND_HALF_UP))
@@ -195,7 +195,7 @@ public class DepositEntity {
                     fundTotalDayIncomePercent.setScale(2, BigDecimal.ROUND_HALF_UP));
 
             BigDecimal stockTotalDayIncomePercent = stockTotalDayIncome.multiply(new BigDecimal("100"))
-                .divide(stockTotalMarketValue.add(stockTotalDayIncome), BigDecimal.ROUND_HALF_UP);
+                .divide(stockTotalMarketValue.subtract(stockTotalDayIncome), BigDecimal.ROUND_HALF_UP);
             String stockTotalDayIncomeContent = stockTotalDayIncome.compareTo(BigDecimal.ZERO) >= 0
                 ? String.format("<span style=\"%s\">%s（%s%%）</span>", redColorStyle, stockTotalDayIncome,
                     stockTotalDayIncomePercent.setScale(2, BigDecimal.ROUND_HALF_UP))
@@ -219,7 +219,7 @@ public class DepositEntity {
                 BigDecimal stockTotalIncomePercent = BigDecimal.ZERO;
                 if (item.marketValue().subtract(item.totalIncome()).compareTo(BigDecimal.ZERO) != 0) {
                     stockTotalIncomePercent = item.totalIncome().multiply(new BigDecimal("100"))
-                            .divide(item.marketValue().subtract(item.totalIncome()), 3, BigDecimal.ROUND_HALF_UP);
+                        .divide(item.marketValue().subtract(item.totalIncome()), 3, BigDecimal.ROUND_HALF_UP);
                 }
                 totalIncomeStyle = item.totalIncome().compareTo(BigDecimal.ZERO) >= 0 ? redColorStyle : greenColorStyle;
                 stockItemContent.append(String.format(

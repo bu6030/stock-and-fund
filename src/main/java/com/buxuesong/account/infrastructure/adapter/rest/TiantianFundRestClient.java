@@ -42,10 +42,10 @@ public class TiantianFundRestClient {
         log.info("通过天天基金接口获取基金，编码：{}， URL：{}", code, GET_FUND_INFO_URL);
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(GET_FUND_INFO_URL.replace("{code}", code) + "?rt=" + System.currentTimeMillis()))
-                .header("Accept", "application/javascript")
-                .GET()
-                .build();
+            .uri(URI.create(GET_FUND_INFO_URL.replace("{code}", code) + "?rt=" + System.currentTimeMillis()))
+            .header("Accept", "application/javascript")
+            .GET()
+            .build();
         try {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString(Charset.forName("UTF-8")));
             if (response.statusCode() == 200) {
