@@ -524,7 +524,7 @@ function getStockHistory(code) {
                     bondsChange = "(+" + bondsChange + ")";
                     bondsChangeStyle = "style=\"color:#c12e2a\"";
                 } else if (bondsChange < (new BigDecimal("0"))) {
-                    bondsChange = "(+" + bondsChange + ")";
+                    bondsChange = "(" + bondsChange + ")";
                     bondsChangeStyle = "style=\"color:#3e8f3e\"";
                 } else {
                     bondsChange = "(不变)";
