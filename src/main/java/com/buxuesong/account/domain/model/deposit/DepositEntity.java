@@ -214,8 +214,11 @@ public class DepositEntity {
             List<DepositItem> stockDepositItems = stockDepositResult.depositItems();
             for (DepositItem item : stockDepositItems) {
                 style = item.dayIncome().compareTo(BigDecimal.ZERO) >= 0 ? redColorStyle : greenColorStyle;
-                BigDecimal dayIncomePercent = item.dayIncome().multiply(new BigDecimal("100"))
-                    .divide(item.marketValue().subtract(item.dayIncome()), BigDecimal.ROUND_HALF_UP);
+                BigDecimal dayIncomePercent = BigDecimal.ZERO;
+                if (item.marketValue().subtract(item.dayIncome()).compareTo(BigDecimal.ZERO) != 0) {
+                    dayIncomePercent = item.dayIncome().multiply(new BigDecimal("100"))
+                            .divide(item.marketValue().subtract(item.dayIncome()), BigDecimal.ROUND_HALF_UP);
+                }
                 BigDecimal stockTotalIncomePercent = BigDecimal.ZERO;
                 if (item.marketValue().subtract(item.totalIncome()).compareTo(BigDecimal.ZERO) != 0) {
                     stockTotalIncomePercent = item.totalIncome().multiply(new BigDecimal("100"))

@@ -4,7 +4,7 @@ name: Git Release CI
 on:
   # 在 push 到 master 和 release/1.8.0 的时候触发
   push:
-    branches: [ "master", "release/1.8.0" ]
+    branches: [ "master" ]
   # 在对 master 分支实施 pull_request（Merge 其他分支到 master）时触发
   pull_request:
     branches: [ "master" ]
