@@ -1,11 +1,16 @@
 # 股基神器
 
+[系统架构图](#jump0)  
 [功能](#jump1)  
 [功能描述](#jump2)  
 [修改历史](#jump3)  
 [UI页面](#jump4)  
 [部署](#jump5)  
 [初始化表结构](#jump6)  
+
+## <span id="jump0">系统架构图</span>
+![image](architect.png)  
+系统架构图--当前为股票基金神器后端
 
 ## <span id="jump1">功能</span>
 1. 可以模拟炒股哦
