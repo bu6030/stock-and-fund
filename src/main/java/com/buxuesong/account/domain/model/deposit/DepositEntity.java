@@ -24,6 +24,7 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -202,7 +203,8 @@ public class DepositEntity {
                 : String.format("<span style=\"%s\">%s（%s%%）</span>", greenColorStyle, stockTotalDayIncome,
                     stockTotalDayIncomePercent.setScale(2, BigDecimal.ROUND_HALF_UP));
 
-            BigDecimal totalDayIncomePercent = totalDayIncome.multiply(new BigDecimal("100")).divide(totalMarketValue.subtract(totalDayIncome),
+            BigDecimal totalDayIncomePercent = totalDayIncome.multiply(new BigDecimal("100")).divide(
+                totalMarketValue.subtract(totalDayIncome),
                 BigDecimal.ROUND_HALF_UP);
             String totalDayIncomeContent = totalDayIncome.compareTo(BigDecimal.ZERO) >= 0
                 ? String.format("<span style=\"%s\">%s（%s%%）</span>", redColorStyle, totalDayIncome,
@@ -217,7 +219,7 @@ public class DepositEntity {
                 BigDecimal dayIncomePercent = BigDecimal.ZERO;
                 if (item.marketValue().subtract(item.dayIncome()).compareTo(BigDecimal.ZERO) != 0) {
                     dayIncomePercent = item.dayIncome().multiply(new BigDecimal("100"))
-                            .divide(item.marketValue().subtract(item.dayIncome()), BigDecimal.ROUND_HALF_UP);
+                        .divide(item.marketValue().subtract(item.dayIncome()), BigDecimal.ROUND_HALF_UP);
                 }
                 BigDecimal stockTotalIncomePercent = BigDecimal.ZERO;
                 if (item.marketValue().subtract(item.totalIncome()).compareTo(BigDecimal.ZERO) != 0) {
@@ -325,6 +327,7 @@ public class DepositEntity {
                 stockTotalDayIncomeContent, totalDayIncomeContent, fundTotalIncomeContent, stockTotalIncomeContent,
                 totalIncomeContent, stockItemContent, fundItemContent);
             mailUtils.sendMailNoArchieve("每日收益报告" + LocalDateTime.now().truncatedTo(ChronoUnit.HOURS), mailContent);
+            sendAccumulateDeposit(username);
         } catch (Exception e) {
             log.error("Send deposit mail error, ", e);
         }
@@ -527,5 +530,81 @@ public class DepositEntity {
             }
         }
         return fundNetDiagram;
+    }
+
+    /**
+     * 发送累计收益统计邮寄
+     */
+    private void sendAccumulateDeposit(String username) throws Exception {
+        // 获取当日收益
+        LocalDate today = LocalDate.now();
+        DepositPO depositPOToday = depositMapper.getDepositSummit(today.toString(), today.toString(), username);
+        // 获取本周收益
+        LocalDate firstDayOfWeek = today.with(DayOfWeek.MONDAY);
+        DepositPO depositPOCurrentWeek = depositMapper.getDepositSummit(firstDayOfWeek.toString(), today.toString(), username);
+        // 获取本月收益
+        LocalDate firstDayOfMonth = today.withDayOfMonth(1);
+        DepositPO depositPOCurrentMonth = depositMapper.getDepositSummit(firstDayOfMonth.toString(), today.toString(), username);
+        // 获取本年收益
+        LocalDate firstDayOfYear = today.withDayOfYear(1);
+        DepositPO depositPOCurrentYear = depositMapper.getDepositSummit(firstDayOfYear.toString(), today.toString(), username);
+        // 获取累计收益
+        DepositPO depositPOAll = depositMapper.getDepositSummit(null, null, username);
+
+        String mailContent = String.format(
+                "<html>" +
+                        "<head>" +
+                        "<style>" +
+                        "body {font-family: Arial, sans-serif; line-height: 1.6; }" +
+                        "table {width: 600px; border-collapse: collapse; margin: 20px 0; white-space: nowrap}" +
+                        "th, td {padding: 8px 12px; border: 1px solid #ddd; text-align: left;}" +
+                        "th {background-color: #f4f4f4;}" +
+                        "td {font-size: smaller;}" +
+                        "</style>" +
+                        "</head>" +
+                        "<body>" +
+                        "<h2>汇总收益报告</h2>" +
+                        "<p>日期：%s</p>" +
+                        "<p>用户：%s</p>" +
+                        "<p>当日基金收益：<span style=\"%s\">%s</span></p>" +
+                        "<p>当日股票收益：<span style=\"%s\">%s</span></p>" +
+                        "<p>当日总收益：<span style=\"%s\">%s</span></p>" +
+                        "<p>当周基金收益：<span style=\"%s\">%s</span></p>" +
+                        "<p>当周股票收益：<span style=\"%s\">%s</span></p>" +
+                        "<p>当周总收益：<span style=\"%s\">%s</span></p>" +
+                        "<p>当月基金收益：<span style=\"%s\">%s</span></p>" +
+                        "<p>当月股票收益：<span style=\"%s\">%s</span></p>" +
+                        "<p>当月总收益：<span style=\"%s\">%s</span></p>" +
+                        "<p>当年基金收益：<span style=\"%s\">%s</span></p>" +
+                        "<p>当年股票收益：<span style=\"%s\">%s</span></p>" +
+                        "<p>当年总收益：<span style=\"%s\">%s</span></p>" +
+                        "<p>累计基金收益：<span style=\"%s\">%s</span></p>" +
+                        "<p>累计股票收益：<span style=\"%s\">%s</span></p>" +
+                        "<p>累计总收益：<span style=\"%s\">%s</span></p>" +
+                        "</body>" +
+                        "</html>",
+                LocalDate.now(), username,
+                getDepositStyle(depositPOToday.getFundDayIncome()), depositPOToday.getFundDayIncome(),
+                getDepositStyle(depositPOToday.getStockDayIncome()), depositPOToday.getStockDayIncome(),
+                getDepositStyle(depositPOToday.getTotalDayIncome()), depositPOToday.getTotalDayIncome(),
+                getDepositStyle(depositPOCurrentWeek.getFundDayIncome()), depositPOCurrentWeek.getFundDayIncome(),
+                getDepositStyle(depositPOCurrentWeek.getStockDayIncome()), depositPOCurrentWeek.getStockDayIncome(),
+                getDepositStyle(depositPOCurrentWeek.getTotalDayIncome()), depositPOCurrentWeek.getTotalDayIncome(),
+                getDepositStyle(depositPOCurrentMonth.getFundDayIncome()), depositPOCurrentMonth.getFundDayIncome(),
+                getDepositStyle(depositPOCurrentMonth.getStockDayIncome()), depositPOCurrentMonth.getStockDayIncome(),
+                getDepositStyle(depositPOCurrentMonth.getTotalDayIncome()), depositPOCurrentMonth.getTotalDayIncome(),
+                getDepositStyle(depositPOCurrentYear.getFundDayIncome()), depositPOCurrentYear.getFundDayIncome(),
+                getDepositStyle(depositPOCurrentYear.getStockDayIncome()), depositPOCurrentYear.getStockDayIncome(),
+                getDepositStyle(depositPOCurrentYear.getTotalDayIncome()), depositPOCurrentYear.getTotalDayIncome(),
+                getDepositStyle(depositPOAll.getFundDayIncome()), depositPOAll.getFundDayIncome(),
+                getDepositStyle(depositPOAll.getStockDayIncome()), depositPOAll.getStockDayIncome(),
+                getDepositStyle(depositPOAll.getTotalDayIncome()), depositPOAll.getTotalDayIncome());
+        mailUtils.sendMailNoArchieve("汇总收益报告" + LocalDateTime.now().truncatedTo(ChronoUnit.HOURS), mailContent);
+    }
+
+    private String getDepositStyle(BigDecimal income) {
+        String redColorStyle = "color: red;";
+        String greenColorStyle = "color: green;";
+        return income.compareTo(BigDecimal.ZERO) > 0 ? redColorStyle : greenColorStyle;
     }
 }
