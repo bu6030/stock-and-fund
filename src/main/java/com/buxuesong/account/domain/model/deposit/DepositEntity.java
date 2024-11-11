@@ -566,39 +566,46 @@ public class DepositEntity {
                         "<h2>汇总收益报告</h2>" +
                         "<p>日期：%s</p>" +
                         "<p>用户：%s</p>" +
-                        "<p>当日基金收益：<span style=\"%s\">%s</span></p>" +
-                        "<p>当日股票收益：<span style=\"%s\">%s</span></p>" +
-                        "<p>当日总收益：<span style=\"%s\">%s</span></p>" +
-                        "<p>当周基金收益：<span style=\"%s\">%s</span></p>" +
-                        "<p>当周股票收益：<span style=\"%s\">%s</span></p>" +
-                        "<p>当周总收益：<span style=\"%s\">%s</span></p>" +
-                        "<p>当月基金收益：<span style=\"%s\">%s</span></p>" +
-                        "<p>当月股票收益：<span style=\"%s\">%s</span></p>" +
-                        "<p>当月总收益：<span style=\"%s\">%s</span></p>" +
-                        "<p>当年基金收益：<span style=\"%s\">%s</span></p>" +
-                        "<p>当年股票收益：<span style=\"%s\">%s</span></p>" +
-                        "<p>当年总收益：<span style=\"%s\">%s</span></p>" +
-                        "<p>累计基金收益：<span style=\"%s\">%s</span></p>" +
-                        "<p>累计股票收益：<span style=\"%s\">%s</span></p>" +
-                        "<p>累计总收益：<span style=\"%s\">%s</span></p>" +
+                        "<table>" +
+                        "<tr><th>当日基金收益</th><th>当日股票收益</th><th>当日总收益</th></tr>" +
+                        "<tr><td><span style=\"%s\">%s</span></td>" +
+                        "<td><span style=\"%s\">%s</span></td>" +
+                        "<td><span style=\"%s\">%s</span></td></tr>" +
+                        "<tr><th>当周基金收益</th><th>当周股票收益</th><th>当周总收益</th></tr>" +
+                        "<tr><td><span style=\"%s\">%s</span></td>" +
+                        "<td><span style=\"%s\">%s</span></td>" +
+                        "<td><span style=\"%s\">%s</span></td></tr>" +
+                        "<tr><th>当月基金收益</th><th>当月股票收益</th><th>当月总收益</th></tr>" +
+                        "<tr><td><span style=\"%s\">%s</span></td>" +
+                        "<td><span style=\"%s\">%s</span></td>" +
+                        "<td><span style=\"%s\">%s</span></td></tr>" +
+                        "<tr><th>当年基金收益</th><th>当年股票收益</th><th>当年总收益</th></tr>" +
+                        "<tr><td><span style=\"%s\">%s</span></td>" +
+                        "<td><span style=\"%s\">%s</span></td>" +
+                        "<td><span style=\"%s\">%s</span></td></tr>" +
+                        "<tr><th>累计基金收益</th><th>累计股票收益</th><th>累计总收益</th></tr>" +
+                        "<tr><td><span style=\"%s\">%s</span></td>" +
+                        "<td><span style=\"%s\">%s</span></td>" +
+                        "<td><span style=\"%s\">%s</span></td></tr>" +
+                        "</table>" +
                         "</body>" +
                         "</html>",
                 LocalDate.now(), username,
-                getDepositStyle(depositPOToday.getFundDayIncome()), depositPOToday.getFundDayIncome(),
-                getDepositStyle(depositPOToday.getStockDayIncome()), depositPOToday.getStockDayIncome(),
-                getDepositStyle(depositPOToday.getTotalDayIncome()), depositPOToday.getTotalDayIncome(),
-                getDepositStyle(depositPOCurrentWeek.getFundDayIncome()), depositPOCurrentWeek.getFundDayIncome(),
-                getDepositStyle(depositPOCurrentWeek.getStockDayIncome()), depositPOCurrentWeek.getStockDayIncome(),
-                getDepositStyle(depositPOCurrentWeek.getTotalDayIncome()), depositPOCurrentWeek.getTotalDayIncome(),
-                getDepositStyle(depositPOCurrentMonth.getFundDayIncome()), depositPOCurrentMonth.getFundDayIncome(),
-                getDepositStyle(depositPOCurrentMonth.getStockDayIncome()), depositPOCurrentMonth.getStockDayIncome(),
-                getDepositStyle(depositPOCurrentMonth.getTotalDayIncome()), depositPOCurrentMonth.getTotalDayIncome(),
-                getDepositStyle(depositPOCurrentYear.getFundDayIncome()), depositPOCurrentYear.getFundDayIncome(),
-                getDepositStyle(depositPOCurrentYear.getStockDayIncome()), depositPOCurrentYear.getStockDayIncome(),
-                getDepositStyle(depositPOCurrentYear.getTotalDayIncome()), depositPOCurrentYear.getTotalDayIncome(),
-                getDepositStyle(depositPOAll.getFundDayIncome()), depositPOAll.getFundDayIncome(),
-                getDepositStyle(depositPOAll.getStockDayIncome()), depositPOAll.getStockDayIncome(),
-                getDepositStyle(depositPOAll.getTotalDayIncome()), depositPOAll.getTotalDayIncome());
+                getDepositStyle(depositPOToday.getFundDayIncome()), depositPOToday.getFundDayIncome().setScale(2, BigDecimal.ROUND_HALF_UP),
+                getDepositStyle(depositPOToday.getStockDayIncome()), depositPOToday.getStockDayIncome().setScale(2, BigDecimal.ROUND_HALF_UP),
+                getDepositStyle(depositPOToday.getTotalDayIncome()), depositPOToday.getTotalDayIncome().setScale(2, BigDecimal.ROUND_HALF_UP),
+                getDepositStyle(depositPOCurrentWeek.getFundDayIncome()), depositPOCurrentWeek.getFundDayIncome().setScale(2, BigDecimal.ROUND_HALF_UP),
+                getDepositStyle(depositPOCurrentWeek.getStockDayIncome()), depositPOCurrentWeek.getStockDayIncome().setScale(2, BigDecimal.ROUND_HALF_UP),
+                getDepositStyle(depositPOCurrentWeek.getTotalDayIncome()), depositPOCurrentWeek.getTotalDayIncome().setScale(2, BigDecimal.ROUND_HALF_UP),
+                getDepositStyle(depositPOCurrentMonth.getFundDayIncome()), depositPOCurrentMonth.getFundDayIncome().setScale(2, BigDecimal.ROUND_HALF_UP),
+                getDepositStyle(depositPOCurrentMonth.getStockDayIncome()), depositPOCurrentMonth.getStockDayIncome().setScale(2, BigDecimal.ROUND_HALF_UP),
+                getDepositStyle(depositPOCurrentMonth.getTotalDayIncome()), depositPOCurrentMonth.getTotalDayIncome().setScale(2, BigDecimal.ROUND_HALF_UP),
+                getDepositStyle(depositPOCurrentYear.getFundDayIncome()), depositPOCurrentYear.getFundDayIncome().setScale(2, BigDecimal.ROUND_HALF_UP),
+                getDepositStyle(depositPOCurrentYear.getStockDayIncome()), depositPOCurrentYear.getStockDayIncome().setScale(2, BigDecimal.ROUND_HALF_UP),
+                getDepositStyle(depositPOCurrentYear.getTotalDayIncome()), depositPOCurrentYear.getTotalDayIncome().setScale(2, BigDecimal.ROUND_HALF_UP),
+                getDepositStyle(depositPOAll.getFundDayIncome()), depositPOAll.getFundDayIncome().setScale(2, BigDecimal.ROUND_HALF_UP),
+                getDepositStyle(depositPOAll.getStockDayIncome()), depositPOAll.getStockDayIncome().setScale(2, BigDecimal.ROUND_HALF_UP),
+                getDepositStyle(depositPOAll.getTotalDayIncome()), depositPOAll.getTotalDayIncome().setScale(2, BigDecimal.ROUND_HALF_UP));
         mailUtils.sendMailNoArchieve("汇总收益报告" + LocalDateTime.now().truncatedTo(ChronoUnit.HOURS), mailContent);
     }
 
