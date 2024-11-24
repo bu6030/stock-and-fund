@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Dynamic SQL Query</title>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css" media="all"/>
+</head>
+<body>
+<div class="container">
+  <h2>Enter Groovy SQL Query</h2>
+  <form id="queryForm">
+    <div class="form-group">
+      <label for="groovyQuery">Groovy Query:</label>
+      <textarea class="form-control" id="groovyQuery" rows="30"></textarea>
+    </div>
+    <button type="button" class="btn btn-primary" onclick="submitQuery()">Submit</button>
+  </form>
+  <div id="result"></div>
+</div>
+
+<script th:src="@{/js/jquery.min.js}"></script>
+<script>
+  function submitQuery() {
+      var query = $('#groovyQuery').val();
+      $.ajax({
+          url: '/execute-query',
+          type: 'POST',
+          data: { query: query },
+          success: function(data) {
+              $('#result').text('Result: ' + data);
+          },
+          error: function(error) {
+              $('#result').text('Error: ' + error.responseText);
+          }
+      });
+  }
+</script>
+</body>
+</html>

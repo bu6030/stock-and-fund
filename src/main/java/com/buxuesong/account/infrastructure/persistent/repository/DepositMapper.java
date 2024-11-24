@@ -59,15 +59,15 @@ public interface DepositMapper {
         @Param("username") String username);
 
     @Select({
-            "<script> select sum(FUND_DAY_INCOME) fundDayIncome, sum(STOCK_DAY_INCOME) stockDayIncome, " +
-                    " sum(DAY_INCOME) totalDayIncome " +
-                    " from DEPOSIT " +
-                    " where 1=1 AND USERNAME = #{username} " +
-                    " <if test=\"beginDate!=null and beginDate!=''\"> and DATE &gt;= #{beginDate} </if> " +
-                    " <if test=\"endDate!=null and endDate!=''\"> and DATE &lt;= #{endDate} </if> " +
-                    " </script>" })
+        "<script> select sum(FUND_DAY_INCOME) fundDayIncome, sum(STOCK_DAY_INCOME) stockDayIncome, " +
+            " sum(DAY_INCOME) totalDayIncome " +
+            " from DEPOSIT " +
+            " where 1=1 AND USERNAME = #{username} " +
+            " <if test=\"beginDate!=null and beginDate!=''\"> and DATE &gt;= #{beginDate} </if> " +
+            " <if test=\"endDate!=null and endDate!=''\"> and DATE &lt;= #{endDate} </if> " +
+            " </script>" })
     DepositPO getDepositSummit(@Param("beginDate") String beginDate, @Param("endDate") String endDate,
-                                              @Param("username") String username);
+        @Param("username") String username);
 
     @Delete("delete from DEPOSIT where DATE = #{date} AND USERNAME = #{username} ")
     int deleteDeposit(@Param("date") String date, @Param("username") String username);

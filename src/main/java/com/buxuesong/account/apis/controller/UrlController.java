@@ -179,4 +179,16 @@ public class UrlController {
         m.setViewName("upload");
         return m;
     }
+
+    /**
+     * 上传文件
+     *
+     * @return
+     */
+    @GetMapping(value = "/groovy-script.html")
+    public ModelAndView groovyScriptInit() {
+        ModelAndView m = new ModelAndView();
+        m.setViewName("groovy-script");
+        return m;
+    }
 }
