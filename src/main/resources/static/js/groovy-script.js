@@ -7,7 +7,6 @@ sql.eachRow('SELECT * FROM stock') { row ->
     // 将结果添加到列表中
     results << [id: id, name: name]
 }
-sql.close()
 return results`;
     $("#groovyQuery").val(script);
 }

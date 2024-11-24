@@ -15,10 +15,15 @@ public class GroovyScriptController {
     private String sqlliteDbFile;
 
     @PostMapping("/execute-query")
-    String executeQuery(@RequestParam String query) throws Exception{
-        query = "import groovy.sql.Sql\n" +
-                "def sql = Sql.newInstance('jdbc:sqlite:" + sqlliteDbFile + "', '', '', 'org.sqlite.JDBC')\n"
-                + query;
+    String executeQuery(@RequestParam String query) throws Exception {
+        query = "import groovy.sql.Sql \n" +
+            "def sql = null \n" +
+            "try { \n" +
+            "sql = Sql.newInstance('jdbc:sqlite:" + sqlliteDbFile + "', '', '', 'org.sqlite.JDBC')\n" +
+            query + "\n" +
+            "} finally {\n" +
+            "sql.close()\n" +
+            "}\n";
         ScriptEngine engine = new ScriptEngineManager().getEngineByName("groovy");
         // 假设query是一个简单的Groovy表达式
         Object result = engine.eval(query);
