@@ -59,15 +59,15 @@ public class GroovyScriptController {
         if (Objects.isNull(groovyScriptPO)) {
             groovyScriptPO = new GroovyScriptPO();
             groovyScriptPO.setCodeText("""
-                    def results = []
-                    sql.eachRow('SELECT * FROM stock') { row ->
-                        def id = row['id']
-                        def name = row['name']
-                        // 将结果添加到列表中
-                        results << [id: id, name: name]
-                    }
-                    return results
-                    """);
+                def results = []
+                sql.eachRow('SELECT * FROM stock') { row ->
+                    def id = row['id']
+                    def name = row['name']
+                    // 将结果添加到列表中
+                    results << [id: id, name: name]
+                }
+                return results
+                """);
         }
         return groovyScriptPO.getCodeText();
     }

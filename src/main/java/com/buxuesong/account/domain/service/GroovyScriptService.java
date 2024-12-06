@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 @Slf4j
 @Service
 public class GroovyScriptService {
@@ -21,6 +20,7 @@ public class GroovyScriptService {
     public void saveGroovyScript(GroovyScriptPO groovyScriptPO) {
         groovyScriptMapper.save(groovyScriptPO);
     }
+
     public void updateGroovyScript(GroovyScriptPO groovyScriptPO) {
         groovyScriptMapper.updateGroovyScript(groovyScriptPO);
     }
