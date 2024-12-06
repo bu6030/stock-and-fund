@@ -2,6 +2,7 @@ package com.buxuesong.account.apis.controller;
 
 import com.buxuesong.account.domain.service.GroovyScriptService;
 import com.buxuesong.account.infrastructure.persistent.po.GroovyScriptPO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,8 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Slf4j
 @RestController
 public class GroovyScriptController {
 
@@ -28,9 +31,11 @@ public class GroovyScriptController {
         if (Objects.isNull(groovyScriptPO)) {
             groovyScriptPO = new GroovyScriptPO();
             groovyScriptPO.setCodeText(query);
+            groovyScriptPO.setCreateDate(LocalDateTime.now());
             groovyScriptService.saveGroovyScript(groovyScriptPO);
         } else {
             groovyScriptPO.setCodeText(query);
+            groovyScriptPO.setCreateDate(LocalDateTime.now());
             groovyScriptService.updateGroovyScript(groovyScriptPO);
         }
         query = "import groovy.sql.Sql \n" +
@@ -50,6 +55,7 @@ public class GroovyScriptController {
     @GetMapping("/groovy-script")
     public String getGroovyScript() throws Exception {
         GroovyScriptPO groovyScriptPO = groovyScriptService.getGroovyScript();
+        log.info("groovyScriptPO is {}", groovyScriptPO);
         if (Objects.isNull(groovyScriptPO)) {
             groovyScriptPO = new GroovyScriptPO();
             groovyScriptPO.setCodeText("""
