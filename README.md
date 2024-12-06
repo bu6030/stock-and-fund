@@ -371,3 +371,11 @@ CREATE TABLE authorities (
   CONSTRAINT fk_authorities_users FOREIGN KEY (username) REFERENCES users (username)
 );
 ```
+### Groovy执行脚本程序表
+```
+CREATE TABLE groovy_script (
+  ID INTEGER PRIMARY KEY AUTOINCREMENT,
+  CODE_TEXT TEXT(10) NOT NULL,
+  CREATE_DATE DATETIME
+);
+```
