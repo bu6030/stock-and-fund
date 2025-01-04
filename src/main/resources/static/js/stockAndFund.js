@@ -291,13 +291,26 @@ function getFundTableHtml(result, totalMarketValueResult){
         var oneMonthAgoUpperStyle = result[k].oneMonthAgoUpper == 0 ? "" : (result[k].oneMonthAgoUpper >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
         var oneWeekAgoUpperStyle = result[k].oneWeekAgoUpper == 0 ? "" : (result[k].oneWeekAgoUpper >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
 
+        var ma20 = new BigDecimal(result[k].ma20 + "");
+        var donchianChennel = "";
+        var donchianChennelStyle = "";
+        var now = new BigDecimal(result[k].dwjz + "");
+        if (now.compareTo(ma20) > 0) {
+            donchianChennel += "高于20日均线(" + ma20 + ")；";
+            donchianChennelStyle = "style=\"color:#c12e2a\"";
+        } else if(now.compareTo(ma20) < 0) {
+            donchianChennel += "低于20日均线(" + ma20 + ")；";
+            donchianChennelStyle = "style=\"color:#3e8f3e\"";
+        }
+
         str += "<tr><td class='no-wrap'>"
             + "<a href='#' onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
             + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"分时图\" onclick=\"showTimeImageModal('" + result[k].fundCode + "','FUND')\"><span class=\"am-icon-clock-o\"></span></button>"
             + "</td><td class='no-wrap' colspan=\"2\" onclick=\"getFundHistory('" + result[k].fundCode + "')\">" +result[k].fundName
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
             + "</td><td " + dayIncomeStyle + " colspan='2'>" +result[k].gszzl + "%"
-            + "</td><td colspan='2'>" + result[k].dwjz + "(" + result[k].jzrq + ")"
+            + "</td><td>" + result[k].dwjz + "(" + result[k].jzrq + ")"
+            + "</td><td " + donchianChennelStyle + ">" + donchianChennel
             + "</td><td " + oneYearAgoUpperStyle + ">" + result[k].oneYearAgoUpper + "%"
             + "</td><td " + oneSeasonAgoUpperStyle + ">" + result[k].oneSeasonAgoUpper + "%"
             + "</td><td " + oneMonthAgoUpperStyle + ">" + result[k].oneMonthAgoUpper + "%"

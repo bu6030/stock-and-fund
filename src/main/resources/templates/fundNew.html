@@ -146,6 +146,7 @@
                     var item = res.value[i];
                     item.appNew = getAppName(item.app);
                     var marketValue = new BigDecimal("0");
+                    var now = new BigDecimal(item.gsz + "");
                     if (item.currentDayJingzhi != null && item.currentDayJingzhi != '') {
                         item.gsz = item.currentDayJingzhi + '(实)';
                         item.dayIncome = new BigDecimal(parseFloat(((new BigDecimal(item.currentDayJingzhi + "")).subtract(new BigDecimal(item.previousDayJingzhi + ""))).multiply(new BigDecimal(item.bonds + ""))).toFixed(2));
@@ -173,6 +174,18 @@
                     item.oneSeasonAgoUpperColor = item.oneSeasonAgoUpper == 0 ? "" : (item.oneSeasonAgoUpper >= 0?"#c12e2a":"#3e8f3e");
                     item.oneMonthAgoUpperColor = item.oneMonthAgoUpper == 0 ? "" : (item.oneMonthAgoUpper >= 0?"#c12e2a":"#3e8f3e");
                     item.oneWeekAgoUpperColor = item.oneWeekAgoUpper == 0 ? "" : (item.oneWeekAgoUpper >= 0?"#c12e2a":"#3e8f3e");
+                    var ma20 = new BigDecimal(item.ma20 + "");
+                    var donchianChennel = "";
+                    var donchianChennelColor = "";
+                    if (now.compareTo(ma20) > 0) {
+                        donchianChennel += "高于20日均线(" + ma20 + ")；";
+                        donchianChennelColor = "#c12e2a";
+                    } else if(now.compareTo(ma20) < 0) {
+                        donchianChennel += "低于20日均线(" + ma20 + ")；";
+                        donchianChennelColor = "#3e8f3e";
+                    }
+                    item.donchianChennel = donchianChennel;
+                    item.donchianChennelColor = donchianChennelColor;
                 }
                 return {
                     "code": res.code, //解析接口状态
@@ -189,6 +202,7 @@
                 ,{field: 'dayIncome', title: '当日盈利', width:120, totalRow: true, sort: true,templet: function(d){return '<span style="color: ' + d.dayInComeColor + '">'+ d.dayIncome +'</span>'}}
                 ,{field: 'dwjzNew', title: '当日净值', width: 180}
                 ,{field: 'gsz', title: '估算净值', width:110, sort: true}
+                ,{field: 'donchianChennel', title: '监控', width: 200, templet: function(d){return '<a style="color: ' + d.donchianChennelColor + '">'+ d.donchianChennel +'</a>'}}
                 ,{field: 'oneYearAgoUpper', title: '近一年 %', width:120, sort: true, templet: function(d){return '<span style="color: ' + d.oneYearAgoUpperColor + '">'+ d.oneYearAgoUpper +'</span>'}}
                 ,{field: 'oneSeasonAgoUpper', title: '近一季度 %', width:120, sort: true, templet: function(d){return '<span style="color: ' + d.oneSeasonAgoUpperColor + '">'+ d.oneSeasonAgoUpper +'</span>'}}
                 ,{field: 'oneMonthAgoUpper', title: '近一月 %', width:120, sort: true, templet: function(d){return '<span style="color: ' + d.oneMonthAgoUpperColor + '">'+ d.oneMonthAgoUpper +'</span>'}}

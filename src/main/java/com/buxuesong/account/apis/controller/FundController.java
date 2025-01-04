@@ -104,6 +104,7 @@ public class FundController {
                 .oneSeasonAgoUpper(s.getOneSeasonAgoUpper())
                 .oneMonthAgoUpper(s.getOneMonthAgoUpper())
                 .oneWeekAgoUpper(s.getOneWeekAgoUpper())
+                .ma20(s.getMa20())
                 .build())
             .collect(Collectors.toList());
         List<StockAndFundBean> stockAndFundsFromStocks = stocks.stream()

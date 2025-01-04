@@ -277,6 +277,14 @@ public class FundEntity {
         this.oneWeekAgoUpper = oneWeekAgoUpper;
     }
 
+    public String getMa20() {
+        return ma20;
+    }
+
+    public void setMa20(String ma20) {
+        this.ma20 = ma20;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -594,6 +602,19 @@ public class FundEntity {
                 oneYearAgoDateDayHistory = current;
                 break;
             }
+        }
+        try {
+            // 计算 ma20
+            List<FundJZPO> fundJZPOs20 = fundJZPOs.subList(fundJZPOs.size() - 20,
+                    fundJZPOs.size());
+            double ma20 = fundJZPOs20.stream()
+                    .mapToDouble(response -> Double.parseDouble(response.getDWJZ()))
+                    .average()
+                    .getAsDouble();
+            bean.setMa20(String.format("%.4f", ma20));
+        } catch(Exception e) {
+            log.error("计算 ma20 失败", e);
+            bean.setMa20("0.00");
         }
         LocalDate oneSeasonAgoDate = latestDate.minusMonths(3);
         FundJZPO oneSeasonAgoDateDayHistory = null;

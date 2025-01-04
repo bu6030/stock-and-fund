@@ -199,6 +199,7 @@
                     } else if(item.type == 'FUND') {
                         item.typeNew = '基金';
                         var marketValue = new BigDecimal("0");
+                        var now = new BigDecimal(item.gsz + "");
                         if (item.currentDayJingzhi != null && item.currentDayJingzhi != '') {
                             item.gsz = item.currentDayJingzhi + '(实)';
                             item.dayIncome = new BigDecimal(parseFloat(((new BigDecimal(item.currentDayJingzhi + "")).subtract(new BigDecimal(item.previousDayJingzhi + ""))).multiply(new BigDecimal(item.bonds + ""))).toFixed(2));
@@ -222,8 +223,18 @@
                         item.change = 'N/A';
                         item.max = 'N/A';
                         item.min = 'N/A';
-                        item.donchianChennel = 'N/A';
-                        item.donchianChennelColor = '';
+                        var donchianChennel = "";
+                        var donchianChennelColor = "";
+                        var ma20 = new BigDecimal(item.ma20 + "");
+                        if (now.compareTo(ma20) > 0) {
+                            donchianChennel += "高于20日均线(" + ma20 + ")；";
+                            donchianChennelColor = "#c12e2a";
+                        } else if(now.compareTo(ma20) < 0) {
+                            donchianChennel += "低于20日均线(" + ma20 + ")；";
+                            donchianChennelColor = "#3e8f3e";
+                        }
+                        item.donchianChennel = donchianChennel;
+                        item.donchianChennelColor = donchianChennelColor;
                         if (totalMarketValue.compareTo(new BigDecimal("0")) != 0) {
                             item.marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValue) + "";
                         }
