@@ -252,6 +252,7 @@
                     var day20Min = new BigDecimal(item.day20Min + "");
                     var day10Max = new BigDecimal(item.day10Max + "");
                     var day10Min = new BigDecimal(item.day10Min + "");
+                    var ma20 = new BigDecimal(item.ma20 + "");
                     var now = new BigDecimal(item.now + "");
                     var donchianChennel = "";
                     var donchianChennelColor = "";
@@ -274,6 +275,13 @@
                         donchianChennelColor = "#c12e2a";
                     } else if(now.compareTo(day10Min) < 0) {
                         donchianChennel += "破10低(" + day10Min + ")；";
+                        donchianChennelColor = "#3e8f3e";
+                    }
+                    if(now.compareTo(ma20) > 0) {
+                        donchianChennel += "高于20日均线(" + ma20 + ")；";
+                        donchianChennelColor = "#c12e2a";
+                    } else if(now.compareTo(ma20) < 0) {
+                        donchianChennel += "低于20日均线(" + ma20 + ")；";
                         donchianChennelColor = "#3e8f3e";
                     }
                     if (donchianChennel == "") {
@@ -303,7 +311,7 @@
                 ,{field: 'dayIncome', title: '当日盈利', width: 120, sort: true, totalRow: true,templet: function(d){return '<span style="color: ' + d.dayInComeColor + '">'+ d.dayIncome +'</span>'}}
                 ,{field: 'max', title: '最高价', width:100}
                 ,{field: 'min', title: '最低价', width: 100}
-                ,{field: 'donchianChennel', title: '唐安奇通道', width: 200, templet: function(d){return '<a style="color: ' + d.donchianChennelColor + '" onclick="showDonchianChennel(\'' + d.name + '\',' + d.day50Max + ',' + d.day50Min + ',' + d.day20Max + ',' + d.day20Min + ',' + d.day10Max + ',' + d.day10Min + ')">'+ d.donchianChennel +'</a>'}}
+                ,{field: 'donchianChennel', title: '监控', width: 200, templet: function(d){return '<a style="color: ' + d.donchianChennelColor + '" onclick="showDonchianChennel(\'' + d.name + '\',' + d.day50Max + ',' + d.day50Min + ',' + d.day20Max + ',' + d.day20Min + ',' + d.day10Max + ',' + d.day10Min + ',' + d.ma20 + ')">'+ d.donchianChennel +'</a>'}}
                 ,{field: 'oneYearAgoUpper', title: '近一年 %', width:120, sort: true, templet: function(d){return '<span style="color: ' + d.oneYearAgoUpperColor + '">'+ d.oneYearAgoUpper +'</span>'}}
                 ,{field: 'oneSeasonAgoUpper', title: '近一季度 %', width:120, sort: true, templet: function(d){return '<span style="color: ' + d.oneSeasonAgoUpperColor + '">'+ d.oneSeasonAgoUpper +'</span>'}}
                 ,{field: 'oneMonthAgoUpper', title: '近一月 %', width:120, sort: true, templet: function(d){return '<span style="color: ' + d.oneMonthAgoUpperColor + '">'+ d.oneMonthAgoUpper +'</span>'}}
@@ -562,8 +570,8 @@
         });
     }
 
-    function showDonchianChennel(name, day50Max, day50Min, day20Max, day20Min, day10Max, day10Min) {
-        layer.msg("股票：" + name + "；50最高：" + day50Max + "；50最低：" + day50Min + "；20最高：" + day20Max + "；20最低：" + day20Min + "；10最高：" + day10Max + "；10最低：" + day10Min + "");
+    function showDonchianChennel(name, day50Max, day50Min, day20Max, day20Min, day10Max, day10Min, ma20) {
+        layer.msg("股票：" + name + "；50最高：" + day50Max + "；50最低：" + day50Min + "；20最高：" + day20Max + "；20最低：" + day20Min + "；10最高：" + day10Max + "；10最低：" + day10Min + "；20日均线：" + ma20 +"");
     }
 </script>
 </body>

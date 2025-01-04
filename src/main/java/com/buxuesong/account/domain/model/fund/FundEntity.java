@@ -52,6 +52,7 @@ public class FundEntity {
     private boolean hide;// 是否隐藏
     private String currentDayJingzhi;// 当日净值（每个交易日晚9点之后有新日期数据）
     private String previousDayJingzhi;// 前一日净值
+    private String ma20;
     private String oneYearAgoUpper;
     private String oneSeasonAgoUpper;
     private String oneMonthAgoUpper;

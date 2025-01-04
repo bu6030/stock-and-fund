@@ -173,6 +173,7 @@ function getStockTableHtml(result, totalMarketValueResult){
         var day20Min = new BigDecimal(result[k].day20Min + "");
         var day10Max = new BigDecimal(result[k].day10Max + "");
         var day10Min = new BigDecimal(result[k].day10Min + "");
+        var ma20 = new BigDecimal(result[k].ma20 + "");
         var now = new BigDecimal(result[k].now + "");
         var donchianChennel = "";
         var donchianChennelStyle = "";
@@ -197,6 +198,13 @@ function getStockTableHtml(result, totalMarketValueResult){
             donchianChennel += "破10低(" + day10Min + ")；";
             donchianChennelStyle = "style=\"color:#3e8f3e\"";
         }
+        if (now.compareTo(ma20) > 0) {
+            donchianChennel += "高于20日均线(" + ma20 + ")；";
+            donchianChennelStyle = "style=\"color:#c12e2a\"";
+        } else if(now.compareTo(ma20) < 0) {
+            donchianChennel += "低于20日均线(" + ma20 + ")；";
+            donchianChennelStyle = "style=\"color:#3e8f3e\"";
+        }
         if (donchianChennel == "") {
             donchianChennel += "监控中；";
             donchianChennelStyle = "";
@@ -214,7 +222,7 @@ function getStockTableHtml(result, totalMarketValueResult){
             + "</td><td " + dayIncomeStyle + ">" + result[k].changePercent +"%"
             + "</td><td>" +result[k].max
             + "</td><td>" + result[k].min
-            + "</td><td " + donchianChennelStyle + " onclick=\"showDonchianChennel('" + result[k].name + "','" + day50Max + "','" + day50Min + "','" + day20Max + "','" + day20Min + "','" + day10Max + "','" + day10Min + "')\">" + donchianChennel
+            + "</td><td " + donchianChennelStyle + " onclick=\"showDonchianChennel('" + result[k].name + "','" + day50Max + "','" + day50Min + "','" + day20Max + "','" + day20Min + "','" + day10Max + "','" + day10Min + "','" + ma20 + "')\">" + donchianChennel
             + "</td><td " + oneYearAgoUpperStyle + ">" + result[k].oneYearAgoUpper + "%"
             + "</td><td " + oneSeasonAgoUpperStyle + ">" + result[k].oneSeasonAgoUpper + "%"
             + "</td><td " + oneMonthAgoUpperStyle + ">" + result[k].oneMonthAgoUpper + "%"
@@ -600,6 +608,6 @@ function showBuyOrSell() {
     });
 }
 
-function showDonchianChennel(name, day50Max, day50Min, day20Max, day20Min, day10Max, day10Min) {
-    alert("股票：" + name + "；50最高：" + day50Max + "；50最低：" + day50Min + "；20最高：" + day20Max + "；20最低：" + day20Min + "；10最高：" + day10Max + "；10最低：" + day10Min + "");
+function showDonchianChennel(name, day50Max, day50Min, day20Max, day20Min, day10Max, day10Min, ma20) {
+    alert("股票：" + name + "；50最高：" + day50Max + "；50最低：" + day50Min + "；20最高：" + day20Max + "；20最低：" + day20Min + "；10最高：" + day10Max + "；10最低：" + day10Min + "；20均线：" + ma20 + "");
 }
