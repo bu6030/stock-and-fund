@@ -65,6 +65,7 @@ public class StockEntity {
     private String oneSeasonAgoUpper;
     private String oneMonthAgoUpper;
     private String oneWeekAgoUpper;
+    private String ma20;
 
     public StockEntity() {
     }
@@ -104,6 +105,14 @@ public class StockEntity {
                 this.bonds = codeStr[2];
             }
         }
+    }
+
+    public String getMa20() {
+        return ma20;
+    }
+
+    public void setMa20(String ma20) {
+        this.ma20 = ma20;
     }
 
     public String getCode() {
@@ -474,6 +483,11 @@ public class StockEntity {
                         stockDayHistory300.size());
                     List<StockDayHistoryResponse> stockDayHistory20 = stockDayHistory300.subList(stockDayHistory300.size() - 20,
                         stockDayHistory300.size());
+                    // 计算 stockDayHistory20 的平均收盘价格，也就是StockDayHistoryResponse的close
+                    double ma20 = stockDayHistory20.stream()
+                        .mapToDouble(StockDayHistoryResponse::getClose)
+                        .average()
+                        .getAsDouble();
                     StockDayHistoryResponse maxStockDay20 = stockDayHistory20.stream()
                         .max((s1, s2) -> Double.compare(s1.getHigh(), s2.getHigh()))
                         .get();
@@ -490,6 +504,7 @@ public class StockEntity {
                     bean.setDay20Min(minStockDay20.getLow() + "");
                     bean.setDay10Max(maxStockDay10.getHigh() + "");
                     bean.setDay10Min(minStockDay10.getLow() + "");
+                    bean.setMa20(String.format("%.3f", ma20));
                 } else {
                     bean.setDay50Max(now + "");
                     bean.setDay50Min(now + "");
@@ -497,6 +512,7 @@ public class StockEntity {
                     bean.setDay20Min(now + "");
                     bean.setDay10Max(now + "");
                     bean.setDay10Min(now + "");
+                    bean.setMa20(now + "");
                 }
                 stocks.add(bean);
             }

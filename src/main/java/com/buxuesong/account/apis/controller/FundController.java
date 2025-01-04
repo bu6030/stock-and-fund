@@ -117,6 +117,7 @@ public class FundController {
                 .day50Min(s.getDay50Min()).day50Max(s.getDay50Max())
                 .day20Min(s.getDay20Min()).day20Max(s.getDay20Max())
                 .day10Min(s.getDay10Min()).day10Max(s.getDay10Max())
+                .ma20(s.getMa20())
                 .oneYearAgoUpper(s.getOneYearAgoUpper())
                 .oneSeasonAgoUpper(s.getOneSeasonAgoUpper())
                 .oneMonthAgoUpper(s.getOneMonthAgoUpper())

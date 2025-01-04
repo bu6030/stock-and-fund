@@ -44,6 +44,7 @@ public class StockAndFundBean {
     private String day20Min;
     private String day10Max;
     private String day10Min;
+    private String ma20;
 
     private String oneYearAgoUpper;
     private String oneSeasonAgoUpper;
