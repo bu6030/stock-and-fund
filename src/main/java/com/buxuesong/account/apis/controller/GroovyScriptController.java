@@ -49,7 +49,8 @@ public class GroovyScriptController {
         ScriptEngine engine = new ScriptEngineManager().getEngineByName("groovy");
         // 假设query是一个简单的Groovy表达式
         Object result = engine.eval(query);
-        return "Result: " + result.toString();
+        log.info("Grovvy execute-query result: {}", result);
+        return result.toString();
     }
 
     @GetMapping("/groovy-script")

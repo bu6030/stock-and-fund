@@ -20,10 +20,10 @@ function submitQuery() {
               type: 'POST',
               data: { query: query },
               success: function(data) {
-                  $('#result').text('Result: ' + data);
+                  $('#result').html(data);
               },
               error: function(error) {
-                  $('#result').text('Error: ' + error.responseText);
+                  $('#result').html('Error: ' + error.responseText);
               }
           });
 }
