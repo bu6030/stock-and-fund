@@ -126,13 +126,13 @@
                         <div class="am-form-group am-cf">
                             <div class="zuo">操作股数：</div>
                             <div class="you">
-                                <input type="number" class="am-input-sm" id="handleBonds" th:value="100" placeholder="请输入操作股数，买入/卖出股数">
+                                <input type="number" class="am-input-sm" id="handleBonds" onchange="priceOrHandleBondsChanged()" th:value="100" placeholder="请输入操作股数，买入/卖出股数">
                             </div>
                         </div>
                         <div class="am-form-group am-cf">
                             <div class="zuo">买入/卖出股价：</div>
                             <div class="you">
-                                <input type="number" class="am-input-sm" id="price" placeholder="请输入买入/卖出股价">
+                                <input type="number" class="am-input-sm" id="price" onchange="priceOrHandleBondsChanged()" placeholder="请输入买入/卖出股价">
                             </div>
                         </div>
                         <div class="am-form-group am-cf">

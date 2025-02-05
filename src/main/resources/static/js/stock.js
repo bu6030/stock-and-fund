@@ -586,3 +586,12 @@ function showBuyOrSellCost(code) {
 function showDonchianChennel(name, day50Max, day50Min, day20Max, day20Min, day10Max, day10Min, ma20) {
     alert("股票：" + name + "；50最高：" + day50Max + "；50最低：" + day50Min + "；20最高：" + day20Max + "；20最低：" + day20Min + "；10最高：" + day10Max + "；10最低：" + day10Min + "；20日均线：" + ma20 + "");
 }
+
+function priceOrHandleBondsChanged() {
+    var handleBonds = $("#handleBonds").val();
+    var price = $("#price").val();
+    if (handleBonds > 0 && price > 0) {
+        var cost = parseFloat(price * handleBonds * 2.5 / 10000).toFixed(2);
+        $("#cost").val(cost);
+    }
+}
