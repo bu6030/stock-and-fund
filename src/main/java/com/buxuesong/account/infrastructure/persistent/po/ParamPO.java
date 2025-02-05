@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ParamPO {
+    private String id;
     private String type;
     private String code;
     private String name;

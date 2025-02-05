@@ -34,7 +34,7 @@ function getTableHtml(result){
         str += "<tr><td>" + result[k].type
             + "</td><td>" + result[k].code
             + "</td><td>" + result[k].name
-            + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"修改\" onclick=\"updateParam('" + result[k].code + "','" + result[k].type + "','" + result[k].name + "')\">"
+            + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"修改\" onclick=\"updateParam('" + result[k].id + "','" + result[k].code + "','" + result[k].type + "','" + result[k].name + "')\">"
             + "<span class=\"am-icon-pencil-square-o\"></span></button>"
             + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"删除\" onclick=\"deleteParam('" + result[k].code + "','" + result[k].type + "')\">"
             + "<span class=\"am-icon-remove\"></span></button>"
@@ -88,25 +88,22 @@ function deleteParam(code, type){
     });
 }
 
-function updateParam(code, type, name){
+function updateParam(id, code, type, name) {
+    $("#id").val(id);
     $("#code").val(code);
     $("#type").val(type);
+    $("#typeSelect").val(type);
     $("#name").val(name);
     $("#myModal").modal();
-    // var iHeight = 600;
-    // var iWidth = 800;
-    // //获得窗口的垂直位置
-    // var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
-    // //获得窗口的水平位置
-    // var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
-    // window.open ('/updateParam.html?code='+code+'&type='+type, 'newwindow', 'height='+iHeight+', width='+iWidth+', top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
 }
 
 function submitParam(){
+    var id =$("#id").val();
     var type =$("#type").val();
     var code =$("#code").val();
     var name =$("#name").val();
     var req = {
+        "id": id,
         "code": code,
         "type": type,
         "name": name

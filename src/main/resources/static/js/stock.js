@@ -1,26 +1,30 @@
 var pageSize = 15;
 var filteredApp = "ALL";
-var appList;
+var appList = [];
+var stockCostRate = 0;
+var etfCostRate = 0;
 
 function getData() {
     var userId = $("#userId").val();
     var personName = $("#personName").val();
     var accountId = $("#accountId").val();
     $.ajax({
-        url:"/param?type=APP",
+        url:"/param",
         type:"get",
         data :{},
         dataType:'json',
         contentType: 'application/x-www-form-urlencoded',
-        success: function (data){
-            appList = data.value;
-            var app = $("#app");
-            app.find('option').remove();
-            app.append("<option value=''>请选择</option>");
-            for(var k in appList) {
-                var opt = $("<option></option>").text(appList[k].name).val(appList[k].code);
-                app.append(opt);
+        success: function (data) {
+            for(var k in data.value) {
+               if (data.value[k].type == 'APP') {
+                   appList.push(data.value[k]);
+               } else if (data.value[k].type == 'ETF_COST_RATE') {
+                   etfCostRate = data.value[k].code;
+               } else if (data.value[k].type == 'STOCK_COST_RATE') {
+                   stockCostRate = data.value[k].code;
+               }
             }
+            initApp(appList);
             initData();
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -31,6 +35,16 @@ function getData() {
     });
     // 30s刷新
     setInterval('autoRefresh()', 30000);
+}
+
+function initApp(appList) {
+    var app = $("#app");
+    app.find('option').remove();
+    app.append("<option value=''>请选择</option>");
+    for(var k in appList) {
+        var opt = $("<option></option>").text(appList[k].name).val(appList[k].code);
+        app.append(opt);
+    }
 }
 
 function initData() {
@@ -588,10 +602,17 @@ function showDonchianChennel(name, day50Max, day50Min, day20Max, day20Min, day10
 }
 
 function priceOrHandleBondsChanged() {
+    var nameBuyOrSell = $("#nameBuyOrSell").val();
+    var rate = 2.5 / 10000;
+    if (nameBuyOrSell.indexOf("ETF") != -1) {
+        rate = parseFloat(etfCostRate);
+    } else {
+        rate = parseFloat(stockCostRate);
+    }
     var handleBonds = $("#handleBonds").val();
     var price = $("#price").val();
     if (handleBonds > 0 && price > 0) {
-        var cost = parseFloat(price * handleBonds * 2.5 / 10000).toFixed(2);
+        var cost = parseFloat(price * handleBonds * rate).toFixed(2);
         $("#cost").val(cost);
     }
 }

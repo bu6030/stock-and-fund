@@ -38,12 +38,15 @@
                 <!-- 模态框主体 -->
                 <div class="modal-body">
                     <form class="am-form" id="saveOutComeForm">
+                        <input type="hidden" id="id"/>
                         <input type="hidden" id="type" th:value="APP"/>
                         <div class="am-form-group am-cf">
                             <div class="zuo">字典数据类型：</div>
                             <div class="you">
-                                <select disabled="disabled" data-am-selected="{btnSize: 'sm'}">
-                                    <option th:value="1" th:selected="true">APP</option>
+                                <select id="typeSelect" disabled="disabled" data-am-selected="{btnSize: 'sm'}">
+                                    <option th:value="APP" th:selected="true">APP</option>
+                                    <option th:value="ETF_COST_RATE">ETF_COST_RATE</option>
+                                    <option th:value="STOCK_COST_RATE">STOCK_COST_RATE</option>
                                 </select>
                             </div>
                         </div>
