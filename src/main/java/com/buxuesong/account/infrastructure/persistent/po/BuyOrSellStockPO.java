@@ -22,4 +22,5 @@ public class BuyOrSellStockPO implements Serializable {
     private String app;
     private BigDecimal openPrice;
     private BigDecimal income;
+    private String createDate;
 }

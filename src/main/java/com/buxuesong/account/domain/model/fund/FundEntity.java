@@ -606,13 +606,13 @@ public class FundEntity {
         try {
             // 计算 ma20
             List<FundJZPO> fundJZPOs20 = fundJZPOs.subList(fundJZPOs.size() - 20,
-                    fundJZPOs.size());
+                fundJZPOs.size());
             double ma20 = fundJZPOs20.stream()
-                    .mapToDouble(response -> Double.parseDouble(response.getDWJZ()))
-                    .average()
-                    .getAsDouble();
+                .mapToDouble(response -> Double.parseDouble(response.getDWJZ()))
+                .average()
+                .getAsDouble();
             bean.setMa20(String.format("%.4f", ma20));
-        } catch(Exception e) {
+        } catch (Exception e) {
             log.error("计算 ma20 失败", e);
             bean.setMa20("0.00");
         }

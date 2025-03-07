@@ -11,20 +11,20 @@ import java.util.List;
 public interface BuyOrSellMapper {
 
     @Update(" INSERT INTO BUY_OR_SELL (DATE, CODE, TYPE, PRICE," +
-        " COST, BONDS, INCOME, OPENPRICE, USERNAME) " +
+        " COST, BONDS, INCOME, OPENPRICE, USERNAME, CREATE_DATE) " +
         " values " +
         " (#{buyOrSellStock.date},#{buyOrSellStock.code},#{buyOrSellStock.type},#{buyOrSellStock.price}," +
-        " #{buyOrSellStock.cost},#{buyOrSellStock.bonds},#{buyOrSellStock.income},#{buyOrSellStock.openPrice}, #{username}) ")
+        " #{buyOrSellStock.cost},#{buyOrSellStock.bonds},#{buyOrSellStock.income},#{buyOrSellStock.openPrice}, #{username}, datetime('now','localtime')) ")
     int save(@Param("buyOrSellStock") BuyOrSellStockPO buyOrSellStockPO, @Param("username") String username);
 
-    @Select("select DATE, CODE, TYPE, PRICE, COST, BONDS, INCOME, OPENPRICE from BUY_OR_SELL t where t.date = #{date} AND t.USERNAME = #{username}")
+    @Select("select DATE, CODE, TYPE, PRICE, COST, BONDS, INCOME, OPENPRICE, CREATE_DATE as createDate from BUY_OR_SELL t where t.date = #{date} AND t.USERNAME = #{username} order by CREATE_DATE desc")
     List<BuyOrSellStockPO> findAllBuyOrSellStocksByDate(@Param("date") String date, @Param("username") String username);
 
-    @Select("<script> select DATE, CODE, TYPE, PRICE, COST, BONDS, INCOME, OPENPRICE from BUY_OR_SELL t where USERNAME = #{username}" +
+    @Select("<script> select DATE, CODE, TYPE, PRICE, COST, BONDS, INCOME, OPENPRICE, CREATE_DATE as createDate from BUY_OR_SELL t where USERNAME = #{username}" +
         " <if test=\"code!=null and code!=''\"> and code = #{code} </if> " +
         " <if test=\"beginDate!=null and beginDate!=''\"> and DATE &gt;= #{beginDate} </if> " +
         " <if test=\"endDate!=null and endDate!=''\"> and DATE &lt;= #{endDate} </if> " +
-        " order by DATE DESC </script>")
+        " order by DATE DESC, CREATE_DATE DESC </script>")
     List<BuyOrSellStockPO> findAllBuyOrSellStocks(@Param("code") String code, @Param("beginDate") String beginDate,
         @Param("endDate") String endDate, @Param("username") String username);
 }

@@ -556,7 +556,7 @@ function showBuyOrSell() {
                     + "</td><td>" + cost
                     + "</td><td>" + bonds
                     + "</td><td>" + totalPrice
-                    + "</td><td>" + result[k].date
+                    + "</td><td>" + result[k].createDate
                     +"</td></tr>";
             }
             $("#buy-or-sell-nr").html(str);
