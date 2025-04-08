@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <property name="APP_HOME_LOG" value="log" />
+    <property name="APP_NAME" value="stock-and-fund" />
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%level] [%thread] [%c] - %msg%n</pattern>
@@ -12,7 +14,7 @@
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <FileNamePattern>${APP_HOME_LOG}/${APP_NAME}.%d{yyMMdd}.log.gz</FileNamePattern>
-            <MaxHistory>10</MaxHistory>
+            <MaxHistory>50</MaxHistory>
         </rollingPolicy>
     </appender>
 
