@@ -14,12 +14,12 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.1</version>
+		<version>3.5.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
 	<properties>
-		<httpclient.version>5.4.1</httpclient.version>
+		<httpclient.version>5.5</httpclient.version>
 		<main.basedir>${project.basedir}</main.basedir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -115,7 +115,7 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>3.14.0</version>
+			<version>3.18.0</version>
 		</dependency>
 
 		<dependency>

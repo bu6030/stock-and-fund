@@ -70,10 +70,13 @@ function getTableHtml(result){
         if (filteredApp != "ALL" && result[k].app != filteredApp) {
             continue;
         }
-        marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].gsz)).multiply(new BigDecimal(result[k].bonds))).toFixed(2));
+        if (result[k].currentDayJingzhi != null && result[k].currentDayJingzhi != '') {
+            marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].currentDayJingzhi + "")).multiply(new BigDecimal(result[k].bonds + ""))).toFixed(2));
+        } else {
+            marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].gsz)).multiply(new BigDecimal(result[k].bonds))).toFixed(2));
+        }
         totalmarketValue = totalmarketValue.add(marketValue);
     }
-
 
     for(var k in result) {
         if (filteredApp != "ALL" && result[k].app != filteredApp) {
