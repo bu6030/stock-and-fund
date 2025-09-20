@@ -1,0 +1,91 @@
+<!-- src/main/resources/templates/advice.html -->
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>用户建议管理</title>
+    <link rel="stylesheet" th:href="@{/css/main.admin.css}" type="text/css" media="all"/>
+    <link rel="stylesheet" th:href="@{/css/main.amazeui.min.css}" type="text/css" media="all"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css" media="all"/>
+    <script th:src="@{/js/common.js}"></script>
+    <script th:src="@{/js/advice.js}"></script>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/sidebar.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+</head>
+<body onload="sidebar();initData();">
+
+<header class="menu">
+    <div th:replace="header.html"></div>
+</header>
+
+<div class="am-cf admin-main">
+    <div th:replace="sidebar.html"></div>
+
+    <!-- 模态框 -->
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!-- 模态框头部 -->
+                <div class="modal-header">
+                    <h4 class="modal-title">添加/修改建议</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- 模态框主体 -->
+                <div class="modal-body">
+                    <form class="am-form" id="adviceForm">
+                        <input type="hidden" id="adviceId"/>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">反馈内容：</div>
+                            <div class="you">
+                                <textarea class="am-input-sm" id="adviceContent" rows="5" placeholder="请输入反馈内容"></textarea>
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">开发版本：</div>
+                            <div class="you">
+                                <input type="text" class="am-input-sm" id="adviceDevelopVersion" placeholder="请输入开发版本号">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 模态框底部 -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="submitAdvice()">保存</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class=" admin-content">
+        <div class="admin-biaogelist">
+            <div class="listbiaoti am-cf">
+                <ul class="am-icon-users"> 用户建议管理</ul>
+                <dl class="am-icon-home" style="float: right;">
+                    当前位置： 首页 > <a href="#">用户建议管理</a>
+                </dl>
+            </div>
+            <div class="am-btn-toolbars am-btn-toolbar am-kg am-cf"></div>
+            <form class="am-form am-g">
+                <table width="100%" class="am-table am-table-bordered am-table-radius am-table-striped">
+                    <thead>
+                    <tr class="am-success no-wrap">
+                        <th class="table-id">ID</th>
+                        <th class="table-type">反馈内容</th>
+                        <th class="table-author am-hide-sm-only">开发版本</th>
+                        <th class="table-date am-hide-sm-only">提交时间</th>
+                        <th width="150px">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="nr">
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

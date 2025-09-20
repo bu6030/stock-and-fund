@@ -92,6 +92,18 @@ public class UrlController {
         return m;
     }
 
+    /**
+     * 反馈建议页面初始化
+     *
+     * @return
+     */
+    @GetMapping(value = "/advice.html")
+    public ModelAndView adviceInit() {
+        ModelAndView m = new ModelAndView();
+        m.setViewName("advice");
+        return m;
+    }
+
     // 新版本页面，layui版本
     /**
      * 新基金页面初始化，引入layui
