@@ -181,6 +181,18 @@ public class UrlController {
     }
 
     /**
+     * 反馈建议页面初始化
+     *
+     * @return
+     */
+    @GetMapping(value = "/adviceNew.html")
+    public ModelAndView adviceNewInit() {
+        ModelAndView m = new ModelAndView();
+        m.setViewName("adviceNew");
+        return m;
+    }
+
+    /**
      * 上传文件
      *
      * @return

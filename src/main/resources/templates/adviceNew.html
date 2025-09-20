@@ -1,0 +1,234 @@
+<!-- src/main/resources/templates/adviceNew.html -->
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>用户建议管理</title>
+    <link rel="stylesheet" th:href="@{/css/main.admin.css}" type="text/css" media="all"/>
+    <link rel="stylesheet" th:href="@{/css/main.amazeui.min.css}" type="text/css" media="all"/>
+    <link href="https://cdn.staticfile.org/layui/2.7.6/css/layui.css" rel="stylesheet">
+    <style>
+        body{padding: 6px 16px;}
+        .demo-carousel{height: 200px; line-height: 200px; text-align: center;}
+    </style>
+</head>
+<body>
+<header class="menu">
+    <div th:replace="headerNew.html"></div>
+</header>
+<blockquote class="layui-elem-quote">用户建议管理：您可在此页面查看、添加、修改和删除用户反馈建议。</blockquote>
+
+<div>
+    <div id="model" style="display: none;">
+        <div class="modal-dialog modal-lg" style="padding-top: 10px;padding-bottom: 10px;padding-left: 10px;padding-right: 10px">
+            <div class="modal-content">
+                <!-- 模态框主体 -->
+                <div class="modal-body">
+                    <form class="am-form" id="adviceForm">
+                        <input type="hidden" id="adviceId"/>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">反馈内容：</div>
+                            <div class="you">
+                                <textarea class="layui-textarea" id="adviceContent" rows="5" placeholder="请输入反馈内容"></textarea>
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">开发版本：</div>
+                            <div class="you">
+                                <input type="text" class="layui-input" id="adviceDevelopVersion" placeholder="请输入开发版本号">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 模态框底部 -->
+                <div class="modal-footer">
+                    <button type="button" class="layui-btn" onclick="submitAdvice()">保存</button>
+                    <button type="button" class="layui-btn" onclick="layer.closeAll();">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="layui-hide" id="adviceTable" lay-filter="adviceTable"></table>
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+<!--        <button class="layui-btn layui-btn-sm" lay-event="add">添加建议</button>-->
+    </div>
+</script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+</script>
+
+<script th:src="@{/js/jquery.min.js}"></script>
+<script src="https://cdn.staticfile.org/layui/2.7.6/layui.js"></script>
+
+<script>
+    var adviceTable;
+    var active;
+    var modalLayer;
+
+    layui.use(function(){
+        // 得到需要的内置组件
+        var layer = layui.layer; //弹层
+        var table = layui.table; //表格
+
+        // 向世界问个好
+        layer.msg('用户建议管理：您可在此页面查看、添加、修改和删除用户反馈建议。');
+
+        // 执行一个 table 实例
+        adviceTable = table.render({
+            elem: '#adviceTable'
+            ,url: '/advice' //数据接口
+            ,title: '用户建议表'
+            ,even: true //开启隔行背景
+            ,toolbar: '#toolbarDemo' //开启工具栏
+            ,parseData: function(res){ //res 即为原始返回的数据
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.value.length, //解析数据长度
+                    "data": res.value //解析数据列表
+                };
+            }
+            ,cols: [ [
+                {type: 'checkbox'}
+                ,{field: 'id', title: 'ID', width: 80, sort: true}
+                ,{field: 'adviceContent', title: '反馈内容', width: 400}
+                ,{field: 'adviceDevelopVersion', title: '开发版本', width: 150}
+                ,{field: 'date', title: '提交时间', width: 180}
+                ,{title: '操作', width: 150, align:'center', toolbar: '#barDemo'}
+            ] ]
+        });
+
+        // 头工具栏事件
+        table.on('toolbar(adviceTable)', function(obj){
+            switch(obj.event){
+                case 'add':
+                    showDialog();
+                    break;
+            };
+        });
+
+        // 单元格工具事件
+        table.on('tool(adviceTable)', function(obj){
+            var data = obj.data //获得当前行数据
+                ,layEvent = obj.event; //获得 lay-event 对应的值
+            if(layEvent === 'edit') {
+                updateAdvice(data);
+            } else if (layEvent === 'delete') {
+                layer.confirm('真的删除这条建议么?', function(index){
+                    deleteAdvice(data.id);
+                    obj.del(); //删除对应行（tr）的DOM结构
+                    layer.close(index);
+                });
+            }
+        });
+
+        active = {
+            add: function () {
+                modalLayer = layer.open({
+                    type: 1
+                    ,title: '添加/修改建议'
+                    , id: 'layerDemo' //防止重复弹出
+                    , content: $('#model')
+                    , area: ['600px', '450px']//定义宽和高
+                    , btnAlign: 'c' //按钮居中
+                    , shade: 0 //不显示遮罩
+                    , yes: function () {
+                        layer.closeAll();
+                    }
+                });
+            }
+        };
+    });
+
+    function showDialog() {
+        $("#adviceId").val('');
+        $("#adviceContent").val('');
+        $("#adviceDevelopVersion").val('');
+        active.add();
+    }
+
+    function updateAdvice(data) {
+        $("#adviceId").val(data.id);
+        $("#adviceContent").val(data.adviceContent);
+        $("#adviceDevelopVersion").val(data.adviceDevelopVersion || '');
+        active.add();
+    }
+
+    function deleteAdvice(id) {
+        var req = {
+            "id": id
+        };
+        $.ajax({
+            url: "/deleteAdvice",
+            type: "post",
+            data: JSON.stringify(req),
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (data){
+                if(data.code=="00000000") {
+                    adviceTable.reload();
+                } else {
+                    layer.msg("删除失败：" + data.message);
+                }
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest.status);
+                console.log(XMLHttpRequest.readyState);
+                console.log(textStatus);
+                layer.msg("删除失败");
+            }
+        });
+    }
+
+    function submitAdvice() {
+        var id = $("#adviceId").val();
+        var adviceContent = $("#adviceContent").val();
+        var adviceDevelopVersion = $("#adviceDevelopVersion").val();
+
+        if (!adviceContent) {
+            layer.msg("请输入反馈内容");
+            return;
+        }
+
+        var req = {
+            "id": id,
+            "adviceContent": adviceContent,
+            "adviceDevelopVersion": adviceDevelopVersion
+        };
+
+        var url = "/updateAdvice";
+        var method = "post";
+
+        $.ajax({
+            url: url,
+            type: method,
+            data: JSON.stringify(req),
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (data){
+                if(data.code=="00000000") {
+                    layer.closeAll();
+                    adviceTable.reload();
+                } else {
+                    layer.msg("保存失败：" + data.message);
+                }
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest.status);
+                console.log(XMLHttpRequest.readyState);
+                console.log(textStatus);
+                layer.msg("保存失败");
+            }
+        });
+    }
+</script>
+</body>
+</html>
