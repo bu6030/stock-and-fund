@@ -11,6 +11,50 @@
     <style>
         body{padding: 6px 16px;}
         .demo-carousel{height: 200px; line-height: 200px; text-align: center;}
+
+        /* 移动端适配 */
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 4px 8px;
+            }
+
+            .layui-table th,
+            .layui-table td {
+                font-size: 12px;
+                padding: 3px 5px;
+            }
+
+            .layui-btn-container .layui-btn {
+                margin-bottom: 5px;
+            }
+
+            #model .modal-content {
+                padding: 5px;
+            }
+
+            .am-form-group .zuo,
+            .am-form-group .you {
+                width: 100%;
+                float: none;
+                padding: 0;
+            }
+
+            .am-form-group .zuo {
+                margin-bottom: 5px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .layui-table th,
+            .layui-table td {
+                font-size: 11px;
+                padding: 2px 3px;
+            }
+
+            .layui-layer-content {
+                padding: 0 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -19,9 +63,10 @@
 </header>
 <blockquote class="layui-elem-quote">用户建议管理：您可在此页面查看、添加、修改和删除用户反馈建议。</blockquote>
 
+<!-- 替换原有的模态框部分 -->
 <div>
     <div id="model" style="display: none;">
-        <div class="modal-dialog modal-lg" style="padding-top: 10px;padding-bottom: 10px;padding-left: 10px;padding-right: 10px">
+        <div class="modal-dialog modal-lg" style="padding: 5px;">
             <div class="modal-content">
                 <!-- 模态框主体 -->
                 <div class="modal-body">
@@ -30,7 +75,7 @@
                         <div class="am-form-group am-cf">
                             <div class="zuo">反馈内容：</div>
                             <div class="you">
-                                <textarea class="layui-textarea" id="adviceContent" rows="5" placeholder="请输入反馈内容"></textarea>
+                                <textarea class="layui-textarea" id="adviceContent" rows="4" placeholder="请输入反馈内容"></textarea>
                             </div>
                         </div>
                         <div class="am-form-group am-cf">
@@ -43,9 +88,9 @@
                 </div>
 
                 <!-- 模态框底部 -->
-                <div class="modal-footer">
-                    <button type="button" class="layui-btn" onclick="submitAdvice()">保存</button>
-                    <button type="button" class="layui-btn" onclick="layer.closeAll();">关闭</button>
+                <div class="modal-footer" style="text-align: center;">
+                    <button type="button" class="layui-btn layui-btn-sm" onclick="submitAdvice()" style="width: 45%; margin: 2px;">保存</button>
+                    <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" onclick="layer.closeAll();" style="width: 45%; margin: 2px;">关闭</button>
                 </div>
             </div>
         </div>
@@ -96,13 +141,14 @@
                     "data": res.value //解析数据列表
                 };
             }
+            // 修改表格列配置
             ,cols: [ [
-                {type: 'checkbox'}
-                ,{field: 'id', title: 'ID', width: 80, sort: true}
-                ,{field: 'adviceContent', title: '反馈内容', width: 400}
-                ,{field: 'adviceDevelopVersion', title: '开发版本', width: 150}
-                ,{field: 'date', title: '提交时间', width: 180}
-                ,{title: '操作', width: 150, align:'center', toolbar: '#barDemo'}
+                {type: 'checkbox', width: 40}
+                ,{field: 'id', title: 'ID', width: 60, sort: true}
+                ,{field: 'adviceContent', title: '反馈内容', width: 'auto'}
+                ,{field: 'adviceDevelopVersion', title: '版本', width: 100}
+                ,{field: 'date', title: '时间', width: 120}
+                ,{title: '操作', width: 100, align:'center', toolbar: '#barDemo'}
             ] ]
         });
 
@@ -132,12 +178,15 @@
 
         active = {
             add: function () {
+                var areaWidth = window.innerWidth > 600 ? '600px' : '95%';
+                var areaHeight = window.innerWidth > 600 ? '450px' : '80%';
+
                 modalLayer = layer.open({
                     type: 1
                     ,title: '添加/修改建议'
                     , id: 'layerDemo' //防止重复弹出
                     , content: $('#model')
-                    , area: ['600px', '450px']//定义宽和高
+                    , area: [areaWidth, areaHeight]//动态定义宽和高
                     , btnAlign: 'c' //按钮居中
                     , shade: 0 //不显示遮罩
                     , yes: function () {
