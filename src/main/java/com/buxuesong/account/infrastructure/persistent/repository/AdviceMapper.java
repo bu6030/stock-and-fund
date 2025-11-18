@@ -21,6 +21,6 @@ public interface AdviceMapper {
     @Update(" UPDATE ADVICE SET ENABLED = false where ID = #{advicePO.id} ")
     int delete(@Param("advicePO") AdvicePO advicePO);
 
-    @Select("select ID, DATE, ADVICE_CONTENT adviceContent, ADVICE_DEVELOP_VERSION adviceDevelopVersion from ADVICE t where t.ENABLED = true limit 10")
+    @Select("select ID, DATE, ADVICE_CONTENT adviceContent, ADVICE_DEVELOP_VERSION adviceDevelopVersion from ADVICE t where t.ENABLED = true")
     List<AdvicePO> getAdvice();
 }
