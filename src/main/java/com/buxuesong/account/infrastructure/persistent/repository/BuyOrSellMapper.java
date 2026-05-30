@@ -20,7 +20,8 @@ public interface BuyOrSellMapper {
     @Select("select DATE, CODE, TYPE, PRICE, COST, BONDS, INCOME, OPENPRICE, CREATE_DATE as createDate from BUY_OR_SELL t where t.date = #{date} AND t.USERNAME = #{username} order by CREATE_DATE desc")
     List<BuyOrSellStockPO> findAllBuyOrSellStocksByDate(@Param("date") String date, @Param("username") String username);
 
-    @Select("<script> select DATE, CODE, TYPE, PRICE, COST, BONDS, INCOME, OPENPRICE, CREATE_DATE as createDate from BUY_OR_SELL t where USERNAME = #{username}" +
+    @Select("<script> select DATE, CODE, TYPE, PRICE, COST, BONDS, INCOME, OPENPRICE, CREATE_DATE as createDate from BUY_OR_SELL t where USERNAME = #{username}"
+        +
         " <if test=\"code!=null and code!=''\"> and code = #{code} </if> " +
         " <if test=\"beginDate!=null and beginDate!=''\"> and DATE &gt;= #{beginDate} </if> " +
         " <if test=\"endDate!=null and endDate!=''\"> and DATE &lt;= #{endDate} </if> " +

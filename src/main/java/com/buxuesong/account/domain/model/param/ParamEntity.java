@@ -40,7 +40,8 @@ public class ParamEntity {
     public void saveParam(ParamRequest paramRequest) {
 //        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         String username = UserUtils.getUsername();
-        ParamPO paramPO = ParamPO.builder().id(paramRequest.getId()).code(paramRequest.getCode()).name(paramRequest.getName()).type(paramRequest.getType()).build();
+        ParamPO paramPO = ParamPO.builder().id(paramRequest.getId()).code(paramRequest.getCode()).name(paramRequest.getName())
+            .type(paramRequest.getType()).build();
         ParamPO paramPOOld = paramMapper.findParamById(paramPO, username);
         if (paramPOOld != null) {
             paramMapper.update(paramPO, username);
@@ -53,7 +54,9 @@ public class ParamEntity {
 //        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         String username = UserUtils.getUsername();
         paramMapper
-            .delete(ParamPO.builder().id(paramRequest.getId()).code(paramRequest.getCode()).name(paramRequest.getName()).type(paramRequest.getType()).build(),
+            .delete(
+                ParamPO.builder().id(paramRequest.getId()).code(paramRequest.getCode()).name(paramRequest.getName())
+                    .type(paramRequest.getType()).build(),
                 username);
     }
 }

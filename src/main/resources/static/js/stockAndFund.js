@@ -216,7 +216,7 @@ function getStockTableHtml(result, totalMarketValueResult){
         str += "<tr><td class='no-wrap'>"
             + "<a href='#' onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
             + "</td><td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary am-round\" data-am-modal=\"{target: '#my-popups'}\" type=\"button\" title=\"分时图\" onclick=\"showTimeImageModal('" + result[k].code + "','STOCK')\"><span class=\"am-icon-clock-o\"></span></button>"
-            + "</td><td class='no-wrap' onclick=\"getStockHistory('" + result[k].code + "')\">" +result[k].name
+            + "</td><td class='no-wrap' onclick=\"showBuyOrSellByCode('" + result[k].code + "', '" + result[k].name + "')\">" +result[k].name
             + "</td><td " + dayIncomeStyle + ">" + result[k].change
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
             + "</td><td " + dayIncomeStyle + ">" + result[k].changePercent +"%"
@@ -619,6 +619,58 @@ function showBuyOrSell() {
             console.log(textStatus);
         }
     });
+}
+
+function showBuyOrSellByCode(code, name) {
+    $("#buy-or-sell-stock-code").val(code);
+    $("#buy-or-sell-stock-name").val(name);
+    $.ajax({
+        url:"/buyOrSellStock?code=" + code,
+        type:"get",
+        data :{},
+        dataType:'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data){
+            var result = data.value;
+            var str = "";
+            for(var k in result) {
+                let type = '';
+                let style = '';
+                if (result[k].type == "1") {
+                    type = "买";
+                    style = "class=\"my-buy-tr\"";
+                } else {
+                    type = "卖";
+                    style = "class=\"my-sell-tr\"";
+                }
+                var cost = new BigDecimal(result[k].cost + "");
+                var bonds = new BigDecimal(result[k].bonds + "");
+                var price = new BigDecimal(result[k].price + "");
+                var totalPrice = parseFloat(price.multiply(bonds).subtract(cost)).toFixed(2);
+                str += "<tr " + style + "><td>" + name
+                    + "</td><td>" + type
+                    + "</td><td>" + price
+                    + "</td><td>" + cost
+                    + "</td><td>" + bonds
+                    + "</td><td>" + totalPrice
+                    + "</td><td>" + result[k].createDate
+                    +"</td></tr>";
+            }
+            $("#buy-or-sell-nr").html(str);
+            $("#buy-or-sell-modal").modal();
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+}
+
+function showHistory() {
+    $("#buy-or-sell-modal").modal('hide');
+    let code = $("#buy-or-sell-stock-code").val();
+    getStockHistory(code);
 }
 
 function showDonchianChennel(name, day50Max, day50Min, day20Max, day20Min, day10Max, day10Min, ma20) {
