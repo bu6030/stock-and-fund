@@ -222,7 +222,7 @@ function getStockTableHtml(result, totalMarketValueResult){
             + "</td><td " + dayIncomeStyle + ">" + result[k].changePercent +"%"
             + "</td><td>" +result[k].max
             + "</td><td>" + result[k].min
-            + "</td><td " + donchianChennelStyle + " onclick=\"showDonchianChennel('" + result[k].name + "','" + day50Max + "','" + day50Min + "','" + day20Max + "','" + day20Min + "','" + day10Max + "','" + day10Min + "','" + ma20 + "')\">" + donchianChennel
+            + "</td><td class='no-wrap' " + donchianChennelStyle + " onclick=\"showDonchianChennel('" + result[k].name + "','" + day50Max + "','" + day50Min + "','" + day20Max + "','" + day20Min + "','" + day10Max + "','" + day10Min + "','" + ma20 + "')\">" + donchianChennel
             + "</td><td " + oneYearAgoUpperStyle + ">" + result[k].oneYearAgoUpper + "%"
             + "</td><td " + oneSeasonAgoUpperStyle + ">" + result[k].oneSeasonAgoUpper + "%"
             + "</td><td " + oneMonthAgoUpperStyle + ">" + result[k].oneMonthAgoUpper + "%"
@@ -309,8 +309,8 @@ function getFundTableHtml(result, totalMarketValueResult){
             + "</td><td class='no-wrap' colspan=\"2\" onclick=\"getFundHistory('" + result[k].fundCode + "')\">" +result[k].fundName
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
             + "</td><td " + dayIncomeStyle + " colspan='2'>" +result[k].gszzl + "%"
-            + "</td><td>" + result[k].dwjz + "(" + result[k].jzrq + ")"
-            + "</td><td " + donchianChennelStyle + ">" + donchianChennel
+            + "</td><td class='no-wrap'>" + result[k].dwjz + "(" + result[k].jzrq + ")"
+            + "</td><td class='no-wrap' " + donchianChennelStyle + ">" + donchianChennel
             + "</td><td " + oneYearAgoUpperStyle + ">" + result[k].oneYearAgoUpper + "%"
             + "</td><td " + oneSeasonAgoUpperStyle + ">" + result[k].oneSeasonAgoUpper + "%"
             + "</td><td " + oneMonthAgoUpperStyle + ">" + result[k].oneMonthAgoUpper + "%"

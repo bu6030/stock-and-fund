@@ -127,9 +127,9 @@ function getTableHtml(result){
             + "</td><td class='no-wrap' onclick=\"getFundHistory('" + result[k].fundCode + "')\">" + result[k].fundName
             + "</td><td " + dayIncomeStyle + ">" +result[k].gszzl + "%"
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
-            + "</td><td>" + result[k].dwjz + "(" + result[k].jzrq + ")"
+            + "</td><td class='no-wrap'>" + result[k].dwjz + "(" + result[k].jzrq + ")"
             + "</td><td>" + result[k].gsz
-            + "</td><td " + donchianChennelStyle + ">" + donchianChennel
+            + "</td><td class='no-wrap' " + donchianChennelStyle + ">" + donchianChennel
             + "</td><td " + oneYearAgoUpperStyle + ">" + result[k].oneYearAgoUpper + "%"
             + "</td><td " + oneSeasonAgoUpperStyle + ">" + result[k].oneSeasonAgoUpper + "%"
             + "</td><td " + oneMonthAgoUpperStyle + ">" + result[k].oneMonthAgoUpper + "%"

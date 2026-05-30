@@ -198,7 +198,7 @@ function getTableHtml(result){
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
             + "</td><td>" + result[k].max
             + "</td><td>" + result[k].min
-            + "</td><td " + donchianChennelStyle + " onclick=\"showDonchianChennel('" + result[k].name + "','" + day50Max + "','" + day50Min + "','" + day20Max + "','" + day20Min + "','" + day10Max + "','" + day10Min + "','" + ma20 + "')\">" + donchianChennel
+            + "</td><td class='no-wrap' " + donchianChennelStyle + " onclick=\"showDonchianChennel('" + result[k].name + "','" + day50Max + "','" + day50Min + "','" + day20Max + "','" + day20Min + "','" + day10Max + "','" + day10Min + "','" + ma20 + "')\">" + donchianChennel
             + "</td><td " + oneYearAgoUpperStyle + ">" + result[k].oneYearAgoUpper + "%"
             + "</td><td " + oneSeasonAgoUpperStyle + ">" + result[k].oneSeasonAgoUpper + "%"
             + "</td><td " + oneMonthAgoUpperStyle + ">" + result[k].oneMonthAgoUpper + "%"
