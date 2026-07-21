@@ -1,6 +1,7 @@
 package com.buxuesong.account.infrastructure.adapter.rest;
 
 import com.buxuesong.account.infrastructure.adapter.rest.response.FundNetDiagramResponse;
+import com.buxuesong.account.infrastructure.adapter.rest.response.FundSearchResponse;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class EastMoneyRestClient {
     private static final String GET_FUND_CODE_BY_NAME_URL = "http://fund.eastmoney.com/js/fundcode_search.js";
 
     private static final String GET_FUND_NET_DIAGRAM_URL = "https://fundmobapi.eastmoney.com/FundMApi/FundNetDiagram.ashx";
+
+    private static final String GET_FUND_INFO_URL = "https://fundsuggest.eastmoney.com/FundSearch/api/FundSearchAPI.ashx";
 
     public String searchAllFundsFromEastMoney() {
         log.info("通过东方财富接口获取基金，URL：{}", GET_FUND_CODE_BY_NAME_URL);
@@ -46,6 +49,19 @@ public class EastMoneyRestClient {
             return null;
         }
         return gson.fromJson(response.getBody(), FundNetDiagramResponse.class);
+    }
+
+    public FundSearchResponse getFundInfo(String code) {
+        log.info("通过东方财富接口获取基金实时信息，编码：{}， URL：{}", code, GET_FUND_INFO_URL);
+        String url = GET_FUND_INFO_URL + "?callback=&m=5&key=" + code + "&_=" + System.currentTimeMillis();
+        ResponseEntity<String> response = null;
+        try {
+            response = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
+        } catch (Exception e) {
+            log.info("通过东方财富接口获取基金实时信息异常: {}", e);
+            return null;
+        }
+        return gson.fromJson(response.getBody(), FundSearchResponse.class);
     }
 
 }
