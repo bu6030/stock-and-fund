@@ -1,7 +1,9 @@
 package com.buxuesong.account.infrastructure.adapter.rest;
 
 import com.buxuesong.account.infrastructure.adapter.rest.response.ShareBonusResponse;
+import com.buxuesong.account.infrastructure.adapter.rest.response.SinaFundEstimateResponse;
 import com.buxuesong.account.infrastructure.adapter.rest.response.StockDayHistoryResponse;
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -29,7 +31,11 @@ public class SinaRestClient {
 
     private static final String GET_FUND_INFO_SINA_URL = "https://hq.sinajs.cn/?_={timestamp}/&list=sz{code},f_{code}";
 
+    private static final String GET_FUND_ESTIMATE_SINA_URL = "https://stock.finance.sina.com.cn/fundInfo/api/openapi.php/FdFundService.getEstimateNetworthPic?symbol={code}";
+
     private static final String GET_STOCK_DAY_HISTORY_SINA_URL = "https://money.finance.sina.com.cn/quotes_service/api/json_v2.php/CN_MarketData.getKLineData?symbol={code}&scale=240&datalen={datalen}";
+
+    private static Gson gson = new Gson();
 
     public String getFundInfo(String code) {
         log.info("通过新浪基金接口获取基金，编码：{}， URL：{}", code, GET_FUND_INFO_SINA_URL);
@@ -45,6 +51,23 @@ public class SinaRestClient {
             return null;
         }
         return response.getBody();
+    }
+
+    public SinaFundEstimateResponse getFundEstimate(String code) {
+        log.info("通过新浪基金估值接口获取基金估值，编码：{}， URL：{}", code, GET_FUND_ESTIMATE_SINA_URL);
+        ResponseEntity<String> response = null;
+        try {
+            response = restTemplate.exchange(
+                GET_FUND_ESTIMATE_SINA_URL, HttpMethod.GET, null, String.class, code);
+        } catch (Exception e) {
+            log.info("获取新浪基金估值接口异常: {}", e.getMessage());
+            return null;
+        }
+        log.info("获取新浪基金估值接口返回：{}", response);
+        if (response.getBody() == null) {
+            return null;
+        }
+        return gson.fromJson(response.getBody(), SinaFundEstimateResponse.class);
     }
 
     public ArrayList<StockDayHistoryResponse> getStockDayHistory(String code, String dataLen) {

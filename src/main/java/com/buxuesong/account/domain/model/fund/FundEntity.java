@@ -9,6 +9,7 @@ import com.buxuesong.account.infrastructure.adapter.rest.EastMoneyRestClient;
 import com.buxuesong.account.infrastructure.adapter.rest.SinaRestClient;
 import com.buxuesong.account.infrastructure.adapter.rest.TiantianFundRestClient;
 import com.buxuesong.account.infrastructure.adapter.rest.response.FundSearchResponse;
+import com.buxuesong.account.infrastructure.adapter.rest.response.SinaFundEstimateResponse;
 import com.buxuesong.account.infrastructure.adapter.rest.response.StockDayHistoryResponse;
 import com.buxuesong.account.infrastructure.general.utils.DateTimeUtils;
 import com.buxuesong.account.infrastructure.general.utils.UserUtils;
@@ -357,24 +358,44 @@ public class FundEntity {
 
         for (String code : codeList) {
             try {
-                FundSearchResponse result = eastMoneyRestClient.getFundInfo(code);
+                SinaFundEstimateResponse estimateResponse = sinaRestClient.getFundEstimate(code);
 
-                if (result != null && result.getErrCode() == 0 && result.getDatas() != null && !result.getDatas().isEmpty()) {
-                    FundSearchResponse.FundData fundData = result.getDatas().get(0);
-                    FundSearchResponse.FundBaseInfo fundBaseInfo = fundData.getFundBaseInfo();
-                    log.info("东方财富基金结果： {}", fundData);
-                    
+                if (estimateResponse != null && estimateResponse.getResult() != null
+                    && estimateResponse.getResult().getData() != null
+                    && estimateResponse.getResult().getData().getNetworth() != null
+                    && !estimateResponse.getResult().getData().getNetworth().isEmpty()) {
+                    SinaFundEstimateResponse.D d = estimateResponse.getResult().getData();
+                    List<SinaFundEstimateResponse.Networth> networthList = d.getNetworth();
+                    SinaFundEstimateResponse.Networth lastNetworth = networthList.get(networthList.size() - 1);
+                    log.info("新浪基金估值结果： {}", d);
+
                     FundEntity bean = new FundEntity();
-                    bean.setFundCode(fundData.getCODE());
-                    bean.setFundName(fundData.getNAME());
-                    if (fundBaseInfo != null) {
-                        bean.setDwjz(String.valueOf(fundBaseInfo.getDWJZ()));
-                        bean.setJzrq(fundBaseInfo.getFSRQ());
+                    bean.setFundCode(code);
+                    // 从数据库获取基金名称
+                    FundPO fundPO = fundMapper.findFundByCode(code, UserUtils.getUsername());
+                    bean.setFundName(fundPO != null ? fundPO.getName() : "--");
+
+                    String worthDate = d.getWorth_date();
+                    String lastPreDate = lastNetworth.getPre_date();
+                    // worth_date 格式为 20260911，pre_date 格式为 2026-09-11，需统一格式后比较
+                    String normalizedPreDate = lastPreDate != null ? lastPreDate.replace("-", "") : "";
+
+                    if (worthDate != null && worthDate.equals(normalizedPreDate)) {
+                        // 真实净值已出
+                        bean.setDwjz(d.getWorth());
+                        bean.setGsz(d.getWorth());
+                        // worth_rate 需要乘以 100 得到涨跌幅百分比
+                        BigDecimal worthRate = new BigDecimal(d.getWorth_rate()).multiply(new BigDecimal("100"))
+                            .setScale(2, RoundingMode.HALF_UP);
+                        bean.setGszzl(worthRate.toString());
+                        bean.setJzrq(worthDate.substring(0, 4) + "-" + worthDate.substring(4, 6) + "-"
+                            + worthDate.substring(6, 8));
+                    } else {
+                        // 真实净值未出，使用实时估值
+                        bean.setGsz(lastNetworth.getPre_nav());
+                        // nav_pct 已经是百分比，无需乘以 100
+                        bean.setGszzl(lastNetworth.getNav_pct());
                     }
-                    // 新接口没有估算净值，使用当日净值作为估算净值
-                    bean.setGsz(bean.getDwjz());
-                    // 新接口没有估算涨跌百分比，默认设为0
-                    bean.setGszzl("0");
                     bean.setGztime(LocalDateTime.now().toString());
                     FundEntity.loadFund(bean, codeMap);
 
@@ -402,6 +423,12 @@ public class FundEntity {
                         }
                     }
                     List<FundJZPO> fundJZPOs = fundJZMapper.findResent380FundJZByCode(bean.getFundCode());
+                    // 真实净值未出时，从历史净值中取最新已发布净值作为当日净值
+                    if (bean.getDwjz() == null && fundJZPOs != null && !fundJZPOs.isEmpty()) {
+                        FundJZPO latestJZ = fundJZPOs.get(fundJZPOs.size() - 1);
+                        bean.setDwjz(latestJZ.getDWJZ());
+                        bean.setJzrq(latestJZ.getFSRQ());
+                    }
                     Optional<FundJZPO> optional = fundJZPOs.stream()
                         .filter(item -> item.getFSRQ().equals(bean.getGztime().substring(0, 10))).findAny();
                     // 当日净值已出
