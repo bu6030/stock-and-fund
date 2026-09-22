@@ -368,7 +368,7 @@ public class DepositEntity {
     private DepositResult depositFund(String username) {
         List<DepositItem> depositItems = new ArrayList<>();
         List<String> fundListFrom = fundEntity.getFundList(null, username);
-        List<FundEntity> funds = fundEntity.getFundDetails(fundListFrom);
+        List<FundEntity> funds = fundEntity.getFundDetails(fundListFrom, username);
         BigDecimal fundTotalDayIncome = new BigDecimal("0");
         BigDecimal fundTotalMarketValue = new BigDecimal("0");
         BigDecimal fundTotalIncome = new BigDecimal("0");

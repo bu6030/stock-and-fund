@@ -46,7 +46,7 @@ public class ChromeController {
         String fundArr = fundCode + "," + costPrise + "," + bonds + "," + app;
         List<String> fundListFromRedis = new ArrayList<>();
         fundListFromRedis.add(fundArr);
-        return Response.builder().code("00000000").value(fundEntity.getFundDetails(fundListFromRedis).get(0)).build();
+        return Response.builder().code("00000000").value(fundEntity.getFundDetails(fundListFromRedis, "buxuesong").get(0)).build();
     }
 
     /**
@@ -59,7 +59,7 @@ public class ChromeController {
         throws Exception {
         List<String> fundListFromRedis = fundEntity.getFundList(null, "buxuesong");
         List<String> stockListFromRedis = stockEntity.getStockList(null, "buxuesong");
-        return Response.builder().code("00000000").value(ChromeStockAndFund.builder().funds(fundEntity.getFundDetails(fundListFromRedis))
+        return Response.builder().code("00000000").value(ChromeStockAndFund.builder().funds(fundEntity.getFundDetails(fundListFromRedis, "buxuesong"))
             .stocks(stockEntity.getStockDetails(stockListFromRedis, "buxuesong"))
             .dayIncomeHistorys(depositEntity.getDepositList(null, null, "buxuesong"))
             .build()).build();

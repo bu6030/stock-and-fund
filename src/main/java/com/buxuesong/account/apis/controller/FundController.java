@@ -5,6 +5,7 @@ import com.buxuesong.account.apis.model.response.Response;
 import com.buxuesong.account.domain.model.fund.FundEntity;
 import com.buxuesong.account.apis.model.response.StockAndFundBean;
 import com.buxuesong.account.domain.model.stock.StockEntity;
+import com.buxuesong.account.infrastructure.general.utils.UserUtils;
 import com.buxuesong.account.infrastructure.persistent.po.FundHisPO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class FundController {
         if (code != null && !"".equals(code)) {
             fundList = fundList.stream().filter(s -> s.contains(code)).collect(Collectors.toList());
         }
-        return Response.builder().code("00000000").value(fundEntity.getFundDetails(fundList)).build();
+        return Response.builder().code("00000000").value(fundEntity.getFundDetails(fundList, UserUtils.getUsername())).build();
     }
 
     @GetMapping(value = "/fundHis")
@@ -89,7 +90,7 @@ public class FundController {
         throws Exception {
         List<String> fundListFrom = fundEntity.getFundList(app);
         List<String> stcokListFrom = stockEntity.getStockList(app);
-        List<FundEntity> funds = fundEntity.getFundDetails(fundListFrom);
+        List<FundEntity> funds = fundEntity.getFundDetails(fundListFrom, UserUtils.getUsername());
         List<StockEntity> stocks = stockEntity.getStockDetails(stcokListFrom);
         List<StockAndFundBean> stockAndFundsFromFunds = funds.stream()
             .map(s -> StockAndFundBean.builder().type("FUND").code(s.getFundCode())

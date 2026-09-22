@@ -341,7 +341,7 @@ public class FundEntity {
     @Autowired
     private CacheService cacheService;
 
-    public List<FundEntity> getFundDetails(List<String> codes) {
+    public List<FundEntity> getFundDetails(List<String> codes, String username) {
         List<FundEntity> funds = new ArrayList<>();
         List<String> codeList = new ArrayList<>();
         Map<String, String[]> codeMap = new HashMap<>();
@@ -372,7 +372,7 @@ public class FundEntity {
                     FundEntity bean = new FundEntity();
                     bean.setFundCode(code);
                     // 从数据库获取基金名称
-                    FundPO fundPO = fundMapper.findFundByCode(code, UserUtils.getUsername());
+                    FundPO fundPO = fundMapper.findFundByCode(code, username);
                     bean.setFundName(fundPO != null ? fundPO.getName() : "--");
 
                     String worthDate = d.getWorth_date();
